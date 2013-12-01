@@ -1,7 +1,8 @@
 {
-    "name": "rowanhill/wiremock-php",
+    "name": "wiremock-php/wiremock-php",
     "description": "PHP API for WireMock JSON interface",
-    "minimum-stability": "dev",
+    "homepage": "http://github.com/rowanhill/wiremock-php",
+    "license": "MIT",
     "authors": [
         {
             "name": "Rowan Hill"
