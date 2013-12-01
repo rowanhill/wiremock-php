@@ -30,6 +30,17 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    function testRequestWithBinaryBodyCanBeStubbed()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBodyData('some binary data as a string')));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     function testRequestUrlCanBeMatchedByRegex()
     {
         // when

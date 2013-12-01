@@ -11,13 +11,18 @@ The API is based directly on WireMock's Java API, so see the [WireMock documenta
 help with interacting with WireMock.
 
 Unfortunately, PHP doesn't support anything like Java's static import of methods, so the result is slightly less pretty
-than the Java API. Also, some methods which are static in Java are instance methods in PHP. Those methods are:
+than the Java API. Most methods are static on the WireMock class, but methods which are static in Java are instance
+methods in PHP. Those methods are:
 
 - stubFor
 - verify
 - findAll
 - reset
 - isAlive (not part of the WireMock API, used to check if the standalone service is up and running)
+
+Also, Java has an overload of withBody() that takes a byte array. Byte arrays are less common in PHP, so instead,
+`withBodyData()` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
+of bytes, use [pack](http://php.net/pack).
 
 A typical usage looks something like the following:
 ```php
@@ -46,7 +51,6 @@ TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
 
-- Setting binary data as a stubbed response body (`withBody(byte[])`)
 - Setting stub priority (`atPriority()`)
 - Stateful behaviour (`inScenario()`, `whenScenarioStateIs()`, `willSetStateTo()`)
 - Proxying (`proxiedFrom()`)

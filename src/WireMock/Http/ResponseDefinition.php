@@ -10,6 +10,8 @@ class ResponseDefinition
     private $_body;
     /** @var string */
     private $_bodyFile;
+    /** @var string */
+    private $_base64Body;
     /** @var array */
     private $_headers;
 
@@ -38,6 +40,14 @@ class ResponseDefinition
     }
 
     /**
+     * @param string $bodyData Base64 encoded data
+     */
+    public function setBase64Body($bodyData)
+    {
+        $this->_base64Body = $bodyData;
+    }
+
+    /**
      * @param array $headers
      */
     public function setHeaders(array $headers)
@@ -54,6 +64,9 @@ class ResponseDefinition
         }
         if ($this->_bodyFile) {
             $array['bodyFileName'] = $this->_bodyFile;
+        }
+        if ($this->_base64Body) {
+            $array['base64Body'] = $this->_base64Body;
         }
         if ($this->_headers) {
             $array['headers'] = $this->_headers;

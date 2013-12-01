@@ -9,6 +9,7 @@ class ResponseDefinitionBuilder
     private $_status;
     private $_body;
     private $_bodyFile;
+    private $_bodyData;
     private $_headers = array();
 
     /**
@@ -32,12 +33,23 @@ class ResponseDefinitionBuilder
     }
 
     /**
-     * @param $bodyFile
+     * @param string $bodyFile
      * @return ResponseDefinitionBuilder
      */
     public function withBodyFile($bodyFile)
     {
         $this->_bodyFile = $bodyFile;
+        return $this;
+    }
+
+    /**
+     * @param string $bytesAsString
+     * @return ResponseDefinitionBuilder
+     */
+    public function withBodyData($bytesAsString)
+    {
+        $base64 = base64_encode($bytesAsString);
+        $this->_bodyData = $base64;
         return $this;
     }
 
@@ -51,10 +63,10 @@ class ResponseDefinitionBuilder
         $this->_headers[$headerName] = $headerValue;
         return $this;
     }
-
     //TODO: withBody (binary)
     //TODO: withFixedDelay
     //TODO: proxiedFrom
+
     //TODO: withFault
 
     public function build()
@@ -68,6 +80,9 @@ class ResponseDefinitionBuilder
         }
         if ($this->_bodyFile) {
             $responseDefinition->setBodyFile($this->_bodyFile);
+        }
+        if ($this->_bodyData) {
+            $responseDefinition->setBase64Body($this->_bodyData);
         }
         if (!empty($this->_headers)) {
             $responseDefinition->setHeaders($this->_headers);

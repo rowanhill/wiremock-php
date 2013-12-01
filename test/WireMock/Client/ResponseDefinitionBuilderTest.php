@@ -88,6 +88,22 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, not(hasKey('bodyFileName')));
     }
 
+    function testBase64BodyIsAvailableInArrayIfSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $bodyData = 'data';
+        $responseDefinitionBuilder->withBodyData($bodyData);
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // when
+        $base64 = base64_encode($bodyData);
+        assertThat($responseDefArray, hasEntry('base64Body', $base64));
+    }
+
     function testHeaderIsAvailableInArrayIfSet()
     {
         // given
