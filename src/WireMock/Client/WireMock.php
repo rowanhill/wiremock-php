@@ -171,7 +171,10 @@ class WireMock
         return new UrlMatchingStrategy('url', $urlPath);
     }
 
-    //TODO: urlMatching
+    public static function urlMatching($urlRegex)
+    {
+        return new UrlMatchingStrategy('urlPattern', $urlRegex);
+    }
 
     //TODO: matching, notMatching, matchingJsonPath ValueMatchingStrategy methods
 

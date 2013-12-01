@@ -46,7 +46,6 @@ TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
 
-- Matching URLs by regular expressions (`urlMatching()`)
 - Matching requests by body (`withRequestBody()`)
 - Setting binary data as a stubbed response body (`withBody(byte[])`)
 - Setting stub priority (`atPriority()`)
