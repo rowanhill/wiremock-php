@@ -92,7 +92,75 @@ class WireMock
         return new MappingBuilder($requestPattern);
     }
 
-    //TODO: POST, PUT, DELETE, OPTIONS, HEAD, TRACE, ANY MappingBuilder methods
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function post(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('POST', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function put(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('PUT', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function delete(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('DELETE', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function head(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('HEAD', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function options(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('OPTIONS', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function trace(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('TRACE', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
+    public static function any(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('ANY', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
 
     /**
      * @param string $urlPath
@@ -133,7 +201,59 @@ class WireMock
         return new RequestPatternBuilder('GET', $urlMatchingStrategy);
     }
 
-    //TODO: Other [method]RequestedFor RequestPatternBuilder methods
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function postRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('POST', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function putRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('PUT', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function deleteRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('DELETE', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function optionsRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('OPTIONS', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function headRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('HEAD', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function traceRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
+    }
 
     //TODO: setGlobalFixedDelay
     //TODO: addRequestProcessingDelay
