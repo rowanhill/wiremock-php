@@ -38,4 +38,19 @@ class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
         // then
         assertThat($result, is($body));
     }
+
+    function testRequestUrlAndBodyFileCanBeStubbed()
+    {
+        // given
+        $wiremock = WireMock::create();
+        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBodyFile('someFile.html')));
+
+        // when
+        $result = file_get_contents('http://localhost:8080/some/url');
+
+        // then
+        assertThat($result, is('<h1>Some File</h1>'));
+    }
 }

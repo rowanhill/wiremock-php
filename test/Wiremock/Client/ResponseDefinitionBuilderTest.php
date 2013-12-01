@@ -44,4 +44,32 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         // when
         assertThat($responseDefArray, not(hasKey('body')));
     }
+
+    function testBodyFileIsAvailableInArrayIfSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $bodyFile = 'someFile';
+        $responseDefinitionBuilder->withBodyFile($bodyFile);
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // when
+        assertThat($responseDefArray, hasEntry('bodyFileName', $bodyFile));
+    }
+
+    function testBodyFileIsNotAvailableInArrayIfNotSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // when
+        assertThat($responseDefArray, not(hasKey('bodyFileName')));
+    }
 }
