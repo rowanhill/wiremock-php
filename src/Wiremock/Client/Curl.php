@@ -4,17 +4,21 @@ namespace WireMock\Client;
 
 class Curl
 {
-    function post($url, array $jsonArray)
+    function post($url, array $jsonArray=null)
     {
-        $json = json_encode($jsonArray);
-
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        if ($jsonArray !== null) {
+            $json = json_encode($jsonArray);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+            $contentLength = strlen($json);
+        } else {
+            $contentLength = 0;
+        }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: ' . strlen($json)
+            "Content-Length: $contentLength"
         ));
 
         $result = curl_exec($ch);

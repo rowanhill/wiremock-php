@@ -1,17 +1,21 @@
 <?php
 
 use WireMock\Client\WireMock;
+use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
 {
-    function setUp()
+    /** @var WireMock */
+    private static $_wireMock;
+
+    static function setUpBeforeClass()
     {
         exec('cd ../wiremock && `java -jar wiremock-1.33-standalone.jar &> wiremock.log &`');
-        $wiremock = WireMock::create();
-        assertThat($wiremock->isAlive(), is(true));
+        self::$_wireMock = WireMock::create();
+        assertThat(self::$_wireMock->isAlive(), is(true));
     }
 
-    function tearDown()
+    static function tearDownAfterClass()
     {
         $result = 0;
         $output = array();
@@ -23,34 +27,64 @@ class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
         assertThat($result, is(0));
     }
 
+    function setUp()
+    {
+        self::$_wireMock->reset();
+    }
+
     function testRequestWithUrlAndStringBodyCanBeStubbed()
     {
-        // given
-        $body = 'Here is some body text';
-        $wiremock = WireMock::create();
-        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
-            ->willReturn(WireMock::aResponse()
-                ->withBody($body)));
-
         // when
-        $result = file_get_contents('http://localhost:8080/some/url');
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text')));
 
         // then
-        assertThat($result, is($body));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     function testRequestUrlAndBodyFileCanBeStubbed()
     {
-        // given
-        $wiremock = WireMock::create();
-        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->willReturn(WireMock::aResponse()
                 ->withBodyFile('someFile.html')));
 
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    function testMappingsCanBeReset()
+    {
+        // given
+        $wiremock = WireMock::create();
+        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()));
+
         // when
-        $result = file_get_contents('http://localhost:8080/some/url');
+        $wiremock->reset();
 
         // then
-        assertThat($result, is('<h1>Some File</h1>'));
+        assertThatThereAreNoMappings();
     }
+}
+
+function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
+{
+    $mappings = getMappings();
+    assertThat($mappings, is(arrayWithSize(1)));
+    assertThat($mappings[0], is($stubMapping->toArray()));
+}
+
+function assertThatThereAreNoMappings()
+{
+    $mappings = getMappings();
+    assertThat($mappings, is(emptyArray()));
+}
+
+function getMappings()
+{
+    $adminJson = file_get_contents('http://localhost:8080/__admin');
+    $admin = json_decode($adminJson, true);
+    return $admin['mappings'];
 }

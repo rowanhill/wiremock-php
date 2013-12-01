@@ -43,6 +43,13 @@ class WireMock
         $stubMapping = $mappingBuilder->build();
         $url = $this->_makeUrl('__admin/mappings/new');
         $this->_curl->post($url, $stubMapping->toArray());
+        return $stubMapping;
+    }
+
+    public function reset()
+    {
+        $url = $this->_makeUrl('__admin/reset');
+        $this->_curl->post($url);
     }
 
     private function _makeUrl($path)
