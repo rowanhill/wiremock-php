@@ -11,6 +11,7 @@ class MappingBuilder
     private $_requestPattern;
     /** @var ResponseDefinitionBuilder */
     private $_responseDefinitionBuilder;
+    private $_headers = array();
 
     public function __construct(RequestPattern $requestPattern)
     {
@@ -24,19 +25,29 @@ class MappingBuilder
     public function willReturn(ResponseDefinitionBuilder $responseDefinitionBuilder)
     {
         $this->_responseDefinitionBuilder = $responseDefinitionBuilder;
-        /** @var MappingBuilder $this */
         return $this;
     }
 
     //TODO: atPriority
-    //TODO: withHeader
     //TODO: withRequestBody
+
+    /**
+     * @param $headerName
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return MappingBuilder
+     */
+    public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        return $this;
+    }
 
     //TODO: inScenario, whenScenarioStateIs, willSetStateTo
 
     public function build()
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();
+        $this->_requestPattern->setHeaders($this->_headers);
         return new StubMapping($this->_requestPattern, $responseDefinition);
     }
 }

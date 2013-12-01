@@ -46,4 +46,19 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($array, hasEntry('request', array('aRequest' => 'pattern')));
         assertThat($array, hasEntry('response', array('aResponse' => 'definition')));
     }
+
+    function testMatchedRequestHeadersAreSetOnRequestPattern()
+    {
+        // given
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
+        $mappingBuilder->withHeader('aHeader', new ValueMatchingStrategy('equalTo', 'aValue'));
+        $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
+
+        // when
+        $mappingBuilder->build();
+
+        // then
+        $headers = array('aHeader' => array('equalTo' => 'aValue'));
+        verify($this->_mockRequestPattern)->setHeaders($headers);
+    }
 }

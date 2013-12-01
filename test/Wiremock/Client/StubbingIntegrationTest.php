@@ -55,6 +55,17 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
+
+    function testHeadersCanBeMatched()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withHeader('Cookie', WireMock::equalTo('foo=bar'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
 }
 
 function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
