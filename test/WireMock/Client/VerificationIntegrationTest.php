@@ -82,6 +82,30 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withRequestBody(WireMock::equalTo('Some Body')));
     }
 
+    function testCanVerifyASpecificNumberOfRequestsOccurred()
+    {
+        // given
+        @file_get_contents('http://localhost:8080/some/url');
+        @file_get_contents('http://localhost:8080/some/url');
+        @file_get_contents('http://localhost:8080/some/url');
+
+        // when
+        self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
+    function testVerifyingWrongNumberOfRequestsThrowsException()
+    {
+        // given
+        @file_get_contents('http://localhost:8080/some/url');
+        @file_get_contents('http://localhost:8080/some/url');
+
+        // when
+        self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+    }
+
     function testFindingAllRequestsReturnsMatchingRequestDetails()
     {
         // given

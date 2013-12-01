@@ -46,14 +46,30 @@ class WireMock
         return $stubMapping;
     }
 
-    public function verify(RequestPatternBuilder $requestPatternBuilder)
+    /**
+     * @param RequestPatternBuilder|integer $requestPatternBuilderOrNumber
+     * @param RequestPatternBuilder $requestPatternBuilder
+     * @throws VerificationException
+     */
+    public function verify($requestPatternBuilderOrNumber, RequestPatternBuilder $requestPatternBuilder=null)
     {
-        $requestPattern = $requestPatternBuilder->build();
+        if (is_int($requestPatternBuilderOrNumber)) {
+            $patternBuilder = $requestPatternBuilder;
+            $numberOfRequests = $requestPatternBuilderOrNumber;
+        } else {
+            $patternBuilder = $requestPatternBuilderOrNumber;
+            $numberOfRequests = null;
+        }
+
+        $requestPattern = $patternBuilder->build();
         $url = $this->_makeUrl('__admin/requests/count');
         $responseJson = $this->_curl->post($url, $requestPattern->toArray());
         $response = json_decode($responseJson, true);
-        if ($response['count'] < 1) {
-            throw new VerificationException('Expected at least one request, but found ' . $response['count']);
+        $count = $response['count'];
+
+        if (($numberOfRequests === null && $count < 1) || ($numberOfRequests && $count != $numberOfRequests)) {
+            $expected = $numberOfRequests ? $numberOfRequests : 'at least one';
+            throw new VerificationException("Expected $expected request(s), but found $count");
         }
     }
 
