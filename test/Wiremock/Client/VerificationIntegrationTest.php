@@ -72,6 +72,21 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withoutHeader('Cookie'));
     }
 
+    function testFindingAllRequestsReturnsMatchingRequestDetails()
+    {
+        // given
+        $this->_getRequestWithHeaders('http://localhost:8080/some/url', array('Cookie: foo=bar'));
+
+        // when
+        $requests = self::$_wireMock->findAll(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+
+        // then
+        assertThat($requests, is(arrayWithSize(1)));
+        /** @var LoggedRequest $request */
+        $request = current($requests);
+        assertThat($request->getUrl(), is('/some/url'));
+    }
+
     private function _getRequestWithHeaders($url, array $headers)
     {
         $ch = curl_init($url);
