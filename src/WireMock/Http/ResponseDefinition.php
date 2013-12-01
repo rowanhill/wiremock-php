@@ -14,6 +14,14 @@ class ResponseDefinition
     private $_headers;
 
     /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->_status = $status;
+    }
+
+    /**
      * @param string $body
      */
     public function setBody($body)
@@ -21,12 +29,18 @@ class ResponseDefinition
         $this->_body = $body;
     }
 
+    /**
+     * @param string $bodyFile
+     */
     public function setBodyFile($bodyFile)
     {
         $this->_bodyFile = $bodyFile;
     }
 
-    public function setHeaders($headers)
+    /**
+     * @param array $headers
+     */
+    public function setHeaders(array $headers)
     {
         $this->_headers = $headers;
     }

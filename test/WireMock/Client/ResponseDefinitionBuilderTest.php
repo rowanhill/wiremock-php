@@ -17,6 +17,21 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('status', 200));
     }
 
+    function testSpecifiedStatusIsAvailableInArray()
+    {
+        // given
+        $status = 403;
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder->withStatus($status);
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // then
+        assertThat($responseDefArray, hasEntry('status', $status));
+    }
+
     function testBodyIsAvailableInArrayIfSet()
     {
         // given

@@ -6,9 +6,20 @@ use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
+    private $_status;
     private $_body;
     private $_bodyFile;
     private $_headers = array();
+
+    /**
+     * @param int $status
+     * @return ResponseDefinitionBuilder
+     */
+    public function withStatus($status)
+    {
+        $this->_status = $status;
+        return $this;
+    }
 
     /**
      * @param string $body
@@ -41,7 +52,6 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
-    //TODO: withStatus
     //TODO: withBody (binary)
     //TODO: withFixedDelay
     //TODO: proxiedFrom
@@ -50,6 +60,9 @@ class ResponseDefinitionBuilder
     public function build()
     {
         $responseDefinition = new ResponseDefinition();
+        if ($this->_status) {
+            $responseDefinition->setStatus($this->_status);
+        }
         if ($this->_body) {
             $responseDefinition->setBody($this->_body);
         }

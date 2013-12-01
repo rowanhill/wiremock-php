@@ -48,7 +48,6 @@ The whole WireMock API is not yet supported. In particular, the following featur
 
 - Matching URLs by regular expressions (`urlMatching()`)
 - Matching requests by body (`withRequestBody()`)
-- Setting stubbed response status (`withStatus()`)
 - Setting binary data as a stubbed response body (`withBody(byte[])`)
 - Setting stub priority (`atPriority()`)
 - Stateful behaviour (`inScenario()`, `whenScenarioStateIs()`, `willSetStateTo()`)
