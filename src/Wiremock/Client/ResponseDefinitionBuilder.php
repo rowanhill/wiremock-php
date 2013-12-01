@@ -41,6 +41,12 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    //TODO: withStatus
+    //TODO: withBody (binary)
+    //TODO: withFixedDelay
+    //TODO: proxiedFrom
+    //TODO: withFault
+
     public function build()
     {
         $responseDefinition = new ResponseDefinition();

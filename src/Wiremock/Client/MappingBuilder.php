@@ -28,6 +28,12 @@ class MappingBuilder
         return $this;
     }
 
+    //TODO: atPriority
+    //TODO: withHeader
+    //TODO: withRequestBody
+
+    //TODO: inScenario, whenScenarioStateIs, willSetStateTo
+
     public function build()
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();

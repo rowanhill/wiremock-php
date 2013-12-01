@@ -67,6 +67,8 @@ class WireMock
         return new MappingBuilder($requestPattern);
     }
 
+    //TODO: POST, PUT, DELETE, OPTIONS, HEAD, TRACE, ANY MappingBuilder methods
+
     /**
      * @param string $urlPath
      * @return UrlMatchingStrategy
@@ -76,6 +78,10 @@ class WireMock
         return new UrlMatchingStrategy('url', $urlPath);
     }
 
+    //TODO: urlMatching
+
+    //TODO: equalTo, matching, notMatching, matchingJsonPath ValueMatchingStrategy methods
+
     /**
      * @return ResponseDefinitionBuilder
      */
@@ -83,4 +89,11 @@ class WireMock
     {
         return new ResponseDefinitionBuilder();
     }
+
+    //TODO: verify methods
+    //TODO: findAll method
+    //TODO: [method]RequestedFor RequestPatternBuilder methods
+
+    //TODO: setGlobalFixedDelay
+    //TODO: addRequestProcessingDelay
 }
