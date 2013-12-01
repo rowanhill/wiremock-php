@@ -110,6 +110,17 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
+
+    function testStubPriorityCanBeSet()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->atPriority(5)
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
 }
 
 function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)

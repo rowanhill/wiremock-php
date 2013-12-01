@@ -14,6 +14,8 @@ class MappingBuilder
     private $_headers = array();
     /** @var ValueMatchingStrategy */
     private $_requestBodyPatterns = array();
+    /** @var int */
+    private $_priority;
 
     public function __construct(RequestPattern $requestPattern)
     {
@@ -30,7 +32,15 @@ class MappingBuilder
         return $this;
     }
 
-    //TODO: atPriority
+    /**
+     * @param int $priority
+     * @return MappingBuilder
+     */
+    public function atPriority($priority)
+    {
+        $this->_priority = $priority;
+        return $this;
+    }
 
     /**
      * @param $headerName
@@ -62,6 +72,6 @@ class MappingBuilder
         if (!empty($this->_requestBodyPatterns)) {
             $this->_requestPattern->setBodyPatterns($this->_requestBodyPatterns);
         }
-        return new StubMapping($this->_requestPattern, $responseDefinition);
+        return new StubMapping($this->_requestPattern, $responseDefinition, $this->_priority);
     }
 }

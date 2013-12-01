@@ -34,4 +34,17 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         assertThat($stubMappingArray, hasEntry('request', $requestArray));
         assertThat($stubMappingArray, hasEntry('response', $responseArray));
     }
+
+    function testPriorityIsInArrayIfSpecified()
+    {
+        when($this->_mockRequestPattern->toArray())->return(array());
+        when($this->_mockResponseDefinition->toArray())->return(array());
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, 5);
+
+        // when
+        $stubMappingArray = $stubMapping->toArray();
+
+        // then
+        assertThat($stubMappingArray, hasEntry('priority', 5));
+    }
 }

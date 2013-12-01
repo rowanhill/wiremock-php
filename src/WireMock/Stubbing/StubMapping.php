@@ -11,18 +11,30 @@ class StubMapping
     private $_requestPattern;
     /** @var ResponseDefinition */
     private $_responseDefinition;
+    /** @var int */
+    private $_priority;
 
-    function __construct(RequestPattern $requestPattern, ResponseDefinition $responseDefinition)
+    /**
+     * @param RequestPattern $requestPattern
+     * @param ResponseDefinition $responseDefinition
+     * @param int $priority
+     */
+    function __construct(RequestPattern $requestPattern, ResponseDefinition $responseDefinition, $priority=null)
     {
         $this->_requestPattern = $requestPattern;
         $this->_responseDefinition = $responseDefinition;
+        $this->_priority = $priority;
     }
 
     function toArray()
     {
-        return array(
+        $array = array(
             'request' => $this->_requestPattern->toArray(),
             'response' => $this->_responseDefinition->toArray()
         );
+        if ($this->_priority) {
+            $array['priority'] = $this->_priority;
+        }
+        return $array;
     }
 }

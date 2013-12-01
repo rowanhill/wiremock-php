@@ -51,7 +51,6 @@ TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
 
-- Setting stub priority (`atPriority()`)
 - Stateful behaviour (`inScenario()`, `whenScenarioStateIs()`, `willSetStateTo()`)
 - Proxying (`proxiedFrom()`)
 - Delays (`withFixedDelay()`, `setGlobalFixedDelay()`, `addRequestProcessingDelay()`)

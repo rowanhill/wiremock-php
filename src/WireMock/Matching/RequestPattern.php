@@ -8,6 +8,7 @@ class RequestPattern
     private $_urlMatchingStrategy;
     private $_headers;
     private $_bodyPatterns;
+    private $_priority;
 
     /**
      * @param string $method
@@ -38,6 +39,9 @@ class RequestPattern
         }
         if ($this->_bodyPatterns) {
             $array['bodyPatterns'] = $this->_bodyPatterns;
+        }
+        if ($this->_priority) {
+            $array['priority'] = $this->_priority;
         }
         return $array;
     }
