@@ -39,4 +39,21 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         // then
         assertThat($requestPatternArray, hasEntry('headers', $headers));
     }
+
+    function testRequestBodyMatchersAreAvailableInArray()
+    {
+        // given
+        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
+        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
+        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+
+        // when
+        $bodyPatterns = array(array('equalTo' => 'aValue'));
+        $requestPattern->setBodyPatterns($bodyPatterns);
+        $requestPatternArray = $requestPattern->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatterns));
+    }
 }

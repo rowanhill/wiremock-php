@@ -176,8 +176,6 @@ class WireMock
         return new UrlMatchingStrategy('urlPattern', $urlRegex);
     }
 
-    //TODO: matching, notMatching, matchingJsonPath ValueMatchingStrategy methods
-
     /**
      * @param string $value
      * @return ValueMatchingStrategy
@@ -185,6 +183,33 @@ class WireMock
     public static function equalTo($value)
     {
         return new ValueMatchingStrategy('equalTo', $value);
+    }
+
+    /**
+     * @param string $value
+     * @return ValueMatchingStrategy
+     */
+    public static function matching($value)
+    {
+        return new ValueMatchingStrategy('matches', $value);
+    }
+
+    /**
+     * @param string $value
+     * @return ValueMatchingStrategy
+     */
+    public static function notMatching($value)
+    {
+        return new ValueMatchingStrategy('doesNotMatch', $value);
+    }
+
+    /**
+     * @param string $jsonPath
+     * @return ValueMatchingStrategy
+     */
+    public static function matchingJsonPath($jsonPath)
+    {
+        return new ValueMatchingStrategy('matchesJsonPath', $jsonPath);
     }
 
     /**

@@ -7,6 +7,7 @@ class RequestPattern
     private $_method;
     private $_urlMatchingStrategy;
     private $_headers;
+    private $_bodyPatterns;
 
     /**
      * @param string $method
@@ -23,12 +24,20 @@ class RequestPattern
         $this->_headers = $headers;
     }
 
+    public function setBodyPatterns(array $bodyPatterns)
+    {
+        $this->_bodyPatterns = $bodyPatterns;
+    }
+
     public function toArray()
     {
         $array = array('method' => $this->_method);
         $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
         if ($this->_headers) {
             $array['headers'] = $this->_headers;
+        }
+        if ($this->_bodyPatterns) {
+            $array['bodyPatterns'] = $this->_bodyPatterns;
         }
         return $array;
     }

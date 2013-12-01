@@ -87,6 +87,18 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
+
+    function testRequestBodyCanBeMatched()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::matching('<status>OK</status>'))
+            ->withRequestBody(WireMock::notMatching('.*ERROR.*'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
 }
 
 function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
