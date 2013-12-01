@@ -1,10 +1,6 @@
 <?php
 
-use WireMock\Http\ResponseDefinition;
-use WireMock\Matching\RequestPattern;
 use WireMock\Client\WireMock;
-use WireMock\Matching\UrlMatchingStrategy;
-use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
 {
@@ -30,17 +26,16 @@ class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
     function testRequestWithUrlAndStringBodyCanBeStubbed()
     {
         // given
-        $urlMatcher = new UrlMatchingStrategy('url', '/some/url');
-        $requestMatcher = new RequestPattern('GET', $urlMatcher);
-        $responseDefinition = new ResponseDefinition();
-        $responseDefinition->setBody('Here is some body text');
-        $stubMapping = new StubMapping($requestMatcher, $responseDefinition);
+        $body = 'Here is some body text';
+        $wiremock = WireMock::create();
+        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody($body)));
 
         // when
-        WireMock::create()->stubFor($stubMapping);
         $result = file_get_contents('http://localhost:8080/some/url');
 
         // then
-        assertThat($result, is('Here is some body text'));
+        assertThat($result, is($body));
     }
 }

@@ -46,16 +46,19 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         assertThat($isAlive, is(false));
     }
 
-    function testAddingMappingPostsJsonSerialisedObjectToWireMock()
+    function testStubbingPostsJsonSerialisedObjectToWireMock()
     {
         // given
         /** @var StubMapping $mockStubMapping */
         $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
         $stubMappingArray = array('some' => 'json');
         when($mockStubMapping->toArray())->return($stubMappingArray);
+        /** @var MappingBuilder $mockMappingBuilder */
+        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
+        when($mockMappingBuilder->build())->return($mockStubMapping);
 
         // when
-        $this->_wireMock->stubFor($mockStubMapping);
+        $this->_wireMock->stubFor($mockMappingBuilder);
 
         // then
         verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings/new', $stubMappingArray);
