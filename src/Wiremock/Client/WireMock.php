@@ -93,7 +93,16 @@ class WireMock
 
     //TODO: urlMatching
 
-    //TODO: equalTo, matching, notMatching, matchingJsonPath ValueMatchingStrategy methods
+    //TODO: matching, notMatching, matchingJsonPath ValueMatchingStrategy methods
+
+    /**
+     * @param string $value
+     * @return ValueMatchingStrategy
+     */
+    public static function equalTo($value)
+    {
+        return new ValueMatchingStrategy('equalTo', $value);
+    }
 
     /**
      * @return ResponseDefinitionBuilder
