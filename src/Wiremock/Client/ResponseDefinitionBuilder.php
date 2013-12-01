@@ -8,6 +8,7 @@ class ResponseDefinitionBuilder
 {
     private $_body;
     private $_bodyFile;
+    private $_headers = array();
 
     /**
      * @param string $body
@@ -29,6 +30,17 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    /**
+     * @param $headerName
+     * @param $headerValue
+     * @return ResponseDefinitionBuilder
+     */
+    public function withHeader($headerName, $headerValue)
+    {
+        $this->_headers[$headerName] = $headerValue;
+        return $this;
+    }
+
     public function build()
     {
         $responseDefinition = new ResponseDefinition();
@@ -37,6 +49,9 @@ class ResponseDefinitionBuilder
         }
         if ($this->_bodyFile) {
             $responseDefinition->setBodyFile($this->_bodyFile);
+        }
+        if (!empty($this->_headers)) {
+            $responseDefinition->setHeaders($this->_headers);
         }
         return $responseDefinition;
     }

@@ -6,8 +6,12 @@ class ResponseDefinition
 {
     /** @var int */
     private $_status = 200;
+    /** @var string */
     private $_body;
+    /** @var string */
     private $_bodyFile;
+    /** @var array */
+    private $_headers;
 
     /**
      * @param string $body
@@ -22,6 +26,11 @@ class ResponseDefinition
         $this->_bodyFile = $bodyFile;
     }
 
+    public function setHeaders($headers)
+    {
+        $this->_headers = $headers;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -31,6 +40,9 @@ class ResponseDefinition
         }
         if ($this->_bodyFile) {
             $array['bodyFileName'] = $this->_bodyFile;
+        }
+        if ($this->_headers) {
+            $array['headers'] = $this->_headers;
         }
         return $array;
     }

@@ -67,6 +67,18 @@ class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
         // then
         assertThatThereAreNoMappings();
     }
+
+    function testHeadersCanBeStubbed()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withHeader('Content-Type', 'text/plain')
+                ->withBody('Here is some body text')));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
 }
 
 function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
