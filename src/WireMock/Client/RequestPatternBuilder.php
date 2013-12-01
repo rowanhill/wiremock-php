@@ -10,6 +10,7 @@ class RequestPatternBuilder
     private $_method;
     private $_urlMatchingStrategy;
     private $_headers = array();
+    private $_bodyPatterns = array();
 
     /**
      * @param string $method
@@ -42,7 +43,15 @@ class RequestPatternBuilder
         return $this;
     }
 
-    //TODO: withRequestBody
+    /**
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public function withRequestBody(ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_bodyPatterns[] = $valueMatchingStrategy->toArray();
+        return $this;
+    }
 
     /**
      * @return RequestPattern
@@ -52,6 +61,9 @@ class RequestPatternBuilder
         $requestPattern = new RequestPattern($this->_method, $this->_urlMatchingStrategy);
         if (!empty($this->_headers)) {
             $requestPattern->setHeaders($this->_headers);
+        }
+        if (!empty($this->_bodyPatterns)) {
+            $requestPattern->setBodyPatterns($this->_bodyPatterns);
         }
         return $requestPattern;
     }

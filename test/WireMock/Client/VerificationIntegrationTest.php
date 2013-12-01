@@ -72,6 +72,16 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withoutHeader('Cookie'));
     }
 
+    function testCanVerifyRequestHasBody()
+    {
+        // given
+        $this->_postRequestWithBody('http://localhost:8080/some/url', 'Some Body');
+
+        // when
+        self::$_wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::equalTo('Some Body')));
+    }
+
     function testFindingAllRequestsReturnsMatchingRequestDetails()
     {
         // given
@@ -92,6 +102,16 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
+    private function _postRequestWithBody($url, $body)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_exec($ch);
         curl_close($ch);
     }

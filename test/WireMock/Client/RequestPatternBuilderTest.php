@@ -59,4 +59,20 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         // then
         assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('absent' => true))));
     }
+
+    function testRequestBodyPatternsAreInArrayIfSpecified()
+    {
+        // given
+        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
+        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
+        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
+        $requestPatternBuilder->withRequestBody(new ValueMatchingStrategy('equalTo', 'aValue'));
+
+        // when
+        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('bodyPatterns', array(array('equalTo' => 'aValue'))));
+    }
 }
