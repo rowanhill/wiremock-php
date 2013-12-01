@@ -1,37 +1,13 @@
 <?php
 
+require_once 'WireMockIntegrationTest.php';
+
 use WireMock\Client\WireMock;
+use WireMock\Client\WireMockIntegrationTest;
 use WireMock\Stubbing\StubMapping;
 
-class StubbingIntegrationTest extends PHPUnit_Framework_TestCase
+class StubbingIntegrationTest extends WireMockIntegrationTest
 {
-    /** @var WireMock */
-    private static $_wireMock;
-
-    static function setUpBeforeClass()
-    {
-        exec('cd ../wiremock && `java -jar wiremock-1.33-standalone.jar &> wiremock.log &`');
-        self::$_wireMock = WireMock::create();
-        assertThat(self::$_wireMock->isAlive(), is(true));
-    }
-
-    static function tearDownAfterClass()
-    {
-        $result = 0;
-        $output = array();
-        exec(
-            "kill -9 `ps -e | grep \"java -jar wiremock-1.33-standalone.jar\" | grep -v grep | awk '{print $1}'`",
-            $output,
-            $result
-        );
-        assertThat($result, is(0));
-    }
-
-    function setUp()
-    {
-        self::$_wireMock->reset();
-    }
-
     function testRequestWithUrlAndStringBodyCanBeStubbed()
     {
         // when

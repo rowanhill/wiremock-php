@@ -4,6 +4,11 @@ namespace WireMock\Client;
 
 class Curl
 {
+    /**
+     * @param string $url
+     * @param array $jsonArray
+     * @return string The response body
+     */
     function post($url, array $jsonArray=null)
     {
         $ch = curl_init($url);

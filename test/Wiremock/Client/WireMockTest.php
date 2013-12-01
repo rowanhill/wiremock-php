@@ -2,6 +2,7 @@
 
 namespace WireMock\Client;
 
+use WireMock\Matching\RequestPattern;
 use WireMock\Stubbing\StubMapping;
 
 class WireMockTest extends \PHPUnit_Framework_TestCase
@@ -62,5 +63,25 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
 
         // then
         verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings/new', $stubMappingArray);
+    }
+
+    function testVerifyingPostsJsonSerialisedObjectToWireMock()
+    {
+        // given
+        /** @var RequestPattern $mockRequestPattern */
+        $mockRequestPattern = mock('WireMock\Matching\RequestPattern');
+        $requestPatternArray = array('some' => 'json');
+        when($mockRequestPattern->toArray())->return($requestPatternArray);
+        /** @var RequestPatternBuilder $mockRequestPatternBuilder */
+        $mockRequestPatternBuilder = mock('WireMock\Client\RequestPatternBuilder');
+        when($mockRequestPatternBuilder->build())->return($mockRequestPattern);
+        when($this->_mockCurl->post('http://localhost:8080/__admin/requests/count', $requestPatternArray))
+            ->return('{"count":1}');
+
+        // when
+        $this->_wireMock->verify($mockRequestPatternBuilder);
+
+        // then
+        verify($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray);
     }
 }

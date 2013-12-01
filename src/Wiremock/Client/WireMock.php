@@ -46,6 +46,19 @@ class WireMock
         return $stubMapping;
     }
 
+    public function verify(RequestPatternBuilder $requestPatternBuilder)
+    {
+        $requestPattern = $requestPatternBuilder->build();
+        $url = $this->_makeUrl('__admin/requests/count');
+        $responseJson = $this->_curl->post($url, $requestPattern->toArray());
+        $response = json_decode($responseJson, true);
+        if ($response['count'] < 1) {
+            throw new VerificationException('Expected at least one request, but found ' . $response['count']);
+        }
+    }
+
+    //TODO: findAll method
+
     public function reset()
     {
         $url = $this->_makeUrl('__admin/reset');
@@ -90,9 +103,16 @@ class WireMock
         return new ResponseDefinitionBuilder();
     }
 
-    //TODO: verify methods
-    //TODO: findAll method
-    //TODO: [method]RequestedFor RequestPatternBuilder methods
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function getRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('GET', $urlMatchingStrategy);
+    }
+
+    //TODO: Other [method]RequestedFor RequestPatternBuilder methods
 
     //TODO: setGlobalFixedDelay
     //TODO: addRequestProcessingDelay
