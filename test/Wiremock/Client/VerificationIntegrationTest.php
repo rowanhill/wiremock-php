@@ -49,6 +49,29 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withHeader('Cookie', WireMock::equalTo('foo=bar')));
     }
 
+    function testCanVerifyRequestDoesNotHaveHeader()
+    {
+        // given
+        @file_get_contents('http://localhost:8080/some/url');
+
+        // when
+        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+            ->withoutHeader('Cookie'));
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
+    function testVerifyingAbsenceOfPresentHeaderThrowsException()
+    {
+        // given
+        $this->_getRequestWithHeaders('http://localhost:8080/some/url', array('Cookie: foo=bar'));
+
+        // when
+        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+            ->withoutHeader('Cookie'));
+    }
+
     private function _getRequestWithHeaders($url, array $headers)
     {
         $ch = curl_init($url);

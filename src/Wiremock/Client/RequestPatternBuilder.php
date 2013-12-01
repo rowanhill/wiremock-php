@@ -32,7 +32,15 @@ class RequestPatternBuilder
         return $this;
     }
 
-    //TODO: withoutHeader
+    /**
+     * @param string $headerName
+     * @return RequestPatternBuilder
+     */
+    public function withoutHeader($headerName)
+    {
+        $this->_headers[$headerName] = array('absent' => true);
+        return $this;
+    }
 
     //TODO: withRequestBody
 
