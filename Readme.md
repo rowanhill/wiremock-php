@@ -47,6 +47,9 @@ $wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/verify/this'
     ->withHeader('Content-Type', WireMock::equalTo('text/xml')));
 ```
 
+If a verification fails a `VerificationException` is thrown. As this is a subclass of
+`PHPUnit_Framework_AssertionFailedError`, this will cause any containing PHPUnit test to fail.
+
 TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
