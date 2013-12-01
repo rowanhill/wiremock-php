@@ -1,0 +1,25 @@
+{
+    "name": "rowanhill/wiremock-php",
+    "description": "PHP API for WireMock JSON interface",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Rowan Hill"
+        }
+    ],
+
+    "archive": {
+        "exclude": ["/test", "composer.phar", "wiremock"]
+    },
+
+    "autoload": {
+        "psr-0": {"WireMock\\": "src"}
+    },
+
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*@dev",
+        "hafriedlander/phockito": "dev-master"
+    }
+}

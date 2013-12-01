@@ -1,0 +1,7 @@
+<phpunit bootstrap="bootstrap.php">
+    <testsuites>
+        <testsuite name="WireMock PHP tests">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
