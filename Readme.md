@@ -60,3 +60,5 @@ The whole WireMock API is not yet supported. In particular, the following featur
 - Faults (`withFault()`)
 
 None of this should be particularly difficult to add, merely time consuming - pull requests very welcome!
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rowanhill/wiremock-php/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
