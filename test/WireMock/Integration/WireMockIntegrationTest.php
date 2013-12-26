@@ -5,11 +5,15 @@ namespace WireMock\Integration;
 use WireMock\Client\WireMock;
 
 require_once 'MappingsAssertionFunctions.php';
+require_once 'TestClient.php';
 
 class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var WireMock */
     protected static $_wireMock;
+
+    /** @var TestClient */
+    protected $_testClient;
 
     static function setUpBeforeClass()
     {
@@ -32,6 +36,7 @@ class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $this->_testClient = new TestClient('localhost', 8080);
         self::$_wireMock->reset();
     }
 }

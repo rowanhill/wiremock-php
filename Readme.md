@@ -54,7 +54,6 @@ TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
 
-- Delays (`withFixedDelay()`, `setGlobalFixedDelay()`, `addRequestProcessingDelay()`)
 - Faults (`withFault()`)
 
 None of this should be particularly difficult to add, merely time consuming - pull requests very welcome!

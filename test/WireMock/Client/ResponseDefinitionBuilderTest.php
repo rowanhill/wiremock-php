@@ -145,4 +145,18 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         // when
         assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'http://otherhost.com/approot'));
     }
+
+    function testFixedDelayMillisecondsIsInArrayIfSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder->withFixedDelay(2000);
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // when
+        assertThat($responseDefArray, hasEntry('fixedDelayMilliseconds', 2000));
+    }
 }

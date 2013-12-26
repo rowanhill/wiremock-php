@@ -88,6 +88,23 @@ class WireMock
     }
 
     /**
+     * Sets a delay on all stubbed responses
+     *
+     * @param int $delayMillis
+     */
+    public function setGlobalFixedDelay($delayMillis)
+    {
+        $url = $this->_makeUrl('__admin/settings');
+        $this->_curl->post($url, array('fixedDelay' => $delayMillis));
+    }
+
+    public function addRequestProcessingDelay($delayMillis)
+    {
+        $url = $this->_makeUrl('__admin/socket-delay');
+        $this->_curl->post($url, array('milliseconds' => $delayMillis));
+    }
+
+    /**
      * Reset all stubbings and the request journal
      */
     public function reset()
@@ -319,7 +336,4 @@ class WireMock
     {
         return new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
     }
-
-    //TODO: setGlobalFixedDelay
-    //TODO: addRequestProcessingDelay
 }

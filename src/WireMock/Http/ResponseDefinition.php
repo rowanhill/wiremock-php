@@ -16,6 +16,8 @@ class ResponseDefinition
     private $_headers;
     /** @var string */
     private $_proxyBaseUrl;
+    /** @var int */
+    private $_fixedDelayMillis;
 
     /**
      * @param int $status
@@ -65,6 +67,14 @@ class ResponseDefinition
         $this->_proxyBaseUrl = $proxyBaseUrl;
     }
 
+    /**
+     * @param int $fixedDelayMillis
+     */
+    public function setFixedDelayMillis($fixedDelayMillis)
+    {
+        $this->_fixedDelayMillis = $fixedDelayMillis;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -83,6 +93,9 @@ class ResponseDefinition
         }
         if ($this->_proxyBaseUrl) {
             $array['proxyBaseUrl'] = $this->_proxyBaseUrl;
+        }
+        if ($this->_fixedDelayMillis) {
+            $array['fixedDelayMilliseconds'] = $this->_fixedDelayMillis;
         }
         return $array;
     }

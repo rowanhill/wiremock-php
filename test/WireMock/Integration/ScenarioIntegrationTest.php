@@ -2,7 +2,6 @@
 
 namespace WireMock\Integration;
 
-use WireMock\Client\Curl;
 use WireMock\Client\WireMock;
 use WireMock\Stubbing\Scenario;
 
@@ -53,20 +52,19 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
 
     function testScenariosCanBeReset() {
         // given
-        self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))->inScenario('Some Scenario')
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))->inScenario('Some Scenario')
                 ->whenScenarioStateIs(Scenario::STARTED)
                 ->willReturn(WireMock::aResponse()->withBody('Initial'))
                 ->willSetStateTo('Another State'));
-        self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))->inScenario('Some Scenario')
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))->inScenario('Some Scenario')
                 ->whenScenarioStateIs('Another State')
                 ->willReturn(WireMock::aResponse()->withBody('Modified')));
-        $curl = new Curl();
 
         // when
-        $firstResponse = $curl->post('http://localhost:8080/some/url');
-        $secondResponse = $curl->post('http://localhost:8080/some/url');
+        $firstResponse = $this->_testClient->get('/some/url');
+        $secondResponse = $this->_testClient->get('/some/url');
         self::$_wireMock->resetAllScenarios();
-        $thirdResponse = $curl->post('http://localhost:8080/some/url');
+        $thirdResponse = $this->_testClient->get('/some/url');
 
         // then
         assertThat($firstResponse, is('Initial'));
