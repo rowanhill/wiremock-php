@@ -1,4 +1,4 @@
-wiremock-php
+wiremock-php [![Build Status](https://travis-ci.org/rowanhill/wiremock-php.png?branch=master)](https://travis-ci.org/rowanhill/wiremock-php)
 ============
 A PHP API for [WireMock](https://github.com/tomakehurst/wiremock).
 
