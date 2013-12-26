@@ -6,7 +6,7 @@ cd ../wiremock
 
 # Ensure WireMock isn't already running
 if [ -e wiremock.pid ]; then
-    echo WireMock is already started: see process `cat wiremock.pid` 1&>2
+    echo WireMock is already started: see process `cat wiremock.pid` 1>&2
     exit 1
 fi
 
@@ -16,7 +16,7 @@ if ! [ -e wiremock-standalone.jar ]; then
     curl http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock/1.39/wiremock-1.39-standalone.jar -o wiremock-standalone.jar
     status = $?
     if [ $status -ne 0 ]; then
-        echo curl could not download WireMock JAR 1&>2
+        echo curl could not download WireMock JAR 1>&2
         exit $status
     fi
 fi

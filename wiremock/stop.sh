@@ -8,7 +8,7 @@ if [ -e wiremock.pid ]; then
   kill -9 `cat wiremock.pid`
   rm wiremock.pid
 else
-  echo WireMock is not started 1&>2
+  echo WireMock is not started 2>&1
   exit 1
 fi
 
