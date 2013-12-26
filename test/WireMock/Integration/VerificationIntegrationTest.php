@@ -2,6 +2,7 @@
 
 namespace WireMock\Integration;
 
+use WireMock\Client\LoggedRequest;
 use WireMock\Client\WireMock;
 
 require_once 'WireMockIntegrationTest.php';
@@ -11,7 +12,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testCanVerifySimpleGetToUrl()
     {
         // given
-        @file_get_contents('http://localhost:8080/some/url');
+        $this->_testClient->get('/some/url');
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
@@ -29,7 +30,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testCanVerifyRequestHasHeader()
     {
         // given
-        $this->_getRequestWithHeaders('http://localhost:8080/some/url', array('Cookie: foo=bar'));
+        $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
@@ -42,7 +43,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testVerifyingRequestWithMissingHeaderThrowsException()
     {
         // given
-        @file_get_contents('http://localhost:8080/some/url');
+        $this->_testClient->get('/some/url');
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
@@ -52,7 +53,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testCanVerifyRequestDoesNotHaveHeader()
     {
         // given
-        @file_get_contents('http://localhost:8080/some/url');
+        $this->_testClient->get('/some/url');
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
@@ -65,7 +66,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testVerifyingAbsenceOfPresentHeaderThrowsException()
     {
         // given
-        $this->_getRequestWithHeaders('http://localhost:8080/some/url', array('Cookie: foo=bar'));
+        $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
@@ -75,7 +76,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testCanVerifyRequestHasBody()
     {
         // given
-        $this->_postRequestWithBody('http://localhost:8080/some/url', 'Some Body');
+        $this->_testClient->post('/some/url', 'Some Body');
 
         // when
         self::$_wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/some/url'))
@@ -85,9 +86,9 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testCanVerifyASpecificNumberOfRequestsOccurred()
     {
         // given
-        @file_get_contents('http://localhost:8080/some/url');
-        @file_get_contents('http://localhost:8080/some/url');
-        @file_get_contents('http://localhost:8080/some/url');
+        $this->_testClient->get('/some/url');
+        $this->_testClient->get('/some/url');
+        $this->_testClient->get('/some/url');
 
         // when
         self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
@@ -99,8 +100,8 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testVerifyingWrongNumberOfRequestsThrowsException()
     {
         // given
-        @file_get_contents('http://localhost:8080/some/url');
-        @file_get_contents('http://localhost:8080/some/url');
+        $this->_testClient->get('/some/url');
+        $this->_testClient->get('/some/url');
 
         // when
         self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
@@ -109,7 +110,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     function testFindingAllRequestsReturnsMatchingRequestDetails()
     {
         // given
-        $this->_getRequestWithHeaders('http://localhost:8080/some/url', array('Cookie: foo=bar'));
+        $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
         // when
         $requests = self::$_wireMock->findAll(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
@@ -119,24 +120,5 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         /** @var LoggedRequest $request */
         $request = current($requests);
         assertThat($request->getUrl(), is('/some/url'));
-    }
-
-    private function _getRequestWithHeaders($url, array $headers)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_exec($ch);
-        curl_close($ch);
-    }
-
-    private function _postRequestWithBody($url, $body)
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        curl_exec($ch);
-        curl_close($ch);
     }
 }
