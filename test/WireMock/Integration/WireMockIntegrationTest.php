@@ -36,7 +36,7 @@ class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->_testClient = new TestClient('localhost', 8080);
+        $this->_testClient = new TestClient();
         self::$_wireMock->reset();
     }
 }

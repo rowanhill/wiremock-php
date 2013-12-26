@@ -8,7 +8,7 @@ class TestClient
     private $_port;
     private $_lastRequestTimeMillis;
 
-    function __construct($_hostname, $_port)
+    function __construct($_hostname='localhost', $_port=8080)
     {
         $this->_hostname = $_hostname;
         $this->_port = $_port;
