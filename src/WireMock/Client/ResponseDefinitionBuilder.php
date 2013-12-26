@@ -11,6 +11,7 @@ class ResponseDefinitionBuilder
     private $_bodyFile;
     private $_bodyData;
     private $_headers = array();
+    private $_proxyBaseUrl;
 
     /**
      * @param int $status
@@ -63,9 +64,18 @@ class ResponseDefinitionBuilder
         $this->_headers[$headerName] = $headerValue;
         return $this;
     }
-    //TODO: withBody (binary)
+
+    /**
+     * @param string $proxyBaseUrl
+     * @return ResponseDefinitionBuilder
+     */
+    public function proxiedFrom($proxyBaseUrl)
+    {
+        $this->_proxyBaseUrl = $proxyBaseUrl;
+        return $this;
+    }
+
     //TODO: withFixedDelay
-    //TODO: proxiedFrom
 
     //TODO: withFault
 
@@ -86,6 +96,9 @@ class ResponseDefinitionBuilder
         }
         if (!empty($this->_headers)) {
             $responseDefinition->setHeaders($this->_headers);
+        }
+        if ($this->_proxyBaseUrl) {
+            $responseDefinition->setProxyBaseUrl($this->_proxyBaseUrl);
         }
         return $responseDefinition;
     }

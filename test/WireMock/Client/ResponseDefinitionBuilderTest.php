@@ -131,4 +131,18 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         // when
         assertThat($responseDefArray, not(hasKey('headers')));
     }
+
+    function testProxyBaseUrlIsAvailableIfSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder->proxiedFrom('http://otherhost.com/approot');
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // when
+        assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'http://otherhost.com/approot'));
+    }
 }

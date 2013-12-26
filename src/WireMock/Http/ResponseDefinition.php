@@ -14,6 +14,8 @@ class ResponseDefinition
     private $_base64Body;
     /** @var array */
     private $_headers;
+    /** @var string */
+    private $_proxyBaseUrl;
 
     /**
      * @param int $status
@@ -55,6 +57,14 @@ class ResponseDefinition
         $this->_headers = $headers;
     }
 
+    /**
+     * @param string $proxyBaseUrl
+     */
+    public function setProxyBaseUrl($proxyBaseUrl)
+    {
+        $this->_proxyBaseUrl = $proxyBaseUrl;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -70,6 +80,9 @@ class ResponseDefinition
         }
         if ($this->_headers) {
             $array['headers'] = $this->_headers;
+        }
+        if ($this->_proxyBaseUrl) {
+            $array['proxyBaseUrl'] = $this->_proxyBaseUrl;
         }
         return $array;
     }
