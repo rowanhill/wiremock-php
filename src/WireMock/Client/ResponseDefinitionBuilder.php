@@ -13,6 +13,7 @@ class ResponseDefinitionBuilder
     private $_headers = array();
     private $_proxyBaseUrl;
     private $_fixedDelayMillis;
+    private $_fault;
 
     /**
      * @param int $status
@@ -86,7 +87,15 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
-    //TODO: withFault
+    /**
+     * @param $fault
+     * @return ResponseDefinitionBuilder
+     */
+    public function withFault($fault)
+    {
+        $this->_fault = $fault;
+        return $this;
+    }
 
     public function build()
     {
@@ -111,6 +120,9 @@ class ResponseDefinitionBuilder
         }
         if ($this->_fixedDelayMillis) {
             $responseDefinition->setFixedDelayMillis($this->_fixedDelayMillis);
+        }
+        if ($this->_fault) {
+            $responseDefinition->setFault($this->_fault);
         }
         return $responseDefinition;
     }

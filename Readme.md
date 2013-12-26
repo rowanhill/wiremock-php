@@ -50,12 +50,5 @@ $wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/verify/this'
 If a verification fails a `VerificationException` is thrown. As this is a subclass of
 `PHPUnit_Framework_AssertionFailedError`, this will cause any containing PHPUnit test to fail.
 
-TODO
-----
-The whole WireMock API is not yet supported. In particular, the following features are missing:
-
-- Faults (`withFault()`)
-
-None of this should be particularly difficult to add, merely time consuming - pull requests very welcome!
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rowanhill/wiremock-php/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

@@ -18,6 +18,8 @@ class ResponseDefinition
     private $_proxyBaseUrl;
     /** @var int */
     private $_fixedDelayMillis;
+    /** @var string */
+    private $_fault;
 
     /**
      * @param int $status
@@ -75,6 +77,14 @@ class ResponseDefinition
         $this->_fixedDelayMillis = $fixedDelayMillis;
     }
 
+    /**
+     * @param string $fault
+     */
+    public function setFault($fault)
+    {
+        $this->_fault = $fault;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -96,6 +106,9 @@ class ResponseDefinition
         }
         if ($this->_fixedDelayMillis) {
             $array['fixedDelayMilliseconds'] = $this->_fixedDelayMillis;
+        }
+        if ($this->_fault) {
+            $array['fault'] = $this->_fault;
         }
         return $array;
     }

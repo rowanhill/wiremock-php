@@ -3,12 +3,14 @@
 namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
+use WireMock\Stubbing\Fault;
 
 require_once 'WireMockIntegrationTest.php';
 
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
-    function testFixedDelayOnStubbedResponseCanBeSpecified() {
+    function testFixedDelayOnStubbedResponseCanBeSpecified()
+    {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
                 ->willReturn(WireMock::aResponse()
@@ -21,7 +23,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    function testGlobalFixedDelayOnStubbedResponsesCanBeSet() {
+    function testGlobalFixedDelayOnStubbedResponsesCanBeSet()
+    {
         // given
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->willReturn(WireMock::aResponse()));
@@ -36,7 +39,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
     }
 
-    function testGlobalFixedDelayOnSocketAcceptanceCanBeSet() {
+    function testGlobalFixedDelayOnSocketAcceptanceCanBeSet()
+    {
         // given
         $this->_testClient->get('/not/stubbed/url');
         assertThat($this->_testClient->getLastRequestTimeMillis(), lessThan(1000));
@@ -47,5 +51,34 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
+    }
+
+    function testEmptyResponseFaultCanBeStubbed()
+    {
+        $this->_testFaultCanBeStubbed(Fault::EMPTY_RESPONSE);
+    }
+
+    function testMalformedResponseChunkFaultCanBeStubbed()
+    {
+        $this->_testFaultCanBeStubbed(Fault::MALFORMED_RESPONSE_CHUNK);
+    }
+
+    function testRandomDataThenCloseFaultCanBeStubbed()
+    {
+        $this->_testFaultCanBeStubbed(Fault::RANDOM_DATA_THEN_CLOSE);
+    }
+
+    private function _testFaultCanBeStubbed($fault)
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+                ->willReturn(WireMock::aResponse()
+                    ->withFault($fault))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['fault'], is($fault));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 }
