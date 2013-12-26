@@ -22,5 +22,9 @@
     "require-dev": {
         "phpunit/phpunit": "3.7.*@dev",
         "hafriedlander/phockito": "dev-master"
+    },
+
+    "suggest": {
+        "phpunit/phpunit": "Thrown VerificationExceptions automatically fail tests"
     }
 }
