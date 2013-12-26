@@ -17,7 +17,8 @@ methods in PHP. Those methods are:
 - stubFor
 - verify
 - findAll
-- reset
+- reset, resetToDefault, resetAllScenarios
+- setGlobalFixedDelay, addRequestProcessingDelay
 - isAlive (not part of the WireMock API, used to check if the standalone service is up and running)
 
 Also, Java has an overload of withBody() that takes a byte array. Byte arrays are less common in PHP, so instead,
