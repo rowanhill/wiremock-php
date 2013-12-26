@@ -3,4 +3,5 @@
 /wiremock/*.jar
 /wiremock/*.log
 /wiremock/mappings
+/wiremock/exec_test.pid
 *.iml
