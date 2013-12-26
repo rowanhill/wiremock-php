@@ -97,6 +97,15 @@ class WireMock
     }
 
     /**
+     * Reset all stubbings, reload those from the mappings directory, and reset the request journal
+     */
+    public function resetToDefault()
+    {
+        $url = $this->_makeUrl('__admin/mappings/reset');
+        $this->_curl->post($url);
+    }
+
+    /**
      * Reset all scenarios to the Scenario.STARTED state
      */
     public function resetAllScenarios()

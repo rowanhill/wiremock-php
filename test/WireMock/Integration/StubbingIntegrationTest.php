@@ -65,6 +65,20 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatThereAreNoMappings();
     }
 
+    function testMappingsCanBeResetToDefault()
+    {
+        // given
+        $wiremock = WireMock::create();
+        $wiremock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $wiremock->resetToDefault();
+
+        // then
+        assertThatThereAreNoMappings();
+    }
+
     function testHeadersCanBeStubbed()
     {
         // when
