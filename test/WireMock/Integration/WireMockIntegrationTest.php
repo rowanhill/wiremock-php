@@ -17,19 +17,23 @@ class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 
     static function setUpBeforeClass()
     {
-        $result = 0;
-        $output = array();
-        exec('(./../wiremock/start.sh) > /dev/null 2>&1 &', $output, $result);
-        assertThat($result, is(0));
+        self::runCmd('./../wiremock/start.sh');
         self::$_wireMock = WireMock::create();
         assertThat(self::$_wireMock->isAlive(), is(true));
     }
 
     static function tearDownAfterClass()
     {
+        self::runCmd('./../wiremock/stop.sh');
+    }
+
+    private static function runCmd($cmd)
+    {
         $result = 0;
         $output = array();
-        exec('(./../wiremock/stop.sh) > /dev/null 2>&1 &', $output, $result);
+        exec("($cmd) > /dev/null 2>&1 &", $output, $result);
+        $output = array_map(function($line) { return "\n$line"; }, $output);
+        echo implode($output, "\n");
         assertThat($result, is(0));
     }
 
