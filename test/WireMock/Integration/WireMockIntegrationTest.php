@@ -1,6 +1,8 @@
 <?php
 
-namespace WireMock\Client;
+namespace WireMock\Integration;
+
+use WireMock\Client\WireMock;
 
 require_once 'MappingsAssertionFunctions.php';
 

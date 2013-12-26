@@ -1,10 +1,10 @@
 <?php
 
+namespace WireMock\Integration;
+
 require_once 'WireMockIntegrationTest.php';
 
 use WireMock\Client\WireMock;
-use WireMock\Client\WireMockIntegrationTest;
-use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {

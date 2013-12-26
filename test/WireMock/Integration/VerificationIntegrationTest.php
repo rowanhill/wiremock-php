@@ -1,10 +1,10 @@
 <?php
 
-namespace WireMock\Client;
+namespace WireMock\Integration;
+
+use WireMock\Client\WireMock;
 
 require_once 'WireMockIntegrationTest.php';
-
-use WireMock\Client\WireMockIntegrationTest;
 
 class VerificationIntegrationTest extends WireMockIntegrationTest
 {
