@@ -17,7 +17,10 @@ class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 
     static function setUpBeforeClass()
     {
-        exec('cd ../wiremock && `java -jar wiremock-1.33-standalone.jar &> wiremock.log &`');
+        $result = 0;
+        $output = array();
+        exec('(./../wiremock/start.sh) > /dev/null 2>&1 &', $output, $result);
+        assertThat($result, is(0));
         self::$_wireMock = WireMock::create();
         assertThat(self::$_wireMock->isAlive(), is(true));
     }
@@ -26,11 +29,7 @@ class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $result = 0;
         $output = array();
-        exec(
-            "kill -9 `ps -e | grep \"java -jar wiremock-1.33-standalone.jar\" | grep -v grep | awk '{print $1}'`",
-            $output,
-            $result
-        );
+        exec('(./../wiremock/stop.sh) > /dev/null 2>&1 &', $output, $result);
         assertThat($result, is(0));
     }
 
