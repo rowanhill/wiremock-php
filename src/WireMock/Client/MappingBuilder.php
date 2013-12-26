@@ -11,8 +11,9 @@ class MappingBuilder
     private $_requestPattern;
     /** @var ResponseDefinitionBuilder */
     private $_responseDefinitionBuilder;
+    /** @var array of string -> ValueMatchingStrategy */
     private $_headers = array();
-    /** @var ValueMatchingStrategy */
+    /** @var array of ValueMatchingStrategy */
     private $_requestBodyPatterns = array();
     /** @var int */
     private $_priority;
