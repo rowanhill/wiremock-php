@@ -13,17 +13,25 @@ class StubMapping
     private $_responseDefinition;
     /** @var int */
     private $_priority;
+    /** @var Scenario */
+    private $_scenario;
 
     /**
      * @param RequestPattern $requestPattern
      * @param ResponseDefinition $responseDefinition
      * @param int $priority
+     * @param Scenario $scenario
      */
-    function __construct(RequestPattern $requestPattern, ResponseDefinition $responseDefinition, $priority=null)
+    function __construct(
+        RequestPattern $requestPattern,
+        ResponseDefinition $responseDefinition,
+        $priority=null,
+        $scenario=null)
     {
         $this->_requestPattern = $requestPattern;
         $this->_responseDefinition = $responseDefinition;
         $this->_priority = $priority;
+        $this->_scenario = $scenario;
     }
 
     function toArray()
@@ -34,6 +42,9 @@ class StubMapping
         );
         if ($this->_priority) {
             $array['priority'] = $this->_priority;
+        }
+        if ($this->_scenario !== null) {
+            $array = array_merge($array, $this->_scenario->toArray());
         }
         return $array;
     }
