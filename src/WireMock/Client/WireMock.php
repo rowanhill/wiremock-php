@@ -87,9 +87,21 @@ class WireMock
         return $requests;
     }
 
+    /**
+     * Reset all stubbings and the request journal
+     */
     public function reset()
     {
         $url = $this->_makeUrl('__admin/reset');
+        $this->_curl->post($url);
+    }
+
+    /**
+     * Reset all scenarios to the Scenario.STARTED state
+     */
+    public function resetAllScenarios()
+    {
+        $url = $this->_makeUrl('__admin/scenarios/reset');
         $this->_curl->post($url);
     }
 

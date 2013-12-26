@@ -4,6 +4,8 @@ namespace WireMock\Stubbing;
 
 class Scenario
 {
+    const STARTED = 'Started';
+
     /** @var string */
     private $_scenarioName;
     /** @var string */

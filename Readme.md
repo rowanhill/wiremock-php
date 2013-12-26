@@ -54,7 +54,7 @@ TODO
 ----
 The whole WireMock API is not yet supported. In particular, the following features are missing:
 
-- Resetting scenarios
+- Reset to default
 - Delays (`withFixedDelay()`, `setGlobalFixedDelay()`, `addRequestProcessingDelay()`)
 - Faults (`withFault()`)
 
