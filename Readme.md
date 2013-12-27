@@ -5,6 +5,9 @@ A PHP API for [WireMock](https://github.com/tomakehurst/wiremock).
 WireMock provides a JSON API for interacting with it; wiremock-php makes it easy to use that JSON API from PHP by
 wrapping it up in a fluent API very similar to the Java API provided by WireMock.
 
+Version numbers track those of WireMock itself, but may lag behind (i.e. if a WireMock release does not contain changes
+to the API, there may be no corresponding version of wiremock-php).
+
 Usage
 -----
 The API is based directly on WireMock's Java API, so see the [WireMock documentation](http://wiremock.org/) for general
