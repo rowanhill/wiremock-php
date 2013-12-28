@@ -43,6 +43,7 @@ methods. Those methods are:
 - `stubFor`
 - `verify`
 - `findAll`
+- `saveAllMappings`
 - `reset`, `resetToDefault`, `resetAllScenarios`
 - `setGlobalFixedDelay`, `addRequestProcessingDelay`
 - `shutdownServer`

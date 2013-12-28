@@ -110,6 +110,12 @@ class WireMock
         $this->_curl->post($url, array('milliseconds' => $delayMillis));
     }
 
+    public function saveAllMappings()
+    {
+        $url = $this->_makeUrl('__admin/mappings/save');
+        $this->_curl->post($url);
+    }
+
     /**
      * Reset all stubbings and the request journal
      */

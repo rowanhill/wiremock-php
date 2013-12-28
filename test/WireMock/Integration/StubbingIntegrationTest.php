@@ -8,6 +8,23 @@ use WireMock\Client\WireMock;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {
+    function clearMappings()
+    {
+        exec('rm -f ../wiremock/mappings/*');
+    }
+
+    function setUp()
+    {
+        parent::setUp();
+        $this->clearMappings();
+    }
+
+    function tearDown()
+    {
+        parent::tearDown();
+        $this->clearMappings();
+    }
+
     function testRequestWithUrlAndStringBodyCanBeStubbed()
     {
         // when
@@ -131,6 +148,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->atPriority(5)
             ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    function testStubsCanBeSaved()
+    {
+        // given
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text')));
+
+        // when
+        self::$_wireMock->saveAllMappings();
+        self::tearDownAfterClass(); // shut down the server
+        self::setUpBeforeClass(); // start the server again
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
