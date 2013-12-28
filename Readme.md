@@ -32,20 +32,26 @@ The API is based directly on WireMock's Java API, so see the [WireMock documenta
 help with interacting with WireMock.
 
 ### Differences to Java API
-Unfortunately, PHP doesn't support anything like Java's static import of methods, so the result is slightly less pretty
-than the Java API. Most methods are static on the WireMock class, but methods which are static in Java are instance
-methods in PHP. Those methods are:
+To provide a fluent interface, the WireMock Java API makes use of statically imported methods (which act upon a default
+static instance), but it's also possible to act directly upon a Java WireMock instance (using slightly differently
+named methods).
 
-- stubFor
-- verify
-- findAll
-- reset, resetToDefault, resetAllScenarios
-- setGlobalFixedDelay, addRequestProcessingDelay
-- isAlive (not part of the WireMock API, used to check if the standalone service is up and running)
+Unfortunately, PHP doesn't support anything like Java's static import of methods, so there's not much point in mimicking
+the Java API's static instance pattern. Instead, in wiremock-php some methods which are static in Java are instance
+methods. Those methods are:
 
-Also, Java has an overload of withBody() that takes a byte array. Byte arrays are less common in PHP, so instead,
-`withBodyData()` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
+- `stubFor`
+- `verify`
+- `findAll`
+- `reset`, `resetToDefault`, `resetAllScenarios`
+- `setGlobalFixedDelay`, `addRequestProcessingDelay`
+
+Also, Java has an overload of `withBody` that takes a byte array. Byte arrays are less common in PHP, so instead,
+`withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
 of bytes, use [pack](http://php.net/pack).
+
+In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
+response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.
 
 ### Example
 A typical usage looks something like the following:
