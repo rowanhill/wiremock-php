@@ -21,4 +21,17 @@ class HttpWait
         }
         return $serverStarted;
     }
+
+    function waitForServerToFailToRespond($url, $timeoutSecs = 5)
+    {
+        $startTime = microtime(true);
+        $serverFailedToRespond = false;
+        while (microtime(true) - $startTime < $timeoutSecs) {
+            if (@get_headers($url, 1) === false) {
+                $serverFailedToRespond = true;
+                break;
+            }
+        }
+        return $serverFailedToRespond;
+    }
 }

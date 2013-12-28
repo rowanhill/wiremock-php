@@ -38,6 +38,12 @@ class WireMock
         return $this->_httpWait->waitForServerToGive200($url);
     }
 
+    public function isShutDown()
+    {
+        $url = $this->_makeUrl('__admin/');
+        return $this->_httpWait->waitForServerToFailToRespond($url);
+    }
+
     public function stubFor(MappingBuilder $mappingBuilder)
     {
         $stubMapping = $mappingBuilder->build();
@@ -128,6 +134,12 @@ class WireMock
     public function resetAllScenarios()
     {
         $url = $this->_makeUrl('__admin/scenarios/reset');
+        $this->_curl->post($url);
+    }
+
+    public function shutdownServer()
+    {
+        $url = $this->_makeUrl('__admin/shutdown');
         $this->_curl->post($url);
     }
 

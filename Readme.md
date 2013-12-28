@@ -45,6 +45,7 @@ methods. Those methods are:
 - `findAll`
 - `reset`, `resetToDefault`, `resetAllScenarios`
 - `setGlobalFixedDelay`, `addRequestProcessingDelay`
+- `shutdownServer`
 
 Also, Java has an overload of `withBody` that takes a byte array. Byte arrays are less common in PHP, so instead,
 `withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array

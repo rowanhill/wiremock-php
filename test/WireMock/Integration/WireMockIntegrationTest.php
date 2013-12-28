@@ -7,7 +7,7 @@ use WireMock\Client\WireMock;
 require_once 'MappingsAssertionFunctions.php';
 require_once 'TestClient.php';
 
-class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
+abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var WireMock */
     protected static $_wireMock;
