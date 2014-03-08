@@ -22,7 +22,7 @@ Installation
 It easiest to install wiremock-php via Composer:
 
 ```bash
-php composer.phar require --dev wiremock-php/wiremock-php:1.40
+php composer.phar require --dev wiremock-php/wiremock-php:1.43
 ```
 
 Usage
@@ -51,6 +51,10 @@ methods. Those methods are:
 Also, Java has an overload of `withBody` that takes a byte array. Byte arrays are less common in PHP, so instead,
 `withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
 of bytes, use [pack](http://php.net/pack).
+
+The request body matcher `equalToJson` takes an optional $jsonCompareMode parameter. In the Java API, these are enum
+values on org.skyscreamer.jsonassert.JSONCompareMode; in wiremock-php, these values are consts on
+JsonValueMatchingStrategy.
 
 In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
 response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.
