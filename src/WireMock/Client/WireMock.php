@@ -285,6 +285,25 @@ class WireMock
     }
 
     /**
+     * @param string $value
+     * @return ValueMatchingStrategy
+     */
+    public static function containing($value)
+    {
+        return new ValueMatchingStrategy('contains', $value);
+    }
+
+    /**
+     * @param string $value
+     * @param string $jsonCompareMode
+     * @return ValueMatchingStrategy
+     */
+    public static function equalToJson($value, $jsonCompareMode = JsonValueMatchingStrategy::COMPARE_MODE__NON_EXTENSIBLE)
+    {
+        return new JsonValueMatchingStrategy($value, $jsonCompareMode);
+    }
+
+    /**
      * @param string $jsonPath
      * @return ValueMatchingStrategy
      */

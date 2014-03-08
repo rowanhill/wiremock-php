@@ -4,6 +4,7 @@ namespace WireMock\Integration;
 
 require_once 'WireMockIntegrationTest.php';
 
+use WireMock\Client\JsonValueMatchingStrategy;
 use WireMock\Client\WireMock;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
@@ -130,12 +131,46 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    function testRequestBodyCanBeMatched()
+    function testResponseCanBeStubbedByBodyMatching()
     {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withRequestBody(WireMock::matching('<status>OK</status>'))
             ->withRequestBody(WireMock::notMatching('.*ERROR.*'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    function testResponseCanBeStubbedByBodyContaining()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::containing('ERROR'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    function testResponseCanBeStubbedByBodyEqualingJson()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::equalToJson('{"key":"value"}'))
+            ->withRequestBody(WireMock::equalToJson('{}', JsonValueMatchingStrategy::COMPARE_MODE__LENIENT))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    function testResponseCanBeStubbedByBodyJsonPath()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::matchingJsonPath('$.status'))
             ->willReturn(WireMock::aResponse()));
 
         // then
