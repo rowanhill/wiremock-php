@@ -52,9 +52,9 @@ Also, Java has an overload of `withBody` that takes a byte array. Byte arrays ar
 `withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
 of bytes, use [pack](http://php.net/pack).
 
-The request body matcher `equalToJson` takes an optional $jsonCompareMode parameter. In the Java API, these are enum
+The request body matcher `equalToJson` takes an optional `$jsonCompareMode` parameter. In the Java API, these are enum
 values on org.skyscreamer.jsonassert.JSONCompareMode; in wiremock-php, these values are consts on
-JsonValueMatchingStrategy.
+`JsonValueMatchingStrategy`.
 
 In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
 response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.
