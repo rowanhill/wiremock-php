@@ -4,7 +4,6 @@ namespace WireMock\Client;
 
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
-use WireMock\Stubbing\StubMapping;
 
 class WireMock
 {
@@ -198,6 +197,16 @@ class WireMock
      * @param UrlMatchingStrategy $urlMatchingStrategy
      * @return MappingBuilder
      */
+    public static function patch(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        $requestPattern = new RequestPattern('PATCH', $urlMatchingStrategy);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return MappingBuilder
+     */
     public static function head(UrlMatchingStrategy $urlMatchingStrategy)
     {
         $requestPattern = new RequestPattern('HEAD', $urlMatchingStrategy);
@@ -335,6 +344,15 @@ class WireMock
     public static function optionsRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
     {
         return new RequestPatternBuilder('OPTIONS', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public static function patchRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    {
+        return new RequestPatternBuilder('PATCH', $urlMatchingStrategy);
     }
 
     /**
