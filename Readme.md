@@ -87,6 +87,3 @@ $wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/verify/this'
 If a verification fails a `VerificationException` is thrown. If PHPUnit is present on the include path, this will be a
 subclass of `PHPUnit_Framework_AssertionFailedError`, thus causing any containing PHPUnit test to fail; if PHPUnit is
 not present, `VerificationException` subclasses `Exception`.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rowanhill/wiremock-php/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
