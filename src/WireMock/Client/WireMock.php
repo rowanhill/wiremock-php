@@ -72,9 +72,15 @@ class WireMock
         $response = json_decode($responseJson, true);
         $count = $response['count'];
 
-        if (($numberOfRequests === null && $count < 1) || ($numberOfRequests && $count != $numberOfRequests)) {
-            $expected = $numberOfRequests ? $numberOfRequests : 'at least one';
-            throw new VerificationException("Expected $expected request(s), but found $count");
+        if ($numberOfRequests === null) {
+            // If $numberOfRequests is not specified, any non-zero number of requests is acceptable
+            if ($count < 1) {
+                throw new VerificationException("Expected at least one request, but found $count");
+            }
+        } else {
+            if ($count != $numberOfRequests) {
+                throw new VerificationException("Expected $numberOfRequests request(s), but found $count");
+            }
         }
     }
 

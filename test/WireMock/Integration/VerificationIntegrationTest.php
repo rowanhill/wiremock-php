@@ -97,6 +97,18 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
+    function testVerifyingZeroRequestsWhenSomeRequestsWereMadeThrowsException()
+    {
+        // given
+        $this->_testClient->get('/some/url');
+
+        // when
+        self::$_wireMock->verify(0, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
     function testVerifyingWrongNumberOfRequestsThrowsException()
     {
         // given
