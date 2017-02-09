@@ -12,4 +12,4 @@ php:
 before_script:
   - travis_retry composer update --no-interaction
 
-script: pushd test && phpunit --configuration phpunit.xml --debug --verbose && popd
+script: pushd test && ../vendor/bin/phpunit --configuration phpunit.xml --debug --verbose && popd
