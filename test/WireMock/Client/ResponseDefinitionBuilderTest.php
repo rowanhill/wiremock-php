@@ -4,7 +4,7 @@ namespace WireMock\Client;
 
 class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    function testDefault200StatusIsAvailableInArray()
+    public function testDefault200StatusIsAvailableInArray()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -17,7 +17,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('status', 200));
     }
 
-    function testSpecifiedStatusIsAvailableInArray()
+    public function testSpecifiedStatusIsAvailableInArray()
     {
         // given
         $status = 403;
@@ -32,7 +32,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('status', $status));
     }
 
-    function testBodyIsAvailableInArrayIfSet()
+    public function testBodyIsAvailableInArrayIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -47,7 +47,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('body', $body));
     }
 
-    function testBodyIsNotAvailableInArrayIfNotSet()
+    public function testBodyIsNotAvailableInArrayIfNotSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -60,7 +60,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, not(hasKey('body')));
     }
 
-    function testBodyFileIsAvailableInArrayIfSet()
+    public function testBodyFileIsAvailableInArrayIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -75,7 +75,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('bodyFileName', $bodyFile));
     }
 
-    function testBodyFileIsNotAvailableInArrayIfNotSet()
+    public function testBodyFileIsNotAvailableInArrayIfNotSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -88,7 +88,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, not(hasKey('bodyFileName')));
     }
 
-    function testBase64BodyIsAvailableInArrayIfSet()
+    public function testBase64BodyIsAvailableInArrayIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -104,7 +104,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('base64Body', $base64));
     }
 
-    function testHeaderIsAvailableInArrayIfSet()
+    public function testHeaderIsAvailableInArrayIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -119,7 +119,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('headers', array('foo1' => 'bar1', 'foo2' => 'bar2')));
     }
 
-    function testHeaderIsNotAvailableInArrayIfNotSet()
+    public function testHeaderIsNotAvailableInArrayIfNotSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -132,7 +132,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, not(hasKey('headers')));
     }
 
-    function testProxyBaseUrlIsAvailableIfSet()
+    public function testProxyBaseUrlIsAvailableIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
@@ -146,7 +146,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'http://otherhost.com/approot'));
     }
 
-    function testFixedDelayMillisecondsIsInArrayIfSet()
+    public function testFixedDelayMillisecondsIsInArrayIfSet()
     {
         // given
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();

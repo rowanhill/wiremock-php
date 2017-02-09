@@ -15,14 +15,14 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var TestClient */
     protected $_testClient;
 
-    static function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         self::runCmd('./../wiremock/start.sh');
         self::$_wireMock = WireMock::create();
         assertThat(self::$_wireMock->isAlive(), is(true));
     }
 
-    static function tearDownAfterClass()
+    public static function tearDownAfterClass()
     {
         self::runCmd('./../wiremock/stop.sh');
     }
@@ -38,7 +38,7 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         assertThat($result, is(0));
     }
 
-    function setUp()
+    public function setUp()
     {
         $this->_testClient = new TestClient();
         self::$_wireMock->reset();

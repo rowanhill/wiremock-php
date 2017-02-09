@@ -13,7 +13,7 @@ class LoggedRequest
     private $_loggedDate;
     private $_loggedDateString;
 
-    function __construct(array $requestArray)
+    public function __construct(array $requestArray)
     {
         foreach ($requestArray as $key => $value) {
             $property = "_$key";
@@ -84,6 +84,4 @@ class LoggedRequest
     {
         return $this->_loggedDateString;
     }
-
-
 }

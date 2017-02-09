@@ -8,13 +8,13 @@ class TestClient
     private $_port;
     private $_lastRequestTimeMillis;
 
-    function __construct($_hostname='localhost', $_port=8080)
+    public function __construct($_hostname='localhost', $_port=8080)
     {
         $this->_hostname = $_hostname;
         $this->_port = $_port;
     }
 
-    function get($path, array $headers=array())
+    public function get($path, array $headers=array())
     {
         $ch = curl_init($this->_makeUrl($path));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -29,7 +29,7 @@ class TestClient
         return $result;
     }
 
-    function post($path, $body)
+    public function post($path, $body)
     {
         $ch = curl_init($this->_makeUrl($path));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

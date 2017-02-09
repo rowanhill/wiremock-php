@@ -4,7 +4,7 @@ namespace WireMock\Matching;
 
 class RequestPatternTest extends \PHPUnit_Framework_TestCase
 {
-    function testMethodAndMatchingTypeAndMatchingValueAreAvailableAsArray()
+    public function testMethodAndMatchingTypeAndMatchingValueAreAvailableAsArray()
     {
         // given
         $method = 'GET';
@@ -23,7 +23,7 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry($matchingType, $matchingValue));
     }
 
-    function testRequestHeaderMatchersAreAvailableInArray()
+    public function testRequestHeaderMatchersAreAvailableInArray()
     {
         // given
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
@@ -40,7 +40,7 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry('headers', $headers));
     }
 
-    function testRequestBodyMatchersAreAvailableInArray()
+    public function testRequestBodyMatchersAreAvailableInArray()
     {
         // given
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */

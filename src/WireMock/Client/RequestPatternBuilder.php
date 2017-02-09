@@ -16,7 +16,7 @@ class RequestPatternBuilder
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
      */
-    function __construct($method, $urlMatchingStrategy)
+    public function __construct($method, $urlMatchingStrategy)
     {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;
@@ -56,7 +56,7 @@ class RequestPatternBuilder
     /**
      * @return RequestPattern
      */
-    function build()
+    public function build()
     {
         $requestPattern = new RequestPattern($this->_method, $this->_urlMatchingStrategy);
         if (!empty($this->_headers)) {

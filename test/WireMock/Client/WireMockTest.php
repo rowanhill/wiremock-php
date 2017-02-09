@@ -15,7 +15,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     /** @var WireMock */
     private $_wireMock;
 
-    function setUp()
+    public function setUp()
     {
         $this->_mockHttpWait = mock('WireMock\Client\HttpWait');
         $this->_mockCurl = mock('WireMock\Client\Curl');
@@ -23,7 +23,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl);
     }
 
-    function testApiIsAliveIfServerReturns200()
+    public function testApiIsAliveIfServerReturns200()
     {
         // given
         when($this->_mockHttpWait->waitForServerToGive200('http://localhost:8080/__admin/'))->return(true);
@@ -35,7 +35,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         assertThat($isAlive, is(true));
     }
 
-    function testApiIsNotAliveIfServerDoesNotReturn200()
+    public function testApiIsNotAliveIfServerDoesNotReturn200()
     {
         // given
         when($this->_mockHttpWait->waitForServerToGive200('http://localhost:8080/__admin'))->return(false);
@@ -47,7 +47,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         assertThat($isAlive, is(false));
     }
 
-    function testStubbingPostsJsonSerialisedObjectToWireMock()
+    public function testStubbingPostsJsonSerialisedObjectToWireMock()
     {
         // given
         /** @var StubMapping $mockStubMapping */
@@ -65,7 +65,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings/new', $stubMappingArray);
     }
 
-    function testVerifyingPostsJsonSerialisedObjectToWireMock()
+    public function testVerifyingPostsJsonSerialisedObjectToWireMock()
     {
         // given
         /** @var RequestPattern $mockRequestPattern */

@@ -11,16 +11,16 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy
 
     private $_jsonCompareMode;
 
-    function __construct($matchingValue, $jsonCompareMode)
+    public function __construct($matchingValue, $jsonCompareMode)
     {
         parent::__construct('equalToJson', $matchingValue);
         $this->_jsonCompareMode = $jsonCompareMode;
     }
 
-    function toArray()
+    public function toArray()
     {
         $array = parent::toArray();
         $array['jsonCompareMode'] = $this->_jsonCompareMode;
         return $array;
     }
-} 
+}

@@ -6,7 +6,7 @@ use WireMock\Matching\UrlMatchingStrategy;
 
 class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    function testMethodAndUrlMatchingStrategyAreInArray()
+    public function testMethodAndUrlMatchingStrategyAreInArray()
     {
         // given
         $method = 'GET';
@@ -25,7 +25,7 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry($matchingType, $matchingValue));
     }
 
-    function testHeaderWithValueMatchingStrategyIsInArrayIfSpecified()
+    public function testHeaderWithValueMatchingStrategyIsInArrayIfSpecified()
     {
         // given
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
@@ -44,7 +44,7 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('equalTo' => 'something'))));
     }
 
-    function testHeaderAbsenceIsInArrayIfSpecified()
+    public function testHeaderAbsenceIsInArrayIfSpecified()
     {
         // given
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
@@ -60,7 +60,7 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('absent' => true))));
     }
 
-    function testRequestBodyPatternsAreInArrayIfSpecified()
+    public function testRequestBodyPatternsAreInArrayIfSpecified()
     {
         // given
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */

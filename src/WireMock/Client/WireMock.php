@@ -23,7 +23,7 @@ class WireMock
         return new self($httpWait, $curl, $hostname, $port);
     }
 
-    function __construct(HttpWait $httpWait, Curl $curl, $hostname='localhost', $port=8080)
+    public function __construct(HttpWait $httpWait, Curl $curl, $hostname='localhost', $port=8080)
     {
         $this->_hostname = $hostname;
         $this->_port = $port;

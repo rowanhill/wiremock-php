@@ -13,7 +13,7 @@ class UrlMatchingStrategy
      * @param string $matchingType
      * @param string $matchingValue
      */
-    function __construct($matchingType, $matchingValue)
+    public function __construct($matchingType, $matchingValue)
     {
         $this->_matchingType = $matchingType;
         $this->_matchingValue = $matchingValue;

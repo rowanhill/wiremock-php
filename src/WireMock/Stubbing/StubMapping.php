@@ -22,7 +22,7 @@ class StubMapping
      * @param int $priority
      * @param Scenario $scenario
      */
-    function __construct(
+    public function __construct(
         RequestPattern $requestPattern,
         ResponseDefinition $responseDefinition,
         $priority=null,
@@ -34,7 +34,7 @@ class StubMapping
         $this->_scenario = $scenario;
     }
 
-    function toArray()
+    public function toArray()
     {
         $array = array(
             'request' => $this->_requestPattern->toArray(),

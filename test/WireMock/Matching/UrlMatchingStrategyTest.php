@@ -4,7 +4,7 @@ namespace WireMock\Matching;
 
 class UrlMatchingStrategyTest extends \PHPUnit_Framework_TestCase
 {
-    function testMatchingTypeAndMatchingValueAreAvailableAsArray()
+    public function testMatchingTypeAndMatchingValueAreAvailableAsArray()
     {
         // given
         $matchingType = 'url';

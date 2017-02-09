@@ -9,7 +9,7 @@ require_once 'WireMockIntegrationTest.php';
 
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
-    function testFixedDelayOnStubbedResponseCanBeSpecified()
+    public function testFixedDelayOnStubbedResponseCanBeSpecified()
     {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
@@ -23,7 +23,7 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    function testGlobalFixedDelayOnStubbedResponsesCanBeSet()
+    public function testGlobalFixedDelayOnStubbedResponsesCanBeSet()
     {
         // given
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
@@ -39,7 +39,7 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
     }
 
-    function testGlobalFixedDelayOnSocketAcceptanceCanBeSet()
+    public function testGlobalFixedDelayOnSocketAcceptanceCanBeSet()
     {
         // given
         $this->_testClient->get('/not/stubbed/url');
@@ -53,17 +53,17 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
     }
 
-    function testEmptyResponseFaultCanBeStubbed()
+    public function testEmptyResponseFaultCanBeStubbed()
     {
         $this->_testFaultCanBeStubbed(Fault::EMPTY_RESPONSE);
     }
 
-    function testMalformedResponseChunkFaultCanBeStubbed()
+    public function testMalformedResponseChunkFaultCanBeStubbed()
     {
         $this->_testFaultCanBeStubbed(Fault::MALFORMED_RESPONSE_CHUNK);
     }
 
-    function testRandomDataThenCloseFaultCanBeStubbed()
+    public function testRandomDataThenCloseFaultCanBeStubbed()
     {
         $this->_testFaultCanBeStubbed(Fault::RANDOM_DATA_THEN_CLOSE);
     }

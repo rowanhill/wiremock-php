@@ -17,7 +17,7 @@ class ScenarioBuilder
      * @param string $scenarioName
      * @return ScenarioBuilder
      */
-    function withScenarioName($scenarioName)
+    public function withScenarioName($scenarioName)
     {
         $this->_scenarioName = $scenarioName;
         return $this;
@@ -27,7 +27,7 @@ class ScenarioBuilder
      * @param string $requiredScenarioState
      * @return ScenarioBuilder
      */
-    function withRequiredState($requiredScenarioState) {
+    public function withRequiredState($requiredScenarioState) {
         $this->_requiredScenarioState = $requiredScenarioState;
         return $this;
     }
@@ -36,12 +36,12 @@ class ScenarioBuilder
      * @param string $newScenarioState
      * @return ScenarioBuilder
      */
-    function withNewScenarioState($newScenarioState) {
+    public function withNewScenarioState($newScenarioState) {
         $this->_newScenarioState = $newScenarioState;
         return $this;
     }
 
-    function build() {
+    public function build() {
         if ($this->_scenarioName === null) {
             if ($this->_requiredScenarioState !== null || $this->_newScenarioState !== null) {
                 throw new \Exception('Scenario name must be set');
