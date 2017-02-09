@@ -7,17 +7,11 @@ namespace WireMock\Client;
 // If not, it just extends Exception (to prevent forcing a dependency on PHPUnit).
 //
 if (class_exists('PHPUnit_Framework_AssertionFailedError')) {
-
     class VerificationException extends \PHPUnit_Framework_AssertionFailedError
     {
-
     }
-
 } else {
-
     class VerificationException extends \Exception
     {
-
     }
-
 }

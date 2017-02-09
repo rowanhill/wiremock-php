@@ -33,7 +33,9 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         $output = array();
         $redirect = EXEC_BLOCKS_ON_OUTPUT ? '> /dev/null' : '';
         exec("($cmd) $redirect 2>&1 &", $output, $result);
-        $output = array_map(function($line) { return "\n$line"; }, $output);
+        $output = array_map(function ($line) {
+            return "\n$line";
+        }, $output);
         echo implode($output, "\n");
         assertThat($result, is(0));
     }

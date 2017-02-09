@@ -20,8 +20,9 @@ class Scenario
         $this->_newScenarioState = $newScenarioState;
     }
 
-    public function toArray() {
-        $array = array('scenarioName' => $this->_scenarioName);;
+    public function toArray()
+    {
+        $array = array('scenarioName' => $this->_scenarioName);
         if ($this->_requiredScenarioState) {
             $array['requiredScenarioState'] = $this->_requiredScenarioState;
         }

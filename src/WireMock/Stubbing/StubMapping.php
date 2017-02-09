@@ -25,8 +25,8 @@ class StubMapping
     public function __construct(
         RequestPattern $requestPattern,
         ResponseDefinition $responseDefinition,
-        $priority=null,
-        $scenario=null)
+        $priority = null,
+        $scenario = null)
     {
         $this->_requestPattern = $requestPattern;
         $this->_responseDefinition = $responseDefinition;
@@ -38,7 +38,7 @@ class StubMapping
     {
         $array = array(
             'request' => $this->_requestPattern->toArray(),
-            'response' => $this->_responseDefinition->toArray()
+            'response' => $this->_responseDefinition->toArray(),
         );
         if ($this->_priority) {
             $array['priority'] = $this->_priority;

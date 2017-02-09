@@ -22,7 +22,7 @@ class UrlMatchingStrategy
     public function toArray()
     {
         return array(
-            $this->_matchingType => $this->_matchingValue
+            $this->_matchingType => $this->_matchingValue,
         );
     }
 }

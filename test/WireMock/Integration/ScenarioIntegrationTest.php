@@ -9,7 +9,8 @@ require_once 'WireMockIntegrationTest.php';
 
 class ScenarioIntegrationTest extends WireMockIntegrationTest
 {
-    public function testScenarioNameOfStubCanBeSet() {
+    public function testScenarioNameOfStubCanBeSet()
+    {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->inScenario('Some Scenario')
@@ -22,7 +23,8 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    public function testRequiredScenarioStateOfStubCanBeSet() {
+    public function testRequiredScenarioStateOfStubCanBeSet()
+    {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
                 ->inScenario('Some Scenario')
@@ -36,7 +38,8 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    public function testNewScenarioStateOfStubCanBeSet() {
+    public function testNewScenarioStateOfStubCanBeSet()
+    {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
                 ->inScenario('Some Scenario')
@@ -50,7 +53,8 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
-    public function testScenariosCanBeReset() {
+    public function testScenariosCanBeReset()
+    {
         // given
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))->inScenario('Some Scenario')
                 ->whenScenarioStateIs(Scenario::STARTED)

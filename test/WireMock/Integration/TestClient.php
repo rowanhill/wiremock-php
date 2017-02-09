@@ -8,13 +8,13 @@ class TestClient
     private $_port;
     private $_lastRequestTimeMillis;
 
-    public function __construct($_hostname='localhost', $_port=8080)
+    public function __construct($_hostname = 'localhost', $_port = 8080)
     {
         $this->_hostname = $_hostname;
         $this->_port = $_port;
     }
 
-    public function get($path, array $headers=array())
+    public function get($path, array $headers = array())
     {
         $ch = curl_init($this->_makeUrl($path));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -33,7 +33,7 @@ class TestClient
     {
         $ch = curl_init($this->_makeUrl($path));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 
         $result = $this->_makeTimedRequest($ch);

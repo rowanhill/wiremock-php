@@ -7,11 +7,11 @@ use WireMock\Stubbing\Scenario;
 class ScenarioBuilder
 {
     /** @var string */
-    private $_scenarioName = null;
+    private $_scenarioName;
     /** @var string */
-    private $_requiredScenarioState = null;
+    private $_requiredScenarioState;
     /** @var string */
-    private $_newScenarioState = null;
+    private $_newScenarioState;
 
     /**
      * @param string $scenarioName
@@ -27,7 +27,8 @@ class ScenarioBuilder
      * @param string $requiredScenarioState
      * @return ScenarioBuilder
      */
-    public function withRequiredState($requiredScenarioState) {
+    public function withRequiredState($requiredScenarioState)
+    {
         $this->_requiredScenarioState = $requiredScenarioState;
         return $this;
     }
@@ -36,20 +37,22 @@ class ScenarioBuilder
      * @param string $newScenarioState
      * @return ScenarioBuilder
      */
-    public function withNewScenarioState($newScenarioState) {
+    public function withNewScenarioState($newScenarioState)
+    {
         $this->_newScenarioState = $newScenarioState;
         return $this;
     }
 
-    public function build() {
+    public function build()
+    {
         if ($this->_scenarioName === null) {
             if ($this->_requiredScenarioState !== null || $this->_newScenarioState !== null) {
                 throw new \Exception('Scenario name must be set');
-            } else {
-                return null;
             }
-        } else {
-            return new Scenario($this->_scenarioName, $this->_requiredScenarioState, $this->_newScenarioState);
+
+            return null;
         }
+
+        return new Scenario($this->_scenarioName, $this->_requiredScenarioState, $this->_newScenarioState);
     }
 }
