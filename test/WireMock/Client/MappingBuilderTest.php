@@ -14,7 +14,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var ResponseDefinition */
     private $_mockResponseDefinition;
 
-    function setUp()
+    public function setUp()
     {
         /** @var RequestPattern $mockRequestPattern */
         $mockRequestPattern = mock('WireMock\Matching\RequestPattern');
@@ -32,7 +32,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $this->_mockResponseDefinitionBuilder = $mockResponseDefinitionBuilder;
     }
 
-    function testBuiltStubMappingHasRequestPatternAndResponseDefinition()
+    public function testBuiltStubMappingHasRequestPatternAndResponseDefinition()
     {
         // given
         $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
@@ -47,7 +47,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($array, hasEntry('response', array('aResponse' => 'definition')));
     }
 
-    function testMatchedRequestHeadersAreSetOnRequestPattern()
+    public function testMatchedRequestHeadersAreSetOnRequestPattern()
     {
         // given
         $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
@@ -62,7 +62,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         verify($this->_mockRequestPattern)->setHeaders($headers);
     }
 
-    function testRequestBodyMatcherIsSetOnRequestPattern()
+    public function testRequestBodyMatcherIsSetOnRequestPattern()
     {
         // given
         $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);

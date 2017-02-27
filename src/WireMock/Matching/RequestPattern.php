@@ -14,7 +14,7 @@ class RequestPattern
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
      */
-    function __construct($method, $urlMatchingStrategy)
+    public function __construct($method, $urlMatchingStrategy)
     {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;

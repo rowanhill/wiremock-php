@@ -9,7 +9,7 @@ require_once 'WireMockIntegrationTest.php';
 
 class VerificationIntegrationTest extends WireMockIntegrationTest
 {
-    function testCanVerifySimpleGetToUrl()
+    public function testCanVerifySimpleGetToUrl()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -21,13 +21,13 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
-    function testVerifyingUnrequestedUrlThrowsException()
+    public function testVerifyingUnrequestedUrlThrowsException()
     {
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
-    function testCanVerifyRequestHasHeader()
+    public function testCanVerifyRequestHasHeader()
     {
         // given
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
@@ -40,7 +40,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
-    function testVerifyingRequestWithMissingHeaderThrowsException()
+    public function testVerifyingRequestWithMissingHeaderThrowsException()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -50,7 +50,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withHeader('Cookie', WireMock::equalTo('foo=bar')));
     }
 
-    function testCanVerifyRequestDoesNotHaveHeader()
+    public function testCanVerifyRequestDoesNotHaveHeader()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -63,7 +63,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
-    function testVerifyingAbsenceOfPresentHeaderThrowsException()
+    public function testVerifyingAbsenceOfPresentHeaderThrowsException()
     {
         // given
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
@@ -73,7 +73,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withoutHeader('Cookie'));
     }
 
-    function testCanVerifyRequestHasBody()
+    public function testCanVerifyRequestHasBody()
     {
         // given
         $this->_testClient->post('/some/url', 'Some Body');
@@ -83,7 +83,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withRequestBody(WireMock::equalTo('Some Body')));
     }
 
-    function testCanVerifyASpecificNumberOfRequestsOccurred()
+    public function testCanVerifyASpecificNumberOfRequestsOccurred()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -97,7 +97,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
-    function testVerifyingZeroRequestsWhenSomeRequestsWereMadeThrowsException()
+    public function testVerifyingZeroRequestsWhenSomeRequestsWereMadeThrowsException()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -109,7 +109,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     /**
      * @expectedException \WireMock\Client\VerificationException
      */
-    function testVerifyingWrongNumberOfRequestsThrowsException()
+    public function testVerifyingWrongNumberOfRequestsThrowsException()
     {
         // given
         $this->_testClient->get('/some/url');
@@ -119,7 +119,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
-    function testFindingAllRequestsReturnsMatchingRequestDetails()
+    public function testFindingAllRequestsReturnsMatchingRequestDetails()
     {
         // given
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));

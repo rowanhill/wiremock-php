@@ -4,8 +4,12 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - nightly
 
 before_script:
-  - composer install
+  - travis_retry composer update --no-interaction
 
-script: pushd test && phpunit --configuration phpunit.xml --debug --verbose && popd
+script: pushd test && ../vendor/bin/phpunit --configuration phpunit.xml --debug --verbose && popd

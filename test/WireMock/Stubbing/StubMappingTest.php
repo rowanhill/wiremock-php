@@ -14,14 +14,14 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     /** @var Scenario */
     private $_mockScenario;
 
-    function setUp()
+    public function setUp()
     {
         $this->_mockRequestPattern = mock('WireMock\Matching\RequestPattern');
         $this->_mockResponseDefinition = mock('WireMock\Http\ResponseDefinition');
         $this->_mockScenario = mock('WireMock\Stubbing\Scenario');
     }
 
-    function testRequestPatternAndResponseDefinitionAreAvailableInArray()
+    public function testRequestPatternAndResponseDefinitionAreAvailableInArray()
     {
         // given
         $requestArray = array('request');
@@ -38,7 +38,7 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         assertThat($stubMappingArray, hasEntry('response', $responseArray));
     }
 
-    function testPriorityIsInArrayIfSpecified()
+    public function testPriorityIsInArrayIfSpecified()
     {
         // given
         when($this->_mockRequestPattern->toArray())->return(array());
@@ -52,7 +52,7 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         assertThat($stubMappingArray, hasEntry('priority', 5));
     }
 
-    function testScenarioArrayIsMergedIntoArrayIfSpecified()
+    public function testScenarioArrayIsMergedIntoArrayIfSpecified()
     {
         // given
         when($this->_mockRequestPattern->toArray())->return(array());

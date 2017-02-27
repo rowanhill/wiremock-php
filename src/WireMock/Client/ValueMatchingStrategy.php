@@ -9,13 +9,13 @@ class ValueMatchingStrategy
     /** @var string */
     private $_matchingValue;
 
-    function __construct($matchingType, $matchingValue)
+    public function __construct($matchingType, $matchingValue)
     {
         $this->_matchingType = $matchingType;
         $this->_matchingValue = $matchingValue;
     }
 
-    function toArray()
+    public function toArray()
     {
         return array($this->_matchingType => $this->_matchingValue);
     }

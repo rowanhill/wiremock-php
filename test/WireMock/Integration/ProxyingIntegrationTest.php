@@ -8,7 +8,8 @@ require_once 'WireMockIntegrationTest.php';
 
 class ProxyingIntegrationTest extends WireMockIntegrationTest
 {
-    function testProxyBaseUrlOfStubCanBeSet() {
+    public function testProxyBaseUrlOfStubCanBeSet()
+    {
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
                 ->willReturn(WireMock::aResponse()->proxiedFrom('http://otherhost.com/approot'))

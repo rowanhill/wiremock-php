@@ -16,14 +16,14 @@ class WireMock
     /** @var Curl  */
     private $_curl;
 
-    public static function create($hostname='localhost', $port=8080)
+    public static function create($hostname = 'localhost', $port = 8080)
     {
         $httpWait = new HttpWait();
         $curl = new Curl();
         return new self($httpWait, $curl, $hostname, $port);
     }
 
-    function __construct(HttpWait $httpWait, Curl $curl, $hostname='localhost', $port=8080)
+    public function __construct(HttpWait $httpWait, Curl $curl, $hostname = 'localhost', $port = 8080)
     {
         $this->_hostname = $hostname;
         $this->_port = $port;
@@ -56,7 +56,7 @@ class WireMock
      * @param RequestPatternBuilder $requestPatternBuilder
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrNumber, RequestPatternBuilder $requestPatternBuilder=null)
+    public function verify($requestPatternBuilderOrNumber, RequestPatternBuilder $requestPatternBuilder = null)
     {
         if (is_int($requestPatternBuilderOrNumber)) {
             $patternBuilder = $requestPatternBuilder;
@@ -92,7 +92,7 @@ class WireMock
         $findResultArray = json_decode($findResultJson, true);
         $requestArrays = $findResultArray['requests'];
         $requests = array();
-        foreach($requestArrays as $responseArray) {
+        foreach ($requestArrays as $responseArray) {
             $requests[] = new LoggedRequest($responseArray);
         }
         return $requests;

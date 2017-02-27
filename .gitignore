@@ -1,6 +1,7 @@
 .idea
 /vendor
 composer.phar
+composer.lock
 /wiremock/*.jar
 /wiremock/*.log
 /wiremock/mappings

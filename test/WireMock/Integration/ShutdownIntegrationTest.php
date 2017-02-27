@@ -6,7 +6,7 @@ require_once 'WireMockIntegrationTest.php';
 
 class ShutdownIntegrationTest extends WireMockIntegrationTest
 {
-    function testShutdownTerminatesStandaloneServer()
+    public function testShutdownTerminatesStandaloneServer()
     {
         // when
         self::$_wireMock->shutdownServer();

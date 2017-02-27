@@ -4,7 +4,7 @@ namespace WireMock\Client;
 
 class ValueMatchingStrategyTest extends \PHPUnit_Framework_TestCase
 {
-    function testMatchingStrategyAndMatchedValueAreInArray()
+    public function testMatchingStrategyAndMatchedValueAreInArray()
     {
         // given
         $matchingType = 'equalTo';

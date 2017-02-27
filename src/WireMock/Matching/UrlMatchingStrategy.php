@@ -13,7 +13,7 @@ class UrlMatchingStrategy
      * @param string $matchingType
      * @param string $matchingValue
      */
-    function __construct($matchingType, $matchingValue)
+    public function __construct($matchingType, $matchingValue)
     {
         $this->_matchingType = $matchingType;
         $this->_matchingValue = $matchingValue;
@@ -22,7 +22,7 @@ class UrlMatchingStrategy
     public function toArray()
     {
         return array(
-            $this->_matchingType => $this->_matchingValue
+            $this->_matchingType => $this->_matchingValue,
         );
     }
 }
