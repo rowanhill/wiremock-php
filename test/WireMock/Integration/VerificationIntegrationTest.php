@@ -73,6 +73,42 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withoutHeader('Cookie'));
     }
 
+    public function testCanVerifyRequestWithQuery()
+    {
+        // given
+        $this->_testClient->get('/some/url?foo=bar');
+
+        // when
+        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlMatching('/some/url.*'))
+            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
+    public function testVerifyingWiremockUrlEqualThrowsException()
+    {
+        // given
+        $this->_testClient->get('/some/url?foo=bar');
+
+        // when
+        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
+    public function testVerifyingRequestWithMissingQueryThrowsException()
+    {
+        // given
+        $this->_testClient->get('/some/url');
+
+        // when
+        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+    }
+
     public function testCanVerifyRequestHasBody()
     {
         // given

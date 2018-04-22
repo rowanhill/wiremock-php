@@ -109,16 +109,16 @@ class WireMock
         $this->_curl->post($url, array('fixedDelay' => $delayMillis));
     }
 
-    public function addRequestProcessingDelay($delayMillis)
-    {
-        $url = $this->_makeUrl('__admin/socket-delay');
-        $this->_curl->post($url, array('milliseconds' => $delayMillis));
-    }
-
     public function saveAllMappings()
     {
         $url = $this->_makeUrl('__admin/mappings/save');
         $this->_curl->post($url);
+    }
+
+    public function deleteMappings($id)
+    {
+        $url = $this->_makeUrl('__admin/mappings/' . $id);
+        $this->_curl->delete($url);
     }
 
     /**

@@ -6,6 +6,9 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
 {
     $mappings = getMappings();
     assertThat($mappings, is(arrayWithSize(1)));
+
+    unset($mappings[0]['id']);
+    unset($mappings[0]['uuid']);
     assertThat($mappings[0], is($stubMapping->toArray()));
 }
 
