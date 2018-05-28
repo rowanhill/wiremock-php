@@ -7,6 +7,8 @@ class ResponseDefinition
     /** @var int */
     private $_status = 200;
     /** @var string */
+    private $_statusMessage;
+    /** @var string */
     private $_body;
     /** @var string */
     private $_bodyFile;
@@ -27,6 +29,14 @@ class ResponseDefinition
     public function setStatus($status)
     {
         $this->_status = $status;
+    }
+
+    /**
+     * @param string $statusMessage
+     */
+    public function setStatusMessage($statusMessage)
+    {
+        $this->_statusMessage = $statusMessage;
     }
 
     /**
@@ -89,6 +99,9 @@ class ResponseDefinition
     {
         $array = array();
         $array['status'] = $this->_status;
+        if ($this->_statusMessage) {
+            $array['statusMessage'] = $this->_statusMessage;
+        }
         if ($this->_body) {
             $array['body'] = $this->_body;
         }

@@ -32,6 +32,35 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('status', $status));
     }
 
+    public function testStatusMessageIsAvailableInArrayIfSet()
+    {
+        // given
+        $statusMessage = "hello there";
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder->withStatusMessage($statusMessage);
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // then
+        assertThat($responseDefArray, hasEntry('statusMessage', $statusMessage));
+    }
+
+    public function testStatusMessageIsNotAvailableInArrayIfNotSet()
+    {
+        // given
+        $statusMessage = "hello there";
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // then
+        assertThat($responseDefArray, not(hasKey('statusMessage')));
+    }
+
     public function testBodyIsAvailableInArrayIfSet()
     {
         // given
