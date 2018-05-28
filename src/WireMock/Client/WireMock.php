@@ -263,9 +263,21 @@ class WireMock
         return new UrlMatchingStrategy('url', $urlPath);
     }
 
+    /**
+     * @param string $urlRegex
+     * @return UrlMatchingStrategy
+     */
     public static function urlMatching($urlRegex)
     {
         return new UrlMatchingStrategy('urlPattern', $urlRegex);
+    }
+
+    /**
+     * @return UrlMatchingStrategy
+     */
+    public static function anyUrl()
+    {
+        return new UrlMatchingStrategy('urlPattern', '.*');
     }
 
     /**
