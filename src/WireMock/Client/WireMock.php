@@ -148,6 +148,15 @@ class WireMock
     }
 
     /**
+     * Deletes all serve events from the WireMock server's request journal
+     */
+    public function resetAllRequests()
+    {
+        $url = $this->_makeUrl('__admin/requests');
+        $this->_curl->delete($url);
+    }
+
+    /**
      * Sets a delay on all stubbed responses
      *
      * @param int $delayMillis

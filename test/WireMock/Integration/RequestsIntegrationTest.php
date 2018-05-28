@@ -73,4 +73,17 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         $request = current($requests);
         assertThat($request->getUrl(), is('/some/url'));
     }
+
+    public function testResettingAllRequestsRemovesPreviousRequestsFromTheJournal()
+    {
+        // given
+        $this->_testClient->get('/unmatched');
+
+        // when
+        self::$_wireMock->resetAllRequests();
+
+        // then
+        $serveEvents = self::$_wireMock->getAllServeEvents();
+        assertThat($serveEvents['requests'], arrayWithSize(0));
+    }
 }
