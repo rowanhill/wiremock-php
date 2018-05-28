@@ -46,8 +46,21 @@ class WireMock
     public function stubFor(MappingBuilder $mappingBuilder)
     {
         $stubMapping = $mappingBuilder->build();
-        $url = $this->_makeUrl('__admin/mappings/new');
-        $this->_curl->post($url, $stubMapping->toArray());
+        $url = $this->_makeUrl('__admin/mappings');
+        $result = $this->_curl->post($url, $stubMapping->toArray());
+        $resultJson = json_decode($result);
+        $stubMapping->id = $resultJson->id;
+        return $stubMapping;
+    }
+
+    public function editStub(MappingBuilder $mappingBuilder)
+    {
+        $stubMapping = $mappingBuilder->build();
+        if (!$stubMapping->id) {
+            throw new VerificationException('Cannot edit a stub without an id');
+        }
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->id));
+        $this->_curl->put($url, $stubMapping->toArray());
         return $stubMapping;
     }
 

@@ -62,7 +62,43 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         $this->_wireMock->stubFor($mockMappingBuilder);
 
         // then
-        verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings/new', $stubMappingArray);
+        verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray);
+    }
+
+    public function testEditingStubsPutsJsonSerialisedObjectAtUrlWithIdToWireMock()
+    {
+        // given
+        /** @var StubMapping $mockStubMapping */
+        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
+        $mockStubMapping->id = 'some-long-guid';
+        $stubMappingArray = array('some' => 'json');
+        when($mockStubMapping->toArray())->return($stubMappingArray);
+        /** @var MappingBuilder $mockMappingBuilder */
+        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
+        when($mockMappingBuilder->build())->return($mockStubMapping);
+
+        // when
+        $this->_wireMock->editStub($mockMappingBuilder);
+
+        // then
+        verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', $stubMappingArray);
+    }
+
+    /**
+     * @expectedException \WireMock\Client\VerificationException
+     */
+    public function testEditingStubWithoutAnIdThrowsException()
+    {
+        // given
+        /** @var StubMapping $mockStubMapping */
+        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
+        $mockStubMapping->id = null;
+        /** @var MappingBuilder $mockMappingBuilder */
+        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
+        when($mockMappingBuilder->build())->return($mockStubMapping);
+
+        // when
+        $this->_wireMock->editStub($mockMappingBuilder);
     }
 
     public function testStubbingAddsReturnedIdToStubMappingObject()

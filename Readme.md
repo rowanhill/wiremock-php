@@ -40,7 +40,7 @@ Unfortunately, PHP doesn't support anything like Java's static import of methods
 the Java API's static instance pattern. Instead, in wiremock-php some methods which are static in Java are instance
 methods. Those methods are:
 
-- `stubFor`
+- `stubFor`, `editStub`
 - `verify`
 - `findAll`
 - `saveAllMappings`
