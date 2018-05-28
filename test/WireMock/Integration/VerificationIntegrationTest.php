@@ -130,6 +130,17 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
+    public function testCanVerifyAsComparisonOperator()
+    {
+        // given
+        $this->_testClient->get('/some/url');
+        $this->_testClient->get('/some/url');
+        $this->_testClient->get('/some/url');
+
+        // when
+        self::$_wireMock->verify(WireMock::moreThan(2), WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+    }
+
     /**
      * @expectedException \WireMock\Client\VerificationException
      */

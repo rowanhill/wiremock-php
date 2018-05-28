@@ -4,6 +4,7 @@ namespace WireMock\Client;
 
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\Verification\CountMatchingStrategy;
 
 class WireMock
 {
@@ -65,18 +66,21 @@ class WireMock
     }
 
     /**
-     * @param RequestPatternBuilder|integer $requestPatternBuilderOrNumber
+     * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
      * @param RequestPatternBuilder $requestPatternBuilder
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrNumber, RequestPatternBuilder $requestPatternBuilder = null)
+    public function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
     {
-        if (is_int($requestPatternBuilderOrNumber)) {
+        if ($requestPatternBuilderOrCount instanceof CountMatchingStrategy) {
             $patternBuilder = $requestPatternBuilder;
-            $numberOfRequests = $requestPatternBuilderOrNumber;
+            $numberOfRequestsMatcher = $requestPatternBuilderOrCount;
+        } else if (is_int($requestPatternBuilderOrCount)) {
+            $patternBuilder = $requestPatternBuilder;
+            $numberOfRequestsMatcher = self::exactly($requestPatternBuilderOrCount);
         } else {
-            $patternBuilder = $requestPatternBuilderOrNumber;
-            $numberOfRequests = null;
+            $patternBuilder = $requestPatternBuilderOrCount;
+            $numberOfRequestsMatcher = null;
         }
 
         $requestPattern = $patternBuilder->build();
@@ -85,14 +89,15 @@ class WireMock
         $response = json_decode($responseJson, true);
         $count = $response['count'];
 
-        if ($numberOfRequests === null) {
-            // If $numberOfRequests is not specified, any non-zero number of requests is acceptable
+        if ($numberOfRequestsMatcher === null) {
+            // If $numberOfRequestsMatcher is not specified, any non-zero number of requests is acceptable
             if ($count < 1) {
                 throw new VerificationException("Expected at least one request, but found $count");
             }
         } else {
-            if ($count != $numberOfRequests) {
-                throw new VerificationException("Expected $numberOfRequests request(s), but found $count");
+            if (!$numberOfRequestsMatcher->matches($count)) {
+                $describe = $numberOfRequestsMatcher->describe();
+                throw new VerificationException("Expected $describe request(s), but found $count");
             }
         }
     }
@@ -389,6 +394,51 @@ class WireMock
     public static function matchingXPath($xPath)
     {
         return new ValueMatchingStrategy('matchesXPath', $xPath);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function lessThan($count)
+    {
+        return CountMatchingStrategy::lessThan($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function lessThanOrExactly($count)
+    {
+        return CountMatchingStrategy::lessThanOrExactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function exactly($count)
+    {
+        return CountMatchingStrategy::exactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function moreThanOrExactly($count)
+    {
+        return CountMatchingStrategy::moreThanOrExactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function moreThan($count)
+    {
+        return CountMatchingStrategy::moreThan($count);
     }
 
     /**
