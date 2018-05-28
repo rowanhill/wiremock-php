@@ -203,4 +203,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
+
+    public function testStubsCanBeIndividuallyDeleted()
+    {
+        // given
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text')));
+        $stubMapping2 = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url2'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text2')));
+
+        // when
+        print_r($stubMapping->id);
+        self::$_wireMock->removeStub($stubMapping->id);
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping2);
+    }
 }

@@ -115,9 +115,14 @@ class WireMock
         $this->_curl->post($url);
     }
 
-    public function deleteMappings($id)
+    /**
+     * Deletes a particular stub, identified by it's GUID, from the server
+     *
+     * @param string $id A string representation of a GUID
+     */
+    public function removeStub($id)
     {
-        $url = $this->_makeUrl('__admin/mappings/' . $id);
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
         $this->_curl->delete($url);
     }
 

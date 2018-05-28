@@ -65,6 +65,26 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings/new', $stubMappingArray);
     }
 
+    public function testStubbingAddsReturnedIdToStubMappingObject()
+    {
+        // given
+        /** @var StubMapping $mockStubMapping */
+        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
+        $stubMappingArray = array('some' => 'json');
+        when($mockStubMapping->toArray())->return($stubMappingArray);
+        /** @var MappingBuilder $mockMappingBuilder */
+        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
+        when($mockMappingBuilder->build())->return($mockStubMapping);
+        $id = 'some-long-guid';
+        when($this->_mockCurl->post(anything(), $stubMappingArray))->return(json_encode(array('id' => $id)));
+
+        // when
+        $this->_wireMock->stubFor($mockMappingBuilder);
+
+        // then
+        assertThat($mockStubMapping->id, equalTo($id));
+    }
+
     public function testVerifyingPostsJsonSerialisedObjectToWireMock()
     {
         // given
