@@ -172,6 +172,32 @@ class WireMock
         $this->_curl->post($url);
     }
 
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array Associative array from JSON - see WireMock docs for details
+     */
+    public function listAllStubMappings($limit = null, $offset = null)
+    {
+        $pathAndParams = '__admin/mappings';
+        if ($limit || $offset) {
+            $pathAndParams .= '?';
+            if ($limit) {
+                $pathAndParams .= 'limit=' . urlencode($limit);
+            }
+            if ($limit && $offset) {
+                $pathAndParams .= '&';
+            }
+            if ($offset) {
+                $pathAndParams .= 'offset=' . urlencode($offset);
+            }
+        }
+        $url = $this->_makeUrl($pathAndParams);
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
+    }
+
     private function _makeUrl($path)
     {
         return "http://$this->_hostname:$this->_port/$path";
