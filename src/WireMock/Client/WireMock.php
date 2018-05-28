@@ -323,6 +323,11 @@ class WireMock
         return new ValueMatchingStrategy('matchesJsonPath', $jsonPath);
     }
 
+    public static function matchingXPath($xPath)
+    {
+        return new ValueMatchingStrategy('matchesXPath', $xPath);
+    }
+
     /**
      * @return ResponseDefinitionBuilder
      */
