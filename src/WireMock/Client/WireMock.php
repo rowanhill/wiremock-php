@@ -148,6 +148,17 @@ class WireMock
     }
 
     /**
+     * @return UnmatchedRequests
+     */
+    public function findUnmatchedRequests()
+    {
+        $url = $this->_makeUrl('__admin/requests/unmatched');
+        $resultJson = file_get_contents($url);
+        $resultArray = json_decode($resultJson, true);
+        return new UnmatchedRequests($resultArray);
+    }
+
+    /**
      * Deletes all serve events from the WireMock server's request journal
      */
     public function resetAllRequests()
