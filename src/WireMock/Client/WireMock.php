@@ -2,6 +2,7 @@
 
 namespace WireMock\Client;
 
+use DateTime;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\Verification\CountMatchingStrategy;
@@ -102,6 +103,36 @@ class WireMock
         }
     }
 
+    /**
+     * @param DateTime $since
+     * @param int $limit
+     * @return array Associative array from JSON - see WireMock docs for details
+     */
+    public function getAllServeEvents($since = null, $limit = null)
+    {
+        $pathAndParams = '__admin/requests';
+        if ($since || $limit) {
+            $pathAndParams .= '?';
+            if ($since) {
+                $pathAndParams .= 'since=' . urlencode($since->format(DateTime::ATOM));
+            }
+            if ($since && $limit) {
+                $pathAndParams .= '&';
+            }
+            if ($limit) {
+                $pathAndParams .= 'limit=' . urlencode($limit);
+            }
+        }
+        $url = $this->_makeUrl($pathAndParams);
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
+    }
+
+    /**
+     * @param RequestPatternBuilder $requestPatternBuilder
+     * @return LoggedRequest[]
+     */
     public function findAll(RequestPatternBuilder $requestPatternBuilder)
     {
         $requestPattern = $requestPatternBuilder->build();
