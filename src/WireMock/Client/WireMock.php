@@ -198,6 +198,18 @@ class WireMock
         return $resultObj;
     }
 
+    /**
+     * @param string $id GUID of stub to retrieve
+     * @return \stdClass
+     */
+    public function getSingleStubMapping($id)
+    {
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
+    }
+
     private function _makeUrl($path)
     {
         return "http://$this->_hostname:$this->_port/$path";

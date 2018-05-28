@@ -58,4 +58,17 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         // then
         assertThat($mappings['mappings'], allOf(hasItemWithIdOfMapping($mapping), arrayWithSize(1)));
     }
+
+    public function testGettingSingleMappingRetrievesStubById()
+    {
+        // given
+        $mapping = self::$_wireMock->stubFor(WireMock::any(WireMock::urlEqualTo('/one'))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $returnedMapping = self::$_wireMock->getSingleStubMapping($mapping->id);
+
+        // then
+        assertThat($returnedMapping, hasIdOfMapping($mapping));
+    }
 }
