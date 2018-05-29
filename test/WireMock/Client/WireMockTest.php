@@ -57,6 +57,8 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         /** @var MappingBuilder $mockMappingBuilder */
         $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
         when($mockMappingBuilder->build())->return($mockStubMapping);
+        when($this->_mockCurl->post('http://localhost:8080/__admin/mappings', $stubMappingArray))
+            ->return(json_encode(array('id' => 'some-long-guid')));
 
         // when
         $this->_wireMock->stubFor($mockMappingBuilder);
