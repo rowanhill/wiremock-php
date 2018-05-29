@@ -51,17 +51,17 @@ class WireMock
         $url = $this->_makeUrl('__admin/mappings');
         $result = $this->_curl->post($url, $stubMapping->toArray());
         $resultJson = json_decode($result);
-        $stubMapping->id = $resultJson->id;
+        $stubMapping->setId($resultJson->id);
         return $stubMapping;
     }
 
     public function editStub(MappingBuilder $mappingBuilder)
     {
         $stubMapping = $mappingBuilder->build();
-        if (!$stubMapping->id) {
+        if (!$stubMapping->getId()) {
             throw new VerificationException('Cannot edit a stub without an id');
         }
-        $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->id));
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->getId()));
         $this->_curl->put($url, $stubMapping->toArray());
         return $stubMapping;
     }

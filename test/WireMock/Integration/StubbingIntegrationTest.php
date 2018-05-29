@@ -258,8 +258,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
                 ->withBody('Here is some body text2')));
 
         // when
-        print_r($stubMapping->id);
-        self::$_wireMock->removeStub($stubMapping->id);
+        self::$_wireMock->removeStub($stubMapping->getId());
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping2);

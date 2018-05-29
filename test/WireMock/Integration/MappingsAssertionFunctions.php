@@ -40,5 +40,5 @@ function hasItemWithIdOfMapping(StubMapping $mapping)
 
 function hasIdOfMapping(StubMapping $mapping)
 {
-    return hasKeyValuePair('id', $mapping->id);
+    return hasKeyValuePair('id', $mapping->getId());
 }

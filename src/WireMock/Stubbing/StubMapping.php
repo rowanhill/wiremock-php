@@ -2,15 +2,13 @@
 
 namespace WireMock\Stubbing;
 
-use WireMock\Client\VerificationException;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 
 class StubMapping
 {
     /** @var string A string representation of a GUID */
-    public $id;
-
+    private $_id;
     /** @var RequestPattern */
     private $_requestPattern;
     /** @var ResponseDefinition */
@@ -34,11 +32,27 @@ class StubMapping
         $priority = null,
         $scenario = null)
     {
-        $this->id = $id;
+        $this->_id = $id;
         $this->_requestPattern = $requestPattern;
         $this->_responseDefinition = $responseDefinition;
         $this->_priority = $priority;
         $this->_scenario = $scenario;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->_id = $id;
     }
 
     public function toArray()
@@ -47,8 +61,8 @@ class StubMapping
             'request' => $this->_requestPattern->toArray(),
             'response' => $this->_responseDefinition->toArray(),
         );
-        if ($this->id) {
-            $array['id'] = $this->id;
+        if ($this->_id) {
+            $array['id'] = $this->_id;
         }
         if ($this->_priority) {
             $array['priority'] = $this->_priority;

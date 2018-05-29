@@ -66,7 +66,7 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::aResponse()));
 
         // when
-        $returnedMapping = self::$_wireMock->getSingleStubMapping($mapping->id);
+        $returnedMapping = self::$_wireMock->getSingleStubMapping($mapping->getId());
 
         // then
         assertThat($returnedMapping, hasIdOfMapping($mapping));
