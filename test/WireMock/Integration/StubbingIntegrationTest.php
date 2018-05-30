@@ -69,6 +69,16 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testRequestUrlCanByMatchedAsAnyUrl()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testMappingsCanBeReset()
     {
         // given
@@ -131,6 +141,17 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testStatusMessageCanBeStubbed()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withStatusMessage("hello")));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testResponseCanBeStubbedByBodyMatching()
     {
         // when
@@ -177,6 +198,28 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponsesCanBeStubbedByBodyXPath()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::matchingXPath('/todo-list[count(todo-item) = 3]'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testStubIdCanBeSet()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withId('76ada7b0-49ae-4229-91c4-396a36f18e09')
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testStubPriorityCanBeSet()
     {
         // when
@@ -199,6 +242,41 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock->saveAllMappings();
         self::tearDownAfterClass(); // shut down the server
         self::setUpBeforeClass(); // start the server again
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testStubsCanBeIndividuallyDeleted()
+    {
+        // given
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text')));
+        $stubMapping2 = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url2'))
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Here is some body text2')));
+
+        // when
+        self::$_wireMock->removeStub($stubMapping->getId());
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping2);
+    }
+
+    public function testStubsCanBeEdited()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withId('76ada7b0-49ae-4229-91c4-396a36f18e09')
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Original')));
+
+        // when
+        $stubMapping = self::$_wireMock->editStub(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withId('76ada7b0-49ae-4229-91c4-396a36f18e09')
+            ->willReturn(WireMock::aResponse()
+                ->withBody('Modified')));
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);

@@ -7,6 +7,8 @@ use WireMock\Stubbing\StubMapping;
 
 class MappingBuilder
 {
+    /** @var string A string representation of a GUID  */
+    private $_id;
     /** @var RequestPattern */
     private $_requestPattern;
     /** @var ResponseDefinitionBuilder */
@@ -24,6 +26,16 @@ class MappingBuilder
     {
         $this->_requestPattern = $requestPattern;
         $this->_scenarioBuilder = new ScenarioBuilder();
+    }
+
+    /**
+     * @param string $id A string representation of a GUID
+     * @return MappingBuilder
+     */
+    public function withId($id)
+    {
+        $this->_id = $id;
+        return $this;
     }
 
     /**
@@ -107,6 +119,7 @@ class MappingBuilder
         return new StubMapping(
             $this->_requestPattern,
             $responseDefinition,
+            $this->_id,
             $this->_priority,
             $this->_scenarioBuilder->build());
     }
