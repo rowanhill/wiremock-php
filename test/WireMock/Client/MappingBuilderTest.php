@@ -62,6 +62,21 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         verify($this->_mockRequestPattern)->setHeaders($headers);
     }
 
+    public function testMatchedRequestQueryParamsAreSetOnRequestPattern()
+    {
+        // given
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
+        $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
+
+        // when
+        $mappingBuilder->withQueryParam('aQueryParam', new ValueMatchingStrategy('equalTo', 'aValue'));
+        $mappingBuilder->build();
+
+        // then
+        $headers = array('aQueryParam' => array('equalTo' => 'aValue'));
+        verify($this->_mockRequestPattern)->setQueryParameters($headers);
+    }
+
     public function testRequestBodyMatcherIsSetOnRequestPattern()
     {
         // given
