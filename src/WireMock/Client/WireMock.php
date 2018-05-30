@@ -2,8 +2,10 @@
 
 namespace WireMock\Client;
 
+use DateTime;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\Verification\CountMatchingStrategy;
 
 class WireMock
 {
@@ -46,24 +48,40 @@ class WireMock
     public function stubFor(MappingBuilder $mappingBuilder)
     {
         $stubMapping = $mappingBuilder->build();
-        $url = $this->_makeUrl('__admin/mappings/new');
-        $this->_curl->post($url, $stubMapping->toArray());
+        $url = $this->_makeUrl('__admin/mappings');
+        $result = $this->_curl->post($url, $stubMapping->toArray());
+        $resultJson = json_decode($result);
+        $stubMapping->setId($resultJson->id);
+        return $stubMapping;
+    }
+
+    public function editStub(MappingBuilder $mappingBuilder)
+    {
+        $stubMapping = $mappingBuilder->build();
+        if (!$stubMapping->getId()) {
+            throw new VerificationException('Cannot edit a stub without an id');
+        }
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->getId()));
+        $this->_curl->put($url, $stubMapping->toArray());
         return $stubMapping;
     }
 
     /**
-     * @param RequestPatternBuilder|integer $requestPatternBuilderOrNumber
+     * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
      * @param RequestPatternBuilder $requestPatternBuilder
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrNumber, RequestPatternBuilder $requestPatternBuilder = null)
+    public function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
     {
-        if (is_int($requestPatternBuilderOrNumber)) {
+        if ($requestPatternBuilderOrCount instanceof CountMatchingStrategy) {
             $patternBuilder = $requestPatternBuilder;
-            $numberOfRequests = $requestPatternBuilderOrNumber;
+            $numberOfRequestsMatcher = $requestPatternBuilderOrCount;
+        } else if (is_int($requestPatternBuilderOrCount)) {
+            $patternBuilder = $requestPatternBuilder;
+            $numberOfRequestsMatcher = self::exactly($requestPatternBuilderOrCount);
         } else {
-            $patternBuilder = $requestPatternBuilderOrNumber;
-            $numberOfRequests = null;
+            $patternBuilder = $requestPatternBuilderOrCount;
+            $numberOfRequestsMatcher = null;
         }
 
         $requestPattern = $patternBuilder->build();
@@ -72,18 +90,49 @@ class WireMock
         $response = json_decode($responseJson, true);
         $count = $response['count'];
 
-        if ($numberOfRequests === null) {
-            // If $numberOfRequests is not specified, any non-zero number of requests is acceptable
+        if ($numberOfRequestsMatcher === null) {
+            // If $numberOfRequestsMatcher is not specified, any non-zero number of requests is acceptable
             if ($count < 1) {
                 throw new VerificationException("Expected at least one request, but found $count");
             }
         } else {
-            if ($count != $numberOfRequests) {
-                throw new VerificationException("Expected $numberOfRequests request(s), but found $count");
+            if (!$numberOfRequestsMatcher->matches($count)) {
+                $describe = $numberOfRequestsMatcher->describe();
+                throw new VerificationException("Expected $describe request(s), but found $count");
             }
         }
     }
 
+    /**
+     * @param DateTime $since
+     * @param int $limit
+     * @return array Associative array from JSON - see WireMock docs for details
+     */
+    public function getAllServeEvents($since = null, $limit = null)
+    {
+        $pathAndParams = '__admin/requests';
+        if ($since || $limit) {
+            $pathAndParams .= '?';
+            if ($since) {
+                $pathAndParams .= 'since=' . urlencode($since->format(DateTime::ATOM));
+            }
+            if ($since && $limit) {
+                $pathAndParams .= '&';
+            }
+            if ($limit) {
+                $pathAndParams .= 'limit=' . urlencode($limit);
+            }
+        }
+        $url = $this->_makeUrl($pathAndParams);
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
+    }
+
+    /**
+     * @param RequestPatternBuilder $requestPatternBuilder
+     * @return LoggedRequest[]
+     */
     public function findAll(RequestPatternBuilder $requestPatternBuilder)
     {
         $requestPattern = $requestPatternBuilder->build();
@@ -99,6 +148,26 @@ class WireMock
     }
 
     /**
+     * @return UnmatchedRequests
+     */
+    public function findUnmatchedRequests()
+    {
+        $url = $this->_makeUrl('__admin/requests/unmatched');
+        $resultJson = file_get_contents($url);
+        $resultArray = json_decode($resultJson, true);
+        return new UnmatchedRequests($resultArray);
+    }
+
+    /**
+     * Deletes all serve events from the WireMock server's request journal
+     */
+    public function resetAllRequests()
+    {
+        $url = $this->_makeUrl('__admin/requests');
+        $this->_curl->delete($url);
+    }
+
+    /**
      * Sets a delay on all stubbed responses
      *
      * @param int $delayMillis
@@ -109,16 +178,21 @@ class WireMock
         $this->_curl->post($url, array('fixedDelay' => $delayMillis));
     }
 
-    public function addRequestProcessingDelay($delayMillis)
-    {
-        $url = $this->_makeUrl('__admin/socket-delay');
-        $this->_curl->post($url, array('milliseconds' => $delayMillis));
-    }
-
     public function saveAllMappings()
     {
         $url = $this->_makeUrl('__admin/mappings/save');
         $this->_curl->post($url);
+    }
+
+    /**
+     * Deletes a particular stub, identified by it's GUID, from the server
+     *
+     * @param string $id A string representation of a GUID
+     */
+    public function removeStub($id)
+    {
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
+        $this->_curl->delete($url);
     }
 
     /**
@@ -152,6 +226,44 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/shutdown');
         $this->_curl->post($url);
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     * @return array Associative array from JSON - see WireMock docs for details
+     */
+    public function listAllStubMappings($limit = null, $offset = null)
+    {
+        $pathAndParams = '__admin/mappings';
+        if ($limit || $offset) {
+            $pathAndParams .= '?';
+            if ($limit) {
+                $pathAndParams .= 'limit=' . urlencode($limit);
+            }
+            if ($limit && $offset) {
+                $pathAndParams .= '&';
+            }
+            if ($offset) {
+                $pathAndParams .= 'offset=' . urlencode($offset);
+            }
+        }
+        $url = $this->_makeUrl($pathAndParams);
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
+    }
+
+    /**
+     * @param string $id GUID of stub to retrieve
+     * @return \stdClass
+     */
+    public function getSingleStubMapping($id)
+    {
+        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
+        $result = file_get_contents($url);
+        $resultObj = json_decode($result, true);
+        return $resultObj;
     }
 
     private function _makeUrl($path)
@@ -258,9 +370,21 @@ class WireMock
         return new UrlMatchingStrategy('url', $urlPath);
     }
 
+    /**
+     * @param string $urlRegex
+     * @return UrlMatchingStrategy
+     */
     public static function urlMatching($urlRegex)
     {
         return new UrlMatchingStrategy('urlPattern', $urlRegex);
+    }
+
+    /**
+     * @return UrlMatchingStrategy
+     */
+    public static function anyUrl()
+    {
+        return new UrlMatchingStrategy('urlPattern', '.*');
     }
 
     /**
@@ -316,6 +440,56 @@ class WireMock
     public static function matchingJsonPath($jsonPath)
     {
         return new ValueMatchingStrategy('matchesJsonPath', $jsonPath);
+    }
+
+    public static function matchingXPath($xPath)
+    {
+        return new ValueMatchingStrategy('matchesXPath', $xPath);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function lessThan($count)
+    {
+        return CountMatchingStrategy::lessThan($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function lessThanOrExactly($count)
+    {
+        return CountMatchingStrategy::lessThanOrExactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function exactly($count)
+    {
+        return CountMatchingStrategy::exactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function moreThanOrExactly($count)
+    {
+        return CountMatchingStrategy::moreThanOrExactly($count);
+    }
+
+    /**
+     * @param int $count
+     * @return CountMatchingStrategy
+     */
+    public static function moreThan($count)
+    {
+        return CountMatchingStrategy::moreThan($count);
     }
 
     /**

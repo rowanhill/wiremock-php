@@ -20,7 +20,25 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy
     public function toArray()
     {
         $array = parent::toArray();
-        $array['jsonCompareMode'] = $this->_jsonCompareMode;
+
+        switch ($this->_jsonCompareMode) {
+            case self::COMPARE_MODE__NON_EXTENSIBLE:
+                $array['ignoreArrayOrder'] = true;
+                $array['ignoreExtraElements'] = true;
+                break;
+            case self::COMPARE_MODE__LENIENT:
+                $array['ignoreArrayOrder'] = true;
+                $array['ignoreExtraElements'] = false;
+                break;
+            case self::COMPARE_MODE__STRICT:
+                $array['ignoreArrayOrder'] = false;
+                $array['ignoreExtraElements'] = true;
+                break;
+            case self::COMPARE_MODE__STRICT_ORDER:
+                $array['ignoreArrayOrder'] = false;
+                $array['ignoreExtraElements'] = false;
+                break;
+        }
         return $array;
     }
 }

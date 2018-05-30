@@ -7,6 +7,7 @@ class RequestPattern
     private $_method;
     private $_urlMatchingStrategy;
     private $_headers;
+    private $_queryParameters;
     private $_bodyPatterns;
     private $_priority;
 
@@ -25,6 +26,11 @@ class RequestPattern
         $this->_headers = $headers;
     }
 
+    public function setQueryParameters(array $queryParameters)
+    {
+        $this->_queryParameters = $queryParameters;
+    }
+
     public function setBodyPatterns(array $bodyPatterns)
     {
         $this->_bodyPatterns = $bodyPatterns;
@@ -36,6 +42,9 @@ class RequestPattern
         $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
         if ($this->_headers) {
             $array['headers'] = $this->_headers;
+        }
+        if ($this->_queryParameters) {
+            $array['queryParameters'] = $this->_queryParameters;
         }
         if ($this->_bodyPatterns) {
             $array['bodyPatterns'] = $this->_bodyPatterns;

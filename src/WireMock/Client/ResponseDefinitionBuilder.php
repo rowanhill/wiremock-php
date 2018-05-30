@@ -7,6 +7,7 @@ use WireMock\Http\ResponseDefinition;
 class ResponseDefinitionBuilder
 {
     private $_status;
+    private $_statusMessage;
     private $_body;
     private $_bodyFile;
     private $_bodyData;
@@ -22,6 +23,17 @@ class ResponseDefinitionBuilder
     public function withStatus($status)
     {
         $this->_status = $status;
+        return $this;
+    }
+
+
+    /**
+     * @param string $statusMessage
+     * @return ResponseDefinitionBuilder
+     */
+    public function withStatusMessage($statusMessage)
+    {
+        $this->_statusMessage = $statusMessage;
         return $this;
     }
 
@@ -102,6 +114,9 @@ class ResponseDefinitionBuilder
         $responseDefinition = new ResponseDefinition();
         if ($this->_status) {
             $responseDefinition->setStatus($this->_status);
+        }
+        if ($this->_statusMessage) {
+            $responseDefinition->setStatusMessage($this->_statusMessage);
         }
         if ($this->_body) {
             $responseDefinition->setBody($this->_body);

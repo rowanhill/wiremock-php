@@ -39,20 +39,6 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
     }
 
-    public function testGlobalFixedDelayOnSocketAcceptanceCanBeSet()
-    {
-        // given
-        $this->_testClient->get('/not/stubbed/url');
-        assertThat($this->_testClient->getLastRequestTimeMillis(), lessThan(1000));
-
-        // when
-        self::$_wireMock->addRequestProcessingDelay(1000);
-        $this->_testClient->get('/not/stubbed/url');
-
-        // then
-        assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
-    }
-
     public function testEmptyResponseFaultCanBeStubbed()
     {
         $this->_testFaultCanBeStubbed(Fault::EMPTY_RESPONSE);

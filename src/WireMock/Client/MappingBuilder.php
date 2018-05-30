@@ -7,12 +7,16 @@ use WireMock\Stubbing\StubMapping;
 
 class MappingBuilder
 {
+    /** @var string A string representation of a GUID  */
+    private $_id;
     /** @var RequestPattern */
     private $_requestPattern;
     /** @var ResponseDefinitionBuilder */
     private $_responseDefinitionBuilder;
     /** @var array of string -> ValueMatchingStrategy */
     private $_headers = array();
+    /** @var array of string -> ValueMatchingStrategy */
+    private $_queryParameters = array();
     /** @var array of ValueMatchingStrategy */
     private $_requestBodyPatterns = array();
     /** @var int */
@@ -24,6 +28,16 @@ class MappingBuilder
     {
         $this->_requestPattern = $requestPattern;
         $this->_scenarioBuilder = new ScenarioBuilder();
+    }
+
+    /**
+     * @param string $id A string representation of a GUID
+     * @return MappingBuilder
+     */
+    public function withId($id)
+    {
+        $this->_id = $id;
+        return $this;
     }
 
     /**
@@ -54,6 +68,12 @@ class MappingBuilder
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
         $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        return $this;
+    }
+
+    public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_queryParameters[$name] = $valueMatchingStrategy->toArray();
         return $this;
     }
 
@@ -101,12 +121,14 @@ class MappingBuilder
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();
         $this->_requestPattern->setHeaders($this->_headers);
+        $this->_requestPattern->setQueryParameters($this->_queryParameters);
         if (!empty($this->_requestBodyPatterns)) {
             $this->_requestPattern->setBodyPatterns($this->_requestBodyPatterns);
         }
         return new StubMapping(
             $this->_requestPattern,
             $responseDefinition,
+            $this->_id,
             $this->_priority,
             $this->_scenarioBuilder->build());
     }
