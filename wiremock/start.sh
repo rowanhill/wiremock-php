@@ -22,7 +22,7 @@ if ! [ -e wiremock-standalone.jar ]; then
 fi
 
 # Start WireMock in standalone mode (in a background process) and save its output to a log
-java -jar wiremock-standalone.jar &> wiremock.log 2>&1 &
+java -jar wiremock-standalone.jar -verbose &> wiremock.log 2>&1 &
 echo $! > wiremock.pid
 
 echo WireMock started
