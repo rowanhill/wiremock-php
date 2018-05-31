@@ -435,11 +435,12 @@ class WireMock
 
     /**
      * @param string $jsonPath
+     * @param ValueMatchingStrategy|null $matchingStrategy
      * @return ValueMatchingStrategy
      */
-    public static function matchingJsonPath($jsonPath)
+    public static function matchingJsonPath($jsonPath, ValueMatchingStrategy $matchingStrategy = null)
     {
-        return new ValueMatchingStrategy('matchesJsonPath', $jsonPath);
+        return new JsonPathMatchingStrategy($jsonPath, $matchingStrategy);
     }
 
     public static function matchingXPath($xPath)
