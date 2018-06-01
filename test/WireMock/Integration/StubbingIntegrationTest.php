@@ -180,7 +180,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withRequestBody(WireMock::equalToJson('{"key":"value"}'))
-            ->withRequestBody(WireMock::equalToJson('{}', JsonValueMatchingStrategy::COMPARE_MODE__LENIENT))
+            ->withRequestBody(WireMock::equalToJson('{}', true, true))
             ->willReturn(WireMock::aResponse()));
 
         // then
