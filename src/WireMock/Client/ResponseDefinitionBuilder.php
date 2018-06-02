@@ -6,7 +6,7 @@ use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
-    private $_status;
+    private $_status = 200;
     private $_statusMessage;
     private $_body;
     private $_bodyFile;
@@ -111,34 +111,16 @@ class ResponseDefinitionBuilder
 
     public function build()
     {
-        $responseDefinition = new ResponseDefinition();
-        if ($this->_status) {
-            $responseDefinition->setStatus($this->_status);
-        }
-        if ($this->_statusMessage) {
-            $responseDefinition->setStatusMessage($this->_statusMessage);
-        }
-        if ($this->_body) {
-            $responseDefinition->setBody($this->_body);
-        }
-        if ($this->_bodyFile) {
-            $responseDefinition->setBodyFile($this->_bodyFile);
-        }
-        if ($this->_bodyData) {
-            $responseDefinition->setBase64Body($this->_bodyData);
-        }
-        if (!empty($this->_headers)) {
-            $responseDefinition->setHeaders($this->_headers);
-        }
-        if ($this->_proxyBaseUrl) {
-            $responseDefinition->setProxyBaseUrl($this->_proxyBaseUrl);
-        }
-        if ($this->_fixedDelayMillis) {
-            $responseDefinition->setFixedDelayMillis($this->_fixedDelayMillis);
-        }
-        if ($this->_fault) {
-            $responseDefinition->setFault($this->_fault);
-        }
-        return $responseDefinition;
+        return new ResponseDefinition(
+            $this->_status,
+            $this->_statusMessage,
+            $this->_body,
+            $this->_bodyFile,
+            $this->_bodyData,
+            $this->_headers,
+            $this->_proxyBaseUrl,
+            $this->_fixedDelayMillis,
+            $this->_fault
+        );
     }
 }

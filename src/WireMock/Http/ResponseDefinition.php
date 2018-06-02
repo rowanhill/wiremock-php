@@ -24,75 +24,109 @@ class ResponseDefinition
     private $_fault;
 
     /**
+     * ResponseDefinition constructor.
      * @param int $status
-     */
-    public function setStatus($status)
-    {
-        $this->_status = $status;
-    }
-
-    /**
      * @param string $statusMessage
-     */
-    public function setStatusMessage($statusMessage)
-    {
-        $this->_statusMessage = $statusMessage;
-    }
-
-    /**
      * @param string $body
-     */
-    public function setBody($body)
-    {
-        $this->_body = $body;
-    }
-
-    /**
      * @param string $bodyFile
-     */
-    public function setBodyFile($bodyFile)
-    {
-        $this->_bodyFile = $bodyFile;
-    }
-
-    /**
-     * @param string $bodyData Base64 encoded data
-     */
-    public function setBase64Body($bodyData)
-    {
-        $this->_base64Body = $bodyData;
-    }
-
-    /**
+     * @param string $base64Body
      * @param array $headers
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->_headers = $headers;
-    }
-
-    /**
      * @param string $proxyBaseUrl
-     */
-    public function setProxyBaseUrl($proxyBaseUrl)
-    {
-        $this->_proxyBaseUrl = $proxyBaseUrl;
-    }
-
-    /**
      * @param int $fixedDelayMillis
-     */
-    public function setFixedDelayMillis($fixedDelayMillis)
-    {
-        $this->_fixedDelayMillis = $fixedDelayMillis;
-    }
-
-    /**
      * @param string $fault
      */
-    public function setFault($fault)
-    {
+    public function __construct(
+        $status,
+        $statusMessage,
+        $body,
+        $bodyFile,
+        $base64Body,
+        $headers,
+        $proxyBaseUrl,
+        $fixedDelayMillis,
+        $fault
+    ) {
+        $this->_status = $status;
+        $this->_statusMessage = $statusMessage;
+        $this->_body = $body;
+        $this->_bodyFile = $bodyFile;
+        $this->_base64Body = $base64Body;
+        $this->_headers = $headers;
+        $this->_proxyBaseUrl = $proxyBaseUrl;
+        $this->_fixedDelayMillis = $fixedDelayMillis;
         $this->_fault = $fault;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusMessage()
+    {
+        return $this->_statusMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->_body;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBodyFile()
+    {
+        return $this->_bodyFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBase64Body()
+    {
+        return $this->_base64Body;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyBaseUrl()
+    {
+        return $this->_proxyBaseUrl;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFixedDelayMillis()
+    {
+        return $this->_fixedDelayMillis;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFault()
+    {
+        return $this->_fault;
     }
 
     public function toArray()
@@ -124,5 +158,20 @@ class ResponseDefinition
             $array['fault'] = $this->_fault;
         }
         return $array;
+    }
+
+    public static function fromArray(array $array)
+    {
+        return new ResponseDefinition(
+            $array['status'],
+            $array['statusMessage'],
+            $array['body'],
+            $array['bodyFileName'],
+            $array['base64Body'],
+            $array['headers'],
+            $array['proxyBaseUrl'],
+            $array['fixedDelayMilliseconds'],
+            $array['fault']
+        );
     }
 }

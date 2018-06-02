@@ -128,4 +128,9 @@ class LoggedRequest
             'loggedDateString' => $this->_loggedDateString
         );
     }
+
+    public static function fromArray(array $array)
+    {
+        return new LoggedRequest($array);
+    }
 }

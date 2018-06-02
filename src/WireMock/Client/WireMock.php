@@ -160,14 +160,15 @@ class WireMock
 
     /**
      * @param LoggedRequest $loggedRequest
-     * @return array
+     * @return FindNearMissesResult
      */
     public function findNearMissesFor($loggedRequest)
     {
         $url = $this->_makeUrl('__admin/near-misses/request');
         $loggedRequestArray = $loggedRequest->toArray();
         $findResultJson = $this->_curl->post($url, $loggedRequestArray);
-        return json_decode($findResultJson, true);
+        $findResult = json_decode($findResultJson, true);
+        return FindNearMissesResult::fromArray($findResult);
     }
 
     /**

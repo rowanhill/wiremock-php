@@ -4,12 +4,16 @@ namespace WireMock\Matching;
 
 class RequestPattern
 {
+    /** @var string */
     private $_method;
+    /** @var UrlMatchingStrategy  */
     private $_urlMatchingStrategy;
+    /** @var array */
     private $_headers;
+    /** @var array */
     private $_queryParameters;
+    /** @var array */
     private $_bodyPatterns;
-    private $_priority;
 
     /**
      * @param string $method
@@ -36,6 +40,46 @@ class RequestPattern
         $this->_bodyPatterns = $bodyPatterns;
     }
 
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->_method;
+    }
+
+    /**
+     * @return UrlMatchingStrategy
+     */
+    public function getUrlMatchingStrategy()
+    {
+        return $this->_urlMatchingStrategy;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQueryParameters()
+    {
+        return $this->_queryParameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBodyPatterns()
+    {
+        return $this->_bodyPatterns;
+    }
+
     public function toArray()
     {
         $array = array('method' => $this->_method);
@@ -49,9 +93,19 @@ class RequestPattern
         if ($this->_bodyPatterns) {
             $array['bodyPatterns'] = $this->_bodyPatterns;
         }
-        if ($this->_priority) {
-            $array['priority'] = $this->_priority;
-        }
         return $array;
+    }
+
+    /**
+     * @param array $array
+     * @return RequestPattern
+     * @throws \Exception
+     */
+    public static function fromArray(array $array)
+    {
+        return new RequestPattern(
+            $array['method'],
+            UrlMatchingStrategy::fromArray($array)
+        );
     }
 }

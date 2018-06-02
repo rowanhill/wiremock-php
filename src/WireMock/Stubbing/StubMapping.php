@@ -137,4 +137,20 @@ class StubMapping
         }
         return $array;
     }
+
+    /**
+     * @param array $array
+     * @return StubMapping
+     * @throws \Exception
+     */
+    public static function fromArray(array $array)
+    {
+        return new StubMapping(
+            RequestPattern::fromArray($array['request']),
+            ResponseDefinition::fromArray($array['response']),
+            $array['id'],
+            $array['priority'],
+            new ScenarioMapping($array['scenarioName'], $array['requiredScenarioState'], $array['newScenarioState'])
+        );
+    }
 }
