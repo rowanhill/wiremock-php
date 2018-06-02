@@ -65,7 +65,7 @@ class LoggedRequest
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getCookies()
     {
@@ -81,7 +81,7 @@ class LoggedRequest
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBodyAsBase64()
     {
@@ -110,5 +110,22 @@ class LoggedRequest
     public function getLoggedDateString()
     {
         return $this->_loggedDateString;
+    }
+
+    public function toArray()
+    {
+        return array(
+            'url' => $this->_url,
+            'absoluteUrl' => $this->_absoluteUrl,
+            'method' => $this->_method,
+            'clientIp' => $this->_clientIp,
+            'headers' => $this->_headers,
+            'cookies' => (object) $this->_cookies,
+            'body' => $this->_body,
+            'bodyAsBase64' => $this->_bodyAsBase64,
+            'browserProxyRequest' => $this->_browserProxyRequest,
+            'loggedDate' => $this->_loggedDate,
+            'loggedDateString' => $this->_loggedDateString
+        );
     }
 }

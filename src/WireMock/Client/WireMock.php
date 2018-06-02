@@ -159,6 +159,18 @@ class WireMock
     }
 
     /**
+     * @param LoggedRequest $loggedRequest
+     * @return array
+     */
+    public function findNearMissesFor($loggedRequest)
+    {
+        $url = $this->_makeUrl('__admin/near-misses/request');
+        $loggedRequestArray = $loggedRequest->toArray();
+        $findResultJson = $this->_curl->post($url, $loggedRequestArray);
+        return json_decode($findResultJson, true);
+    }
+
+    /**
      * Deletes all serve events from the WireMock server's request journal
      */
     public function resetAllRequests()
