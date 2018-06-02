@@ -19,13 +19,13 @@ class MappingBuilder
     private $_requestBodyPatterns = array();
     /** @var int */
     private $_priority;
-    /** @var ScenarioBuilder */
+    /** @var ScenarioMappingBuilder */
     private $_scenarioBuilder;
 
     public function __construct(RequestPattern $requestPattern)
     {
         $this->_requestPattern = $requestPattern;
-        $this->_scenarioBuilder = new ScenarioBuilder();
+        $this->_scenarioBuilder = new ScenarioMappingBuilder();
     }
 
     /**
@@ -109,6 +109,10 @@ class MappingBuilder
         return $this;
     }
 
+    /**
+     * @return StubMapping
+     * @throws \Exception
+     */
     public function build()
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();
