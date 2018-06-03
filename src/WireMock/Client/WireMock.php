@@ -181,6 +181,17 @@ class WireMock
     }
 
     /**
+     * @return FindNearMissesResult
+     */
+    public function findNearMissesForAllUnmatched()
+    {
+        $url = $this->_makeUrl('__admin/requests/unmatched/near-misses');
+        $findResultJson = file_get_contents($url);
+        $findResult = json_decode($findResultJson, true);
+        return FindNearMissesResult::fromArray($findResult);
+    }
+
+    /**
      * Deletes all serve events from the WireMock server's request journal
      */
     public function resetAllRequests()
