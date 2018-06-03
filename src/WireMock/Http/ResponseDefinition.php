@@ -164,14 +164,14 @@ class ResponseDefinition
     {
         return new ResponseDefinition(
             $array['status'],
-            $array['statusMessage'],
-            $array['body'],
-            $array['bodyFileName'],
-            $array['base64Body'],
-            $array['headers'],
-            $array['proxyBaseUrl'],
-            $array['fixedDelayMilliseconds'],
-            $array['fault']
+            isset($array['statusMessage']) ?: null,
+            isset($array['body']) ?: null,
+            isset($array['bodyFileName']) ?: null,
+            isset($array['base64Body']) ?: null,
+            isset($array['headers']) ?: null,
+            isset($array['proxyBaseUrl']) ?: null,
+            isset($array['fixedDelayMilliseconds']) ?: null,
+            isset($array['fault']) ?: null
         );
     }
 }

@@ -49,6 +49,10 @@ class LoggedResponse
 
     public static function fromArray(array $array)
     {
-        return new LoggedResponse($array['status'], $array['headers'], base64_decode($array['bodyAsBase64']));
+        return new LoggedResponse(
+            $array['status'],
+            isset($array['headers']) ?: null,
+            isset($array['bodyAsBase64']) ? base64_decode($array['bodyAsBase64']) : null
+        );
     }
 }

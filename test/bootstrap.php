@@ -16,3 +16,6 @@ $endTime = microtime(true);
 $sleepTime = (($endTime - $startTime) * 1000);
 echo "Took $sleepTime millis to sleep in background exec()\n";
 define('EXEC_BLOCKS_ON_OUTPUT', $sleepTime > 5000);
+
+// Report all errors - being as strict as possible ensures the library will be compatible with the most environments
+error_reporting(E_ALL);
