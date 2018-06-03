@@ -79,7 +79,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlMatching('/some/url.*'))
-            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+            ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
     /**
@@ -92,7 +92,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
-            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+            ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
     /**
@@ -105,7 +105,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
 
         // when
         self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
-            ->withQueryParameter('foo', WireMock::equalTo('bar')));
+            ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
     public function testCanVerifyRequestHasBody()

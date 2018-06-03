@@ -61,7 +61,7 @@ class RequestPatternBuilder
      * @param ValueMatchingStrategy $valueMatchingStrategy
      * @return RequestPatternBuilder
      */
-    public function withQueryParameter($name, ValueMatchingStrategy $valueMatchingStrategy)
+    public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
     {
         $this->_queryParameters[$name] = $valueMatchingStrategy->toArray();
         return $this;
