@@ -103,9 +103,19 @@ class RequestPattern
      */
     public static function fromArray(array $array)
     {
-        return new RequestPattern(
+        $pattern = new RequestPattern(
             $array['method'],
             UrlMatchingStrategy::fromArray($array)
         );
+        if ($array['headers']) {
+            $pattern->setHeaders($array['headers']);
+        }
+        if ($array['queryParameters']) {
+            $pattern->setQueryParameters($array['queryParameters']);
+        }
+        if ($array['bodyPatterns']) {
+            $pattern->setBodyPatterns($array['bodyPatterns']);
+        }
+        return $pattern;
     }
 }
