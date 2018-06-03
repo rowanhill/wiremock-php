@@ -6,7 +6,7 @@ class ValueMatchingStrategy
 {
     /** @var string */
     protected $_matchingType;
-    /** @var string */
+    /** @var string|boolean */
     protected $_matchingValue;
 
     public function __construct($matchingType, $matchingValue)

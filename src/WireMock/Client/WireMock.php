@@ -496,6 +496,14 @@ class WireMock
     }
 
     /**
+     * @return ValueMatchingStrategy
+     */
+    public static function absent()
+    {
+        return new ValueMatchingStrategy('absent', true);
+    }
+
+    /**
      * @param int $count
      * @return CountMatchingStrategy
      */
