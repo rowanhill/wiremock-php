@@ -97,6 +97,17 @@ class MappingBuilder
     }
 
     /**
+     * @param string $username
+     * @param string $password
+     * @return MappingBuilder
+     */
+    public function withBasicAuth($username, $password)
+    {
+        $this->_requestPatternBuilder->withBasicAuth($username, $password);
+        return $this;
+    }
+
+    /**
      * @param string $scenarioName
      * @return MappingBuilder
      */

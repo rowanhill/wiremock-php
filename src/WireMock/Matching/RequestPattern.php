@@ -2,6 +2,8 @@
 
 namespace WireMock\Matching;
 
+use WireMock\Client\BasicCredentials;
+
 class RequestPattern
 {
     /** @var string */
@@ -16,6 +18,8 @@ class RequestPattern
     private $_queryParameters;
     /** @var array */
     private $_bodyPatterns;
+    /** @var BasicCredentials */
+    private $_basicCredentials;
 
     /**
      * @param string $method
@@ -24,6 +28,7 @@ class RequestPattern
      * @param array $cookies
      * @param array $bodyPatterns
      * @param array $queryParameters
+     * @param BasicCredentials $basicCredentials
      */
     public function __construct(
         $method,
@@ -31,7 +36,8 @@ class RequestPattern
         $headers = null,
         $cookies = null,
         $bodyPatterns = null,
-        $queryParameters = null
+        $queryParameters = null,
+        $basicCredentials = null
     ) {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;
@@ -39,6 +45,7 @@ class RequestPattern
         $this->_cookies = $cookies;
         $this->_bodyPatterns = $bodyPatterns;
         $this->_queryParameters = $queryParameters;
+        $this->_basicCredentials = $basicCredentials;
     }
 
     /**
@@ -89,6 +96,14 @@ class RequestPattern
         return $this->_bodyPatterns;
     }
 
+    /**
+     * @return BasicCredentials
+     */
+    public function getBasicCredentials()
+    {
+        return $this->_basicCredentials;
+    }
+
     public function toArray()
     {
         $array = array('method' => $this->_method);
@@ -104,6 +119,9 @@ class RequestPattern
         }
         if ($this->_bodyPatterns) {
             $array['bodyPatterns'] = $this->_bodyPatterns;
+        }
+        if ($this->_basicCredentials) {
+            $array['basicAuthCredentials'] = $this->_basicCredentials->toArray();
         }
         return $array;
     }

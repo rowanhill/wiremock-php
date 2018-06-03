@@ -13,6 +13,8 @@ class RequestPatternBuilder
     private $_cookies = array();
     private $_queryParameters = array();
     private $_bodyPatterns = array();
+    /** @var BasicCredentials */
+    private $_basicCredentials;
 
     /**
      * @param string $method
@@ -78,6 +80,17 @@ class RequestPatternBuilder
     }
 
     /**
+     * @param string $username
+     * @param string $password
+     * @return RequestPatternBuilder
+     */
+    public function withBasicAuth($username, $password)
+    {
+        $this->_basicCredentials = new BasicCredentials($username, $password);
+        return $this;
+    }
+
+    /**
      * @return RequestPattern
      */
     public function build()
@@ -88,7 +101,8 @@ class RequestPatternBuilder
             $this->_headers,
             $this->_cookies,
             $this->_bodyPatterns,
-            $this->_queryParameters
+            $this->_queryParameters,
+            $this->_basicCredentials
         );
     }
 }
