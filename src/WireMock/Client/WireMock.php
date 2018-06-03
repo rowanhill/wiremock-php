@@ -487,11 +487,11 @@ class WireMock
 
     /**
      * @param string $xPath
-     * @return ValueMatchingStrategy
+     * @return XPathValueMatchingStrategy
      */
     public static function matchingXPath($xPath)
     {
-        return new ValueMatchingStrategy('matchesXPath', $xPath);
+        return new XPathValueMatchingStrategy('matchesXPath', $xPath);
     }
 
     /**
