@@ -49,7 +49,7 @@ class UrlMatchingStrategy
     public static function fromArray(array $array)
     {
         foreach (array('url', 'urlPattern', 'urlPath', 'urlPathPattern') as $type) {
-            if ($array[$type]) {
+            if (isset($array[$type])) {
                 return new UrlMatchingStrategy($type, $array[$type]);
             }
         }

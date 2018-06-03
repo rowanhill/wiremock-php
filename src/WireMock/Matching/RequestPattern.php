@@ -117,16 +117,16 @@ class RequestPattern
             $array['method'],
             UrlMatchingStrategy::fromArray($array)
         );
-        if ($array['headers']) {
+        if (isset($array['headers'])) {
             $pattern->setHeaders($array['headers']);
         }
-        if ($array['cookies']) {
+        if (isset($array['cookies'])) {
             $pattern->setCookies($array['cookies']);
         }
-        if ($array['queryParameters']) {
+        if (isset($array['queryParameters'])) {
             $pattern->setQueryParameters($array['queryParameters']);
         }
-        if ($array['bodyPatterns']) {
+        if (isset($array['bodyPatterns'])) {
             $pattern->setBodyPatterns($array['bodyPatterns']);
         }
         return $pattern;

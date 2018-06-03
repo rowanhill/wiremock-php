@@ -75,8 +75,8 @@ class NearMiss
     {
         return new NearMiss(
             LoggedRequest::fromArray($array['request']),
-            $array['stubMapping'] ? StubMapping::fromArray($array['stubMapping']) : null,
-            $array['requestPattern'] ? RequestPattern::fromArray($array['requestPattern']) : null,
+            isset($array['stubMapping']) ? StubMapping::fromArray($array['stubMapping']) : null,
+            isset($array['requestPattern']) ? RequestPattern::fromArray($array['requestPattern']) : null,
             MatchResult::fromArray($array['matchResult'])
         );
     }
