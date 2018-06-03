@@ -476,6 +476,19 @@ class WireMock
         return new ValueMatchingStrategy('matchesJsonPath', $jsonPath);
     }
 
+    /**
+     * @param string $xml
+     * @return ValueMatchingStrategy
+     */
+    public static function equalToXml($xml)
+    {
+        return new ValueMatchingStrategy('equalToXml', $xml);
+    }
+
+    /**
+     * @param string $xPath
+     * @return ValueMatchingStrategy
+     */
     public static function matchingXPath($xPath)
     {
         return new ValueMatchingStrategy('matchesXPath', $xPath);
