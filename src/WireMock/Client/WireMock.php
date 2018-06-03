@@ -5,6 +5,7 @@ namespace WireMock\Client;
 use DateTime;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\Stubbing\StubMapping;
 use WireMock\Verification\CountMatchingStrategy;
 
 class WireMock
@@ -244,7 +245,7 @@ class WireMock
     /**
      * @param int $limit
      * @param int $offset
-     * @return array Associative array from JSON - see WireMock docs for details
+     * @return ListStubMappingsResult
      */
     public function listAllStubMappings($limit = null, $offset = null)
     {
@@ -263,20 +264,21 @@ class WireMock
         }
         $url = $this->_makeUrl($pathAndParams);
         $result = file_get_contents($url);
-        $resultObj = json_decode($result, true);
-        return $resultObj;
+        $resultArray = json_decode($result, true);
+        return new ListStubMappingsResult($resultArray);
     }
 
     /**
      * @param string $id GUID of stub to retrieve
-     * @return \stdClass
+     * @return StubMapping
+     * @throws \Exception
      */
     public function getSingleStubMapping($id)
     {
         $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
         $result = file_get_contents($url);
-        $resultObj = json_decode($result, true);
-        return $resultObj;
+        $resultArray = json_decode($result, true);
+        return StubMapping::fromArray($resultArray);
     }
 
     private function _makeUrl($path)

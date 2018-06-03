@@ -14,7 +14,7 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         $mappings = self::$_wireMock->listAllStubMappings();
 
         // then
-        assertThat($mappings['mappings'], emptyArray());
+        assertThat($mappings->getMappings(), emptyArray());
     }
 
     public function testMappingListContainsStubsPreviouslyCreated()
@@ -26,7 +26,7 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         $mappings = self::$_wireMock->listAllStubMappings();
 
         // then
-        assertThat($mappings['mappings'], hasItemWithIdOfMapping($mapping));
+        assertThat($mappings->getMappings(), hasItemInArray($mapping));
     }
 
     public function testMappingListCanBeLimitedToMostRecent()
@@ -41,7 +41,7 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         $mappings = self::$_wireMock->listAllStubMappings(1);
 
         // then
-        assertThat($mappings['mappings'], allOf(hasItemWithIdOfMapping($mapping), arrayWithSize(1)));
+        assertThat($mappings->getMappings(), allOf(hasItemInArray($mapping), arrayWithSize(1)));
     }
 
     public function testMappingListCanBeOffsetToRetrieveOlderStubs()
@@ -56,7 +56,7 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         $mappings = self::$_wireMock->listAllStubMappings(1, 1);
 
         // then
-        assertThat($mappings['mappings'], allOf(hasItemWithIdOfMapping($mapping), arrayWithSize(1)));
+        assertThat($mappings->getMappings(), allOf(hasItemInArray($mapping), arrayWithSize(1)));
     }
 
     public function testGettingSingleMappingRetrievesStubById()
@@ -69,6 +69,6 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         $returnedMapping = self::$_wireMock->getSingleStubMapping($mapping->getId());
 
         // then
-        assertThat($returnedMapping, hasIdOfMapping($mapping));
+        assertThat($returnedMapping, equalTo($mapping));
     }
 }

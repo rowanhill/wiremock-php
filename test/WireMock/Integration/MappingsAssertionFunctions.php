@@ -32,13 +32,3 @@ function getMappings()
     $admin = json_decode($adminJson, true);
     return $admin['mappings'];
 }
-
-function hasItemWithIdOfMapping(StubMapping $mapping)
-{
-    return hasItemInArray(hasIdOfMapping($mapping));
-}
-
-function hasIdOfMapping(StubMapping $mapping)
-{
-    return hasKeyValuePair('id', $mapping->getId());
-}
