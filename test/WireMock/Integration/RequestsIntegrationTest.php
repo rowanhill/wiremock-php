@@ -15,18 +15,25 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
     public function testGettingAllServeEventsReturnsAllRequestDetails()
     {
         // given
+        $packedResponseBody = pack('c*', 0x23, 0x59, 0x11);
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/matched'))
-            ->willReturn(WireMock::aResponse()));
+            ->willReturn(WireMock::aResponse()
+                ->withBodyData($packedResponseBody)
+                ->withHeader('X-Hello', 'There')));
         $this->_testClient->get('/matched');
-        $this->_testClient->get('/unmatched');
+        $this->_testClient->post('/unmatched', http_build_query(array('requestBody' => 'hello')));
 
         // when
         $serveEvents = self::$_wireMock->getAllServeEvents();
 
         // then
-        assertThat($serveEvents['requests'], arrayWithSize(2));
-        assertThat($serveEvents['requests'][0]['request']['url'], equalTo('/unmatched'));
-        assertThat($serveEvents['requests'][1]['request']['url'], equalTo('/matched'));
+        $loggedRequests = $serveEvents->getRequests();
+        assertThat($serveEvents->getMeta()->getTotal(), equalTo(2));
+        assertThat($loggedRequests, arrayWithSize(2));
+        assertThat($loggedRequests[0]->getRequest()->getUrl(), equalTo('/unmatched'));
+        assertThat($loggedRequests[0]->getRequest()->getBody(), equalTo('requestBody=hello'));
+        assertThat($loggedRequests[1]->getRequest()->getUrl(), equalTo('/matched'));
+        assertThat($loggedRequests[1]->getResponse()->getBody(), equalTo($packedResponseBody));
     }
 
     public function testGettingAllServeEventsSinceATime()
@@ -40,7 +47,7 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         $serveEvents = self::$_wireMock->getAllServeEvents($oneMinuteAgo);
 
         // then
-        assertThat($serveEvents['requests'], arrayWithSize(1));
+        assertThat($serveEvents->getRequests(), arrayWithSize(1));
     }
 
     public function testGettingAllServeEventsCanBeLimited()
@@ -55,8 +62,9 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         $serveEvents = self::$_wireMock->getAllServeEvents(null, 1);
 
         // then
-        assertThat($serveEvents['requests'], arrayWithSize(1));
-        assertThat($serveEvents['requests'][0]['request']['url'], equalTo('/unmatched'));
+        $requests = $serveEvents->getRequests();
+        assertThat($requests, arrayWithSize(1));
+        assertThat($requests[0]->getRequest()->getUrl(), equalTo('/unmatched'));
     }
 
     public function testFindingAllRequestsReturnsMatchingRequestDetails()
@@ -99,6 +107,6 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
 
         // then
         $serveEvents = self::$_wireMock->getAllServeEvents();
-        assertThat($serveEvents['requests'], arrayWithSize(0));
+        assertThat($serveEvents->getRequests(), arrayWithSize(0));
     }
 }

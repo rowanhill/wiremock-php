@@ -44,8 +44,7 @@ class UrlMatchingStrategy
 
     /**
      * @param array $array
-     * @return UrlMatchingStrategy
-     * @throws \Exception
+     * @return UrlMatchingStrategy|null
      */
     public static function fromArray(array $array)
     {
@@ -54,6 +53,6 @@ class UrlMatchingStrategy
                 return new UrlMatchingStrategy($type, $array[$type]);
             }
         }
-        throw new \Exception('Could not deserialise UrlMatchingStrategy from array ' . print_r($array, true));
+        return null;
     }
 }

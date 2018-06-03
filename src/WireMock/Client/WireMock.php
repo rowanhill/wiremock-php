@@ -106,7 +106,7 @@ class WireMock
     /**
      * @param DateTime $since
      * @param int $limit
-     * @return array Associative array from JSON - see WireMock docs for details
+     * @return GetServeEventsResult
      */
     public function getAllServeEvents($since = null, $limit = null)
     {
@@ -125,8 +125,8 @@ class WireMock
         }
         $url = $this->_makeUrl($pathAndParams);
         $result = file_get_contents($url);
-        $resultObj = json_decode($result, true);
-        return $resultObj;
+        $resultArray = json_decode($result, true);
+        return new GetServeEventsResult($resultArray);
     }
 
     /**
