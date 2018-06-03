@@ -60,6 +60,19 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('absent' => true))));
     }
 
+    public function testCookieWithValueMatchingStrategyIsInArrayIfSpecified()
+    {
+        // given
+        $requestPatternBuilder = new RequestPatternBuilder('GET', new UrlMatchingStrategy('url', '/some/url'));
+        $requestPatternBuilder->withCookie('aCookie', new ValueMatchingStrategy('equalTo', 'something'));
+
+        // when
+        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('cookies', array('aCookie' => array('equalTo' => 'something'))));
+    }
+
     public function testRequestBodyPatternsAreInArrayIfSpecified()
     {
         // given

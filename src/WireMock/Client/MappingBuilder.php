@@ -15,6 +15,8 @@ class MappingBuilder
     private $_responseDefinitionBuilder;
     /** @var array of string -> ValueMatchingStrategy */
     private $_headers = array();
+    /** @var array of string -> ValueMatchingStrategy */
+    private $_cookies = array();
     /** @var array of ValueMatchingStrategy */
     private $_requestBodyPatterns = array();
     /** @var int */
@@ -59,13 +61,24 @@ class MappingBuilder
     }
 
     /**
-     * @param $headerName
+     * @param string $headerName
      * @param ValueMatchingStrategy $valueMatchingStrategy
      * @return MappingBuilder
      */
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
         $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        return $this;
+    }
+
+    /**
+     * @param string $cookieName
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return MappingBuilder
+     */
+    public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_cookies[$cookieName] = $valueMatchingStrategy->toArray();
         return $this;
     }
 
@@ -117,6 +130,7 @@ class MappingBuilder
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();
         $this->_requestPattern->setHeaders($this->_headers);
+        $this->_requestPattern->setCookies($this->_cookies);
         if (!empty($this->_requestBodyPatterns)) {
             $this->_requestPattern->setBodyPatterns($this->_requestBodyPatterns);
         }

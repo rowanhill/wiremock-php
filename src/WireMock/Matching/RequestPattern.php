@@ -11,6 +11,8 @@ class RequestPattern
     /** @var array */
     private $_headers;
     /** @var array */
+    private $_cookies;
+    /** @var array */
     private $_queryParameters;
     /** @var array */
     private $_bodyPatterns;
@@ -28,6 +30,11 @@ class RequestPattern
     public function setHeaders(array $headers)
     {
         $this->_headers = $headers;
+    }
+
+    public function setCookies(array $cookies)
+    {
+        $this->_cookies = $cookies;
     }
 
     public function setQueryParameters(array $queryParameters)
@@ -87,6 +94,9 @@ class RequestPattern
         if ($this->_headers) {
             $array['headers'] = $this->_headers;
         }
+        if ($this->_cookies) {
+            $array['cookies'] = $this->_cookies;
+        }
         if ($this->_queryParameters) {
             $array['queryParameters'] = $this->_queryParameters;
         }
@@ -109,6 +119,9 @@ class RequestPattern
         );
         if ($array['headers']) {
             $pattern->setHeaders($array['headers']);
+        }
+        if ($array['cookies']) {
+            $pattern->setCookies($array['cookies']);
         }
         if ($array['queryParameters']) {
             $pattern->setQueryParameters($array['queryParameters']);

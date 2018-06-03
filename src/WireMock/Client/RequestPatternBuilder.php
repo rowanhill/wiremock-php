@@ -10,6 +10,7 @@ class RequestPatternBuilder
     private $_method;
     private $_urlMatchingStrategy;
     private $_headers = array();
+    private $_cookies = array();
     private $_queryParameters = array();
     private $_bodyPatterns = array();
 
@@ -31,6 +32,17 @@ class RequestPatternBuilder
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
         $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        return $this;
+    }
+
+    /**
+     * @param string $cookieName
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return RequestPatternBuilder
+     */
+    public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_cookies[$cookieName] = $valueMatchingStrategy->toArray();
         return $this;
     }
 
@@ -73,6 +85,9 @@ class RequestPatternBuilder
         $requestPattern = new RequestPattern($this->_method, $this->_urlMatchingStrategy);
         if (!empty($this->_headers)) {
             $requestPattern->setHeaders($this->_headers);
+        }
+        if (!empty($this->_cookies)) {
+            $requestPattern->setCookies($this->_cookies);
         }
         if (!empty($this->_bodyPatterns)) {
             $requestPattern->setBodyPatterns($this->_bodyPatterns);
