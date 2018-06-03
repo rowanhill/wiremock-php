@@ -33,11 +33,14 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
-        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+        $headers = array('aHeader' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            $headers
+        );
 
         // when
-        $headers = array('aHeader' => array('equalTo' => 'aValue'));
-        $requestPattern->setHeaders($headers);
         $requestPatternArray = $requestPattern->toArray();
 
         // then
@@ -50,11 +53,15 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
-        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+        $cookies = array('aCookie' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            $cookies
+        );
 
         // when
-        $cookies = array('aCookie' => array('equalTo' => 'aValue'));
-        $requestPattern->setCookies($cookies);
         $requestPatternArray = $requestPattern->toArray();
 
         // then
@@ -67,14 +74,42 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
-        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+        $bodyPatterns = array(array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            null,
+            $bodyPatterns
+        );
 
         // when
-        $bodyPatterns = array(array('equalTo' => 'aValue'));
-        $requestPattern->setBodyPatterns($bodyPatterns);
         $requestPatternArray = $requestPattern->toArray();
 
         // then
         assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatterns));
+    }
+
+    public function testQueryParamMatchersAreAvailableInArray()
+    {
+        // given
+        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
+        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
+        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $queryParams = array('aParam' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            null,
+            null,
+            $queryParams
+        );
+
+        // when
+        $requestPatternArray = $requestPattern->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('queryParameters', $queryParams));
     }
 }

@@ -82,19 +82,13 @@ class RequestPatternBuilder
      */
     public function build()
     {
-        $requestPattern = new RequestPattern($this->_method, $this->_urlMatchingStrategy);
-        if (!empty($this->_headers)) {
-            $requestPattern->setHeaders($this->_headers);
-        }
-        if (!empty($this->_cookies)) {
-            $requestPattern->setCookies($this->_cookies);
-        }
-        if (!empty($this->_bodyPatterns)) {
-            $requestPattern->setBodyPatterns($this->_bodyPatterns);
-        }
-        if (!empty($this->_queryParameters)) {
-            $requestPattern->setQueryParameters($this->_queryParameters);
-        }
-        return $requestPattern;
+        return new RequestPattern(
+            $this->_method,
+            $this->_urlMatchingStrategy,
+            $this->_headers,
+            $this->_cookies,
+            $this->_bodyPatterns,
+            $this->_queryParameters
+        );
     }
 }

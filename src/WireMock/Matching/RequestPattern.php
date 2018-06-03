@@ -20,31 +20,25 @@ class RequestPattern
     /**
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param array $headers
+     * @param array $cookies
+     * @param array $bodyPatterns
+     * @param array $queryParameters
      */
-    public function __construct($method, $urlMatchingStrategy)
-    {
+    public function __construct(
+        $method,
+        $urlMatchingStrategy,
+        $headers = null,
+        $cookies = null,
+        $bodyPatterns = null,
+        $queryParameters = null
+    ) {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;
-    }
-
-    public function setHeaders(array $headers)
-    {
         $this->_headers = $headers;
-    }
-
-    public function setCookies(array $cookies)
-    {
         $this->_cookies = $cookies;
-    }
-
-    public function setQueryParameters(array $queryParameters)
-    {
-        $this->_queryParameters = $queryParameters;
-    }
-
-    public function setBodyPatterns(array $bodyPatterns)
-    {
         $this->_bodyPatterns = $bodyPatterns;
+        $this->_queryParameters = $queryParameters;
     }
 
     /**
@@ -113,22 +107,13 @@ class RequestPattern
      */
     public static function fromArray(array $array)
     {
-        $pattern = new RequestPattern(
+        return new RequestPattern(
             $array['method'],
-            UrlMatchingStrategy::fromArray($array)
+            UrlMatchingStrategy::fromArray($array),
+            isset($array['headers']) ?: null,
+            isset($array['cookies']) ?: null,
+            isset($array['queryParameters']) ?: null,
+            isset($array['bodyPatterns']) ?: null
         );
-        if (isset($array['headers'])) {
-            $pattern->setHeaders($array['headers']);
-        }
-        if (isset($array['cookies'])) {
-            $pattern->setCookies($array['cookies']);
-        }
-        if (isset($array['queryParameters'])) {
-            $pattern->setQueryParameters($array['queryParameters']);
-        }
-        if (isset($array['bodyPatterns'])) {
-            $pattern->setBodyPatterns($array['bodyPatterns']);
-        }
-        return $pattern;
     }
 }
