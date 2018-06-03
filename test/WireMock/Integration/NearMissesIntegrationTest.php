@@ -25,6 +25,25 @@ class NearMissesIntegrationTest extends WireMockIntegrationTest
         $nearMiss = $nearMisses[0];
         assertThat($nearMiss->getRequest()->getUrl(), equalTo('/different-url'));
         assertThat($nearMiss->getMapping()->getRequest()->getUrlMatchingStrategy()->getMatchingValue(), equalTo('/some-url'));
+        assertThat($nearMiss->getRequestPattern(), nullValue());
+        assertThat($nearMiss->getMatchResult()->getDistance(), floatValue());
+    }
+
+    public function testFindNearMissesForRequestPattern()
+    {
+        // given
+        $requestPattern = WireMock::getRequestedFor(WireMock::urlEqualTo('/some-url'));
+        $this->_testClient->get('/different-url');
+
+        // when
+        $nearMissesResult = self::$_wireMock->findNearMissesFor($requestPattern);
+
+        // then
+        $nearMisses = $nearMissesResult->getNearMisses();
+        $nearMiss = $nearMisses[0];
+        assertThat($nearMiss->getRequest()->getUrl(), equalTo('/different-url'));
+        assertThat($nearMiss->getMapping(), nullValue());
+        assertThat($nearMiss->getRequestPattern()->getUrlMatchingStrategy()->getMatchingValue(), equalTo('/some-url'));
         assertThat($nearMiss->getMatchResult()->getDistance(), floatValue());
     }
 }

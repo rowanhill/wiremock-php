@@ -160,13 +160,21 @@ class WireMock
     }
 
     /**
-     * @param LoggedRequest $loggedRequest
+     * @param LoggedRequest|RequestPattern $loggedRequestOrPattern
      * @return FindNearMissesResult
+     * @throws \Exception
      */
-    public function findNearMissesFor($loggedRequest)
+    public function findNearMissesFor($loggedRequestOrPattern)
     {
-        $url = $this->_makeUrl('__admin/near-misses/request');
-        $loggedRequestArray = $loggedRequest->toArray();
+        if ($loggedRequestOrPattern instanceof LoggedRequest) {
+            $url = $this->_makeUrl('__admin/near-misses/request');
+        } else if ($loggedRequestOrPattern instanceof RequestPatternBuilder) {
+            $loggedRequestOrPattern = $loggedRequestOrPattern->build();
+            $url = $this->_makeUrl('__admin/near-misses/request-pattern');
+        } else {
+            throw new \Exception('Unexpected near miss specifier: ' . print_r($loggedRequestOrPattern, true));
+        }
+        $loggedRequestArray = $loggedRequestOrPattern->toArray();
         $findResultJson = $this->_curl->post($url, $loggedRequestArray);
         $findResult = json_decode($findResultJson, true);
         return FindNearMissesResult::fromArray($findResult);
