@@ -265,6 +265,20 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponsesCanBeStubbedByBodyXPathWithACombinedMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::matchingXPath(
+                '/todo-list[count(todo-item) = 3]',
+                WireMock::containing('blah')
+            ))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testStubIdCanBeSet()
     {
         // when

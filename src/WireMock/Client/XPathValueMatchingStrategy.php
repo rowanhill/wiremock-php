@@ -6,6 +6,19 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
 {
     /** @var array */
     private $_namespaces = array();
+    /** @var ValueMatchingStrategy */
+    private $_valueMatchingStrategy;
+
+    /**
+     * XPathValueMatchingStrategy constructor.
+     * @param string $matchingValue
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     */
+    public function __construct($matchingValue, $valueMatchingStrategy = null)
+    {
+        parent::__construct('matchesXPath', $matchingValue);
+        $this->_valueMatchingStrategy = $valueMatchingStrategy;
+    }
 
     /**
      * @param string $name
@@ -23,10 +36,21 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
      */
     public function toArray()
     {
-        $array = parent::toArray();
-        if (!empty($this->_namespaces)) {
-            $array['xPathNamespaces'] = $this->_namespaces;
+        if (!$this->_valueMatchingStrategy) {
+            $array = parent::toArray();
+            if (!empty($this->_namespaces)) {
+                $array['xPathNamespaces'] = $this->_namespaces;
+            }
+            return $array;
+        } else {
+            return array(
+                'matchesXPath' => array_merge(
+                    array(
+                        'expression' => $this->_matchingValue
+                    ),
+                    $this->_valueMatchingStrategy->toArray()
+                )
+            );
         }
-        return $array;
     }
 }

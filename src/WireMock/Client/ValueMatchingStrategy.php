@@ -5,9 +5,9 @@ namespace WireMock\Client;
 class ValueMatchingStrategy
 {
     /** @var string */
-    private $_matchingType;
+    protected $_matchingType;
     /** @var string */
-    private $_matchingValue;
+    protected $_matchingValue;
 
     public function __construct($matchingType, $matchingValue)
     {
