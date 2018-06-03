@@ -68,6 +68,14 @@ class RequestPattern
     /**
      * @return array
      */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+
+    /**
+     * @return array
+     */
     public function getQueryParameters()
     {
         return $this->_queryParameters;
