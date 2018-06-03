@@ -311,7 +311,7 @@ class WireMock
      */
     public static function get(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('GET', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('GET', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -321,7 +321,7 @@ class WireMock
      */
     public static function post(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('POST', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('POST', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -331,7 +331,7 @@ class WireMock
      */
     public static function put(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('PUT', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('PUT', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -341,7 +341,7 @@ class WireMock
      */
     public static function delete(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('DELETE', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('DELETE', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -351,7 +351,7 @@ class WireMock
      */
     public static function patch(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('PATCH', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('PATCH', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -361,7 +361,7 @@ class WireMock
      */
     public static function head(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('HEAD', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('HEAD', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -371,7 +371,7 @@ class WireMock
      */
     public static function options(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('OPTIONS', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('OPTIONS', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -381,7 +381,7 @@ class WireMock
      */
     public static function trace(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('TRACE', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
@@ -391,7 +391,7 @@ class WireMock
      */
     public static function any(UrlMatchingStrategy $urlMatchingStrategy)
     {
-        $requestPattern = new RequestPattern('ANY', $urlMatchingStrategy);
+        $requestPattern = new RequestPatternBuilder('ANY', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
