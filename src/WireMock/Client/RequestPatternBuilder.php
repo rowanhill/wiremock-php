@@ -13,6 +13,8 @@ class RequestPatternBuilder
     private $_cookies = array();
     private $_queryParameters = array();
     private $_bodyPatterns = array();
+    /** @var array */
+    private $_multipartPatterns = array();
     /** @var BasicCredentials */
     private $_basicCredentials;
 
@@ -80,6 +82,16 @@ class RequestPatternBuilder
     }
 
     /**
+     * @param MultipartValuePattern $multipart
+     * @return $this
+     */
+    public function withMultipartRequestBody($multipart)
+    {
+        $this->_multipartPatterns[] = $multipart->toArray();
+        return $this;
+    }
+
+    /**
      * @param string $username
      * @param string $password
      * @return RequestPatternBuilder
@@ -101,6 +113,7 @@ class RequestPatternBuilder
             $this->_headers,
             $this->_cookies,
             $this->_bodyPatterns,
+            $this->_multipartPatterns,
             $this->_queryParameters,
             $this->_basicCredentials
         );

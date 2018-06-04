@@ -97,6 +97,16 @@ class MappingBuilder
     }
 
     /**
+     * @param MultipartValuePatternBuilder $multipartBuilder
+     * @return MappingBuilder
+     */
+    public function withMultipartRequestBody($multipartBuilder)
+    {
+        $this->_requestPatternBuilder->withMultipartRequestBody($multipartBuilder->build());
+        return $this;
+    }
+
+    /**
      * @param string $username
      * @param string $password
      * @return MappingBuilder

@@ -3,6 +3,7 @@
 namespace WireMock\Matching;
 
 use WireMock\Client\BasicCredentials;
+use WireMock\Client\MultipartValuePattern;
 
 class RequestPattern
 {
@@ -18,6 +19,8 @@ class RequestPattern
     private $_queryParameters;
     /** @var array */
     private $_bodyPatterns;
+    /** @var null|MultipartValuePattern[] */
+    private $_multipartPatterns;
     /** @var BasicCredentials */
     private $_basicCredentials;
 
@@ -27,6 +30,7 @@ class RequestPattern
      * @param array $headers
      * @param array $cookies
      * @param array $bodyPatterns
+     * @param array $multipartPatterns
      * @param array $queryParameters
      * @param BasicCredentials $basicCredentials
      */
@@ -36,6 +40,7 @@ class RequestPattern
         $headers = null,
         $cookies = null,
         $bodyPatterns = null,
+        $multipartPatterns = null,
         $queryParameters = null,
         $basicCredentials = null
     ) {
@@ -46,6 +51,7 @@ class RequestPattern
         $this->_bodyPatterns = $bodyPatterns;
         $this->_queryParameters = $queryParameters;
         $this->_basicCredentials = $basicCredentials;
+        $this->_multipartPatterns = $multipartPatterns;
     }
 
     /**
@@ -97,6 +103,14 @@ class RequestPattern
     }
 
     /**
+     * @return array
+     */
+    public function getMultipartPatterns()
+    {
+        return $this->_multipartPatterns;
+    }
+
+    /**
      * @return BasicCredentials
      */
     public function getBasicCredentials()
@@ -120,6 +134,9 @@ class RequestPattern
         if ($this->_bodyPatterns) {
             $array['bodyPatterns'] = $this->_bodyPatterns;
         }
+        if ($this->_multipartPatterns) {
+            $array['multipartPatterns'] = $this->_multipartPatterns;
+        }
         if ($this->_basicCredentials) {
             $array['basicAuthCredentials'] = $this->_basicCredentials->toArray();
         }
@@ -139,6 +156,7 @@ class RequestPattern
             isset($array['headers']) ?: null,
             isset($array['cookies']) ?: null,
             isset($array['queryParameters']) ?: null,
+            isset($array['multipartPatterns']) ?: null,
             isset($array['bodyPatterns']) ?: null
         );
     }

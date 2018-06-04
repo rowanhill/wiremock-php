@@ -17,7 +17,7 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array($matchingType => $matchingValue));
-        $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy);
+        $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy, null);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
@@ -37,7 +37,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
-            $headers
+            $headers,
+            null
         );
 
         // when
@@ -58,7 +59,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
             'GET',
             $mockUrlMatchingStrategy,
             null,
-            $cookies
+            $cookies,
+            null
         );
 
         // when
@@ -80,7 +82,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
             $mockUrlMatchingStrategy,
             null,
             null,
-            $bodyPatterns
+            $bodyPatterns,
+            null
         );
 
         // when
@@ -100,6 +103,7 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
+            null,
             null,
             null,
             null,

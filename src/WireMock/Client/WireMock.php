@@ -496,6 +496,14 @@ class WireMock
     }
 
     /**
+     * @return MultipartValuePatternBuilder
+     */
+    public static function aMultipart()
+    {
+        return new MultipartValuePatternBuilder();
+    }
+
+    /**
      * @return ValueMatchingStrategy
      */
     public static function absent()
