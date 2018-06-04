@@ -180,7 +180,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withQueryParam('foo', WireMock::absent())
             ->willReturn(WireMock::aResponse()));
-        print_r($stubMapping);//qq
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
