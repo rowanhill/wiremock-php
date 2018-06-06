@@ -495,12 +495,13 @@ class WireMock
 
     /**
      * @param string $value
-     * @param string $jsonCompareMode
+     * @param boolean $ignoreArrayOrder
+     * @param boolean $ignoreExtraElements
      * @return ValueMatchingStrategy
      */
-    public static function equalToJson($value, $jsonCompareMode = JsonValueMatchingStrategy::COMPARE_MODE__NON_EXTENSIBLE)
+    public static function equalToJson($value, $ignoreArrayOrder = null, $ignoreExtraElements = null)
     {
-        return new JsonValueMatchingStrategy($value, $jsonCompareMode);
+        return new JsonValueMatchingStrategy($value, $ignoreArrayOrder, $ignoreExtraElements);
     }
 
     /**

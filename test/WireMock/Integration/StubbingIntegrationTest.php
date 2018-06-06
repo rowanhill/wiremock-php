@@ -4,7 +4,6 @@ namespace WireMock\Integration;
 
 require_once 'WireMockIntegrationTest.php';
 
-use WireMock\Client\JsonValueMatchingStrategy;
 use WireMock\Client\WireMock;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
@@ -303,11 +302,21 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withRequestBody(WireMock::equalToJson('{"key":"value"}'))
-            ->withRequestBody(WireMock::equalToJson('{}', JsonValueMatchingStrategy::COMPARE_MODE__LENIENT))
+            ->withRequestBody(WireMock::equalToJson('{}', true, true))
             ->willReturn(WireMock::aResponse()));
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
+            array(
+                'equalToJson' => '{"key":"value"}'
+            ),
+            array(
+                'equalToJson' => '{}',
+                'ignoreArrayOrder' => true,
+                'ignoreExtraElements' => true
+            )
+        )));
     }
 
     public function testResponseCanBeStubbedByBodyJsonPath()

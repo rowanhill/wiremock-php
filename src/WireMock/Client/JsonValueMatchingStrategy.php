@@ -4,40 +4,24 @@ namespace WireMock\Client;
 
 class JsonValueMatchingStrategy extends ValueMatchingStrategy
 {
-    const COMPARE_MODE__NON_EXTENSIBLE = 'NON_EXTENSIBLE';
-    const COMPARE_MODE__LENIENT = 'LENIENT';
-    const COMPARE_MODE__STRICT = 'STRICT';
-    const COMPARE_MODE__STRICT_ORDER = 'STRICT_ORDER';
+    private $_ignoreArrayOrder = null;
+    private $_ignoreExtraElements = null;
 
-    private $_jsonCompareMode;
-
-    public function __construct($matchingValue, $jsonCompareMode)
+    public function __construct($matchingValue, $ignoreArrayOrder = null, $ignoreExtraElements = null)
     {
         parent::__construct('equalToJson', $matchingValue);
-        $this->_jsonCompareMode = $jsonCompareMode;
+        $this->_ignoreArrayOrder = $ignoreArrayOrder;
+        $this->_ignoreExtraElements = $ignoreExtraElements;
     }
 
     public function toArray()
     {
         $array = parent::toArray();
-
-        switch ($this->_jsonCompareMode) {
-            case self::COMPARE_MODE__NON_EXTENSIBLE:
-                $array['ignoreArrayOrder'] = true;
-                $array['ignoreExtraElements'] = true;
-                break;
-            case self::COMPARE_MODE__LENIENT:
-                $array['ignoreArrayOrder'] = true;
-                $array['ignoreExtraElements'] = false;
-                break;
-            case self::COMPARE_MODE__STRICT:
-                $array['ignoreArrayOrder'] = false;
-                $array['ignoreExtraElements'] = true;
-                break;
-            case self::COMPARE_MODE__STRICT_ORDER:
-                $array['ignoreArrayOrder'] = false;
-                $array['ignoreExtraElements'] = false;
-                break;
+        if ($this->_ignoreArrayOrder) {
+            $array['ignoreArrayOrder'] = $this->_ignoreArrayOrder;
+        }
+        if ($this->_ignoreExtraElements) {
+            $array['ignoreExtraElements'] = $this->_ignoreExtraElements;
         }
         return $array;
     }
