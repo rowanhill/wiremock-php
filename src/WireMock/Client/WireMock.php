@@ -458,6 +458,15 @@ class WireMock
     }
 
     /**
+     * @param string $base64String
+     * @return ValueMatchingStrategy
+     */
+    public static function binaryEqualTo($base64String)
+    {
+        return new ValueMatchingStrategy('binaryEqualTo', $base64String);
+    }
+
+    /**
      * @param string $value
      * @return ValueMatchingStrategy
      */

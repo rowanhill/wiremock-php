@@ -259,6 +259,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         )));
     }
 
+    public function testStubAttributesCanBeMatchedByBase64BinaryEquality()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::binaryEqualTo('AQID'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
+            array(
+                'binaryEqualTo' => 'AQID'
+            )
+        )));
+    }
+
     public function testResponseCanBeStubbedByBodyMatching()
     {
         // when
