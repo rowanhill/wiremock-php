@@ -324,10 +324,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // when
         $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withRequestBody(WireMock::matchingJsonPath('$.status'))
+            ->withRequestBody(WireMock::matchingJsonPath('$.status', WireMock::containing('ok')))
             ->willReturn(WireMock::aResponse()));
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
+            array(
+                'matchesJsonPath' => '$.status'
+            ),
+            array(
+                'matchesJsonPath' => array(
+                    'expression' => '$.status',
+                    'contains' => 'ok'
+                )
+            )
+        )));
     }
 
     public function testResponsesCanBeStubbedByBodyXml()
