@@ -242,6 +242,23 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testStubAttributesCanBeMatchedByCaseInsensitiveEquality()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withHeader('X-Header', WireMock::equalToIgnoreCase('VaLUe'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getRequest()->getHeaders(), equalTo(array(
+            'X-Header' => array(
+                'equalTo' => 'VaLUe',
+                'caseInsensitive' => true
+            )
+        )));
+    }
+
     public function testResponseCanBeStubbedByBodyMatching()
     {
         // when

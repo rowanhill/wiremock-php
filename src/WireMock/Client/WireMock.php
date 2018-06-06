@@ -441,11 +441,20 @@ class WireMock
 
     /**
      * @param string $value
-     * @return ValueMatchingStrategy
+     * @return EqualToMatchingStrategy
      */
     public static function equalTo($value)
     {
-        return new ValueMatchingStrategy('equalTo', $value);
+        return new EqualToMatchingStrategy($value);
+    }
+
+    /**
+     * @param string $value
+     * @return EqualToMatchingStrategy
+     */
+    public static function equalToIgnoreCase($value)
+    {
+        return new EqualToMatchingStrategy($value, true);
     }
 
     /**
