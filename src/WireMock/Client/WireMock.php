@@ -396,12 +396,12 @@ class WireMock
     }
 
     /**
-     * @param string $urlPath
+     * @param string $url
      * @return UrlMatchingStrategy
      */
-    public static function urlEqualTo($urlPath)
+    public static function urlEqualTo($url)
     {
-        return new UrlMatchingStrategy('url', $urlPath);
+        return new UrlMatchingStrategy('url', $url);
     }
 
     /**
@@ -411,6 +411,24 @@ class WireMock
     public static function urlMatching($urlRegex)
     {
         return new UrlMatchingStrategy('urlPattern', $urlRegex);
+    }
+
+    /**
+     * @param string $urlPath
+     * @return UrlMatchingStrategy
+     */
+    public static function urlPathEqualTo($urlPath)
+    {
+        return new UrlMatchingStrategy('urlPath', $urlPath);
+    }
+
+    /**
+     * @param string $urlPathRegex
+     * @return UrlMatchingStrategy
+     */
+    public static function urlPathMatching($urlPathRegex)
+    {
+        return new UrlMatchingStrategy('urlPathPattern', $urlPathRegex);
     }
 
     /**
