@@ -6,15 +6,17 @@ use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
-    private $_status = 200;
-    private $_statusMessage;
-    private $_body;
-    private $_bodyFile;
-    private $_bodyData;
-    private $_headers = array();
-    private $_proxyBaseUrl;
-    private $_fixedDelayMillis;
-    private $_fault;
+    protected $_status = 200;
+    protected $_statusMessage;
+    protected $_body;
+    protected $_bodyFile;
+    protected $_bodyData;
+    protected $_headers = array();
+    protected $_proxyBaseUrl;
+    protected $_fixedDelayMillis;
+    protected $_fault;
+
+    protected $_additionalRequestHeaders = array();
 
     /**
      * @param int $status
@@ -25,7 +27,6 @@ class ResponseDefinitionBuilder
         $this->_status = $status;
         return $this;
     }
-
 
     /**
      * @param string $statusMessage
@@ -81,12 +82,12 @@ class ResponseDefinitionBuilder
 
     /**
      * @param string $proxyBaseUrl
-     * @return ResponseDefinitionBuilder
+     * @return ProxiedResponseDefinitionBuilder
      */
     public function proxiedFrom($proxyBaseUrl)
     {
         $this->_proxyBaseUrl = $proxyBaseUrl;
-        return $this;
+        return new ProxiedResponseDefinitionBuilder($this);
     }
 
     /**
@@ -119,8 +120,34 @@ class ResponseDefinitionBuilder
             $this->_bodyData,
             $this->_headers,
             $this->_proxyBaseUrl,
+            $this->_additionalRequestHeaders,
             $this->_fixedDelayMillis,
             $this->_fault
         );
+    }
+}
+
+class ProxiedResponseDefinitionBuilder extends ResponseDefinitionBuilder
+{
+    /**
+     * @param ResponseDefinitionBuilder $from
+     */
+    public function __construct($from)
+    {
+        $vars = get_object_vars($from);
+        foreach ($vars as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    /**
+     * @param string $headerName
+     * @param string $value
+     * @return ProxiedResponseDefinitionBuilder
+     */
+    public function withAdditionalRequestHeader($headerName, $value)
+    {
+        $this->_additionalRequestHeaders[$headerName] = $value;
+        return $this;
     }
 }

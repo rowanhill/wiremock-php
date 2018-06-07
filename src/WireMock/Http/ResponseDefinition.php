@@ -18,6 +18,8 @@ class ResponseDefinition
     private $_headers;
     /** @var string */
     private $_proxyBaseUrl;
+    /** @var array */
+    private $_additionalProxyRequestHeaders;
     /** @var int */
     private $_fixedDelayMillis;
     /** @var string */
@@ -32,6 +34,7 @@ class ResponseDefinition
      * @param string $base64Body
      * @param array $headers
      * @param string $proxyBaseUrl
+     * @param array $additionalProxyRequestHeaders
      * @param int $fixedDelayMillis
      * @param string $fault
      */
@@ -43,6 +46,7 @@ class ResponseDefinition
         $base64Body,
         $headers,
         $proxyBaseUrl,
+        $additionalProxyRequestHeaders,
         $fixedDelayMillis,
         $fault
     ) {
@@ -55,6 +59,7 @@ class ResponseDefinition
         $this->_proxyBaseUrl = $proxyBaseUrl;
         $this->_fixedDelayMillis = $fixedDelayMillis;
         $this->_fault = $fault;
+        $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
     }
 
     /**
@@ -114,6 +119,14 @@ class ResponseDefinition
     }
 
     /**
+     * @return array
+     */
+    public function getAdditionalProxyRequestHeaders()
+    {
+        return $this->_additionalProxyRequestHeaders;
+    }
+
+    /**
      * @return int
      */
     public function getFixedDelayMillis()
@@ -151,6 +164,9 @@ class ResponseDefinition
         if ($this->_proxyBaseUrl) {
             $array['proxyBaseUrl'] = $this->_proxyBaseUrl;
         }
+        if ($this->_additionalProxyRequestHeaders) {
+            $array['additionalProxyRequestHeaders'] = $this->_additionalProxyRequestHeaders;
+        }
         if ($this->_fixedDelayMillis) {
             $array['fixedDelayMilliseconds'] = $this->_fixedDelayMillis;
         }
@@ -170,6 +186,7 @@ class ResponseDefinition
             isset($array['base64Body']) ?: null,
             isset($array['headers']) ?: null,
             isset($array['proxyBaseUrl']) ?: null,
+            isset($array['additionalProxyRequestHeaders']) ?: null,
             isset($array['fixedDelayMilliseconds']) ?: null,
             isset($array['fault']) ?: null
         );

@@ -72,7 +72,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, hasEntry('body', $body));
     }
 
@@ -85,7 +85,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, not(hasKey('body')));
     }
 
@@ -100,7 +100,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, hasEntry('bodyFileName', $bodyFile));
     }
 
@@ -113,7 +113,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, not(hasKey('bodyFileName')));
     }
 
@@ -128,7 +128,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         $base64 = base64_encode($bodyData);
         assertThat($responseDefArray, hasEntry('base64Body', $base64));
     }
@@ -144,7 +144,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, hasEntry('headers', array('foo1' => 'bar1', 'foo2' => 'bar2')));
     }
 
@@ -157,7 +157,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, not(hasKey('headers')));
     }
 
@@ -171,8 +171,53 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'http://otherhost.com/approot'));
+    }
+
+    public function testProxyAdditionalHeadersIsNotInArrayIfEmpty()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+
+        // when
+        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+
+        // then
+        assertThat($responseDefArray, not(hasKey('additionalProxyRequestHeaders')));
+    }
+
+    public function testProxiedBuilderRetainsMatchersAddedSoFar()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder = $responseDefinitionBuilder
+            ->withStatus(404)
+            ->withHeader('X-Header', 'four oh four')
+            ->proxiedFrom('foo');
+
+        // when
+        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+
+        // then
+        assertThat($responseDefArray, hasEntry('status', 404));
+        assertThat($responseDefArray, hasEntry('headers', array('X-Header' => 'four oh four')));
+        assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'foo'));
+    }
+
+    public function testProxyAdditionalHeadersIsInArrayIfSet()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder = $responseDefinitionBuilder
+            ->proxiedFrom('foo')
+            ->withAdditionalRequestHeader('X-Header', 'val');
+
+        // when
+        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+
+        // then
+        assertThat($responseDefArray, hasEntry('additionalProxyRequestHeaders', array('X-Header' => 'val')));
     }
 
     public function testFixedDelayMillisecondsIsInArrayIfSet()
@@ -185,7 +230,7 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         $responseDefinition = $responseDefinitionBuilder->build();
         $responseDefArray = $responseDefinition->toArray();
 
-        // when
+        // then
         assertThat($responseDefArray, hasEntry('fixedDelayMilliseconds', 2000));
     }
 }
