@@ -9,7 +9,7 @@ class Curl
      * @param array $jsonArray
      * @return string The response body
      */
-    public function post($url, array $jsonArray = null)
+    public function post($url, $jsonArray = null)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
