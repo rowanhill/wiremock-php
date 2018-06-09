@@ -13,6 +13,8 @@ class RecordSpec
     private $_targetBaseUrl;
     /** @var RequestPattern */
     private $_requestPattern;
+    /** @var string[] */
+    private $_requestIds;
     /** @var array */
     private $_captureHeaders;
     /** @var array */
@@ -35,6 +37,7 @@ class RecordSpec
     /**
      * @param string $targetBaseUrl
      * @param RequestPattern $requestPattern
+     * @param string[] $requestIds
      * @param array $captureHeaders
      * @param array $extractBodyCriteria
      * @param boolean $persist
@@ -48,6 +51,7 @@ class RecordSpec
     public function __construct(
         $targetBaseUrl,
         $requestPattern,
+        $requestIds,
         $captureHeaders,
         $extractBodyCriteria,
         $persist,
@@ -60,6 +64,7 @@ class RecordSpec
     ) {
         $this->_targetBaseUrl = $targetBaseUrl;
         $this->_requestPattern = $requestPattern;
+        $this->_requestIds = $requestIds;
         $this->_captureHeaders = $captureHeaders;
         $this->_extractBodyCriteria = $extractBodyCriteria;
         $this->_persist = $persist;
@@ -77,10 +82,13 @@ class RecordSpec
         if ($this->_targetBaseUrl) {
             $array['targetBaseUrl'] = $this->_targetBaseUrl;
         }
-        if ($this->_requestPattern || $this->_allowNonProxied) {
+        if ($this->_requestPattern || $this->_requestIds || $this->_allowNonProxied) {
             $filters = array();
             if ($this->_requestPattern) {
                 $filters = array_merge($filters, $this->_requestPattern->toArray());
+            }
+            if ($this->_requestIds) {
+                $filters = array_merge($filters, array('ids' => $this->_requestIds));
             }
             if ($this->_allowNonProxied) {
                 $filters = array_merge($filters, array('allowNonProxied' => true));

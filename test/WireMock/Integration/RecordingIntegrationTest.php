@@ -226,4 +226,44 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThat($result->getMappings(), arrayWithSize(1));
     }
+
+    public function testRecordedMappingsCanBeRequestedById()
+    {
+        // given
+        self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->willReturn(WireMock::aResponse()->withBody('Some Body')));
+        self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+        $this->_testClient->get('/recordables/123');
+        $serveEvents = self::$_wireMock->getAllServeEvents()->getRequests();
+
+        // when
+        $result = self::$_wireMock->snapshotRecord(
+            WireMock::recordSpec()
+                ->onlyRequestIds(array($serveEvents[0]->getId()))
+        );
+
+        // then
+        assertThat($result->getMappings(), arrayWithSize(1));
+    }
+
+    public function testRecordedMappingsCanBeExcludedById()
+    {
+        // given
+        self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->willReturn(WireMock::aResponse()->withBody('Some Body')));
+        self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+        $this->_testClient->get('/recordables/123');
+        $serveEvents = self::$_wireMock->getAllServeEvents()->getRequests();
+
+        // when
+        $result = self::$_wireMock->snapshotRecord(
+            WireMock::recordSpec()
+                ->onlyRequestIds(array('98ae941f-37b6-46f5-81fd-026728c46080')) // shouldn't be the right ID
+        );
+
+        // then
+        assertThat($result->getMappings(), arrayWithSize(0));
+    }
 }

@@ -10,6 +10,8 @@ class RecordSpecBuilder
     private $_targetBaseUrl;
     /** @var RequestPatternBuilder */
     private $_requestPatternBuilder;
+    /** @var string[] */
+    private $_requestIds;
     /** @var array */
     private $_captureHeaders = array();
     /** @var array */
@@ -46,6 +48,16 @@ class RecordSpecBuilder
     public function onlyRequestsMatching($requestPatternBuilder)
     {
         $this->_requestPatternBuilder = $requestPatternBuilder;
+        return $this;
+    }
+
+    /**
+     * @param string[] $ids
+     * @return RecordSpecBuilder
+     */
+    public function onlyRequestIds(array $ids)
+    {
+        $this->_requestIds = $ids;
         return $this;
     }
 
@@ -210,6 +222,7 @@ class RecordSpecBuilder
         return new RecordSpec(
             $this->_targetBaseUrl,
             $this->_requestPatternBuilder ? $this->_requestPatternBuilder->build() : null,
+            $this->_requestIds,
             $this->_captureHeaders,
             $this->_extractBodyCriteria,
             $this->_persist,
