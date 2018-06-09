@@ -340,6 +340,19 @@ class WireMock
         return SnapshotRecordResult::fromArray($resultArray);
     }
 
+    /**
+     * @param RecordSpecBuilder $recordingSpecBuilder
+     * @return SnapshotRecordResult
+     */
+    public function snapshotRecord($recordingSpecBuilder = null)
+    {
+        $url = $this->_makeUrl('__admin/recordings/snapshot');
+        $recordingSpec = $recordingSpecBuilder ? $recordingSpecBuilder->build()->toArray() : null;
+        $resultJson = $this->_curl->post($url, $recordingSpec);
+        $resultArray = json_decode($resultJson, true);
+        return SnapshotRecordResult::fromArray($resultArray);
+    }
+
     private function _makeUrl($path)
     {
         return "http://$this->_hostname:$this->_port/$path";
