@@ -22,7 +22,7 @@ fi
 # Download the wiremock jar if we need it
 if ! [ -e wiremock-standalone.jar ]; then
     echo WireMock standalone JAR missing. Downloading.
-    curl http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.17.0/wiremock-standalone-2.17.0.jar -o wiremock-standalone.jar
+    curl http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.18.0/wiremock-standalone-2.18.0.jar -o wiremock-standalone.jar
     status=$?
     if [ ${status} -ne 0 ]; then
         echo curl could not download WireMock JAR 1>&2
