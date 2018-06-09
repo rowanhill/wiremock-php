@@ -26,6 +26,8 @@ class RecordSpecBuilder
     private $_requestBodyPattern = null;
     /** @var string */
     private $_format = null;
+    /** @var boolean */
+    private $_allowNonProxied = null;
 
     /**
      * @param $targetBaseUrl
@@ -191,6 +193,16 @@ class RecordSpecBuilder
     }
 
     /**
+     * @param boolean $allow
+     * @return RecordSpecBuilder
+     */
+    public function allowNonProxied($allow)
+    {
+        $this->_allowNonProxied = $allow;
+        return $this;
+    }
+
+    /**
      * @return RecordSpec
      */
     public function build()
@@ -205,7 +217,8 @@ class RecordSpecBuilder
             $this->_transformers,
             $this->_transformerParameters,
             $this->_requestBodyPattern,
-            $this->_format
+            $this->_format,
+            $this->_allowNonProxied
         );
     }
 }

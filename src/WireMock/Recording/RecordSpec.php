@@ -29,6 +29,8 @@ class RecordSpec
     private $_requestBodyPattern;
     /** @var string */
     private $_format;
+    /** @var boolean */
+    private $_allowNonProxied;
 
     /**
      * @param string $targetBaseUrl
@@ -41,6 +43,7 @@ class RecordSpec
      * @param array $transformerParameters
      * @param array $requestBodyPattern
      * @param string $format
+     * @param boolean $allowNonProxied
      */
     public function __construct(
         $targetBaseUrl,
@@ -52,7 +55,8 @@ class RecordSpec
         $transformers,
         $transformerParameters,
         $requestBodyPattern,
-        $format
+        $format,
+        $allowNonProxied
     ) {
         $this->_targetBaseUrl = $targetBaseUrl;
         $this->_requestPattern = $requestPattern;
@@ -64,15 +68,24 @@ class RecordSpec
         $this->_transformerParameters = $transformerParameters;
         $this->_requestBodyPattern = $requestBodyPattern;
         $this->_format = $format;
+        $this->_allowNonProxied = $allowNonProxied;
     }
 
     public function toArray()
     {
-        $array = array(
-            'targetBaseUrl' => $this->_targetBaseUrl
-        );
-        if ($this->_requestPattern) {
-            $array['filters'] = $this->_requestPattern->toArray();
+        $array = array();
+        if ($this->_targetBaseUrl) {
+            $array['targetBaseUrl'] = $this->_targetBaseUrl;
+        }
+        if ($this->_requestPattern || $this->_allowNonProxied) {
+            $filters = array();
+            if ($this->_requestPattern) {
+                $filters = array_merge($filters, $this->_requestPattern->toArray());
+            }
+            if ($this->_allowNonProxied) {
+                $filters = array_merge($filters, array('allowNonProxied' => true));
+            }
+            $array['filters'] = $filters;
         }
         if ($this->_captureHeaders) {
             $array['captureHeaders'] = $this->_captureHeaders;
@@ -98,6 +111,6 @@ class RecordSpec
         if ($this->_format) {
             $array['outputFormat'] = $this->_format;
         }
-        return $array;
+        return !empty($array) ? $array : new \stdClass();
     }
 }

@@ -187,4 +187,43 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThat($result->getIds(), arrayWithSize(1));
     }
+
+    public function testStartingRecordDoesNotRecordNonProxiedRequestsByDefault()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->atPriority(1)
+            ->willReturn(WireMock::aResponse())
+        );
+        self::$_wireMock->startRecording(Wiremock::recordSpec()
+            ->forTarget('http://localhost:8082/')
+        );
+        $this->_testClient->get('/recordables/123');
+
+        // when
+        $result = self::$_wireMock->stopRecording();
+
+        // then
+        assertThat($result->getMappings(), arrayWithSize(0));
+    }
+
+    public function testStartingRecordCanRecordNonProxiedRequestsIfAllowed()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->atPriority(1)
+            ->willReturn(WireMock::aResponse())
+        );
+        self::$_wireMock->startRecording(Wiremock::recordSpec()
+            ->forTarget('http://localhost:8082/')
+            ->allowNonProxied(true)
+        );
+        $this->_testClient->get('/recordables/123');
+
+        // when
+        $result = self::$_wireMock->stopRecording();
+
+        // then
+        assertThat($result->getMappings(), arrayWithSize(1));
+    }
 }
