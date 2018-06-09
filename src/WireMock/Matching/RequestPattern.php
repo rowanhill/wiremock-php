@@ -153,11 +153,11 @@ class RequestPattern
         return new RequestPattern(
             $array['method'],
             UrlMatchingStrategy::fromArray($array),
-            isset($array['headers']) ?: null,
-            isset($array['cookies']) ?: null,
-            isset($array['queryParameters']) ?: null,
-            isset($array['multipartPatterns']) ?: null,
-            isset($array['bodyPatterns']) ?: null
+            isset($array['headers']) ? $array['headers'] : null,
+            isset($array['cookies']) ? $array['cookies'] : null,
+            isset($array['queryParameters']) ? $array['queryParameters'] : null,
+            isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
+            isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null
         );
     }
 }

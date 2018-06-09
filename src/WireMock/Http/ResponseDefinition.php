@@ -180,15 +180,17 @@ class ResponseDefinition
     {
         return new ResponseDefinition(
             $array['status'],
-            isset($array['statusMessage']) ?: null,
-            isset($array['body']) ?: null,
-            isset($array['bodyFileName']) ?: null,
-            isset($array['base64Body']) ?: null,
-            isset($array['headers']) ?: null,
-            isset($array['proxyBaseUrl']) ?: null,
-            isset($array['additionalProxyRequestHeaders']) ?: null,
-            isset($array['fixedDelayMilliseconds']) ?: null,
-            isset($array['fault']) ?: null
+            isset($array['statusMessage']) ? $array['statusMessage'] : null,
+            isset($array['body']) ? $array['body'] : null,
+            isset($array['bodyFileName']) ? $array['bodyFileName'] : null,
+            isset($array['base64Body']) ? $array['base64Body'] : null,
+            isset($array['headers']) ? $array['headers'] : null,
+            isset($array['proxyBaseUrl']) ? $array['proxyBaseUrl'] : null,
+            isset($array['additionalProxyRequestHeaders']) ?
+                $array['additionalProxyRequestHeaders'] :
+                null,
+            isset($array['fixedDelayMilliseconds']) ? $array['fixedDelayMilliseconds'] : null,
+            isset($array['fault']) ? $array['fault'] : null
         );
     }
 }

@@ -149,11 +149,11 @@ class StubMapping
             RequestPattern::fromArray($array['request']),
             ResponseDefinition::fromArray($array['response']),
             $array['id'],
-            isset($array['priority']) ?: null,
+            isset($array['priority']) ? $array['priority'] : null,
             new ScenarioMapping(
-                isset($array['scenarioName']) ?: null,
-                isset($array['requiredScenarioState']) ?: null,
-                isset($array['newScenarioState']) ?: null
+                isset($array['scenarioName']) ? $array['scenarioName'] : null,
+                isset($array['requiredScenarioState']) ? $array['requiredScenarioState'] : null,
+                isset($array['newScenarioState']) ? $array['newScenarioState'] : null
             )
         );
     }

@@ -51,7 +51,7 @@ class LoggedResponse
     {
         return new LoggedResponse(
             $array['status'],
-            isset($array['headers']) ?: null,
+            isset($array['headers']) ? $array['headers'] : null,
             isset($array['bodyAsBase64']) ? base64_decode($array['bodyAsBase64']) : null
         );
     }
