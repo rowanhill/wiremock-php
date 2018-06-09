@@ -304,12 +304,15 @@ class WireMock
     }
 
     /**
-     * @param string $url
+     * @param RecordSpecBuilder|string $recordingSpecOrUrl
      */
-    public function startRecording($url)
+    public function startRecording($recordingSpecOrUrl)
     {
-        $builder = new RecordSpecBuilder();
-        $spec = $builder->forTarget($url)->build();
+        if (is_string($recordingSpecOrUrl)) {
+            $spec = self::recordSpec()->forTarget($recordingSpecOrUrl)->build();
+        } else {
+            $spec = $recordingSpecOrUrl->build();
+        }
 
         $url = $this->_makeUrl('__admin/recordings/start');
         $this->_curl->post($url, $spec->toArray());
@@ -326,6 +329,9 @@ class WireMock
         return RecordingStatusResult::fromArray($resultArray);
     }
 
+    /**
+     * @return SnapshotRecordResult
+     */
     public function stopRecording()
     {
         $url = $this->_makeUrl('__admin/recordings/stop');
@@ -626,6 +632,14 @@ class WireMock
     public static function moreThan($count)
     {
         return CountMatchingStrategy::moreThan($count);
+    }
+
+    /**
+     * @return RecordSpecBuilder
+     */
+    public static function recordSpec()
+    {
+        return new RecordSpecBuilder();
     }
 
     /**

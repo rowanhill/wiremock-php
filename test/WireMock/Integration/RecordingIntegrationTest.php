@@ -89,4 +89,25 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         $mappings = $result->getMappings();
         assertThat($mappings[0]->getResponse()->getBase64Body(), equalTo(base64_encode('Some Body')));
     }
+
+    public function testRecordedRequestsMatchingRecordingSpecAreReturnedWhenStopping()
+    {
+        // given
+        self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->willReturn(WireMock::aResponse()->withBody('Some Body')));
+        self::$_wireMock->startRecording(Wiremock::recordSpec()
+            ->forTarget('http://localhost:8082/')
+            ->onlyRequestsMatching(WireMock::getRequestedFor(WireMock::urlPathMatching('/recordables/.*')))
+            ->matchRequestBodyWithEqualToJson()
+        );
+        $this->_testClient->get('/recordables/123');
+
+        // when
+        $result = self::$_wireMock->stopRecording();
+
+        // then
+        assertThat($result->getMappings(), arrayWithSize(1));
+        $mappings = $result->getMappings();
+        assertThat($mappings[0]->getResponse()->getBase64Body(), equalTo(base64_encode('Some Body')));
+    }
 }
