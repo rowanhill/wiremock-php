@@ -6,6 +6,9 @@ use WireMock\Matching\RequestPattern;
 
 class RecordSpec
 {
+    const FULL = 'FULL';
+    const IDS = 'IDS';
+
     /** @var string */
     private $_targetBaseUrl;
     /** @var RequestPattern */
@@ -24,6 +27,8 @@ class RecordSpec
     private $_transformerParameters = array();
     /** @var array */
     private $_requestBodyPattern;
+    /** @var string */
+    private $_format;
 
     /**
      * @param string $targetBaseUrl
@@ -35,6 +40,7 @@ class RecordSpec
      * @param string[] $transformers
      * @param array $transformerParameters
      * @param array $requestBodyPattern
+     * @param string $format
      */
     public function __construct(
         $targetBaseUrl,
@@ -45,7 +51,8 @@ class RecordSpec
         $repeatsAsScenarios,
         $transformers,
         $transformerParameters,
-        $requestBodyPattern
+        $requestBodyPattern,
+        $format
     ) {
         $this->_targetBaseUrl = $targetBaseUrl;
         $this->_requestPattern = $requestPattern;
@@ -56,6 +63,7 @@ class RecordSpec
         $this->_transformers = $transformers;
         $this->_transformerParameters = $transformerParameters;
         $this->_requestBodyPattern = $requestBodyPattern;
+        $this->_format = $format;
     }
 
     public function toArray()
@@ -86,6 +94,9 @@ class RecordSpec
         }
         if ($this->_requestBodyPattern) {
             $array['requestBodyPattern'] = $this->_requestBodyPattern;
+        }
+        if ($this->_format) {
+            $array['outputFormat'] = $this->_format;
         }
         return $array;
     }

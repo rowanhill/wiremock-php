@@ -8,13 +8,17 @@ class SnapshotRecordResult
 {
     /** @var StubMapping[] */
     private $_mappings;
+    /** @var string[] */
+    private $_ids;
 
     /**
      * @param StubMapping[] $mappings
+     * @param string[] $ids
      */
-    public function __construct($mappings)
+    public function __construct($mappings, $ids)
     {
         $this->_mappings = $mappings;
+        $this->_ids = $ids;
     }
 
     /**
@@ -26,13 +30,24 @@ class SnapshotRecordResult
     }
 
     /**
+     * @return string[]
+     */
+    public function getIds()
+    {
+        return $this->_ids;
+    }
+
+    /**
      * @param array $array
      * @return SnapshotRecordResult
      */
     public static function fromArray($array)
     {
         return new SnapshotRecordResult(
-            array_map(function($m) { return StubMapping::fromArray($m); }, $array['mappings'])
+            isset($array['mappings']) ?
+                array_map(function($m) { return StubMapping::fromArray($m); }, $array['mappings']) :
+                null,
+            isset($array['ids']) ? $array['ids'] : null
         );
     }
 }

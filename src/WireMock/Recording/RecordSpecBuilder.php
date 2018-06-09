@@ -24,6 +24,8 @@ class RecordSpecBuilder
     private $_transformerParameters = array();
     /** @var array */
     private $_requestBodyPattern = null;
+    /** @var string */
+    private $_format = null;
 
     /**
      * @param $targetBaseUrl
@@ -179,6 +181,16 @@ class RecordSpecBuilder
     }
 
     /**
+     * @param string $format one of RecordSpec::FULL or RecordSpec::IDS
+     * @return RecordSpecBuilder
+     */
+    public function withOutputFormat($format)
+    {
+        $this->_format = $format;
+        return $this;
+    }
+
+    /**
      * @return RecordSpec
      */
     public function build()
@@ -192,7 +204,8 @@ class RecordSpecBuilder
             $this->_repeatsAsScenarios,
             $this->_transformers,
             $this->_transformerParameters,
-            $this->_requestBodyPattern
+            $this->_requestBodyPattern,
+            $this->_format
         );
     }
 }

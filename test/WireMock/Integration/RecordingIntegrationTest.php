@@ -4,6 +4,7 @@ namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
 use WireMock\Recording\RecordingStatusResult;
+use WireMock\Recording\RecordSpec;
 
 require_once 'WireMockIntegrationTest.php';
 
@@ -149,5 +150,41 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         assertThat($result->getMappings(), arrayWithSize(1));
         $mappings = $result->getMappings();
         assertThat($mappings[0]->getResponse()->getBase64Body(), equalTo(base64_encode('Some Body')));
+    }
+
+    public function testStartAndStopRecordingWithIdsOutputFormat()
+    {
+        // given
+        self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->willReturn(WireMock::aResponse()->withBody('Some Body')));
+        self::$_wireMock->startRecording(Wiremock::recordSpec()
+            ->forTarget('http://localhost:8082/')
+            ->withOutputFormat(RecordSpec::IDS)
+        );
+        $this->_testClient->get('/recordables/123');
+
+        // when
+        $result = self::$_wireMock->stopRecording();
+
+        // then
+        assertThat($result->getIds(), arrayWithSize(1));
+    }
+
+    public function testSnapshotRecordingWithIdsOutputFormat()
+    {
+        // given
+        self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
+            ->willReturn(WireMock::aResponse()->withBody('Some Body')));
+        self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+        $this->_testClient->get('/recordables/123');
+
+        // when
+        $result = self::$_wireMock->snapshotRecord(Wiremock::recordSpec()
+            ->forTarget('http://localhost:8082/')
+            ->withOutputFormat(RecordSpec::IDS));
+
+        // then
+        assertThat($result->getIds(), arrayWithSize(1));
     }
 }
