@@ -24,6 +24,8 @@ class ResponseDefinition
     private $_fixedDelayMillis;
     /** @var string */
     private $_fault;
+    /** @var string[] */
+    private $_transformers = array();
 
     /**
      * ResponseDefinition constructor.
@@ -37,6 +39,7 @@ class ResponseDefinition
      * @param array $additionalProxyRequestHeaders
      * @param int $fixedDelayMillis
      * @param string $fault
+     * @param string[] $transformers
      */
     public function __construct(
         $status,
@@ -48,7 +51,8 @@ class ResponseDefinition
         $proxyBaseUrl,
         $additionalProxyRequestHeaders,
         $fixedDelayMillis,
-        $fault
+        $fault,
+        $transformers
     ) {
         $this->_status = $status;
         $this->_statusMessage = $statusMessage;
@@ -59,6 +63,7 @@ class ResponseDefinition
         $this->_proxyBaseUrl = $proxyBaseUrl;
         $this->_fixedDelayMillis = $fixedDelayMillis;
         $this->_fault = $fault;
+        $this->_transformers = $transformers;
         $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
     }
 
@@ -142,6 +147,14 @@ class ResponseDefinition
         return $this->_fault;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getTransformers()
+    {
+        return $this->_transformers;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -173,6 +186,9 @@ class ResponseDefinition
         if ($this->_fault) {
             $array['fault'] = $this->_fault;
         }
+        if ($this->_transformers) {
+            $array['transformers'] = $this->_transformers;
+        }
         return $array;
     }
 
@@ -190,7 +206,8 @@ class ResponseDefinition
                 $array['additionalProxyRequestHeaders'] :
                 null,
             isset($array['fixedDelayMilliseconds']) ? $array['fixedDelayMilliseconds'] : null,
-            isset($array['fault']) ? $array['fault'] : null
+            isset($array['fault']) ? $array['fault'] : null,
+            isset($array['transformers']) ? $array['transformers'] : null
         );
     }
 }

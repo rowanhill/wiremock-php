@@ -15,6 +15,8 @@ class ResponseDefinitionBuilder
     protected $_proxyBaseUrl;
     protected $_fixedDelayMillis;
     protected $_fault;
+    /** @var string[] */
+    private $_transformers = array();
 
     protected $_additionalRequestHeaders = array();
 
@@ -110,6 +112,15 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformers()
+    {
+        $this->_transformers = func_get_args();
+        return $this;
+    }
+
     public function build()
     {
         return new ResponseDefinition(
@@ -122,7 +133,8 @@ class ResponseDefinitionBuilder
             $this->_proxyBaseUrl,
             $this->_additionalRequestHeaders,
             $this->_fixedDelayMillis,
-            $this->_fault
+            $this->_fault,
+            $this->_transformers
         );
     }
 }
