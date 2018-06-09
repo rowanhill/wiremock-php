@@ -8,11 +8,6 @@ use WireMock\Client\WireMock;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {
-    public function clearMappings()
-    {
-        exec('rm -f ../wiremock/mappings/*');
-    }
-
     public function setUp()
     {
         parent::setUp();

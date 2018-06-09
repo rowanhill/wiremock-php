@@ -45,4 +45,9 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->_testClient = new TestClient();
         self::$_wireMock->reset();
     }
+    
+    public function clearMappings()
+    {
+        exec('rm -f ../wiremock/1/mappings/*');
+    }
 }

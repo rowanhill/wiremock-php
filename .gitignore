@@ -4,6 +4,7 @@ composer.phar
 composer.lock
 /wiremock/*.jar
 /wiremock/*.log
-/wiremock/mappings
+/wiremock/1
+/wiremock/2
 /wiremock/exec_test.pid
 *.iml
