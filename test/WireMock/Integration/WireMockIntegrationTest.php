@@ -27,7 +27,7 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         self::runCmd('./../wiremock/stop.sh');
     }
 
-    private static function runCmd($cmd)
+    protected static function runCmd($cmd)
     {
         $result = 0;
         $output = array();

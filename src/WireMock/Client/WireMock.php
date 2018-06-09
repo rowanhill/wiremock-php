@@ -5,6 +5,9 @@ namespace WireMock\Client;
 use DateTime;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\Recording\RecordingStatusResult;
+use WireMock\Recording\RecordSpecBuilder;
+use WireMock\Recording\SnapshotRecordResult;
 use WireMock\Stubbing\StubMapping;
 use WireMock\Verification\CountMatchingStrategy;
 
@@ -298,6 +301,37 @@ class WireMock
         $result = file_get_contents($url);
         $resultArray = json_decode($result, true);
         return StubMapping::fromArray($resultArray);
+    }
+
+    /**
+     * @param string $url
+     */
+    public function startRecording($url)
+    {
+        $builder = new RecordSpecBuilder();
+        $spec = $builder->forTarget($url)->build();
+
+        $url = $this->_makeUrl('__admin/recordings/start');
+        $this->_curl->post($url, $spec->toArray());
+    }
+
+    /**
+     * @return RecordingStatusResult
+     */
+    public function getRecordingStatus()
+    {
+        $url = $this->_makeUrl('__admin/recordings/status');
+        $result = file_get_contents($url);
+        $resultArray = json_decode($result, true);
+        return RecordingStatusResult::fromArray($resultArray);
+    }
+
+    public function stopRecording()
+    {
+        $url = $this->_makeUrl('__admin/recordings/stop');
+        $resultJson = $this->_curl->post($url);
+        $resultArray = json_decode($resultJson, true);
+        return SnapshotRecordResult::fromArray($resultArray);
     }
 
     private function _makeUrl($path)
