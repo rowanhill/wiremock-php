@@ -334,6 +334,19 @@ class WireMock
     }
 
     /**
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return ListStubMappingsResult
+     */
+    public function findStubsByMetadata($valueMatchingStrategy)
+    {
+        $url = $this->_makeUrl('__admin/mappings/find-by-metadata');
+        $strategyArray = $valueMatchingStrategy->toArray();
+        $findResultJson = $this->_curl->post($url, $strategyArray);
+        $findResultArray = json_decode($findResultJson, true);
+        return new ListStubMappingsResult($findResultArray);
+    }
+
+    /**
      * @param RecordSpecBuilder|string $recordingSpecOrUrl
      */
     public function startRecording($recordingSpecOrUrl)

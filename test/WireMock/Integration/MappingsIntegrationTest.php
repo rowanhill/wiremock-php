@@ -71,4 +71,38 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         // then
         assertThat($returnedMapping, equalTo($mapping));
     }
+
+    public function testStubsCanBeFoundByMetadata()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::any(WireMock::urlEqualTo('/one'))
+            ->withMetadata(array('customId' => 123))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $mappingsResult = self::$_wireMock->findStubsByMetadata(
+            WireMock::matchingJsonPath('$.customId', WireMock::equalTo('123'))
+        );
+
+        // then
+        assertThat($mappingsResult->getMappings(), arrayWithSize(1));
+        $mappings = $mappingsResult->getMappings();
+        assertThat($mappings[0]->getMetadata(), equalTo(array('customId' => 123)));
+    }
+
+    public function testStubsNotMatchingMetadataAreNotFound()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::any(WireMock::urlEqualTo('/one'))
+            ->withMetadata(array('customId' => 123))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $mappingsResult = self::$_wireMock->findStubsByMetadata(
+            WireMock::matchingJsonPath('$.customId', WireMock::equalTo('a different value'))
+        );
+
+        // then
+        assertThat($mappingsResult->getMappings(), arrayWithSize(0));
+    }
 }
