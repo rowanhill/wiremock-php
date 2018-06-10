@@ -412,91 +412,118 @@ class WireMock
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function get(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function get($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('GET', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function post(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function post($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('POST', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function put(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function put($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('PUT', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function delete(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function delete($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('DELETE', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function patch(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function patch($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('PATCH', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function head(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function head($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('HEAD', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function options(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function options($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('OPTIONS', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function trace(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function trace($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
 
     /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function any(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function any($urlMatchingStrategy)
     {
+        if (is_string($urlMatchingStrategy)) {
+            $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
+        }
         $requestPattern = new RequestPatternBuilder('ANY', $urlMatchingStrategy);
         return new MappingBuilder($requestPattern);
     }
@@ -797,5 +824,174 @@ class WireMock
     public static function traceRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
     {
         return new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
+    }
+
+    /**
+     * @param string $body
+     * @return ResponseDefinitionBuilder
+     */
+    public static function ok($body = null)
+    {
+        if ($body) {
+            return self::aResponse()->withStatus(200)->withBody($body);
+        } else {
+            return self::aResponse()->withStatus(200);
+        }
+    }
+
+    /**
+     * @param string $contentType
+     * @param string $body
+     * @return ResponseDefinitionBuilder
+     */
+    public static function okForContentType($contentType, $body)
+    {
+        return self::aResponse()
+            ->withStatus(200)
+            ->withHeader('Content-Type', $contentType)
+            ->withBody($body);
+    }
+
+    /**
+     * @param string $body
+     * @return ResponseDefinitionBuilder
+     */
+    public static function okJson($body)
+    {
+        return self::okForContentType('application/json', $body);
+    }
+
+    /**
+     * @param string $body
+     * @return ResponseDefinitionBuilder
+     */
+    public static function okXml($body)
+    {
+        return self::okForContentType('application/xml', $body);
+    }
+
+    /**
+     * @param string $body
+     * @return ResponseDefinitionBuilder
+     */
+    public static function okTextXml($body)
+    {
+        return self::okForContentType('text/xml', $body);
+    }
+
+    /**
+     * @param string $url
+     * @return MappingBuilder
+     */
+    public static function proxyAllTo($url)
+    {
+        return self::any(self::anyUrl())->willReturn(self::aResponse()->proxiedFrom($url));
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function created() {
+        return self::aResponse()->withStatus(201);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function noContent()
+    {
+        return self::aResponse()->withStatus(204);
+    }
+
+    /**
+     * @param string $location
+     * @return ResponseDefinitionBuilder
+     */
+    public static function permanentRedirect($location)
+    {
+        return self::aResponse()->withStatus(301)->withHeader('Location', $location);
+    }
+
+    /**
+     * @param string $location
+     * @return ResponseDefinitionBuilder
+     */
+    public static function temporaryRedirect($location)
+    {
+        return self::aResponse()->withStatus(302)->withHeader('Location', $location);
+    }
+
+    /**
+     * @param string $location
+     * @return ResponseDefinitionBuilder
+     */
+    public static function seeOther($location)
+    {
+        return self::aResponse()->withStatus(303)->withHeader('Location', $location);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function badRequest()
+    {
+        return self::aResponse()->withStatus(400);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function badRequestEntity()
+    {
+        return self::aResponse()->withStatus(422);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function unauthorized()
+    {
+        return self::aResponse()->withStatus(401);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function forbidden()
+    {
+        return self::aResponse()->withStatus(403);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function notFound()
+    {
+        return self::aResponse()->withStatus(404);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function serverError()
+    {
+        return self::aResponse()->withStatus(500);
+    }
+
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public static function serviceUnavailable()
+    {
+        return self::aResponse()->withStatus(503);
+    }
+
+    /**
+     * @param int $status
+     * @return ResponseDefinitionBuilder
+     */
+    public static function status($status)
+    {
+        return self::aResponse()->withStatus($status);
     }
 }
