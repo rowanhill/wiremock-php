@@ -347,6 +347,16 @@ class WireMock
     }
 
     /**
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     */
+    public function removeStubsByMetadata($valueMatchingStrategy)
+    {
+        $url = $this->_makeUrl('__admin/mappings/remove-by-metadata');
+        $strategyArray = $valueMatchingStrategy->toArray();
+        $this->_curl->post($url, $strategyArray);
+    }
+
+    /**
      * @param RecordSpecBuilder|string $recordingSpecOrUrl
      */
     public function startRecording($recordingSpecOrUrl)

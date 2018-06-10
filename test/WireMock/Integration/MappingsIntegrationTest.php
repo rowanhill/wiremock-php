@@ -105,4 +105,36 @@ class MappingsIntegrationTest extends WireMockIntegrationTest
         // then
         assertThat($mappingsResult->getMappings(), arrayWithSize(0));
     }
+
+    public function testStubsCanBeRemovedByMetadata()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::any(WireMock::urlEqualTo('/one'))
+            ->withMetadata(array('customId' => 123))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        self::$_wireMock->removeStubsByMetadata(
+            WireMock::matchingJsonPath('$.customId', WireMock::equalTo('123'))
+        );
+
+        // then
+        assertThat(self::$_wireMock->listAllStubMappings()->getMappings(), arrayWithSize(0));
+    }
+
+    public function testStubsNotMatchingMetadataAreNotRemoved()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::any(WireMock::urlEqualTo('/one'))
+            ->withMetadata(array('customId' => 123))
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        self::$_wireMock->removeStubsByMetadata(
+            WireMock::matchingJsonPath('$.customId', WireMock::equalTo('a different value'))
+        );
+
+        // then
+        assertThat(self::$_wireMock->listAllStubMappings()->getMappings(), arrayWithSize(1));
+    }
 }
