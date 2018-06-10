@@ -10,6 +10,13 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping)
 
     $serverStubMappingArray = $mappingsFromServer[0]->toArray();
     $localStubMappingArray = $localStubMapping->toArray();
+
+    if (!isset($localStubMappingArray['request']['method'])) {
+        // If we didn't set a request method in the stub, the server will have returned ANY as the method, causing the
+        // local and server mapping arrays not to match, unless we delete the server-returned method
+        unset($serverStubMappingArray['request']['method']);
+    }
+
     assertThat($serverStubMappingArray, is($localStubMappingArray));
 }
 

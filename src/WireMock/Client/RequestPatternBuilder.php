@@ -2,6 +2,7 @@
 
 namespace WireMock\Client;
 
+use WireMock\Matching\CustomMatcherDefinition;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
 
@@ -17,15 +18,22 @@ class RequestPatternBuilder
     private $_multipartPatterns = array();
     /** @var BasicCredentials */
     private $_basicCredentials;
+    /** @var CustomMatcherDefinition */
+    private $_customMatcherDefinition;
 
     /**
-     * @param string $method
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param string $methodOrCustomMatcherName
+     * @param UrlMatchingStrategy|array $urlMatchingStrategyOrCustomParams
      */
-    public function __construct($method, $urlMatchingStrategy)
+    public function __construct($methodOrCustomMatcherName, $urlMatchingStrategyOrCustomParams)
     {
-        $this->_method = $method;
-        $this->_urlMatchingStrategy = $urlMatchingStrategy;
+        if ($urlMatchingStrategyOrCustomParams instanceof UrlMatchingStrategy) {
+            $this->_method = $methodOrCustomMatcherName;
+            $this->_urlMatchingStrategy = $urlMatchingStrategyOrCustomParams;
+        } else {
+            $this->_customMatcherDefinition =
+                new CustomMatcherDefinition($methodOrCustomMatcherName, $urlMatchingStrategyOrCustomParams);
+        }
     }
 
     /**
@@ -115,7 +123,8 @@ class RequestPatternBuilder
             $this->_bodyPatterns,
             $this->_multipartPatterns,
             $this->_queryParameters,
-            $this->_basicCredentials
+            $this->_basicCredentials,
+            $this->_customMatcherDefinition
         );
     }
 }

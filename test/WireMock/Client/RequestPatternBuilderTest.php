@@ -105,4 +105,19 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($requestPatternArray, hasEntry('basicAuthCredentials',
             array('username' => 'uname', 'password' => 'pword')));
     }
+
+    public function testBuilderCanBeCreatedWithCustomMatcherNameAndParams()
+    {
+        // when
+        $builder = new RequestPatternBuilder('custom-matcher', array('param' => 'val'));
+
+        // then
+        $pattern = $builder->build();
+        assertThat($pattern->getMethod(), nullValue());
+        assertThat($pattern->getUrlMatchingStrategy(), nullValue());
+        assertThat($pattern->getCustomMatcherDefinition()->toArray(), equalTo(array(
+            'name' => 'custom-matcher',
+            'parameters' => array('param' => 'val')
+        )));
+    }
 }

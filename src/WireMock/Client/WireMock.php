@@ -479,6 +479,17 @@ class WireMock
     }
 
     /**
+     * @param string $matcherName
+     * @param array $params
+     * @return MappingBuilder
+     */
+    public static function requestMatching($matcherName, $params = array())
+    {
+        $requestPattern = new RequestPatternBuilder($matcherName, $params);
+        return new MappingBuilder($requestPattern);
+    }
+
+    /**
      * @param string $url
      * @return UrlMatchingStrategy
      */

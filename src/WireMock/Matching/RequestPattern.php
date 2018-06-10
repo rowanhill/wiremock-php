@@ -23,6 +23,8 @@ class RequestPattern
     private $_multipartPatterns;
     /** @var BasicCredentials */
     private $_basicCredentials;
+    /** @var CustomMatcherDefinition */
+    private $_customMatcherDefinition;
 
     /**
      * @param string $method
@@ -33,6 +35,7 @@ class RequestPattern
      * @param array $multipartPatterns
      * @param array $queryParameters
      * @param BasicCredentials $basicCredentials
+     * @param CustomMatcherDefinition $customMatcherDefinition
      */
     public function __construct(
         $method,
@@ -42,7 +45,8 @@ class RequestPattern
         $bodyPatterns = null,
         $multipartPatterns = null,
         $queryParameters = null,
-        $basicCredentials = null
+        $basicCredentials = null,
+        $customMatcherDefinition = null
     ) {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;
@@ -52,6 +56,7 @@ class RequestPattern
         $this->_queryParameters = $queryParameters;
         $this->_basicCredentials = $basicCredentials;
         $this->_multipartPatterns = $multipartPatterns;
+        $this->_customMatcherDefinition = $customMatcherDefinition;
     }
 
     /**
@@ -118,10 +123,23 @@ class RequestPattern
         return $this->_basicCredentials;
     }
 
+    /**
+     * @return CustomMatcherDefinition
+     */
+    public function getCustomMatcherDefinition()
+    {
+        return $this->_customMatcherDefinition;
+    }
+
     public function toArray()
     {
-        $array = array('method' => $this->_method);
-        $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
+        $array = array();
+        if ($this->_method) {
+            $array['method'] = $this->_method;
+        }
+        if ($this->_urlMatchingStrategy) {
+            $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
+        }
         if ($this->_headers) {
             $array['headers'] = $this->_headers;
         }
@@ -139,6 +157,9 @@ class RequestPattern
         }
         if ($this->_basicCredentials) {
             $array['basicAuthCredentials'] = $this->_basicCredentials->toArray();
+        }
+        if ($this->_customMatcherDefinition) {
+            $array['customMatcher'] = $this->_customMatcherDefinition->toArray();
         }
         return $array;
     }
@@ -158,7 +179,9 @@ class RequestPattern
             isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null,
             isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
             isset($array['queryParameters']) ? $array['queryParameters'] : null,
-            isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null
+            isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null,
+            isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null
+
         );
     }
 }
