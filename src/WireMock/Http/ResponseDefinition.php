@@ -2,6 +2,9 @@
 
 namespace WireMock\Http;
 
+use WireMock\Fault\DelayDistribution;
+use WireMock\Fault\DelayDistributionFactory;
+
 class ResponseDefinition
 {
     /** @var int */
@@ -22,6 +25,8 @@ class ResponseDefinition
     private $_additionalProxyRequestHeaders;
     /** @var int */
     private $_fixedDelayMillis;
+    /** @var DelayDistribution */
+    protected $_randomDelayDistribution;
     /** @var string */
     private $_fault;
     /** @var string[] */
@@ -38,6 +43,7 @@ class ResponseDefinition
      * @param string $proxyBaseUrl
      * @param array $additionalProxyRequestHeaders
      * @param int $fixedDelayMillis
+     * @param DelayDistribution $randomDelayDistribution
      * @param string $fault
      * @param string[] $transformers
      */
@@ -51,6 +57,7 @@ class ResponseDefinition
         $proxyBaseUrl,
         $additionalProxyRequestHeaders,
         $fixedDelayMillis,
+        $randomDelayDistribution,
         $fault,
         $transformers
     ) {
@@ -62,6 +69,7 @@ class ResponseDefinition
         $this->_headers = $headers;
         $this->_proxyBaseUrl = $proxyBaseUrl;
         $this->_fixedDelayMillis = $fixedDelayMillis;
+        $this->_randomDelayDistribution = $randomDelayDistribution;
         $this->_fault = $fault;
         $this->_transformers = $transformers;
         $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
@@ -140,6 +148,14 @@ class ResponseDefinition
     }
 
     /**
+     * @return DelayDistribution
+     */
+    public function getRandomDelayDistribution()
+    {
+        return $this->_randomDelayDistribution;
+    }
+
+    /**
      * @return string
      */
     public function getFault()
@@ -183,6 +199,9 @@ class ResponseDefinition
         if ($this->_fixedDelayMillis) {
             $array['fixedDelayMilliseconds'] = $this->_fixedDelayMillis;
         }
+        if ($this->_randomDelayDistribution) {
+            $array['delayDistribution'] = $this->_randomDelayDistribution->toArray();
+        }
         if ($this->_fault) {
             $array['fault'] = $this->_fault;
         }
@@ -192,6 +211,11 @@ class ResponseDefinition
         return $array;
     }
 
+    /**
+     * @param array $array
+     * @return ResponseDefinition
+     * @throws \Exception
+     */
     public static function fromArray(array $array)
     {
         return new ResponseDefinition(
@@ -206,6 +230,9 @@ class ResponseDefinition
                 $array['additionalProxyRequestHeaders'] :
                 null,
             isset($array['fixedDelayMilliseconds']) ? $array['fixedDelayMilliseconds'] : null,
+            isset($array['delayDistribution']) ?
+                DelayDistributionFactory::fromArray($array['delayDistribution']) :
+                null,
             isset($array['fault']) ? $array['fault'] : null,
             isset($array['transformers']) ? $array['transformers'] : null
         );

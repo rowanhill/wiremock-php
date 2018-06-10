@@ -2,6 +2,9 @@
 
 namespace WireMock\Client;
 
+use WireMock\Fault\DelayDistribution;
+use WireMock\Fault\LogNormal;
+use WireMock\Fault\UniformDistribution;
 use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
@@ -14,6 +17,8 @@ class ResponseDefinitionBuilder
     protected $_headers = array();
     protected $_proxyBaseUrl;
     protected $_fixedDelayMillis;
+    /** @var DelayDistribution */
+    protected $_randomDelayDistribution;
     protected $_fault;
     /** @var string[] */
     private $_transformers = array();
@@ -103,6 +108,38 @@ class ResponseDefinitionBuilder
     }
 
     /**
+     * @param DelayDistribution $delayDistribution
+     * @return ResponseDefinitionBuilder
+     */
+    public function withRandomDelay($delayDistribution)
+    {
+        $this->_randomDelayDistribution = $delayDistribution;
+        return $this;
+    }
+
+    /**
+     * @param float $median
+     * @param float $sigma
+     * @return ResponseDefinitionBuilder
+     */
+    public function withLogNormalRandomDelay($median, $sigma)
+    {
+        $this->_randomDelayDistribution = new LogNormal($median, $sigma);
+        return $this;
+    }
+
+    /**
+     * @param int $lower
+     * @param int upper
+     * @return ResponseDefinitionBuilder
+     */
+    public function withUniformRandomDelay($lower, $upper)
+    {
+        $this->_randomDelayDistribution = new UniformDistribution($lower, $upper);
+        return $this;
+    }
+
+    /**
      * @param $fault
      * @return ResponseDefinitionBuilder
      */
@@ -133,6 +170,7 @@ class ResponseDefinitionBuilder
             $this->_proxyBaseUrl,
             $this->_additionalRequestHeaders,
             $this->_fixedDelayMillis,
+            $this->_randomDelayDistribution,
             $this->_fault,
             $this->_transformers
         );
