@@ -45,4 +45,9 @@ class BasicCredentials
             'password' => $this->_password
         );
     }
+
+    public static function fromArray(array $array)
+    {
+        return new BasicCredentials($array['username'], $array['password']);
+    }
 }

@@ -155,9 +155,10 @@ class RequestPattern
             UrlMatchingStrategy::fromArray($array),
             isset($array['headers']) ? $array['headers'] : null,
             isset($array['cookies']) ? $array['cookies'] : null,
-            isset($array['queryParameters']) ? $array['queryParameters'] : null,
+            isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null,
             isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
-            isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null
+            isset($array['queryParameters']) ? $array['queryParameters'] : null,
+            isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null
         );
     }
 }

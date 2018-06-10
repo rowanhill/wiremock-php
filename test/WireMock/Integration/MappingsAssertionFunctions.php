@@ -3,22 +3,14 @@
 use WireMock\Client\ListStubMappingsResult;
 use WireMock\Stubbing\StubMapping;
 
-function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)
+function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping)
 {
-    $mappings = getMappings();
-    assertThat($mappings, is(arrayWithSize(1)));
+    $mappingsFromServer = getMappings();
+    assertThat($mappingsFromServer, is(arrayWithSize(1)));
 
-    $stubMappingArray = $stubMapping->toArray();
-
-    // If the stub mapping didn't include an ID, we don't want to match on what WireMock auto generated. If the stubbing
-    // *did* include an ID, we should match on that, too.
-    if (!$stubMappingArray['id']) {
-        unset($mappings[0]['id']);
-    }
-
-    unset($mappings[0]['uuid']);
-
-    assertThat($mappings[0], is($stubMapping->toArray()));
+    $serverStubMappingArray = $mappingsFromServer[0]->toArray();
+    $localStubMappingArray = $localStubMapping->toArray();
+    assertThat($serverStubMappingArray, is($localStubMappingArray));
 }
 
 function assertThatThereAreNoMappings()
@@ -30,6 +22,7 @@ function assertThatThereAreNoMappings()
 function getMappings()
 {
     $adminJson = file_get_contents('http://localhost:8080/__admin');
-    $admin = json_decode($adminJson, true);
-    return $admin['mappings'];
+    $resultArray = json_decode($adminJson, true);
+    $result = new ListStubMappingsResult($resultArray);
+    return $result->getMappings();
 }
