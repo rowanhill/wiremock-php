@@ -185,6 +185,19 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    /**
+     * @param string $transformerName
+     * @param string $paramName
+     * @param mixed $paramValue Can be any scalar value or array (of scalars/arrays, etc), but must not be an object
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformer($transformerName, $paramName, $paramValue)
+    {
+        $this->withTransformers($transformerName);
+        $this->withTransformerParameter($paramName, $paramValue);
+        return $this;
+    }
+
     public function build()
     {
         return new ResponseDefinition(
