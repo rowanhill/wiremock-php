@@ -2,6 +2,7 @@
 
 namespace WireMock\Http;
 
+use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\DelayDistributionFactory;
 
@@ -27,6 +28,8 @@ class ResponseDefinition
     private $_fixedDelayMillis;
     /** @var DelayDistribution */
     protected $_randomDelayDistribution;
+    /** @var ChunkedDribbleDelay */
+    protected $_chunkedDribbleDelay;
     /** @var string */
     private $_fault;
     /** @var string[] */
@@ -44,6 +47,7 @@ class ResponseDefinition
      * @param array $additionalProxyRequestHeaders
      * @param int $fixedDelayMillis
      * @param DelayDistribution $randomDelayDistribution
+     * @param ChunkedDribbleDelay $chunkedDribbleDelay
      * @param string $fault
      * @param string[] $transformers
      */
@@ -58,6 +62,7 @@ class ResponseDefinition
         $additionalProxyRequestHeaders,
         $fixedDelayMillis,
         $randomDelayDistribution,
+        $chunkedDribbleDelay,
         $fault,
         $transformers
     ) {
@@ -70,6 +75,7 @@ class ResponseDefinition
         $this->_proxyBaseUrl = $proxyBaseUrl;
         $this->_fixedDelayMillis = $fixedDelayMillis;
         $this->_randomDelayDistribution = $randomDelayDistribution;
+        $this->_chunkedDribbleDelay = $chunkedDribbleDelay;
         $this->_fault = $fault;
         $this->_transformers = $transformers;
         $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
@@ -156,6 +162,14 @@ class ResponseDefinition
     }
 
     /**
+     * @return ChunkedDribbleDelay
+     */
+    public function getChunkedDribbleDelay()
+    {
+        return $this->_chunkedDribbleDelay;
+    }
+
+    /**
      * @return string
      */
     public function getFault()
@@ -202,6 +216,9 @@ class ResponseDefinition
         if ($this->_randomDelayDistribution) {
             $array['delayDistribution'] = $this->_randomDelayDistribution->toArray();
         }
+        if ($this->_chunkedDribbleDelay) {
+            $array['chunkedDribbleDelay'] = $this->_chunkedDribbleDelay->toArray();
+        }
         if ($this->_fault) {
             $array['fault'] = $this->_fault;
         }
@@ -232,6 +249,9 @@ class ResponseDefinition
             isset($array['fixedDelayMilliseconds']) ? $array['fixedDelayMilliseconds'] : null,
             isset($array['delayDistribution']) ?
                 DelayDistributionFactory::fromArray($array['delayDistribution']) :
+                null,
+            isset($array['chunkedDribbleDelay']) ?
+                ChunkedDribbleDelay::fromArray($array['chunkedDribbleDelay']) :
                 null,
             isset($array['fault']) ? $array['fault'] : null,
             isset($array['transformers']) ? $array['transformers'] : null

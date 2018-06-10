@@ -84,6 +84,23 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testChunkedDribbleDelayOnStubbedResponseCanBeSpecified()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withChunkedDribbleDelay(5, 1000))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['chunkedDribbleDelay'], equalTo(array(
+            'numberOfChunks' => 5,
+            'totalDuration' => 1000
+        )));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testGlobalFixedDelayOnStubbedResponsesCanBeSet()
     {
         // given

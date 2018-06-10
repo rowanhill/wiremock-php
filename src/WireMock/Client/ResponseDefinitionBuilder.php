@@ -2,6 +2,7 @@
 
 namespace WireMock\Client;
 
+use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
@@ -19,6 +20,8 @@ class ResponseDefinitionBuilder
     protected $_fixedDelayMillis;
     /** @var DelayDistribution */
     protected $_randomDelayDistribution;
+    /** @var ChunkedDribbleDelay */
+    protected $_chunkedDribbleDelay;
     protected $_fault;
     /** @var string[] */
     private $_transformers = array();
@@ -140,6 +143,17 @@ class ResponseDefinitionBuilder
     }
 
     /**
+     * @param int $numberOfChunks
+     * @param int $totalDurationMillis
+     * @return ResponseDefinitionBuilder
+     */
+    public function withChunkedDribbleDelay($numberOfChunks, $totalDurationMillis)
+    {
+        $this->_chunkedDribbleDelay = new ChunkedDribbleDelay($numberOfChunks, $totalDurationMillis);
+        return $this;
+    }
+
+    /**
      * @param $fault
      * @return ResponseDefinitionBuilder
      */
@@ -171,6 +185,7 @@ class ResponseDefinitionBuilder
             $this->_additionalRequestHeaders,
             $this->_fixedDelayMillis,
             $this->_randomDelayDistribution,
+            $this->_chunkedDribbleDelay,
             $this->_fault,
             $this->_transformers
         );
