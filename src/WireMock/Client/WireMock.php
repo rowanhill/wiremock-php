@@ -3,6 +3,7 @@
 namespace WireMock\Client;
 
 use DateTime;
+use WireMock\Fault\DelayDistribution;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\Recording\RecordingStatusResult;
@@ -212,6 +213,24 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/settings');
         $this->_curl->post($url, array('fixedDelay' => $delayMillis));
+    }
+
+    /**
+     * @param DelayDistribution $delayDistribution
+     */
+    public function setGlobalRandomDelay($delayDistribution)
+    {
+        $url = $this->_makeUrl('__admin/settings');
+        $this->_curl->post($url, array('delayDistribution' => $delayDistribution->toArray()));
+    }
+
+    /**
+     * Note: this function isn't part of the Java API
+     */
+    public function resetGlobalDelays()
+    {
+        $url = $this->_makeUrl('__admin/settings');
+        $this->_curl->post($url, array('fixedDelay' => null, 'delayDistribution' => null));
     }
 
     public function saveAllMappings()

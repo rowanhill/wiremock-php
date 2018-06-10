@@ -10,6 +10,12 @@ require_once 'WireMockIntegrationTest.php';
 
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$_wireMock->resetGlobalDelays();
+    }
+
     public function testFixedDelayOnStubbedResponseCanBeSpecified()
     {
         // when
@@ -88,6 +94,22 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 
         // when
         self::$_wireMock->setGlobalFixedDelay(1000);
+        $this->_testClient->get('/some/url');
+
+        // then
+        assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
+    }
+
+    public function testGlobalRandomDelayOnStubbedResponsesCanBeSet()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()));
+        $this->_testClient->get('/some/url');
+        assertThat($this->_testClient->getLastRequestTimeMillis(), lessThan(1000));
+
+        // when
+        self::$_wireMock->setGlobalRandomDelay(new UniformDistribution(1000, 1010));
         $this->_testClient->get('/some/url');
 
         // then
