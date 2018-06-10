@@ -25,6 +25,8 @@ class ResponseDefinitionBuilder
     protected $_fault;
     /** @var string[] */
     private $_transformers = array();
+    /** @var array */
+    private $_transformerParameters = array();
 
     protected $_additionalRequestHeaders = array();
 
@@ -172,6 +174,17 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value Can be any scalar value or array (of scalars/arrays, etc), but must not be an object
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformerParameter($name, $value)
+    {
+        $this->_transformerParameters[$name] = $value;
+        return $this;
+    }
+
     public function build()
     {
         return new ResponseDefinition(
@@ -187,7 +200,8 @@ class ResponseDefinitionBuilder
             $this->_randomDelayDistribution,
             $this->_chunkedDribbleDelay,
             $this->_fault,
-            $this->_transformers
+            $this->_transformers,
+            $this->_transformerParameters
         );
     }
 }

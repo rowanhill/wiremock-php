@@ -1,5 +1,6 @@
 <?php
 
+use WireMock\Client\ListStubMappingsResult;
 use WireMock\Stubbing\StubMapping;
 
 function assertThatTheOnlyMappingPresentIs(StubMapping $stubMapping)

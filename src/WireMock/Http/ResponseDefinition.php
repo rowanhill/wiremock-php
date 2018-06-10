@@ -34,6 +34,8 @@ class ResponseDefinition
     private $_fault;
     /** @var string[] */
     private $_transformers = array();
+    /** @var array */
+    private $_transformerParameters = array();
 
     /**
      * ResponseDefinition constructor.
@@ -50,6 +52,7 @@ class ResponseDefinition
      * @param ChunkedDribbleDelay $chunkedDribbleDelay
      * @param string $fault
      * @param string[] $transformers
+     * @param array $transformerParameters
      */
     public function __construct(
         $status,
@@ -64,7 +67,8 @@ class ResponseDefinition
         $randomDelayDistribution,
         $chunkedDribbleDelay,
         $fault,
-        $transformers
+        $transformers,
+        $transformerParameters
     ) {
         $this->_status = $status;
         $this->_statusMessage = $statusMessage;
@@ -78,6 +82,7 @@ class ResponseDefinition
         $this->_chunkedDribbleDelay = $chunkedDribbleDelay;
         $this->_fault = $fault;
         $this->_transformers = $transformers;
+        $this->_transformerParameters = $transformerParameters;
         $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
     }
 
@@ -185,6 +190,14 @@ class ResponseDefinition
         return $this->_transformers;
     }
 
+    /**
+     * @return array
+     */
+    public function getTransformerParameters()
+    {
+        return $this->_transformerParameters;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -225,6 +238,9 @@ class ResponseDefinition
         if ($this->_transformers) {
             $array['transformers'] = $this->_transformers;
         }
+        if ($this->_transformerParameters) {
+            $array['transformerParameters'] = $this->_transformerParameters;
+        }
         return $array;
     }
 
@@ -254,7 +270,8 @@ class ResponseDefinition
                 ChunkedDribbleDelay::fromArray($array['chunkedDribbleDelay']) :
                 null,
             isset($array['fault']) ? $array['fault'] : null,
-            isset($array['transformers']) ? $array['transformers'] : null
+            isset($array['transformers']) ? $array['transformers'] : null,
+            isset($array['transformerParameters']) ? $array['transformerParameters'] : null
         );
     }
 }

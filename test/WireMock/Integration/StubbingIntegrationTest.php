@@ -421,6 +421,24 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThat($stubMapping->getResponse()->getTransformers(), equalTo(array('transformer-1', 'transformer-2')));
     }
 
+    public function testResponseTransformerParametersCanBeSetOnStub()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(
+                WireMock::aResponse()
+                    ->withTransformerParameter('newValue', 66)
+                    ->withTransformerParameter('inner', array('thing' => 'value'))
+            ));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getResponse()->getTransformerParameters(), equalTo(array(
+            'newValue' => 66,
+            'inner' => array('thing' => 'value')
+        )));
+    }
+
     public function testStubsCanBeSaved()
     {
         // given
