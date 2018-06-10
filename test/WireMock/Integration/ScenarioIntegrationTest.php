@@ -75,4 +75,30 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThat($secondResponse, is('Modified'));
         assertThat($thirdResponse, is('Initial'));
     }
+
+    public function testGettingScenarios()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->inScenario('Some Scenario')
+            ->willReturn(WireMock::aResponse()->withBody('Some body'))
+            ->willSetStateTo('AnotherState')
+        );
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->inScenario('Some Scenario')
+            ->whenScenarioStateIs('Another State')
+            ->willReturn(WireMock::aResponse()->withBody('Modified'))
+        );
+
+        // when
+        $scenariosResult = self::$_wireMock->getAllScenarios();
+
+        // then
+        assertThat($scenariosResult->getScenarios(), arrayWithSize(1));
+        $scenarios = $scenariosResult->getScenarios();
+        assertThat($scenarios[0]->getId(), stringValue());
+        assertThat($scenarios[0]->getName(), equalTo('Some Scenario'));
+        assertThat($scenarios[0]->getState(), equalTo(Scenario::STARTED));
+        assertThat($scenarios[0]->getPossibleStates(), equalTo(array(Scenario::STARTED, 'AnotherState')));
+    }
 }

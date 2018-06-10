@@ -269,6 +269,17 @@ class WireMock
     }
 
     /**
+     * @return GetScenariosResult
+     */
+    public function getAllScenarios()
+    {
+        $url = $this->_makeUrl('__admin/scenarios');
+        $findResultJson = file_get_contents($url);
+        $findResult = json_decode($findResultJson, true);
+        return GetScenariosResult::fromArray($findResult);
+    }
+
+    /**
      * Reset all scenarios to the Scenario.STARTED state
      */
     public function resetAllScenarios()
