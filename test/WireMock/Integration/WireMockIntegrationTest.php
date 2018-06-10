@@ -27,7 +27,7 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         self::runCmd('./../wiremock/stop.sh');
     }
 
-    private static function runCmd($cmd)
+    protected static function runCmd($cmd)
     {
         $result = 0;
         $output = array();
@@ -44,5 +44,10 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $this->_testClient = new TestClient();
         self::$_wireMock->reset();
+    }
+    
+    public function clearMappings()
+    {
+        exec('rm -f ../wiremock/1/mappings/*');
     }
 }

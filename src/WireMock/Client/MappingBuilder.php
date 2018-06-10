@@ -2,28 +2,37 @@
 
 namespace WireMock\Client;
 
-use WireMock\Matching\RequestPattern;
 use WireMock\Stubbing\StubMapping;
 
 class MappingBuilder
 {
-    /** @var RequestPattern */
-    private $_requestPattern;
+    /** @var string A string representation of a GUID  */
+    private $_id;
+    /** @var RequestPatternBuilder */
+    private $_requestPatternBuilder;
     /** @var ResponseDefinitionBuilder */
     private $_responseDefinitionBuilder;
-    /** @var array of string -> ValueMatchingStrategy */
-    private $_headers = array();
-    /** @var array of ValueMatchingStrategy */
-    private $_requestBodyPatterns = array();
     /** @var int */
     private $_priority;
-    /** @var ScenarioBuilder */
+    /** @var ScenarioMappingBuilder */
     private $_scenarioBuilder;
+    /** @var array */
+    private $_metadata;
 
-    public function __construct(RequestPattern $requestPattern)
+    public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
-        $this->_requestPattern = $requestPattern;
-        $this->_scenarioBuilder = new ScenarioBuilder();
+        $this->_requestPatternBuilder = $requestPatternBuilder;
+        $this->_scenarioBuilder = new ScenarioMappingBuilder();
+    }
+
+    /**
+     * @param string $id A string representation of a GUID
+     * @return MappingBuilder
+     */
+    public function withId($id)
+    {
+        $this->_id = $id;
+        return $this;
     }
 
     /**
@@ -47,13 +56,35 @@ class MappingBuilder
     }
 
     /**
-     * @param $headerName
+     * @param string $headerName
      * @param ValueMatchingStrategy $valueMatchingStrategy
      * @return MappingBuilder
      */
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        $this->_requestPatternBuilder->withHeader($headerName, $valueMatchingStrategy);
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return $this
+     */
+    public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_requestPatternBuilder->withQueryParam($name, $valueMatchingStrategy);
+        return $this;
+    }
+
+    /**
+     * @param string $cookieName
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @return MappingBuilder
+     */
+    public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
+    {
+        $this->_requestPatternBuilder->withCookie($cookieName, $valueMatchingStrategy);
         return $this;
     }
 
@@ -63,7 +94,28 @@ class MappingBuilder
      */
     public function withRequestBody(ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_requestBodyPatterns[] = $valueMatchingStrategy->toArray();
+        $this->_requestPatternBuilder->withRequestBody($valueMatchingStrategy);
+        return $this;
+    }
+
+    /**
+     * @param MultipartValuePatternBuilder $multipartBuilder
+     * @return MappingBuilder
+     */
+    public function withMultipartRequestBody($multipartBuilder)
+    {
+        $this->_requestPatternBuilder->withMultipartRequestBody($multipartBuilder->build());
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return MappingBuilder
+     */
+    public function withBasicAuth($username, $password)
+    {
+        $this->_requestPatternBuilder->withBasicAuth($username, $password);
         return $this;
     }
 
@@ -97,17 +149,30 @@ class MappingBuilder
         return $this;
     }
 
+    /**
+     * @param array $metadata
+     * @return MappingBuilder
+     */
+    public function withMetadata(array $metadata)
+    {
+        $this->_metadata = $metadata;
+        return $this;
+    }
+
+    /**
+     * @return StubMapping
+     * @throws \Exception
+     */
     public function build()
     {
         $responseDefinition = $this->_responseDefinitionBuilder->build();
-        $this->_requestPattern->setHeaders($this->_headers);
-        if (!empty($this->_requestBodyPatterns)) {
-            $this->_requestPattern->setBodyPatterns($this->_requestBodyPatterns);
-        }
         return new StubMapping(
-            $this->_requestPattern,
+            $this->_requestPatternBuilder->build(),
             $responseDefinition,
+            $this->_id,
             $this->_priority,
-            $this->_scenarioBuilder->build());
+            $this->_scenarioBuilder->build(),
+            $this->_metadata
+        );
     }
 }

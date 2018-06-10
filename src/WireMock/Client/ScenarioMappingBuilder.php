@@ -2,9 +2,9 @@
 
 namespace WireMock\Client;
 
-use WireMock\Stubbing\Scenario;
+use WireMock\Stubbing\ScenarioMapping;
 
-class ScenarioBuilder
+class ScenarioMappingBuilder
 {
     /** @var string */
     private $_scenarioName;
@@ -15,7 +15,7 @@ class ScenarioBuilder
 
     /**
      * @param string $scenarioName
-     * @return ScenarioBuilder
+     * @return ScenarioMappingBuilder
      */
     public function withScenarioName($scenarioName)
     {
@@ -25,7 +25,7 @@ class ScenarioBuilder
 
     /**
      * @param string $requiredScenarioState
-     * @return ScenarioBuilder
+     * @return ScenarioMappingBuilder
      */
     public function withRequiredState($requiredScenarioState)
     {
@@ -35,7 +35,7 @@ class ScenarioBuilder
 
     /**
      * @param string $newScenarioState
-     * @return ScenarioBuilder
+     * @return ScenarioMappingBuilder
      */
     public function withNewScenarioState($newScenarioState)
     {
@@ -43,6 +43,10 @@ class ScenarioBuilder
         return $this;
     }
 
+    /**
+     * @return null|ScenarioMapping
+     * @throws \Exception
+     */
     public function build()
     {
         if ($this->_scenarioName === null) {
@@ -53,6 +57,6 @@ class ScenarioBuilder
             return null;
         }
 
-        return new Scenario($this->_scenarioName, $this->_requiredScenarioState, $this->_newScenarioState);
+        return new ScenarioMapping($this->_scenarioName, $this->_requiredScenarioState, $this->_newScenarioState);
     }
 }

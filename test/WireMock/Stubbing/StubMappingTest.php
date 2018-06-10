@@ -11,14 +11,11 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     private $_mockRequestPattern;
     /** @var ResponseDefinition */
     private $_mockResponseDefinition;
-    /** @var Scenario */
-    private $_mockScenario;
 
     public function setUp()
     {
         $this->_mockRequestPattern = mock('WireMock\Matching\RequestPattern');
         $this->_mockResponseDefinition = mock('WireMock\Http\ResponseDefinition');
-        $this->_mockScenario = mock('WireMock\Stubbing\Scenario');
     }
 
     public function testRequestPatternAndResponseDefinitionAreAvailableInArray()
@@ -38,12 +35,26 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         assertThat($stubMappingArray, hasEntry('response', $responseArray));
     }
 
+    public function testIdIsInArrayIfSpecified()
+    {
+        // given
+        when($this->_mockRequestPattern->toArray())->return(array());
+        when($this->_mockResponseDefinition->toArray())->return(array());
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, 'some-long-guid');
+
+        // when
+        $stubMappingArray = $stubMapping->toArray();
+
+        // then
+        assertThat($stubMappingArray, hasEntry('id', 'some-long-guid'));
+    }
+
     public function testPriorityIsInArrayIfSpecified()
     {
         // given
         when($this->_mockRequestPattern->toArray())->return(array());
         when($this->_mockResponseDefinition->toArray())->return(array());
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, 5);
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null,5);
 
         // when
         $stubMappingArray = $stubMapping->toArray();
@@ -57,9 +68,9 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         // given
         when($this->_mockRequestPattern->toArray())->return(array());
         when($this->_mockResponseDefinition->toArray())->return(array());
-        when($this->_mockScenario->toArray())->return(array('scenarioName' => 'Some Scenario'));
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null,
-            $this->_mockScenario);
+        $scenarioMapping = new ScenarioMapping('Some Scenario', 'from', 'to');
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null,null,
+            $scenarioMapping);
 
         // when
         $stubMappingArray = $stubMapping->toArray();

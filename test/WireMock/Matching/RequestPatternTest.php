@@ -2,6 +2,10 @@
 
 namespace WireMock\Matching;
 
+// Dummy use of UrlMatchingStrategy, to force loader to bring the file in, so this class can be mocked (useful for when
+// these tests are run in isolation)
+new UrlMatchingStrategy('foo', 'bar');
+
 class RequestPatternTest extends \PHPUnit_Framework_TestCase
 {
     public function testMethodAndMatchingTypeAndMatchingValueAreAvailableAsArray()
@@ -13,7 +17,7 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array($matchingType => $matchingValue));
-        $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy);
+        $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy, null);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
@@ -29,15 +33,41 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
-        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+        $headers = array('aHeader' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            $headers,
+            null
+        );
 
         // when
-        $headers = array('aHeader' => array('equalTo' => 'aValue'));
-        $requestPattern->setHeaders($headers);
         $requestPatternArray = $requestPattern->toArray();
 
         // then
         assertThat($requestPatternArray, hasEntry('headers', $headers));
+    }
+
+    public function testRequestCookieMatchersAreAvailableInArray()
+    {
+        // given
+        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
+        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
+        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $cookies = array('aCookie' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            $cookies,
+            null
+        );
+
+        // when
+        $requestPatternArray = $requestPattern->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('cookies', $cookies));
     }
 
     public function testRequestBodyMatchersAreAvailableInArray()
@@ -46,14 +76,44 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
         $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
         when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
-        $requestPattern = new RequestPattern('GET', $mockUrlMatchingStrategy);
+        $bodyPatterns = array(array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            null,
+            $bodyPatterns,
+            null
+        );
 
         // when
-        $bodyPatterns = array(array('equalTo' => 'aValue'));
-        $requestPattern->setBodyPatterns($bodyPatterns);
         $requestPatternArray = $requestPattern->toArray();
 
         // then
         assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatterns));
+    }
+
+    public function testQueryParamMatchersAreAvailableInArray()
+    {
+        // given
+        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
+        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
+        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $queryParams = array('aParam' => array('equalTo' => 'aValue'));
+        $requestPattern = new RequestPattern(
+            'GET',
+            $mockUrlMatchingStrategy,
+            null,
+            null,
+            null,
+            null,
+            $queryParams
+        );
+
+        // when
+        $requestPatternArray = $requestPattern->toArray();
+
+        // then
+        assertThat($requestPatternArray, hasEntry('queryParameters', $queryParams));
     }
 }

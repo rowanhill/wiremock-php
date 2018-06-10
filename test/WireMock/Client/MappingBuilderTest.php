@@ -7,8 +7,8 @@ use WireMock\Matching\RequestPattern;
 
 class MappingBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var RequestPattern */
-    private $_mockRequestPattern;
+    /** @var RequestPatternBuilder */
+    private $_mockRequestPatternBuilder;
     /** @var ResponseDefinitionBuilder */
     private $_mockResponseDefinitionBuilder;
     /** @var ResponseDefinition */
@@ -16,10 +16,13 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        /** @var RequestPatternBuilder $mockRequestPatternBuilder */
+        $mockRequestPatternBuilder = mock('WireMock\Client\RequestPatternBuilder');
         /** @var RequestPattern $mockRequestPattern */
         $mockRequestPattern = mock('WireMock\Matching\RequestPattern');
+        when($mockRequestPatternBuilder->build())->return($mockRequestPattern);
         when($mockRequestPattern->toArray())->return(array('aRequest' => 'pattern'));
-        $this->_mockRequestPattern = $mockRequestPattern;
+        $this->_mockRequestPatternBuilder = $mockRequestPatternBuilder;
 
         /** @var ResponseDefinition $mockResponseDefinition */
         $mockResponseDefinition = mock('WireMock\Http\ResponseDefinition');
@@ -32,10 +35,13 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $this->_mockResponseDefinitionBuilder = $mockResponseDefinitionBuilder;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testBuiltStubMappingHasRequestPatternAndResponseDefinition()
     {
         // given
-        $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPatternBuilder);
         $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
 
         // when
@@ -47,35 +53,57 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($array, hasEntry('response', array('aResponse' => 'definition')));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testMatchedRequestHeadersAreSetOnRequestPattern()
     {
         // given
-        $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPatternBuilder);
         $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
+        $headerName = 'aHeader';
+        $valueMatchingStrategy = new ValueMatchingStrategy('equalTo', 'aValue');
 
         // when
-        $mappingBuilder->withHeader('aHeader', new ValueMatchingStrategy('equalTo', 'aValue'));
-        $mappingBuilder->build();
+        $mappingBuilder->withHeader($headerName, $valueMatchingStrategy)->build();
 
         // then
-        $headers = array('aHeader' => array('equalTo' => 'aValue'));
-        verify($this->_mockRequestPattern)->setHeaders($headers);
+        verify($this->_mockRequestPatternBuilder)->withHeader($headerName, $valueMatchingStrategy);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function testMatchedRequestQueryParamsAreSetOnRequestPattern()
+    {
+        // given
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPatternBuilder);
+        $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
+        $paramName = 'aParam';
+        $valueMatchingStrategy = new ValueMatchingStrategy('equalTo', 'aValue');
+
+        // when
+        $mappingBuilder->withQueryParam($paramName, $valueMatchingStrategy)->build();
+
+        // then
+        verify($this->_mockRequestPatternBuilder)->withQueryParam($paramName, $valueMatchingStrategy);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function testRequestBodyMatcherIsSetOnRequestPattern()
     {
         // given
-        $mappingBuilder = new MappingBuilder($this->_mockRequestPattern);
+        $mappingBuilder = new MappingBuilder($this->_mockRequestPatternBuilder);
         $mappingBuilder->willReturn($this->_mockResponseDefinitionBuilder);
 
         // when
-        $mappingBuilder->withRequestBody(new ValueMatchingStrategy('matches', 'aValue'));
-        $mappingBuilder->withRequestBody(new ValueMatchingStrategy('doesNotMatch', 'anotherValue'));
-        $mappingBuilder->build();
+        $valueMatchingStrategy = new ValueMatchingStrategy('matches', 'aValue');
+        $mappingBuilder->withRequestBody($valueMatchingStrategy)
+            ->build();
 
         // then
-        $matches = array('matches' => 'aValue');
-        $doesNotMatch = array('doesNotMatch' => 'anotherValue');
-        verify($this->_mockRequestPattern)->setBodyPatterns(array($matches, $doesNotMatch));
+        verify($this->_mockRequestPatternBuilder)->withRequestBody($valueMatchingStrategy);
     }
 }

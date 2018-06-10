@@ -7,45 +7,171 @@ use WireMock\Matching\RequestPattern;
 
 class StubMapping
 {
+    /** @var string A string representation of a GUID */
+    private $_id;
     /** @var RequestPattern */
-    private $_requestPattern;
+    private $_request;
     /** @var ResponseDefinition */
-    private $_responseDefinition;
+    private $_response;
     /** @var int */
     private $_priority;
-    /** @var Scenario */
-    private $_scenario;
+    /** @var array */
+    private $_metadata;
+
+    /** @var string */
+    private $_scenarioName;
+    /** @var string */
+    private $_requiredScenarioState;
+    /** @var string */
+    private $_newScenarioState;
 
     /**
      * @param RequestPattern $requestPattern
      * @param ResponseDefinition $responseDefinition
+     * @param string $id
      * @param int $priority
-     * @param Scenario $scenario
+     * @param ScenarioMapping|null $scenarioMapping
+     * @param array $metadata
      */
     public function __construct(
         RequestPattern $requestPattern,
         ResponseDefinition $responseDefinition,
+        $id = null,
         $priority = null,
-        $scenario = null)
+        $scenarioMapping = null,
+        $metadata = null
+    )
     {
-        $this->_requestPattern = $requestPattern;
-        $this->_responseDefinition = $responseDefinition;
+        $this->_id = $id;
+        $this->_request = $requestPattern;
+        $this->_response = $responseDefinition;
         $this->_priority = $priority;
-        $this->_scenario = $scenario;
+        $this->_metadata = $metadata;
+
+        if ($scenarioMapping) {
+            $this->_scenarioName = $scenarioMapping->getScenarioName();
+            $this->_requiredScenarioState = $scenarioMapping->getRequiredScenarioState();
+            $this->_newScenarioState = $scenarioMapping->getNewScenarioState();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->_id = $id;
+    }
+
+    /**
+     * @return RequestPattern
+     */
+    public function getRequest()
+    {
+        return $this->_request;
+    }
+
+    /**
+     * @return ResponseDefinition
+     */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPriority()
+    {
+        return $this->_priority;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->_metadata;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScenarioName()
+    {
+        return $this->_scenarioName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequiredScenarioState()
+    {
+        return $this->_requiredScenarioState;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewScenarioState()
+    {
+        return $this->_newScenarioState;
     }
 
     public function toArray()
     {
         $array = array(
-            'request' => $this->_requestPattern->toArray(),
-            'response' => $this->_responseDefinition->toArray(),
+            'request' => $this->_request->toArray(),
+            'response' => $this->_response->toArray(),
         );
+        if ($this->_id) {
+            $array['id'] = $this->_id;
+        }
         if ($this->_priority) {
             $array['priority'] = $this->_priority;
         }
-        if ($this->_scenario !== null) {
-            $array = array_merge($array, $this->_scenario->toArray());
+        if ($this->_metadata) {
+            $array['metadata'] = $this->_metadata;
+        }
+        if ($this->_scenarioName) {
+            $array['scenarioName'] = $this->_scenarioName;
+        }
+        if ($this->_requiredScenarioState) {
+            $array['requiredScenarioState'] = $this->_requiredScenarioState;
+        }
+        if ($this->_newScenarioState) {
+            $array['newScenarioState'] = $this->_newScenarioState;
         }
         return $array;
+    }
+
+    /**
+     * @param array $array
+     * @return StubMapping
+     * @throws \Exception
+     */
+    public static function fromArray(array $array)
+    {
+        return new StubMapping(
+            RequestPattern::fromArray($array['request']),
+            ResponseDefinition::fromArray($array['response']),
+            $array['id'],
+            isset($array['priority']) ? $array['priority'] : null,
+            new ScenarioMapping(
+                isset($array['scenarioName']) ? $array['scenarioName'] : null,
+                isset($array['requiredScenarioState']) ? $array['requiredScenarioState'] : null,
+                isset($array['newScenarioState']) ? $array['newScenarioState'] : null
+            ),
+            isset($array['metadata']) ? $array['metadata'] : null
+        );
     }
 }

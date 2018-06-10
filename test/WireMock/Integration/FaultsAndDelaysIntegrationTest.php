@@ -3,12 +3,19 @@
 namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
+use WireMock\Fault\UniformDistribution;
 use WireMock\Stubbing\Fault;
 
 require_once 'WireMockIntegrationTest.php';
 
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$_wireMock->resetGlobalDelays();
+    }
+
     public function testFixedDelayOnStubbedResponseCanBeSpecified()
     {
         // when
@@ -20,6 +27,77 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         // then
         $stubMappingArray = $stubMapping->toArray();
         assertThat($stubMappingArray['response']['fixedDelayMilliseconds'], is(2000));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testLogNormalDelayOnStubbedResponseCanBeSpecified()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+                ->willReturn(WireMock::aResponse()
+                ->withLogNormalRandomDelay(90, 0.1))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
+            'type' => 'lognormal',
+            'median' => 90,
+            'sigma' => 0.1
+        )));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testUniformDelayOnStubbedResponseCanBeSpecified()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+                ->willReturn(WireMock::aResponse()
+                ->withUniformRandomDelay(15, 25))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
+            'type' => 'uniform',
+            'lower' => 15,
+            'upper' => 25
+        )));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testRandomDelayOnStubbedResponseCanBeSpecified()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withRandomDelay(new UniformDistribution(15, 25)))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
+            'type' => 'uniform',
+            'lower' => 15,
+            'upper' => 25
+        )));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testChunkedDribbleDelayOnStubbedResponseCanBeSpecified()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withChunkedDribbleDelay(5, 1000))
+        );
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['chunkedDribbleDelay'], equalTo(array(
+            'numberOfChunks' => 5,
+            'totalDuration' => 1000
+        )));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -39,15 +117,17 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
     }
 
-    public function testGlobalFixedDelayOnSocketAcceptanceCanBeSet()
+    public function testGlobalRandomDelayOnStubbedResponsesCanBeSet()
     {
         // given
-        $this->_testClient->get('/not/stubbed/url');
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()));
+        $this->_testClient->get('/some/url');
         assertThat($this->_testClient->getLastRequestTimeMillis(), lessThan(1000));
 
         // when
-        self::$_wireMock->addRequestProcessingDelay(1000);
-        $this->_testClient->get('/not/stubbed/url');
+        self::$_wireMock->setGlobalRandomDelay(new UniformDistribution(1000, 1010));
+        $this->_testClient->get('/some/url');
 
         // then
         assertThat($this->_testClient->getLastRequestTimeMillis(), greaterThan(1000));
@@ -66,6 +146,11 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
     public function testRandomDataThenCloseFaultCanBeStubbed()
     {
         $this->_testFaultCanBeStubbed(Fault::RANDOM_DATA_THEN_CLOSE);
+    }
+
+    public function testConnectionResetByPeerThenCloseFaultCanBeStubbed()
+    {
+        $this->_testFaultCanBeStubbed(Fault::CONNECTION_RESET_BY_PEER);
     }
 
     private function _testFaultCanBeStubbed($fault)

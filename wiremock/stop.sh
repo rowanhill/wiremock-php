@@ -4,12 +4,19 @@
 # Change to the wiremock directory
 cd ../wiremock
 
-if [ -e wiremock.pid ]; then
-  kill -9 `cat wiremock.pid`
-  rm wiremock.pid
+instance=1
+if [ $# -gt 0 ]; then
+    instance=$1
+fi
+pidFile=wiremock.$instance.pid
+
+
+if [ -e $pidFile ]; then
+  kill -9 `cat $pidFile`
+  rm $pidFile
 else
   echo WireMock is not started 2>&1
   exit 1
 fi
 
-echo WireMock stopped
+echo WireMock $instance stopped

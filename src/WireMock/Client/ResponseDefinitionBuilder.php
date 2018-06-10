@@ -2,18 +2,33 @@
 
 namespace WireMock\Client;
 
+use WireMock\Fault\ChunkedDribbleDelay;
+use WireMock\Fault\DelayDistribution;
+use WireMock\Fault\LogNormal;
+use WireMock\Fault\UniformDistribution;
 use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
-    private $_status;
-    private $_body;
-    private $_bodyFile;
-    private $_bodyData;
-    private $_headers = array();
-    private $_proxyBaseUrl;
-    private $_fixedDelayMillis;
-    private $_fault;
+    protected $_status = 200;
+    protected $_statusMessage;
+    protected $_body;
+    protected $_bodyFile;
+    protected $_bodyData;
+    protected $_headers = array();
+    protected $_proxyBaseUrl;
+    protected $_fixedDelayMillis;
+    /** @var DelayDistribution */
+    protected $_randomDelayDistribution;
+    /** @var ChunkedDribbleDelay */
+    protected $_chunkedDribbleDelay;
+    protected $_fault;
+    /** @var string[] */
+    private $_transformers = array();
+    /** @var array */
+    private $_transformerParameters = array();
+
+    protected $_additionalRequestHeaders = array();
 
     /**
      * @param int $status
@@ -22,6 +37,16 @@ class ResponseDefinitionBuilder
     public function withStatus($status)
     {
         $this->_status = $status;
+        return $this;
+    }
+
+    /**
+     * @param string $statusMessage
+     * @return ResponseDefinitionBuilder
+     */
+    public function withStatusMessage($statusMessage)
+    {
+        $this->_statusMessage = $statusMessage;
         return $this;
     }
 
@@ -69,12 +94,12 @@ class ResponseDefinitionBuilder
 
     /**
      * @param string $proxyBaseUrl
-     * @return ResponseDefinitionBuilder
+     * @return ProxiedResponseDefinitionBuilder
      */
     public function proxiedFrom($proxyBaseUrl)
     {
         $this->_proxyBaseUrl = $proxyBaseUrl;
-        return $this;
+        return new ProxiedResponseDefinitionBuilder($this);
     }
 
     /**
@@ -88,6 +113,49 @@ class ResponseDefinitionBuilder
     }
 
     /**
+     * @param DelayDistribution $delayDistribution
+     * @return ResponseDefinitionBuilder
+     */
+    public function withRandomDelay($delayDistribution)
+    {
+        $this->_randomDelayDistribution = $delayDistribution;
+        return $this;
+    }
+
+    /**
+     * @param float $median
+     * @param float $sigma
+     * @return ResponseDefinitionBuilder
+     */
+    public function withLogNormalRandomDelay($median, $sigma)
+    {
+        $this->_randomDelayDistribution = new LogNormal($median, $sigma);
+        return $this;
+    }
+
+    /**
+     * @param int $lower
+     * @param int upper
+     * @return ResponseDefinitionBuilder
+     */
+    public function withUniformRandomDelay($lower, $upper)
+    {
+        $this->_randomDelayDistribution = new UniformDistribution($lower, $upper);
+        return $this;
+    }
+
+    /**
+     * @param int $numberOfChunks
+     * @param int $totalDurationMillis
+     * @return ResponseDefinitionBuilder
+     */
+    public function withChunkedDribbleDelay($numberOfChunks, $totalDurationMillis)
+    {
+        $this->_chunkedDribbleDelay = new ChunkedDribbleDelay($numberOfChunks, $totalDurationMillis);
+        return $this;
+    }
+
+    /**
      * @param $fault
      * @return ResponseDefinitionBuilder
      */
@@ -97,33 +165,81 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
+    /**
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformers()
+    {
+        $this->_transformers = func_get_args();
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value Can be any scalar value or array (of scalars/arrays, etc), but must not be an object
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformerParameter($name, $value)
+    {
+        $this->_transformerParameters[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $transformerName
+     * @param string $paramName
+     * @param mixed $paramValue Can be any scalar value or array (of scalars/arrays, etc), but must not be an object
+     * @return ResponseDefinitionBuilder
+     */
+    public function withTransformer($transformerName, $paramName, $paramValue)
+    {
+        $this->withTransformers($transformerName);
+        $this->withTransformerParameter($paramName, $paramValue);
+        return $this;
+    }
+
     public function build()
     {
-        $responseDefinition = new ResponseDefinition();
-        if ($this->_status) {
-            $responseDefinition->setStatus($this->_status);
+        return new ResponseDefinition(
+            $this->_status,
+            $this->_statusMessage,
+            $this->_body,
+            $this->_bodyFile,
+            $this->_bodyData,
+            $this->_headers,
+            $this->_proxyBaseUrl,
+            $this->_additionalRequestHeaders,
+            $this->_fixedDelayMillis,
+            $this->_randomDelayDistribution,
+            $this->_chunkedDribbleDelay,
+            $this->_fault,
+            $this->_transformers,
+            $this->_transformerParameters
+        );
+    }
+}
+
+class ProxiedResponseDefinitionBuilder extends ResponseDefinitionBuilder
+{
+    /**
+     * @param ResponseDefinitionBuilder $from
+     */
+    public function __construct($from)
+    {
+        $vars = get_object_vars($from);
+        foreach ($vars as $key => $value) {
+            $this->$key = $value;
         }
-        if ($this->_body) {
-            $responseDefinition->setBody($this->_body);
-        }
-        if ($this->_bodyFile) {
-            $responseDefinition->setBodyFile($this->_bodyFile);
-        }
-        if ($this->_bodyData) {
-            $responseDefinition->setBase64Body($this->_bodyData);
-        }
-        if (!empty($this->_headers)) {
-            $responseDefinition->setHeaders($this->_headers);
-        }
-        if ($this->_proxyBaseUrl) {
-            $responseDefinition->setProxyBaseUrl($this->_proxyBaseUrl);
-        }
-        if ($this->_fixedDelayMillis) {
-            $responseDefinition->setFixedDelayMillis($this->_fixedDelayMillis);
-        }
-        if ($this->_fault) {
-            $responseDefinition->setFault($this->_fault);
-        }
-        return $responseDefinition;
+    }
+
+    /**
+     * @param string $headerName
+     * @param string $value
+     * @return ProxiedResponseDefinitionBuilder
+     */
+    public function withAdditionalRequestHeader($headerName, $value)
+    {
+        $this->_additionalRequestHeaders[$headerName] = $value;
+        return $this;
     }
 }
