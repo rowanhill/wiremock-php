@@ -16,6 +16,8 @@ class MappingBuilder
     private $_priority;
     /** @var ScenarioMappingBuilder */
     private $_scenarioBuilder;
+    /** @var array */
+    private $_metadata;
 
     public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
@@ -148,6 +150,16 @@ class MappingBuilder
     }
 
     /**
+     * @param array $metadata
+     * @return MappingBuilder
+     */
+    public function withMetadata(array $metadata)
+    {
+        $this->_metadata = $metadata;
+        return $this;
+    }
+
+    /**
      * @return StubMapping
      * @throws \Exception
      */
@@ -159,6 +171,8 @@ class MappingBuilder
             $responseDefinition,
             $this->_id,
             $this->_priority,
-            $this->_scenarioBuilder->build());
+            $this->_scenarioBuilder->build(),
+            $this->_metadata
+        );
     }
 }

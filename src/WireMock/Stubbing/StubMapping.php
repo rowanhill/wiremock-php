@@ -15,6 +15,8 @@ class StubMapping
     private $_response;
     /** @var int */
     private $_priority;
+    /** @var array */
+    private $_metadata;
 
     /** @var string */
     private $_scenarioName;
@@ -29,19 +31,22 @@ class StubMapping
      * @param string $id
      * @param int $priority
      * @param ScenarioMapping|null $scenarioMapping
+     * @param array $metadata
      */
     public function __construct(
         RequestPattern $requestPattern,
         ResponseDefinition $responseDefinition,
         $id = null,
         $priority = null,
-        $scenarioMapping = null
+        $scenarioMapping = null,
+        $metadata = null
     )
     {
         $this->_id = $id;
         $this->_request = $requestPattern;
         $this->_response = $responseDefinition;
         $this->_priority = $priority;
+        $this->_metadata = $metadata;
 
         if ($scenarioMapping) {
             $this->_scenarioName = $scenarioMapping->getScenarioName();
@@ -91,6 +96,14 @@ class StubMapping
     }
 
     /**
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->_metadata;
+    }
+
+    /**
      * @return string
      */
     public function getScenarioName()
@@ -126,6 +139,9 @@ class StubMapping
         if ($this->_priority) {
             $array['priority'] = $this->_priority;
         }
+        if ($this->_metadata) {
+            $array['metadata'] = $this->_metadata;
+        }
         if ($this->_scenarioName) {
             $array['scenarioName'] = $this->_scenarioName;
         }
@@ -154,7 +170,8 @@ class StubMapping
                 isset($array['scenarioName']) ? $array['scenarioName'] : null,
                 isset($array['requiredScenarioState']) ? $array['requiredScenarioState'] : null,
                 isset($array['newScenarioState']) ? $array['newScenarioState'] : null
-            )
+            ),
+            isset($array['metadata']) ? $array['metadata'] : null
         );
     }
 }
