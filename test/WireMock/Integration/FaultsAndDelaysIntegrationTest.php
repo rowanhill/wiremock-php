@@ -148,6 +148,11 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         $this->_testFaultCanBeStubbed(Fault::RANDOM_DATA_THEN_CLOSE);
     }
 
+    public function testConnectionResetByPeerThenCloseFaultCanBeStubbed()
+    {
+        $this->_testFaultCanBeStubbed(Fault::CONNECTION_RESET_BY_PEER);
+    }
+
     private function _testFaultCanBeStubbed($fault)
     {
         // when
