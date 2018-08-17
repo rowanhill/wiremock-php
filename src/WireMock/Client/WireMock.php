@@ -38,10 +38,10 @@ class WireMock
         $this->_curl = $curl;
     }
 
-    public function isAlive()
+    public function isAlive($debug = false, $timeout = 10)
     {
         $url = $this->_makeUrl('__admin/');
-        return $this->_httpWait->waitForServerToGive200($url);
+        return $this->_httpWait->waitForServerToGive200($url, $timeout, $debug);
     }
 
     public function isShutDown()
