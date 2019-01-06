@@ -9,6 +9,8 @@ class StubMapping
 {
     /** @var string A string representation of a GUID */
     private $_id;
+    /** @var string */
+    private $_name;
     /** @var RequestPattern */
     private $_request;
     /** @var ResponseDefinition */
@@ -24,11 +26,16 @@ class StubMapping
     private $_requiredScenarioState;
     /** @var string */
     private $_newScenarioState;
+    /**
+     * @var null
+     */
+    private $name;
 
     /**
      * @param RequestPattern $requestPattern
      * @param ResponseDefinition $responseDefinition
      * @param string $id
+     * @param string $name
      * @param int $priority
      * @param ScenarioMapping|null $scenarioMapping
      * @param array $metadata
@@ -37,12 +44,14 @@ class StubMapping
         RequestPattern $requestPattern,
         ResponseDefinition $responseDefinition,
         $id = null,
+        $name = null,
         $priority = null,
         $scenarioMapping = null,
         $metadata = null
     )
     {
         $this->_id = $id;
+        $this->_name = $name;
         $this->_request = $requestPattern;
         $this->_response = $responseDefinition;
         $this->_priority = $priority;
@@ -53,6 +62,7 @@ class StubMapping
             $this->_requiredScenarioState = $scenarioMapping->getRequiredScenarioState();
             $this->_newScenarioState = $scenarioMapping->getNewScenarioState();
         }
+        $this->name = $name;
     }
 
     /**
@@ -144,6 +154,9 @@ class StubMapping
         if ($this->_id) {
             $array['id'] = $this->_id;
         }
+        if ($this->_name) {
+            $array['name'] = $this->_name;
+        }
         if ($this->_priority) {
             $array['priority'] = $this->_priority;
         }
@@ -173,6 +186,7 @@ class StubMapping
             RequestPattern::fromArray($array['request']),
             ResponseDefinition::fromArray($array['response']),
             $array['id'],
+            isset($array['name']) ? $array['name'] : null,
             isset($array['priority']) ? $array['priority'] : null,
             new ScenarioMapping(
                 isset($array['scenarioName']) ? $array['scenarioName'] : null,

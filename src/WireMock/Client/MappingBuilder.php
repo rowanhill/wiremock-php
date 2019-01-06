@@ -8,6 +8,8 @@ class MappingBuilder
 {
     /** @var string A string representation of a GUID  */
     private $_id;
+    /** @var string */
+    private $_name;
     /** @var RequestPatternBuilder */
     private $_requestPatternBuilder;
     /** @var ResponseDefinitionBuilder */
@@ -32,6 +34,16 @@ class MappingBuilder
     public function withId($id)
     {
         $this->_id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return MappingBuilder
+     */
+    public function withName($name)
+    {
+        $this->_name = $name;
         return $this;
     }
 
@@ -181,6 +193,7 @@ class MappingBuilder
             $this->_requestPatternBuilder->build(),
             $responseDefinition,
             $this->_id,
+            $this->_name,
             $this->_priority,
             $this->_scenarioBuilder->build(),
             $this->_metadata

@@ -49,12 +49,26 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         assertThat($stubMappingArray, hasEntry('id', 'some-long-guid'));
     }
 
+    public function testNameIsInArrayIfSpecified()
+    {
+        // given
+        when($this->_mockRequestPattern->toArray())->return(array());
+        when($this->_mockResponseDefinition->toArray())->return(array());
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, 'stub-name');
+
+        // when
+        $stubMappingArray = $stubMapping->toArray();
+
+        // then
+        assertThat($stubMappingArray, hasEntry('name', 'stub-name'));
+    }
+
     public function testPriorityIsInArrayIfSpecified()
     {
         // given
         when($this->_mockRequestPattern->toArray())->return(array());
         when($this->_mockResponseDefinition->toArray())->return(array());
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null,5);
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, 5);
 
         // when
         $stubMappingArray = $stubMapping->toArray();
@@ -69,8 +83,7 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         when($this->_mockRequestPattern->toArray())->return(array());
         when($this->_mockResponseDefinition->toArray())->return(array());
         $scenarioMapping = new ScenarioMapping('Some Scenario', 'from', 'to');
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null,null,
-            $scenarioMapping);
+        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, null, $scenarioMapping);
 
         // when
         $stubMappingArray = $stubMapping->toArray();
