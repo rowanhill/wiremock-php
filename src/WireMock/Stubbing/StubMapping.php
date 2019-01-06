@@ -72,6 +72,14 @@ class StubMapping
     }
 
     /**
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    /**
      * @return RequestPattern
      */
     public function getRequest()

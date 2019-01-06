@@ -469,6 +469,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThat($customMatcher->getParameters(), is(array('param' => 'val')));
     }
 
+    public function testStubsCanBeCreatedWithStandardMatchersCombinedWithCustomMatchers()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(
+            WireMock::get(WireMock::urlEqualTo('/some/url'))
+                ->andMatching('custom-matcher', array('param' => 'val'))
+                ->willReturn(WireMock::aResponse())
+        );
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+        $customMatcher = $stubMapping->getRequest()->getCustomMatcherDefinition();
+        assertThat($customMatcher->getName(), is('custom-matcher'));
+        assertThat($customMatcher->getParameters(), is(array('param' => 'val')));
+    }
+
     public function testStubsCanBeCreatedWithMetadataAttached()
     {
         // when

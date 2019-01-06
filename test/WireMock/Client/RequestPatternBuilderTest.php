@@ -120,4 +120,20 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
             'parameters' => array('param' => 'val')
         )));
     }
+
+    public function testCustomMatcherDefinitionIsInArrayIfSpecified()
+    {
+        // given
+        $builder = new RequestPatternBuilder('GET', new UrlMatchingStrategy('url', '/some/url'));
+
+        // when
+        $builder->withCustomMatcher('custom-matcher', array('param' => 'val'));
+
+        // then
+        $pattern = $builder->build();
+        assertThat($pattern->getCustomMatcherDefinition()->toArray(), equalTo(array(
+            'name' => 'custom-matcher',
+            'parameters' => array('param' => 'val')
+        )));
+    }
 }

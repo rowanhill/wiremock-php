@@ -160,6 +160,17 @@ class MappingBuilder
     }
 
     /**
+     * @param string $matcherName
+     * @param array $params
+     * @return MappingBuilder
+     */
+    public function andMatching($matcherName, $params = array())
+    {
+        $this->_requestPatternBuilder->withCustomMatcher($matcherName, $params);
+        return $this;
+    }
+
+    /**
      * @return StubMapping
      * @throws \Exception
      */

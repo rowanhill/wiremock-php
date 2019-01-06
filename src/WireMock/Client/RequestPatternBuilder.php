@@ -111,6 +111,17 @@ class RequestPatternBuilder
     }
 
     /**
+     * @param string $customMatcherName
+     * @param array $customParams
+     * @return RequestPatternBuilder
+     */
+    public function withCustomMatcher($customMatcherName, $customParams)
+    {
+        $this->_customMatcherDefinition = new CustomMatcherDefinition($customMatcherName, $customParams);
+        return $this;
+    }
+
+    /**
      * @return RequestPattern
      */
     public function build()
