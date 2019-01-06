@@ -82,7 +82,7 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->inScenario('Some Scenario')
             ->willReturn(WireMock::aResponse()->withBody('Some body'))
-            ->willSetStateTo('AnotherState')
+            ->willSetStateTo('Another State')
         );
         self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->inScenario('Some Scenario')
@@ -99,6 +99,6 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThat($scenarios[0]->getId(), stringValue());
         assertThat($scenarios[0]->getName(), equalTo('Some Scenario'));
         assertThat($scenarios[0]->getState(), equalTo(Scenario::STARTED));
-        assertThat($scenarios[0]->getPossibleStates(), equalTo(array(Scenario::STARTED, 'AnotherState')));
+        assertThat($scenarios[0]->getPossibleStates(), equalTo(array('Another State')));
     }
 }

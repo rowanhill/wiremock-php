@@ -8,6 +8,8 @@ class MappingBuilder
 {
     /** @var string A string representation of a GUID  */
     private $_id;
+    /** @var string */
+    private $_name;
     /** @var RequestPatternBuilder */
     private $_requestPatternBuilder;
     /** @var ResponseDefinitionBuilder */
@@ -18,6 +20,8 @@ class MappingBuilder
     private $_scenarioBuilder;
     /** @var array */
     private $_metadata;
+    /** @var boolean */
+    private $_isPersistent;
 
     public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
@@ -32,6 +36,16 @@ class MappingBuilder
     public function withId($id)
     {
         $this->_id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return MappingBuilder
+     */
+    public function withName($name)
+    {
+        $this->_name = $name;
         return $this;
     }
 
@@ -160,6 +174,26 @@ class MappingBuilder
     }
 
     /**
+     * @param string $matcherName
+     * @param array $params
+     * @return MappingBuilder
+     */
+    public function andMatching($matcherName, $params = array())
+    {
+        $this->_requestPatternBuilder->withCustomMatcher($matcherName, $params);
+        return $this;
+    }
+
+    /**
+     * @return MappingBuilder
+     */
+    public function persistent()
+    {
+        $this->_isPersistent = true;
+        return $this;
+    }
+
+    /**
      * @return StubMapping
      * @throws \Exception
      */
@@ -170,9 +204,11 @@ class MappingBuilder
             $this->_requestPatternBuilder->build(),
             $responseDefinition,
             $this->_id,
+            $this->_name,
             $this->_priority,
             $this->_scenarioBuilder->build(),
-            $this->_metadata
+            $this->_metadata,
+            $this->_isPersistent
         );
     }
 }
