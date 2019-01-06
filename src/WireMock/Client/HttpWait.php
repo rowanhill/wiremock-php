@@ -16,7 +16,7 @@ class HttpWait
                 $debugTrace[] = "$url not yet up. Error getting headers: " . $e->getMessage();
                 continue;
             }
-            if (isset($headers) && isset($headers[0]) && $headers[0] === 'HTTP/1.1 200 OK') {
+            if (isset($headers) && isset($headers[0]) && strpos($headers[0], '200 OK') !== false) {
                 $serverStarted = true;
                 break;
             } else {
