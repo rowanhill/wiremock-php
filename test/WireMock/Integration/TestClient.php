@@ -14,10 +14,13 @@ class TestClient
         $this->_port = $_port;
     }
 
-    public function get($path, array $headers = array())
+    public function get($path, array $headers = array(), $includeResponseHeaders = false)
     {
         $ch = curl_init($this->_makeUrl($path));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($includeResponseHeaders) {
+            curl_setopt($ch, CURLOPT_HEADER, true);
+        }
         if (!empty($headers)) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         }

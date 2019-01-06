@@ -396,6 +396,20 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testStubIdIsReturnedInResponseHeader()
+    {
+        // given
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withId('76ada7b0-49ae-4229-91c4-396a36f18e09')
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $result = $this->_testClient->get('/some/url', array(), true);
+
+        // then
+        assertThat($result, containsString('Matched-Stub-Id: 76ada7b0-49ae-4229-91c4-396a36f18e09'));
+    }
+
     public function testStubNameCanBeSet()
     {
         // when
@@ -405,6 +419,20 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testStubNameIsReturnedInResponseHeader()
+    {
+        // given
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withName('stub-name')
+            ->willReturn(WireMock::aResponse()));
+
+        // when
+        $result = $this->_testClient->get('/some/url', array(), true);
+
+        // then
+        assertThat($result, containsString('Matched-Stub-Name: stub-name'));
     }
 
     public function testStubPriorityCanBeSet()
