@@ -19,6 +19,8 @@ class StubMapping
     private $_priority;
     /** @var array */
     private $_metadata;
+    /** @var boolean */
+    private $_isPersistent;
 
     /** @var string */
     private $_scenarioName;
@@ -39,6 +41,7 @@ class StubMapping
      * @param int $priority
      * @param ScenarioMapping|null $scenarioMapping
      * @param array $metadata
+     * @param boolean $isPersistent
      */
     public function __construct(
         RequestPattern $requestPattern,
@@ -47,7 +50,8 @@ class StubMapping
         $name = null,
         $priority = null,
         $scenarioMapping = null,
-        $metadata = null
+        $metadata = null,
+        $isPersistent = null
     )
     {
         $this->_id = $id;
@@ -56,6 +60,7 @@ class StubMapping
         $this->_response = $responseDefinition;
         $this->_priority = $priority;
         $this->_metadata = $metadata;
+        $this->_isPersistent = $isPersistent;
 
         if ($scenarioMapping) {
             $this->_scenarioName = $scenarioMapping->getScenarioName();
@@ -122,6 +127,14 @@ class StubMapping
     }
 
     /**
+     * @return boolean|null
+     */
+    public function isPersistent()
+    {
+        return $this->_isPersistent;
+    }
+
+    /**
      * @return string
      */
     public function getScenarioName()
@@ -172,6 +185,9 @@ class StubMapping
         if ($this->_newScenarioState) {
             $array['newScenarioState'] = $this->_newScenarioState;
         }
+        if ($this->_isPersistent) {
+            $array['persistent'] = $this->_isPersistent;
+        }
         return $array;
     }
 
@@ -193,7 +209,8 @@ class StubMapping
                 isset($array['requiredScenarioState']) ? $array['requiredScenarioState'] : null,
                 isset($array['newScenarioState']) ? $array['newScenarioState'] : null
             ),
-            isset($array['metadata']) ? $array['metadata'] : null
+            isset($array['metadata']) ? $array['metadata'] : null,
+            isset($array['persistent']) ? $array['persistent'] : null
         );
     }
 }

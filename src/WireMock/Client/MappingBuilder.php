@@ -20,6 +20,8 @@ class MappingBuilder
     private $_scenarioBuilder;
     /** @var array */
     private $_metadata;
+    /** @var boolean */
+    private $_isPersistent;
 
     public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
@@ -183,6 +185,15 @@ class MappingBuilder
     }
 
     /**
+     * @return MappingBuilder
+     */
+    public function persistent()
+    {
+        $this->_isPersistent = true;
+        return $this;
+    }
+
+    /**
      * @return StubMapping
      * @throws \Exception
      */
@@ -196,7 +207,8 @@ class MappingBuilder
             $this->_name,
             $this->_priority,
             $this->_scenarioBuilder->build(),
-            $this->_metadata
+            $this->_metadata,
+            $this->_isPersistent
         );
     }
 }
