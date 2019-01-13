@@ -4,7 +4,7 @@ namespace WireMock\Client;
 
 class HttpWait
 {
-    public function waitForServerToGive200($url, $timeoutSecs = 10)
+    public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = true)
     {
         $debugTrace = array();
         $startTime = microtime(true);
@@ -16,6 +16,7 @@ class HttpWait
                 $debugTrace[] = "$url not yet up. Error getting headers: " . $e->getMessage();
                 continue;
             }
+
             if (isset($headers) && isset($headers[0]) && strpos($headers[0], '200 OK') !== false) {
                 $serverStarted = true;
                 break;
@@ -32,8 +33,11 @@ class HttpWait
         }
         if (!$serverStarted) {
             $time = microtime(true) - $startTime;
-            $debugTrace[] = "$url failed to come up after $time seconds";
-            echo implode("\n", $debugTrace) ."\n";
+            if ($debug) {
+                echo implode("\n", $debugTrace) ."\n";
+            }
+            echo "$url failed to come up after $time seconds";
+
         }
         return $serverStarted;
     }
