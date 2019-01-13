@@ -4,7 +4,7 @@ namespace WireMock\Client;
 
 class HttpWait
 {
-    public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = false)
+    public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = true)
     {
         $debugTrace = array();
         $startTime = microtime(true);
