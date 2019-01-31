@@ -88,7 +88,15 @@ class ResponseDefinitionBuilder
      */
     public function withHeader($headerName, $headerValue)
     {
-        $this->_headers[$headerName] = $headerValue;
+        if (isset($this->_headers[$headerName])) {
+            if (is_array($this->_headers[$headerName])) {
+                $this->_headers[$headerName][] = $headerValue;
+            } else {
+                $this->_headers[$headerName] = array($this->_headers[$headerName], $headerValue);
+            }
+        } else {
+            $this->_headers[$headerName] = $headerValue;
+        }
         return $this;
     }
 

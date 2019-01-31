@@ -148,6 +148,21 @@ class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDefArray, hasEntry('headers', array('foo1' => 'bar1', 'foo2' => 'bar2')));
     }
 
+    public function testHeaderIsAvailableInArrayAsArrayIfSetMultipleTimes()
+    {
+        // given
+        $responseDefinitionBuilder = new ResponseDefinitionBuilder();
+        $responseDefinitionBuilder->withHeader('foo', 'bar1');
+        $responseDefinitionBuilder->withHeader('foo', 'bar2');
+
+        // when
+        $responseDefinition = $responseDefinitionBuilder->build();
+        $responseDefArray = $responseDefinition->toArray();
+
+        // then
+        assertThat($responseDefArray, hasEntry('headers', array('foo' => array('bar1', 'bar2'))));
+    }
+
     public function testHeaderIsNotAvailableInArrayIfNotSet()
     {
         // given

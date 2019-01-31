@@ -135,6 +135,28 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getResponse()->getHeaders(), equalTo(array(
+            'Content-Type' => 'text/plain'
+        )));
+    }
+
+    public function testMultivalueHeadersCanBeStubbed()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->willReturn(WireMock::aResponse()
+                ->withHeader('Set-Cookie', 'key1=val1')
+                ->withHeader('Set-Cookie', 'key2=val2')
+                ->withBody('Here is some body text')));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThat($stubMapping->getResponse()->getHeaders(), equalTo(array(
+            'Set-Cookie' => array(
+                'key1=val1',
+                'key2=val2'
+            )
+        )));
     }
 
     public function testHeadersCanBeMatched()
