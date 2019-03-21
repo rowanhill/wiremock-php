@@ -660,11 +660,22 @@ class WireMock
 
     /**
      * @param string $xml
-     * @return ValueMatchingStrategy
+     * @param bool $enablePlaceholders
+     * @param string $placeholderOpeningDelimiterRegex
+     * @param string $placeholderClosingDelimiterRegex
+     * @return EqualToXmlMatchingStrategy
      */
-    public static function equalToXml($xml)
-    {
-        return new ValueMatchingStrategy('equalToXml', $xml);
+    public static function equalToXml($xml,
+        $enablePlaceholders = false,
+        $placeholderOpeningDelimiterRegex = null,
+        $placeholderClosingDelimiterRegex = null
+    ) {
+        return new EqualToXmlMatchingStrategy(
+            $xml,
+            $enablePlaceholders,
+            $placeholderOpeningDelimiterRegex,
+            $placeholderClosingDelimiterRegex
+        );
     }
 
     /**

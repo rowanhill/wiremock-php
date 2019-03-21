@@ -370,6 +370,32 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponsesCanBeStubbedByBodyXmlWithPlaceholders()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::equalToXml('<tag>${xmlunit.ignore}</tag>', true))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponsesCanBeStubbedByBodyXmlWithPlaceholdersAndCustomDelimiters()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(WireMock::equalToXml(
+                '<tag>[[xmlunit.ignore]]</tag>',
+                true,
+                '\[\[',
+                ']]'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testResponsesCanBeStubbedByBodyXPath()
     {
         // when
