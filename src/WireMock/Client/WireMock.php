@@ -9,6 +9,8 @@ use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpecBuilder;
 use WireMock\Recording\SnapshotRecordResult;
+use WireMock\Stubbing\StubImport;
+use WireMock\Stubbing\StubImportBuilder;
 use WireMock\Stubbing\StubMapping;
 use WireMock\Verification\CountMatchingStrategy;
 
@@ -69,6 +71,18 @@ class WireMock
         $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->getId()));
         $this->_curl->put($url, $stubMapping->toArray());
         return $stubMapping;
+    }
+
+    /**
+     * @param StubImport|StubImportBuilder $stubImportsOrBuilder
+     */
+    public function importStubs($stubImportsOrBuilder)
+    {
+        $stubImports = ($stubImportsOrBuilder instanceof  StubImport) ?
+            $stubImportsOrBuilder :
+            $stubImportsOrBuilder->build();
+        $url = $this->_makeUrl('__admin/mappings/import');
+        $this->_curl->post($url, $stubImports->toArray());
     }
 
     /**
@@ -1004,5 +1018,13 @@ class WireMock
     public static function status($status)
     {
         return self::aResponse()->withStatus($status);
+    }
+
+    /**
+     * @return StubImportBuilder
+     */
+    public static function stubImport()
+    {
+        return new StubImportBuilder();
     }
 }

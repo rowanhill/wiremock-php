@@ -5,6 +5,7 @@ namespace WireMock\Integration;
 require_once 'WireMockIntegrationTest.php';
 
 use WireMock\Client\WireMock;
+use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {
@@ -649,5 +650,126 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStubsCanBeImported()
+    {
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()
+            ->stub(WireMock::get('/one')->willReturn(WireMock::ok()))
+            ->stub(WireMock::post('/two')->willReturn(WireMock::ok("Body content")))
+            ->stub(WireMock::put('/three')->willReturn(WireMock::ok()))
+        );
+
+        // then
+        /** @var StubMapping[] $mappings */
+        $mappings = getMappings();
+        $urls = array_map(function(/** @var $m StubMapping */$m) {
+            return $m->getRequest()->getUrlMatchingStrategy()->getMatchingValue();
+        },
+            $mappings);
+        assertThat($urls, arrayContainingInAnyOrder(array('/one', '/two', '/three')));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStubImportOverwritesStubsByDefault()
+    {
+        // given
+        $id = '76ada7b0-49ae-4229-91c4-396a36f18e09';
+        self::$_wireMock->stubFor(
+            WireMock::get('/path')->withId($id)->willReturn(WireMock::ok())
+        );
+
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()->stub(
+            WireMock::get('/path2')->withId($id)->willReturn(WireMock::ok())
+        ));
+
+        // then
+        /** @var StubMapping[] $mappings */
+        $mappings = getMappings();
+        assertThat($mappings, is(arrayWithSize(1)));
+        $mapping = $mappings[0];
+        assertThat($mapping->getRequest()->getUrlMatchingStrategy()->getMatchingValue(), is('/path2'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStubImportCanBeSetToIgnoreDuplicates()
+    {
+        // given
+        $id = '76ada7b0-49ae-4229-91c4-396a36f18e09';
+        self::$_wireMock->stubFor(
+            WireMock::get('/path')->withId($id)->willReturn(WireMock::ok())
+        );
+
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()->stub(
+            WireMock::get('/path2')->withId($id)->willReturn(WireMock::ok())
+        )->ignoreExisting());
+
+        // then
+        /** @var StubMapping[] $mappings */
+        $mappings = getMappings();
+        assertThat($mappings, is(arrayWithSize(1)));
+        $mapping = $mappings[0];
+        assertThat($mapping->getRequest()->getUrlMatchingStrategy()->getMatchingValue(), is('/path'));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStubImportLeavesExistingStubsInPlaceByDefault()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get('/path')->willReturn(WireMock::ok()));
+
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()
+            ->stub(WireMock::get('/one')->willReturn(WireMock::ok()))
+            ->stub(WireMock::post('/two')->willReturn(WireMock::ok()))
+        );
+
+        // then
+        /** @var StubMapping[] $mappings */
+        $mappings = getMappings();
+        assertThat($mappings, is(arrayWithSize(3)));
+        $urls = array_map(function(/** @var $m StubMapping */$m) {
+                return $m->getRequest()->getUrlMatchingStrategy()->getMatchingValue();
+            },
+            $mappings);
+        assertThat($urls, arrayContainingInAnyOrder(array('/path', '/one', '/two')));
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testStubImportCanBeSetToReplaceAnyExistingStubs()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get('/path')->willReturn(WireMock::ok()));
+
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()
+            ->stub(WireMock::get('/one')->willReturn(WireMock::ok()))
+            ->stub(WireMock::post('/two')->willReturn(WireMock::ok()))
+            ->deleteAllExistingStubsNotInImport()
+        );
+
+        // then
+        /** @var StubMapping[] $mappings */
+        $mappings = getMappings();
+        assertThat($mappings, is(arrayWithSize(2)));
+        $urls = array_map(function(/** @var $m StubMapping */$m) {
+            return $m->getRequest()->getUrlMatchingStrategy()->getMatchingValue();
+        },
+            $mappings);
+        assertThat($urls, arrayContainingInAnyOrder(array('/one', '/two')));
     }
 }
