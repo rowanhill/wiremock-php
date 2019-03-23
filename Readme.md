@@ -40,7 +40,7 @@ Unfortunately, PHP doesn't support anything like Java's static import of methods
 the Java API's static instance pattern. Instead, in wiremock-php some methods which are static in Java are instance
 methods. Those methods are:
 
-- `stubFor`, `editStub`
+- `stubFor`, `editStub`, `importStubs`
 - `verify`
 - `findAll`
 - `saveAllMappings`
@@ -55,6 +55,9 @@ of bytes, use [pack](http://php.net/pack).
 The request body matcher `equalToJson` takes an optional `$jsonCompareMode` parameter. In the Java API, these are enum
 values on org.skyscreamer.jsonassert.JSONCompareMode; in wiremock-php, these values are consts on
 `JsonValueMatchingStrategy`.
+
+The `stubImport` method is static on `StubBuilder` in Java. In WireMock, to keep all the public static methods in one
+predictable place, this method is available as `WireMock::stubImport`.
 
 In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
 response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.
