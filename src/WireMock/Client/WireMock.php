@@ -158,7 +158,7 @@ class WireMock
         $url = $this->_makeUrl('__admin/requests/find');
         $findResultJson = $this->_curl->post($url, $requestPattern->toArray());
         $findResultArray = json_decode($findResultJson, true);
-        $requestArrays = $findResultArray['requests'];
+        $requestArrays = isset($findResultArray['requests']) ? $findResultArray['requests'] : [];
         $requests = array();
         foreach ($requestArrays as $responseArray) {
             $requests[] = new LoggedRequest($responseArray);
