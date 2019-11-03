@@ -109,4 +109,57 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         $serveEvents = self::$_wireMock->getAllServeEvents();
         assertThat($serveEvents->getRequests(), arrayWithSize(0));
     }
+
+    public function testRemovingServeEventRemovesRequestByIdFromTheJournal()
+    {
+        // given
+        $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/unmatched2');
+        $origServeEvents = self::$_wireMock->getAllServeEvents();
+        $requestId = ($origServeEvents->getRequests())[0]->getId();
+
+        // when
+        self::$_wireMock->removeServeEvent($requestId);
+
+        // then
+        $serveEvents = self::$_wireMock->getAllServeEvents();
+        assertThat($serveEvents->getRequests(), arrayWithSize(1));
+    }
+
+    public function testRemovingServeEventsRemovesRequestsByMatcherFromTheJournal()
+    {
+        // given
+        $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/unmatched2');
+
+        // then
+        self::$_wireMock->removeServeEvents(
+            WireMock::getRequestedFor(WireMock::urlPathMatching('/unmatched2'))
+        );
+
+        // then
+        $serveEvents = self::$_wireMock->getAllServeEvents();
+        assertThat($serveEvents->getRequests(), arrayWithSize(1));
+    }
+
+    public function testRemoveEventsByStubMetadataRemovesMatchingRequestsFromTheJournal()
+    {
+        // given
+        self::$_wireMock->stubFor(
+            WireMock::get("/api/dosomething/123")
+                ->withMetadata(array("tags" => array("test-57")))
+                ->willReturn(WireMock::ok())
+        );
+        $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/api/dosomething/123');
+
+        // then
+        self::$_wireMock->removeEventsByStubMetadata(
+            WireMock::matchingJsonPath("$.tags[0]", WireMock::equalTo("test-57"))
+        );
+
+        // then
+        $serveEvents = self::$_wireMock->getAllServeEvents();
+        assertThat($serveEvents->getRequests(), arrayWithSize(1));
+    }
 }

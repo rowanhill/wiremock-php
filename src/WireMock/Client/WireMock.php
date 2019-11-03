@@ -219,6 +219,35 @@ class WireMock
     }
 
     /**
+     * Removes specified serve event from the WireMock server's request journal
+     * @param string $id
+     */
+    public function removeServeEvent($id)
+    {
+        $url = $this->_makeUrl("__admin/requests/$id");
+        $this->_curl->delete($url);
+    }
+
+    /**
+     * @param RequestPatternBuilder $requestPatternBuilder
+     */
+    public function removeServeEvents($requestPatternBuilder)
+    {
+        $requestPattern = $requestPatternBuilder->build();
+        $url = $this->_makeUrl('__admin/requests/remove');
+        $this->_curl->post($url, $requestPattern->toArray());
+    }
+
+    /**
+     * @param ValueMatchingStrategy $valueMatchingStrategy
+     */
+    public function removeEventsByStubMetadata($valueMatchingStrategy)
+    {
+        $url = $this->_makeUrl('__admin/requests/remove-by-metadata');
+        $this->_curl->post($url, $valueMatchingStrategy->toArray());
+    }
+
+    /**
      * Sets a delay on all stubbed responses
      *
      * @param int $delayMillis
