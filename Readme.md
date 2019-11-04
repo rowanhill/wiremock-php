@@ -22,7 +22,7 @@ Installation
 It easiest to install wiremock-php via Composer:
 
 ```bash
-php composer.phar require --dev wiremock-php/wiremock-php:2.25
+php composer.phar require --dev wiremock-php/wiremock-php:2.25.0
 ```
 
 Usage
