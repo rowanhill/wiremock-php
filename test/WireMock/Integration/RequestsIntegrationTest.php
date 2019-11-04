@@ -116,7 +116,9 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/unmatched');
         $this->_testClient->get('/unmatched2');
         $origServeEvents = self::$_wireMock->getAllServeEvents();
-        $requestId = ($origServeEvents->getRequests())[0]->getId();
+        $reqs = $origServeEvents->getRequests();
+        $firstRequest = $reqs[0];
+        $requestId = $firstRequest->getId();
 
         // when
         self::$_wireMock->removeServeEvent($requestId);
