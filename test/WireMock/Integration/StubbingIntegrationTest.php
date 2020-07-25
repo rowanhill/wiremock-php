@@ -5,6 +5,7 @@ namespace WireMock\Integration;
 require_once 'WireMockIntegrationTest.php';
 
 use WireMock\Client\WireMock;
+use WireMock\Client\XmlUnitComparisonType;
 use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
@@ -391,6 +392,20 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
                 true,
                 '\[\[',
                 ']]'))
+            ->willReturn(WireMock::aResponse()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponsesCanBeStubbedByBodyXmlExemptingSpecificComparisonTypes()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+            ->withRequestBody(
+                WireMock::equalToXml('<tag>Foo</tag>')
+                    ->exemptingComparisons(XmlUnitComparisonType::NAMESPACE_URI, XmlUnitComparisonType::ELEMENT_TAG_NAME)
+            )
             ->willReturn(WireMock::aResponse()));
 
         // then

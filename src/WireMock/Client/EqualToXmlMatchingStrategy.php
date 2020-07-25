@@ -6,6 +6,7 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
     private $_enablePlaceholders = false;
     private $_placeholderOpeningDelimiterRegex = null;
     private $_placeholderClosingDelimiterRegex = null;
+    private $_exemptedComparisons = null;
 
     /**
      * @param string $matchingValue
@@ -25,6 +26,17 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
         $this->_placeholderClosingDelimiterRegex = $placeholderClosingDelimiterRegex;
     }
 
+    /**
+     * @param string[] $comparisonTypes...
+     * @return $this
+     */
+    public function exemptingComparisons($comparisonTypes)
+    {
+        $comparisonTypes = func_get_args();
+        $this->_exemptedComparisons = $comparisonTypes;
+        return $this;
+    }
+
     public function toArray()
     {
         $array = parent::toArray();
@@ -36,6 +48,9 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
         }
         if ($this->_placeholderClosingDelimiterRegex) {
             $array['placeholderClosingDelimiterRegex'] = $this->_placeholderClosingDelimiterRegex;
+        }
+        if ($this->_exemptedComparisons) {
+            $array['exemptedComparisons'] = $this->_exemptedComparisons;
         }
         return $array;
     }
