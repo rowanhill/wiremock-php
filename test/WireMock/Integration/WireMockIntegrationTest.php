@@ -36,7 +36,7 @@ abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
         $output = array_map(function ($line) {
             return "\n$line";
         }, $output);
-        echo implode($output, "\n");
+        echo implode("\n", $output);
         assertThat($result, is(0));
     }
 
