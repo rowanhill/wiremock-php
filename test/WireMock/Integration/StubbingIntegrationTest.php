@@ -598,7 +598,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         self::setUpBeforeClass(); // start the server again
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping);
+        assertThatTheOnlyMappingPresentIs($stubMapping, true);
     }
 
     public function testStubsCanBeImmediatelyPersisted()
