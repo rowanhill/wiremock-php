@@ -27,7 +27,7 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
     }
 
     /**
-     * @param string[] $comparisonTypes...
+     * @param string $comparisonTypes...
      * @return $this
      */
     public function exemptingComparisons($comparisonTypes)

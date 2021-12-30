@@ -4,6 +4,7 @@ namespace WireMock\Integration;
 
 require_once 'WireMockIntegrationTest.php';
 
+use Exception;
 use WireMock\Client\DateTimeMatchingStrategy;
 use WireMock\Client\WireMock;
 use WireMock\Client\XmlUnitComparisonType;
@@ -672,7 +673,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     public function testStubIdIsReturnedInResponseHeader()
     {
         // given
-        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withId('76ada7b0-49ae-4229-91c4-396a36f18e09')
             ->willReturn(WireMock::aResponse()));
 
@@ -697,7 +698,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     public function testStubNameIsReturnedInResponseHeader()
     {
         // given
-        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/some/url'))
             ->withName('stub-name')
             ->willReturn(WireMock::aResponse()));
 
@@ -881,7 +882,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStubsCanBeImported()
     {
@@ -893,7 +894,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        /** @var StubMapping[] $mappings */
         $mappings = getMappings();
         $urls = array_map(function(/** @var $m StubMapping */$m) {
             return $m->getRequest()->getUrlMatchingStrategy()->getMatchingValue();
@@ -903,7 +903,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStubImportOverwritesStubsByDefault()
     {
@@ -919,7 +919,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         ));
 
         // then
-        /** @var StubMapping[] $mappings */
         $mappings = getMappings();
         assertThat($mappings, is(arrayWithSize(1)));
         $mapping = $mappings[0];
@@ -927,7 +926,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStubImportCanBeSetToIgnoreDuplicates()
     {
@@ -943,7 +942,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         )->ignoreExisting());
 
         // then
-        /** @var StubMapping[] $mappings */
         $mappings = getMappings();
         assertThat($mappings, is(arrayWithSize(1)));
         $mapping = $mappings[0];
@@ -951,7 +949,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStubImportLeavesExistingStubsInPlaceByDefault()
     {
@@ -965,7 +963,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        /** @var StubMapping[] $mappings */
         $mappings = getMappings();
         assertThat($mappings, is(arrayWithSize(3)));
         $urls = array_map(function(/** @var $m StubMapping */$m) {
@@ -976,7 +973,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testStubImportCanBeSetToReplaceAnyExistingStubs()
     {
@@ -991,7 +988,6 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        /** @var StubMapping[] $mappings */
         $mappings = getMappings();
         assertThat($mappings, is(arrayWithSize(2)));
         $urls = array_map(function(/** @var $m StubMapping */$m) {
