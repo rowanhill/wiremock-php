@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This is executed from the tests, so the current working directory is the tests folder.
 # Change to the wiremock directory

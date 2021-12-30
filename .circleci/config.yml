@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  php: circleci/php@1.1.0
+
+jobs:
+  run_tests_and_store_logs:
+    parameters:
+      version:
+        description: The PHP version to use, passed to the executor as tag
+        type: string
+    executor:
+      name: php/default
+      tag: "<< parameters.version >>-browsers"
+    steps:
+      - checkout
+      - php/install-packages
+      - run:
+          command: composer test
+      - store_artifacts:
+          path: wiremock/wiremock.1.log
+      - store_artifacts:
+          path: wiremock/wiremock.2.log
+
+workflows:
+  test_all_versions:
+    jobs:
+      - run_tests_and_store_logs:
+          matrix:
+            parameters:
+              version: ['7.0', '7.1', '7.2', '7.3', '7.4']

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Do something quick, without redirecting output anywhere
 cd ../wiremock

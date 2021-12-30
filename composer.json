@@ -17,6 +17,12 @@
         "psr-0": {"WireMock\\": "src"}
     },
 
+    "config": {
+        "platform": {
+            "php": "7.0"
+        }
+    },
+
     "require": {
         "ext-json": "*"
     },
@@ -27,5 +33,9 @@
 
     "suggest": {
         "phpunit/phpunit": "Thrown VerificationExceptions automatically fail tests"
+    },
+
+    "scripts": {
+        "test": "cd test && phpunit --configuration phpunit.xml --debug --verbose && cd .."
     }
 }
