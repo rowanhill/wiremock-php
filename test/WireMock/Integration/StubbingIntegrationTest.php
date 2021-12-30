@@ -4,6 +4,7 @@ namespace WireMock\Integration;
 
 require_once 'WireMockIntegrationTest.php';
 
+use WireMock\Client\DateTimeMatchingStrategy;
 use WireMock\Client\WireMock;
 use WireMock\Client\XmlUnitComparisonType;
 use WireMock\Stubbing\StubMapping;
@@ -449,6 +450,158 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponsesCanBeStubbedByBeforeLiteralMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::before("2021-05-01T00:00:00Z"))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponsesCanBeStubbedByBeforeNowMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::beforeNow())
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping, array(
+            function(&$arr) {
+                $arr['request']['headers']['X-Munged-Date']['before'] = "now +0 seconds";
+            }
+        ));
+    }
+
+    public function testResponsesCanBeStubbedByEqualToDateTimeLiteralMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::equalToDateTime("2021-05-01T00:00:00Z"))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponsesCanBeStubbedByIsNowMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::isNow())
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping, array(
+            function(&$arr) {
+                $arr['request']['headers']['X-Munged-Date']['equalToDateTime'] = "now +0 seconds";
+            }
+        ));
+    }
+
+    public function testResponsesCanBeStubbedByAfterLiteralMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::after("2021-05-01T00:00:00Z"))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponsesCanBeStubbedByAfterNowMatcher()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::afterNow())
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping, array(
+            function(&$arr) {
+                $arr['request']['headers']['X-Munged-Date']['after'] = "now +0 seconds";
+            }
+        ));
+    }
+
+    public function testResponsesCanBeStubbedByDateTimeMatcherWithOffset()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::after("now")
+                ->expectedOffset(3, DateTimeMatchingStrategy::DAYS))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping, array(
+            function(&$arr) {
+                $arr['request']['headers']['X-Munged-Date']['after'] = "now +3 days";
+                unset($arr['request']['headers']['X-Munged-Date']['expectedOffset']);
+                unset($arr['request']['headers']['X-Munged-Date']['expectedOffsetUnit']);
+            }
+        ));
+    }
+
+    public function testResponsesCanBeStubbedByDateTimeMatcherWithOffsetInStringSpec()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader("X-Munged-Date", WireMock::after("now +5 months"))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByDateTimeMatcherWithActualFormat()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader(
+                "X-Munged-Date",
+                WireMock::equalToDateTime("2021-05-01T00:00:00Z")
+                    ->actualFormat("dd/MM/yyyy")
+            )
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByDateTimeMatcherWithTruncatedExpected()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader(
+                "X-Munged-Date",
+                WireMock::equalToDateTime("2021-05-01T00:00:00Z")
+                    ->truncateExpected(DateTimeMatchingStrategy::FIRST_DAY_OF_MONTH)
+            )
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByDateTimeMatcherWithTruncatedActual()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::post(WireMock::urlEqualTo('/some/url'))
+            ->withHeader(
+                "X-Munged-Date",
+                WireMock::after("now +15 days")
+                    ->truncateActual(DateTimeMatchingStrategy::FIRST_DAY_OF_MONTH)
+            )
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testStubIdCanBeSet()
     {
         // when
@@ -613,7 +766,11 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         self::setUpBeforeClass(); // start the server again
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, true);
+        assertThatTheOnlyMappingPresentIs($stubMapping, array(
+            function(&$arr) {
+                $arr['persistent'] = true;
+            }
+        ));
     }
 
     public function testStubsCanBeImmediatelyPersisted()

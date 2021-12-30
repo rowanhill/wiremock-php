@@ -52,6 +52,11 @@ Also, Java has an overload of `withBody` that takes a byte array. Byte arrays ar
 `withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
 of bytes, use [pack](http://php.net/pack).
 
+The date and time request matcher functions (`before`, `beforeNow`, `equalToDateTime`, `isNow`, `after`, `afterNow`) can
+be used with offsets (`expectedOffset($amount, $unit)`). In the Java API, the unit parameter is an enum; in wiremock-php
+these values are consts on `DateTimeMatchingStrategy`. Similarly, truncation types (for use with `truncateExpected` and
+`truncateActual`) are enums in the Java API, but are consts on `DateTimeMatchingStrategy` in wiremock-php.
+
 The `stubImport` method is static on `StubBuilder` in Java. In WireMock, to keep all the public static methods in one
 predictable place, this method is available as `WireMock::stubImport`.
 

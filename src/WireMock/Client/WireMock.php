@@ -793,6 +793,57 @@ class WireMock
     }
 
     /**
+     * @param string $dateTimeSpec
+     * @return DateTimeMatchingStrategy
+     */
+    public static function before($dateTimeSpec)
+    {
+        return DateTimeMatchingStrategy::before($dateTimeSpec);
+    }
+
+    /**
+     * @return DateTimeMatchingStrategy
+     */
+    public static function beforeNow()
+    {
+        return DateTimeMatchingStrategy::before("now");
+    }
+
+    /**
+     * @param string $dateTimeSpec
+     * @return DateTimeMatchingStrategy
+     */
+    public static function equalToDateTime($dateTimeSpec)
+    {
+        return DateTimeMatchingStrategy::equalToDateTime($dateTimeSpec);
+    }
+
+    /**
+     * @return DateTimeMatchingStrategy
+     */
+    public static function isNow()
+    {
+        return DateTimeMatchingStrategy::equalToDateTime("now");
+    }
+
+    /**
+     * @param string $dateTimeSpec
+     * @return DateTimeMatchingStrategy
+     */
+    public static function after($dateTimeSpec)
+    {
+        return DateTimeMatchingStrategy::after($dateTimeSpec);
+    }
+
+    /**
+     * @return DateTimeMatchingStrategy
+     */
+    public static function afterNow()
+    {
+        return DateTimeMatchingStrategy::after("now");
+    }
+
+    /**
      * @return RecordSpecBuilder
      */
     public static function recordSpec()

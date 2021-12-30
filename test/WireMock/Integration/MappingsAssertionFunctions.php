@@ -3,7 +3,11 @@
 use WireMock\Client\ListStubMappingsResult;
 use WireMock\Stubbing\StubMapping;
 
-function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $hasBeenPersisted = false)
+/**
+ * @param StubMapping $localStubMapping
+ * @param callable[] $expectedTransformations
+ */
+function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $expectedTransformations = array())
 {
     $mappingsFromServer = getMappings();
     assertThat($mappingsFromServer, is(arrayWithSize(1)));
@@ -16,10 +20,8 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $hasBe
         // local and server mapping arrays not to match, unless we delete the server-returned method
         unset($serverStubMappingArray['request']['method']);
     }
-    if ($hasBeenPersisted) {
-        // If we've persisted the stubbing through some external means (e.g. saveAllMappings), we should
-        // expect the result from the server to indicate that it's persisted
-        $localStubMappingArray['persistent'] = true;
+    foreach ($expectedTransformations as $transformation) {
+        $transformation($localStubMappingArray);
     }
 
     assertThat($serverStubMappingArray, is($localStubMappingArray));
