@@ -202,7 +202,7 @@ class MappingBuilder
      * @param WebhookDefinition $webhook
      * @return $this
      */
-    public function withPostServeAction(string $name, WebhookDefinition $webhook)
+    public function withPostServeAction($name, WebhookDefinition $webhook)
     {
         if (!isset($this->_postServeActions)) {
             $this->_postServeActions = array();
