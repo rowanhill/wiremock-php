@@ -6,7 +6,7 @@ class ValueMatchingStrategy
 {
     /** @var string */
     protected $_matchingType;
-    /** @var string|boolean */
+    /** @var string|boolean|ValueMatchingStrategy[] */
     protected $_matchingValue;
 
     public function __construct($matchingType, $matchingValue)
@@ -18,5 +18,15 @@ class ValueMatchingStrategy
     public function toArray()
     {
         return array($this->_matchingType => $this->_matchingValue);
+    }
+
+    public function and(ValueMatchingStrategy $other)
+    {
+        return LogicalOperatorMatchingStrategy::andAll($this, $other);
+    }
+
+    public function or(ValueMatchingStrategy $other)
+    {
+        return LogicalOperatorMatchingStrategy::orAll($this, $other);
     }
 }

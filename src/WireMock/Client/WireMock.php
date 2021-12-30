@@ -844,6 +844,24 @@ class WireMock
     }
 
     /**
+     * @param ValueMatchingStrategy ...$matchers
+     * @return LogicalOperatorMatchingStrategy
+     */
+    public static function and(...$matchers)
+    {
+        return LogicalOperatorMatchingStrategy::andAll(...$matchers);
+    }
+
+    /**
+     * @param ValueMatchingStrategy ...$matchers
+     * @return LogicalOperatorMatchingStrategy
+     */
+    public static function or(...$matchers)
+    {
+        return LogicalOperatorMatchingStrategy::orAll(...$matchers);
+    }
+
+    /**
      * @return RecordSpecBuilder
      */
     public static function recordSpec()

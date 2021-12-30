@@ -27,6 +27,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "php": ">=7.0",
         "phpunit/phpunit": "^4.0 | ^5.0",
         "hafriedlander/phockito": "^1.0"
     },

@@ -602,6 +602,62 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponseCanBeStubbedByLogicalAndOfMatchersFromStaticMethod()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo("/and"))
+            ->withHeader("X-Some-Value", WireMock::and(
+                WireMock::matching("[a-z]+"),
+                WireMock::containing("magicvalue")
+            ))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByLogicalAndOfChainedMatchers()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo("/and"))
+            ->withHeader(
+                "X-Some-Value",
+                WireMock::matching("[a-z]+")->and(WireMock::containing("magicvalue"))
+            )
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByLogicalOrOfMatchersFromStaticMethod()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo("/or"))
+            ->withQueryParam("search", WireMock::or(
+                WireMock::matching("[a-z]+"),
+                WireMock::absent()
+            ))
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
+    public function testResponseCanBeStubbedByLogicalOrOfChainedMatchers()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlPathEqualTo("/or"))
+            ->withQueryParam(
+                "search",
+                WireMock::matching("[a-z]+")->or(WireMock::absent())
+            )
+            ->willReturn(WireMock::ok()));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testStubIdCanBeSet()
     {
         // when
