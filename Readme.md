@@ -52,10 +52,6 @@ Also, Java has an overload of `withBody` that takes a byte array. Byte arrays ar
 `withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
 of bytes, use [pack](http://php.net/pack).
 
-The request body matcher `equalToJson` takes an optional `$jsonCompareMode` parameter. In the Java API, these are enum
-values on org.skyscreamer.jsonassert.JSONCompareMode; in wiremock-php, these values are consts on
-`JsonValueMatchingStrategy`.
-
 The `stubImport` method is static on `StubBuilder` in Java. In WireMock, to keep all the public static methods in one
 predictable place, this method is available as `WireMock::stubImport`.
 
