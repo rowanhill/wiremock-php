@@ -8,8 +8,6 @@ use DateTimeZone;
 use WireMock\Client\LoggedRequest;
 use WireMock\Client\WireMock;
 
-require_once 'WireMockIntegrationTest.php';
-
 class RequestsIntegrationTest extends WireMockIntegrationTest
 {
     public function testGettingAllServeEventsReturnsAllRequestDetails()

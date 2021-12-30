@@ -4,9 +4,6 @@ namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
 
-require_once 'MappingsAssertionFunctions.php';
-require_once 'TestClient.php';
-
 abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /** @var WireMock */

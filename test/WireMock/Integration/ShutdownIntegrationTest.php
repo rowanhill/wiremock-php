@@ -2,8 +2,6 @@
 
 namespace WireMock\Integration;
 
-require_once 'WireMockIntegrationTest.php';
-
 class ShutdownIntegrationTest extends WireMockIntegrationTest
 {
     public function testShutdownTerminatesStandaloneServer()

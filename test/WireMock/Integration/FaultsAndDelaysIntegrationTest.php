@@ -6,8 +6,6 @@ use WireMock\Client\WireMock;
 use WireMock\Fault\UniformDistribution;
 use WireMock\Stubbing\Fault;
 
-require_once 'WireMockIntegrationTest.php';
-
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
     protected function tearDown()

@@ -6,8 +6,6 @@ use WireMock\Client\WireMock;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpec;
 
-require_once 'WireMockIntegrationTest.php';
-
 class RecordingIntegrationTest extends WireMockIntegrationTest
 {
     /** @var WireMock */

@@ -5,8 +5,6 @@ namespace WireMock\Integration;
 use WireMock\Client\WireMock;
 use WireMock\Stubbing\Scenario;
 
-require_once 'WireMockIntegrationTest.php';
-
 class ScenarioIntegrationTest extends WireMockIntegrationTest
 {
     public function testScenarioNameOfStubCanBeSet()

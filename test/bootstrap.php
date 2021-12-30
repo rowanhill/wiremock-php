@@ -2,6 +2,9 @@
 require_once('../vendor/autoload.php');
 require_once('../vendor/hafriedlander/phockito/Phockito_Globals.php');
 Phockito::include_hamcrest(true);
+require_once './WireMock/Integration/WireMockIntegrationTest.php';
+require_once './WireMock/Integration/MappingsAssertionFunctions.php';
+require_once './WireMock/Integration/TestClient.php';
 
 // Some systems (e.g. OSX) don't block on commands exec()ed in the below fashion. Other systems (e.g. Travis) do.
 // Systems which do block need to have their output redirected from stdout/stderr if the command being exec()ed is

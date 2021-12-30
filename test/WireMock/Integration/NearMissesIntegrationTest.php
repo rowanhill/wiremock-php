@@ -4,8 +4,6 @@ namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
 
-require_once 'WireMockIntegrationTest.php';
-
 class NearMissesIntegrationTest extends WireMockIntegrationTest
 {
     public function testFindNearMissesForLoggedRequest()

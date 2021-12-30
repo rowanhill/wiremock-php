@@ -5,8 +5,6 @@ namespace WireMock\Integration;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\WireMock;
 
-require_once 'WireMockIntegrationTest.php';
-
 class MultipartIntegrationTest extends WireMockIntegrationTest
 {
     public function testSimpleMultipartStubCanBeRegistered()
