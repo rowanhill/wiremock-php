@@ -2,6 +2,8 @@
 
 namespace WireMock\Client;
 
+use WireMock\PostServe\PostServeAction;
+use WireMock\PostServe\WebhookDefinition;
 use WireMock\Stubbing\StubMapping;
 
 class MappingBuilder
@@ -22,6 +24,8 @@ class MappingBuilder
     private $_metadata;
     /** @var boolean */
     private $_isPersistent;
+    /** @var PostServeAction[]|null */
+    private $_postServeActions;
 
     public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
@@ -194,6 +198,20 @@ class MappingBuilder
     }
 
     /**
+     * @param string $name Name of the post-serve action
+     * @param WebhookDefinition $webhook
+     * @return $this
+     */
+    public function withPostServeAction(string $name, WebhookDefinition $webhook)
+    {
+        if (!isset($this->_postServeActions)) {
+            $this->_postServeActions = array();
+        }
+        $this->_postServeActions[] = new PostServeAction($name, $webhook);
+        return $this;
+    }
+
+    /**
      * @return StubMapping
      * @throws \Exception
      */
@@ -208,7 +226,8 @@ class MappingBuilder
             $this->_priority,
             $this->_scenarioBuilder->build(),
             $this->_metadata,
-            $this->_isPersistent
+            $this->_isPersistent,
+            $this->_postServeActions
         );
     }
 }

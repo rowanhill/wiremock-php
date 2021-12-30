@@ -48,9 +48,9 @@ methods. Those methods are:
 - `setGlobalFixedDelay`, `addRequestProcessingDelay`
 - `shutdownServer`
 
-Also, Java has an overload of `withBody` that takes a byte array. Byte arrays are less common in PHP, so instead,
-`withBodyData` is provided, which takes a string to base64 encoded. To produce an appropriate string from an array
-of bytes, use [pack](http://php.net/pack).
+Also, the Java API has methods (`ResponseDefinitionBuilder::withBody` and `WebhookDefinition::withBinaryBody`) that take
+a byte array. Byte arrays are less common in PHP, so instead, `withBodyData` methods are provided, which takes a string
+to be base64 encoded. To produce an appropriate string from an array of bytes, use [pack](http://php.net/pack).
 
 The date and time request matcher functions (`before`, `beforeNow`, `equalToDateTime`, `isNow`, `after`, `afterNow`) can
 be used with offsets (`expectedOffset($amount, $unit)`). In the Java API, the unit parameter is an enum; in wiremock-php
@@ -59,6 +59,8 @@ these values are consts on `DateTimeMatchingStrategy`. Similarly, truncation typ
 
 The `stubImport` method is static on `StubBuilder` in Java. In WireMock, to keep all the public static methods in one
 predictable place, this method is available as `WireMock::stubImport`.
+
+The request method constants are available on `WireMock\Http\RequestMethod`;
 
 In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
 response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.

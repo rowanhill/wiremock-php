@@ -4,6 +4,7 @@ namespace WireMock\Stubbing;
 
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
+use WireMock\PostServe\PostServeAction;
 
 class StubMapping
 {
@@ -28,6 +29,8 @@ class StubMapping
     private $_requiredScenarioState;
     /** @var string */
     private $_newScenarioState;
+    /** @var PostServeAction[]|null */
+    private $_postServeActions;
     /**
      * @var null
      */
@@ -42,6 +45,7 @@ class StubMapping
      * @param ScenarioMapping|null $scenarioMapping
      * @param array $metadata
      * @param boolean $isPersistent
+     * @param array|null $postServeActions
      */
     public function __construct(
         RequestPattern $requestPattern,
@@ -51,7 +55,8 @@ class StubMapping
         $priority = null,
         $scenarioMapping = null,
         $metadata = null,
-        $isPersistent = null
+        $isPersistent = null,
+        $postServeActions = null
     )
     {
         $this->_id = $id;
@@ -61,6 +66,7 @@ class StubMapping
         $this->_priority = $priority;
         $this->_metadata = $metadata;
         $this->_isPersistent = $isPersistent;
+        $this->_postServeActions = $postServeActions;
 
         if ($scenarioMapping) {
             $this->_scenarioName = $scenarioMapping->getScenarioName();
@@ -188,6 +194,11 @@ class StubMapping
         if ($this->_isPersistent) {
             $array['persistent'] = $this->_isPersistent;
         }
+        if ($this->_postServeActions) {
+            $array['postServeActions'] = array_map(function($action) {
+                return $action->toArray();
+            }, $this->_postServeActions);
+        }
         return $array;
     }
 
@@ -210,7 +221,10 @@ class StubMapping
                 isset($array['newScenarioState']) ? $array['newScenarioState'] : null
             ),
             isset($array['metadata']) ? $array['metadata'] : null,
-            isset($array['persistent']) ? $array['persistent'] : null
+            isset($array['persistent']) ? $array['persistent'] : null,
+            isset($array['postServeActions']) ?
+                array_map(function($action) { return PostServeAction::fromArray($action); }, $array['postServeActions']) :
+                null
         );
     }
 }

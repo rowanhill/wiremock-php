@@ -6,6 +6,7 @@ use DateTime;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpecBuilder;
 use WireMock\Recording\SnapshotRecordResult;
@@ -1124,5 +1125,10 @@ class WireMock
     public static function stubImport()
     {
         return new StubImportBuilder();
+    }
+
+    public static function webhook(): WebhookDefinition
+    {
+        return new WebhookDefinition();
     }
 }
