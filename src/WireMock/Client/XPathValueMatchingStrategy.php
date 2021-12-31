@@ -53,4 +53,25 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
             );
         }
     }
+
+    public static function fromArray(array $array)
+    {
+        if (is_array($array['matchesXPath'])) {
+            $matchingValue = $array['matchesXPath']['expression'];
+            $matchingStrategyArray = $array['matchesXPath'];
+            unset($matchingStrategyArray['expression']);
+            $matchingStrategy = ValueMatchingStrategy::fromArray($matchingStrategyArray);
+            return new self($matchingValue, $matchingStrategy);
+        } else {
+            $matchingValue = $array['matchesXPath'];
+            $result = new self($matchingValue);
+            if (isset($array['xPathNamespaces'])) {
+                $namespaces = $array['xPathNamespaces'];
+                foreach ($namespaces as $name => $uri) {
+                    $result->withXPathNamespace($name, $uri);
+                }
+            }
+            return $result;
+        }
+    }
 }

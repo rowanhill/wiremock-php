@@ -25,4 +25,12 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy
         }
         return $array;
     }
+
+    public static function fromArray(array $array)
+    {
+        $matchingValue = $array['equalToJson'];
+        $ignoreArrayOrder = isset($array['ignoreArrayOrder']) && $array['ignoreArrayOrder'];
+        $ignoreExtraElements = isset($array['ignoreExtraElements']) && $array['ignoreExtraElements'];
+        return new self($matchingValue, $ignoreArrayOrder, $ignoreExtraElements);
+    }
 }

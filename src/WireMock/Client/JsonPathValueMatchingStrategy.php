@@ -32,4 +32,18 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy
             );
         }
     }
+
+    public static function fromArray(array $array)
+    {
+        if (is_array($array['matchesJsonPath'])) {
+            $matchingValue = $array['matchesJsonPath']['expression'];
+            $matchingStrategyArray = $array['matchesJsonPath'];
+            unset($matchingStrategyArray['expression']);
+            $matchingStrategy = ValueMatchingStrategy::fromArray($matchingStrategyArray);
+            return new self($matchingValue, $matchingStrategy);
+        } else {
+            $matchingValue = $array['matchesJsonPath'];
+            return new self($matchingValue);
+        }
+    }
 }

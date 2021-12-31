@@ -451,6 +451,17 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
+    public function testResponsesCanBeStubbedByHostMatching()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get("/things")
+            ->withHost(WireMock::equalTo("my.first.domain"))
+            ->willReturn(WireMock::ok("Domain 1")));
+
+        // then
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
+
     public function testResponsesCanBeStubbedByBeforeLiteralMatcher()
     {
         // when

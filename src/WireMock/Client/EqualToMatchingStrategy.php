@@ -20,4 +20,15 @@ class EqualToMatchingStrategy extends ValueMatchingStrategy
         }
         return $array;
     }
+
+    /**
+     * @param array $array
+     * @return EqualToMatchingStrategy
+     */
+    public static function fromArray(array $array)
+    {
+        $matchingValue = $array['equalTo'];
+        $ignoreCase = isset($array['caseInsensitive']) && $array['caseInsensitive'];
+        return new self($matchingValue, $ignoreCase);
+    }
 }

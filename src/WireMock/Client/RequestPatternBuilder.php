@@ -10,16 +10,22 @@ class RequestPatternBuilder
 {
     private $_method;
     private $_urlMatchingStrategy;
+    /** @var ValueMatchingStrategy[] */
     private $_headers = array();
+    /** @var ValueMatchingStrategy[] */
     private $_cookies = array();
+    /** @var ValueMatchingStrategy[] */
     private $_queryParameters = array();
+    /** @var ValueMatchingStrategy[] */
     private $_bodyPatterns = array();
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_multipartPatterns = array();
     /** @var BasicCredentials */
     private $_basicCredentials;
     /** @var CustomMatcherDefinition */
     private $_customMatcherDefinition;
+    /** @var ValueMatchingStrategy[] */
+    private $_hostPattern;
 
     /**
      * @param string $methodOrCustomMatcherName
@@ -122,6 +128,16 @@ class RequestPatternBuilder
     }
 
     /**
+     * @param ValueMatchingStrategy $hostMatcher
+     * @return $this
+     */
+    public function withHost($hostMatcher)
+    {
+        $this->_hostPattern = $hostMatcher;
+        return $this;
+    }
+
+    /**
      * @return RequestPattern
      */
     public function build()
@@ -135,7 +151,8 @@ class RequestPatternBuilder
             $this->_multipartPatterns,
             $this->_queryParameters,
             $this->_basicCredentials,
-            $this->_customMatcherDefinition
+            $this->_customMatcherDefinition,
+            $this->_hostPattern
         );
     }
 }

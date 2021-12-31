@@ -4,6 +4,7 @@ namespace WireMock\Matching;
 
 use WireMock\Client\BasicCredentials;
 use WireMock\Client\MultipartValuePattern;
+use WireMock\Client\ValueMatchingStrategy;
 
 class RequestPattern
 {
@@ -11,13 +12,13 @@ class RequestPattern
     private $_method;
     /** @var UrlMatchingStrategy  */
     private $_urlMatchingStrategy;
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_headers;
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_cookies;
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_queryParameters;
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_bodyPatterns;
     /** @var null|MultipartValuePattern[] */
     private $_multipartPatterns;
@@ -25,17 +26,20 @@ class RequestPattern
     private $_basicCredentials;
     /** @var CustomMatcherDefinition */
     private $_customMatcherDefinition;
+    /** @var ValueMatchingStrategy */
+    private $_hostPattern;
 
     /**
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @param array $headers
-     * @param array $cookies
-     * @param array $bodyPatterns
-     * @param array $multipartPatterns
-     * @param array $queryParameters
+     * @param ValueMatchingStrategy[] $headers
+     * @param ValueMatchingStrategy[] $cookies
+     * @param ValueMatchingStrategy[] $bodyPatterns
+     * @param ValueMatchingStrategy[] $multipartPatterns
+     * @param ValueMatchingStrategy[] $queryParameters
      * @param BasicCredentials $basicCredentials
      * @param CustomMatcherDefinition $customMatcherDefinition
+     * @param ValueMatchingStrategy $hostPattern
      */
     public function __construct(
         $method,
@@ -46,7 +50,8 @@ class RequestPattern
         $multipartPatterns = null,
         $queryParameters = null,
         $basicCredentials = null,
-        $customMatcherDefinition = null
+        $customMatcherDefinition = null,
+        $hostPattern = null
     ) {
         $this->_method = $method;
         $this->_urlMatchingStrategy = $urlMatchingStrategy;
@@ -57,6 +62,7 @@ class RequestPattern
         $this->_basicCredentials = $basicCredentials;
         $this->_multipartPatterns = $multipartPatterns;
         $this->_customMatcherDefinition = $customMatcherDefinition;
+        $this->_hostPattern = $hostPattern;
     }
 
     /**
@@ -161,6 +167,9 @@ class RequestPattern
         if ($this->_customMatcherDefinition) {
             $array['customMatcher'] = $this->_customMatcherDefinition->toArray();
         }
+        if ($this->_hostPattern) {
+            $array['host'] = $this->_hostPattern->toArray();
+        }
         return $array;
     }
 
@@ -180,8 +189,8 @@ class RequestPattern
             isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
             isset($array['queryParameters']) ? $array['queryParameters'] : null,
             isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null,
-            isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null
-
+            isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null,
+            isset($array['host']) ? ValueMatchingStrategy::fromArray($array['host']) : null
         );
     }
 }

@@ -23,6 +23,19 @@ class LogicalOperatorMatchingStrategy extends ValueMatchingStrategy
     }
 
     /**
+     * @param array $array
+     * @param string $operator
+     * @return LogicalOperatorMatchingStrategy
+     */
+    public static function fromArrayForOperator(array $array, $operator)
+    {
+        $matchers = array_map(function($matcherArray) {
+            return ValueMatchingStrategy::fromArray($matcherArray);
+        }, $array[$operator]);
+        return new self($operator, $matchers);
+    }
+
+    /**
      * @param ValueMatchingStrategy $matchers
      * @return LogicalOperatorMatchingStrategy
      */

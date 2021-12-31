@@ -138,6 +138,16 @@ class MappingBuilder
     }
 
     /**
+     * @param ValueMatchingStrategy $hostMatcher
+     * @return $this
+     */
+    public function withHost($hostMatcher)
+    {
+        $this->_requestPatternBuilder->withHost($hostMatcher);
+        return $this;
+    }
+
+    /**
      * @param string $scenarioName
      * @return MappingBuilder
      */

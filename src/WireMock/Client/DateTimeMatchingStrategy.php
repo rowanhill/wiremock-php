@@ -93,6 +93,28 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy
         return $array;
     }
 
+    /**
+     * @param array $array
+     * @param DateTimeMatchingStrategy $obj
+     * @return DateTimeMatchingStrategy
+     */
+    public static function extendFromArray(array $array, self $obj)
+    {
+        if (isset($array['expectedOffset']) && isset($array['expectedOffsetUnit'])) {
+            $obj->expectedOffset($array['expectedOffset'], $array['expectedOffsetUnit']);
+        }
+        if (isset($array['actualFormat'])) {
+            $obj->actualFormat($array['actualFormat']);
+        }
+        if (isset($array['truncateExpected'])) {
+            $obj->truncateExpected($array['truncateExpected']);
+        }
+        if (isset($array['truncateActual'])) {
+            $obj->truncateActual($array['truncateActual']);
+        }
+        return $obj;
+    }
+
     public static function before($dateTimeSpec)
     {
         return new self("before", $dateTimeSpec);

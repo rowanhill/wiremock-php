@@ -54,4 +54,17 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
         }
         return $array;
     }
+
+    public static function fromArray(array $array)
+    {
+        $matchingValue = $array['equalToXml'];
+        $enablePlaceholders = isset($array['enablePlaceholders']) && $array['enablePlaceholders'];
+        $placeholderOpeningDelimiterRegex = isset($array['placeholderOpeningDelimiterRegex']) && $array['placeholderOpeningDelimiterRegex'];
+        $placeholderClosingDelimiterRegex = isset($array['placeholderClosingDelimiterRegex']) && $array['placeholderClosingDelimiterRegex'];
+        $result = new self($matchingValue, $enablePlaceholders, $placeholderOpeningDelimiterRegex, $placeholderClosingDelimiterRegex);
+        if (isset($array['exemptedComparisons'])) {
+            $result->exemptingComparisons(...$array['exemptedComparisons']);
+        }
+        return $result;
+    }
 }
