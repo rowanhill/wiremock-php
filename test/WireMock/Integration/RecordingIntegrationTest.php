@@ -77,7 +77,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         // given
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
-        self::$_wireMock->startRecording('http://localhost:8082/');
+        self::$_wireMock->startRecording('http://localhost:8082');
         $this->_testClient->get('/recordables/123');
 
         // when
@@ -95,7 +95,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->startRecording(Wiremock::recordSpec()
-            ->forTarget('http://localhost:8082/')
+            ->forTarget('http://localhost:8082')
             ->onlyRequestsMatching(WireMock::getRequestedFor(WireMock::urlPathMatching('/recordables/.*')))
             ->matchRequestBodyWithEqualToJson()
         );
@@ -116,7 +116,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
-            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082')));
         $this->_testClient->get('/recordables/123');
 
         // when
@@ -134,12 +134,12 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
-            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082')));
         $this->_testClient->get('/recordables/123');
 
         // when
         $result = self::$_wireMock->snapshotRecord(Wiremock::recordSpec()
-            ->forTarget('http://localhost:8082/')
+            ->forTarget('http://localhost:8082')
             ->onlyRequestsMatching(WireMock::getRequestedFor(WireMock::urlPathMatching('/recordables/.*')))
             ->matchRequestBodyWithEqualToJson()
         );
@@ -156,7 +156,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->startRecording(Wiremock::recordSpec()
-            ->forTarget('http://localhost:8082/')
+            ->forTarget('http://localhost:8082')
             ->withOutputFormat(RecordSpec::IDS)
         );
         $this->_testClient->get('/recordables/123');
@@ -174,12 +174,12 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
-            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082')));
         $this->_testClient->get('/recordables/123');
 
         // when
         $result = self::$_wireMock->snapshotRecord(Wiremock::recordSpec()
-            ->forTarget('http://localhost:8082/')
+            ->forTarget('http://localhost:8082')
             ->withOutputFormat(RecordSpec::IDS));
 
         // then
@@ -231,7 +231,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         self::$_wireMock2->stubFor(WireMock::get(WireMock::urlPathEqualTo('/recordables/123'))
             ->willReturn(WireMock::aResponse()->withBody('Some Body')));
         self::$_wireMock->stubFor(WireMock::any(WireMock::anyUrl())
-            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082/')));
+            ->willReturn(WireMock::aResponse()->proxiedFrom('http://localhost:8082')));
         $this->_testClient->get('/recordables/123');
         $serveEvents = self::$_wireMock->getAllServeEvents()->getRequests();
 
