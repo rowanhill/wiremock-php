@@ -246,6 +246,17 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
         assertThat($responseDef->getBody(), is('body'));
     }
 
+    public function testJsonResponseIsConvenienceForResponseWithStatusBodyAndJsonContentType()
+    {
+        // when
+        $responseDef = WireMock::jsonResponse('body', 403)->build();
+
+        // then
+        assertThat($responseDef->getStatus(), is(403));
+        assertThat($responseDef->getHeaders(), is(array('Content-Type' => 'application/json')));
+        assertThat($responseDef->getBody(), is('body'));
+    }
+
     public function testProxyToAllIsConvenienceMethodForProxyingAnyToUrl()
     {
         // when

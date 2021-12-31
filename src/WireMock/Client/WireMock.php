@@ -1004,6 +1004,18 @@ class WireMock
     }
 
     /**
+     * @param string $body
+     * @param integer $status
+     * @return ResponseDefinitionBuilder
+     */
+    public static function jsonResponse($body, $status) {
+        return self::aResponse()
+            ->withStatus($status)
+            ->withHeader('Content-Type', "application/json")
+            ->withBody($body);
+    }
+
+    /**
      * @param string $url
      * @return MappingBuilder
      */
