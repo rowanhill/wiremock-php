@@ -6,6 +6,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use WireMock\Client\LoggedRequest;
+use WireMock\Client\ServeEventQuery;
 use WireMock\Client\WireMock;
 
 class RequestsIntegrationTest extends WireMockIntegrationTest
@@ -55,6 +56,7 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::aResponse()));
         $this->_testClient->get('/matched');
         $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/unmatched2');
 
         // when
         $serveEvents = self::$_wireMock->getAllServeEvents(null, 1);
@@ -62,7 +64,58 @@ class RequestsIntegrationTest extends WireMockIntegrationTest
         // then
         $requests = $serveEvents->getRequests();
         assertThat($requests, arrayWithSize(1));
-        assertThat($requests[0]->getRequest()->getUrl(), equalTo('/unmatched'));
+        assertThat($requests[0]->getRequest()->getUrl(), equalTo('/unmatched2'));
+    }
+
+    public function testGettingAllServeEventsCanBePaginatedWithServeEventQuery()
+    {
+        $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/unmatched2');
+        $oneMinuteAgo = new DateTime('now', new DateTimeZone('UTC'));
+        $oneMinuteAgo->sub(new DateInterval('PT1M'));
+
+        // when
+        $serveEvents = self::$_wireMock->getAllServeEvents(ServeEventQuery::paginated($oneMinuteAgo, 1));
+
+        // then
+        assertThat($serveEvents->getRequests(), arrayWithSize(1));
+        assertThat($serveEvents->getRequests()[0]->getRequest()->getUrl(), equalTo('/unmatched2'));
+    }
+
+    public function testGettingUnmatchedServeEvents()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/matched'))
+            ->willReturn(WireMock::aResponse()));
+        $this->_testClient->get('/matched');
+        $this->_testClient->get('/unmatched');
+        $this->_testClient->get('/unmatched2');
+
+        // when
+        $serveEvents = self::$_wireMock->getAllServeEvents(ServeEventQuery::unmatched());
+
+        // then
+        $requests = $serveEvents->getRequests();
+        assertThat($requests, arrayWithSize(2));
+        assertThat($requests[0]->getRequest()->getUrl(), equalTo('/unmatched2'));
+        assertThat($requests[1]->getRequest()->getUrl(), equalTo('/unmatched'));
+    }
+
+    public function testGettingServeEventsForStub()
+    {
+        // given
+        $stub = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/matched'))
+            ->willReturn(WireMock::aResponse()));
+        $this->_testClient->get('/matched');
+        $this->_testClient->get('/unmatched');
+
+        // when
+        $serveEvents = self::$_wireMock->getAllServeEvents(ServeEventQuery::forStubMapping($stub->getId()));
+
+        // then
+        $requests = $serveEvents->getRequests();
+        assertThat($requests, arrayWithSize(1));
+        assertThat($requests[0]->getRequest()->getUrl(), equalTo('/matched'));
     }
 
     public function testFindingAllRequestsReturnsMatchingRequestDetails()

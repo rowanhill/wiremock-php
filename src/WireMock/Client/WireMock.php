@@ -124,25 +124,31 @@ class WireMock
     }
 
     /**
-     * @param DateTime $since
-     * @param int $limit
+     * getAllServeEvents can be called in a variety of ways:
+     * - with no parameters, to return all serve events
+     * - with an optional DateTime as the first param and an optional int as the second param to specify
+     *   since and limit, for pagination
+     * - with a ServeEventQuery (since 2.32) which provides additional controls
+     *
+     * @param ServeEventQuery|DateTime|null $sinceOrQuery
+     * @param int|null $limit
      * @return GetServeEventsResult
      */
-    public function getAllServeEvents($since = null, $limit = null)
+    public function getAllServeEvents($sinceOrQuery = null, $limit = null)
     {
         $pathAndParams = '__admin/requests';
-        if ($since || $limit) {
-            $pathAndParams .= '?';
-            if ($since) {
-                $pathAndParams .= 'since=' . urlencode($since->format(DateTime::ATOM));
-            }
-            if ($since && $limit) {
-                $pathAndParams .= '&';
-            }
-            if ($limit) {
-                $pathAndParams .= 'limit=' . urlencode($limit);
-            }
+
+        if ($sinceOrQuery instanceof ServeEventQuery) {
+            $query = $sinceOrQuery;
+        } else {
+            $query = ServeEventQuery::paginated($sinceOrQuery, $limit);
         }
+
+        $params = $query->toParamsString();
+        if ($params != '') {
+            $pathAndParams .= '?' . $params;
+        }
+
         $url = $this->_makeUrl($pathAndParams);
         $result = file_get_contents($url);
         $resultArray = json_decode($result, true);
