@@ -36,6 +36,8 @@ class ResponseDefinition
     private $_transformers = array();
     /** @var array */
     private $_transformerParameters = array();
+    /** @var string */
+    private $_proxyUrlPrefixToRemove;
 
     /**
      * ResponseDefinition constructor.
@@ -68,7 +70,8 @@ class ResponseDefinition
         $chunkedDribbleDelay,
         $fault,
         $transformers,
-        $transformerParameters
+        $transformerParameters,
+        $proxyUrlPrefixToRemove
     ) {
         $this->_status = $status;
         $this->_statusMessage = $statusMessage;
@@ -84,6 +87,7 @@ class ResponseDefinition
         $this->_transformers = $transformers;
         $this->_transformerParameters = $transformerParameters;
         $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
+        $this->_proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
     }
 
     /**
@@ -198,6 +202,14 @@ class ResponseDefinition
         return $this->_transformerParameters;
     }
 
+    /**
+     * @return string
+     */
+    public function getProxyUrlPrefixToRemove()
+    {
+        return $this->_proxyUrlPrefixToRemove;
+    }
+
     public function toArray()
     {
         $array = array();
@@ -241,6 +253,9 @@ class ResponseDefinition
         if ($this->_transformerParameters) {
             $array['transformerParameters'] = $this->_transformerParameters;
         }
+        if ($this->_proxyUrlPrefixToRemove) {
+            $array['proxyUrlPrefixToRemove'] = $this->_proxyUrlPrefixToRemove;
+        }
         return $array;
     }
 
@@ -271,7 +286,8 @@ class ResponseDefinition
                 null,
             isset($array['fault']) ? $array['fault'] : null,
             isset($array['transformers']) ? $array['transformers'] : null,
-            isset($array['transformerParameters']) ? $array['transformerParameters'] : null
+            isset($array['transformerParameters']) ? $array['transformerParameters'] : null,
+            isset($array['proxyUrlPrefixToRemove']) ? $array['proxyUrlPrefixToRemove'] : null
         );
     }
 }

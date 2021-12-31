@@ -29,6 +29,8 @@ class ResponseDefinitionBuilder
     private $_transformerParameters = array();
 
     protected $_additionalRequestHeaders = array();
+    /** @var string */
+    protected $_proxyUrlPrefixToRemove;
 
     /**
      * @param int $status
@@ -222,7 +224,8 @@ class ResponseDefinitionBuilder
             $this->_chunkedDribbleDelay,
             $this->_fault,
             $this->_transformers,
-            $this->_transformerParameters
+            $this->_transformerParameters,
+            $this->_proxyUrlPrefixToRemove
         );
     }
 }
@@ -248,6 +251,16 @@ class ProxiedResponseDefinitionBuilder extends ResponseDefinitionBuilder
     public function withAdditionalRequestHeader($headerName, $value)
     {
         $this->_additionalRequestHeaders[$headerName] = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $proxyUrlPrefixToRemove
+     * @return $this
+     */
+    public function withProxyUrlPrefixToRemove($proxyUrlPrefixToRemove)
+    {
+        $this->_proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
         return $this;
     }
 }

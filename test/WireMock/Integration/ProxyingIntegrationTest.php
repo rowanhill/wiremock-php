@@ -34,4 +34,18 @@ class ProxyingIntegrationTest extends WireMockIntegrationTest
         assertThat($stubMappingArray['response']['additionalProxyRequestHeaders'], equalTo(array('X-Header' => 'val')));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
+
+    public function testProxyUrlPrefixToRemoveCanBeSet()
+    {
+        // when
+        $stubMapping = self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo("/other/service/doc/123"))
+            ->willReturn(WireMock::aResponse()
+                ->proxiedFrom("http://otherhost.com/approot")
+                ->withProxyUrlPrefixToRemove("/other/service")));
+
+        // then
+        $stubMappingArray = $stubMapping->toArray();
+        assertThat($stubMappingArray['response']['proxyUrlPrefixToRemove'], equalTo('/other/service'));
+        assertThatTheOnlyMappingPresentIs($stubMapping);
+    }
 }
