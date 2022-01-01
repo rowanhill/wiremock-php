@@ -41,7 +41,7 @@ class Curl
      * @return string The response body
      * @throws ClientException
      */
-    public function delete(string $url)
+    public function delete($url)
     {
         return $this->makeCurlRequest('DELETE', $url);
     }
