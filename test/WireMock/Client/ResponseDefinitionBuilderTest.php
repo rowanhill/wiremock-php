@@ -2,7 +2,9 @@
 
 namespace WireMock\Client;
 
-class ResponseDefinitionBuilderTest extends \PHPUnit_Framework_TestCase
+use WireMock\HamcrestTestCase;
+
+class ResponseDefinitionBuilderTest extends HamcrestTestCase
 {
     public function testDefault200StatusIsAvailableInArray()
     {

@@ -2,7 +2,9 @@
 
 namespace WireMock\Matching;
 
-class UrlMatchingStrategyTest extends \PHPUnit_Framework_TestCase
+use WireMock\HamcrestTestCase;
+
+class UrlMatchingStrategyTest extends HamcrestTestCase
 {
     public function testMatchingTypeAndMatchingValueAreAvailableAsArray()
     {

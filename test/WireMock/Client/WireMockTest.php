@@ -2,10 +2,12 @@
 
 namespace WireMock\Client;
 
+use Phake;
+use WireMock\HamcrestTestCase;
 use WireMock\Matching\RequestPattern;
 use WireMock\Stubbing\StubMapping;
 
-class WireMockTest extends \PHPUnit_Framework_TestCase
+class WireMockTest extends HamcrestTestCase
 {
     /** @var HttpWait */
     private $_mockHttpWait;
@@ -17,8 +19,8 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_mockHttpWait = mock('WireMock\Client\HttpWait');
-        $this->_mockCurl = mock('WireMock\Client\Curl');
+        $this->_mockHttpWait = Phake::mock(HttpWait::class);
+        $this->_mockCurl = Phake::mock(Curl::class);
 
         $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl);
     }
@@ -26,7 +28,8 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     public function testApiIsAliveIfServerReturns200()
     {
         // given
-        when($this->_mockHttpWait->waitForServerToGive200('http://localhost:8080/__admin/'))->return(true);
+        Phake::when($this->_mockHttpWait)->waitForServerToGive200('http://localhost:8080/__admin/', 10, true)
+            ->thenReturn(true);
 
         // when
         $isAlive = $this->_wireMock->isAlive();
@@ -38,7 +41,7 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     public function testApiIsNotAliveIfServerDoesNotReturn200()
     {
         // given
-        when($this->_mockHttpWait->waitForServerToGive200('http://localhost:8080/__admin'))->return(false);
+        Phake::when($this->_mockHttpWait)->waitForServerToGive200('http://localhost:8080/__admin')->thenReturn(false);
 
         // when
         $isAlive = $this->_wireMock->isAlive();
@@ -50,40 +53,36 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     public function testStubbingPostsJsonSerialisedObjectToWireMock()
     {
         // given
-        /** @var StubMapping $mockStubMapping */
-        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
+        $mockStubMapping = Phake::mock(StubMapping::class);
         $stubMappingArray = array('some' => 'json');
-        when($mockStubMapping->toArray())->return($stubMappingArray);
-        /** @var MappingBuilder $mockMappingBuilder */
-        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
-        when($mockMappingBuilder->build())->return($mockStubMapping);
-        when($this->_mockCurl->post('http://localhost:8080/__admin/mappings', $stubMappingArray))
-            ->return(json_encode(array('id' => 'some-long-guid')));
+        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        $mockMappingBuilder = Phake::mock(MappingBuilder::class);
+        Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
+        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray)
+            ->thenReturn(json_encode(array('id' => 'some-long-guid')));
 
         // when
         $this->_wireMock->stubFor($mockMappingBuilder);
 
         // then
-        verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray);
+        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray);
     }
 
     public function testEditingStubsPutsJsonSerialisedObjectAtUrlWithIdToWireMock()
     {
         // given
-        /** @var StubMapping $mockStubMapping */
-        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
-        when($mockStubMapping->getId())->return('some-long-guid');
+        $mockStubMapping = Phake::mock(StubMapping::class);
+        Phake::when($mockStubMapping)->getId()->thenReturn('some-long-guid');
         $stubMappingArray = array('some' => 'json');
-        when($mockStubMapping->toArray())->return($stubMappingArray);
-        /** @var MappingBuilder $mockMappingBuilder */
-        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
-        when($mockMappingBuilder->build())->return($mockStubMapping);
+        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        $mockMappingBuilder = Phake::mock(MappingBuilder::class);
+        Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
 
         // when
         $this->_wireMock->editStub($mockMappingBuilder);
 
         // then
-        verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', $stubMappingArray);
+        Phake::verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', $stubMappingArray);
     }
 
     /**
@@ -92,12 +91,10 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     public function testEditingStubWithoutAnIdThrowsException()
     {
         // given
-        /** @var StubMapping $mockStubMapping */
-        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
-        when($mockStubMapping->getId())->return(null);
-        /** @var MappingBuilder $mockMappingBuilder */
-        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
-        when($mockMappingBuilder->build())->return($mockStubMapping);
+        $mockStubMapping = Phake::mock(StubMapping::class);
+        Phake::when($mockStubMapping)->getId()->thenReturn(null);
+        $mockMappingBuilder = Phake::mock(MappingBuilder::class);
+        Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
 
         // when
         $this->_wireMock->editStub($mockMappingBuilder);
@@ -106,41 +103,37 @@ class WireMockTest extends \PHPUnit_Framework_TestCase
     public function testStubbingAddsReturnedIdToStubMappingObject()
     {
         // given
-        /** @var StubMapping $mockStubMapping */
-        $mockStubMapping = mock('WireMock\Stubbing\StubMapping');
+        $mockStubMapping = Phake::mock(StubMapping::class);
         $stubMappingArray = array('some' => 'json');
-        when($mockStubMapping->toArray())->return($stubMappingArray);
-        /** @var MappingBuilder $mockMappingBuilder */
-        $mockMappingBuilder = mock('WireMock\Client\MappingBuilder');
-        when($mockMappingBuilder->build())->return($mockStubMapping);
+        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        $mockMappingBuilder = Phake::mock(MappingBuilder::class);
+        Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
         $id = 'some-long-guid';
-        when($this->_mockCurl->post(anything(), $stubMappingArray))->return(json_encode(array('id' => $id)));
+        Phake::when($this->_mockCurl)->post(anything(), $stubMappingArray)->thenReturn(json_encode(array('id' => $id)));
 
         // when
         $this->_wireMock->stubFor($mockMappingBuilder);
 
         // then
-        verify($mockStubMapping)->setId($id);
+        Phake::verify($mockStubMapping)->setId($id);
     }
 
     public function testVerifyingPostsJsonSerialisedObjectToWireMock()
     {
         // given
-        /** @var RequestPattern $mockRequestPattern */
-        $mockRequestPattern = mock('WireMock\Matching\RequestPattern');
+        $mockRequestPattern = Phake::mock(RequestPattern::class);
         $requestPatternArray = array('some' => 'json');
-        when($mockRequestPattern->toArray())->return($requestPatternArray);
-        /** @var RequestPatternBuilder $mockRequestPatternBuilder */
-        $mockRequestPatternBuilder = mock('WireMock\Client\RequestPatternBuilder');
-        when($mockRequestPatternBuilder->build())->return($mockRequestPattern);
-        when($this->_mockCurl->post('http://localhost:8080/__admin/requests/count', $requestPatternArray))
-            ->return('{"count":1}');
+        Phake::when($mockRequestPattern)->toArray()->thenReturn($requestPatternArray);
+        $mockRequestPatternBuilder = Phake::mock('WireMock\Client\RequestPatternBuilder');
+        Phake::when($mockRequestPatternBuilder)->build()->thenReturn($mockRequestPattern);
+        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray)
+            ->thenReturn('{"count":1}');
 
         // when
         $this->_wireMock->verify($mockRequestPatternBuilder);
 
         // then
-        verify($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray);
+        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray);
     }
 
     public function testGetWithUrlTreatedAsUrlEqualTo()

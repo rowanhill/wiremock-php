@@ -3,8 +3,9 @@
 namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
+use WireMock\HamcrestTestCase;
 
-abstract class WireMockIntegrationTest extends \PHPUnit_Framework_TestCase
+abstract class WireMockIntegrationTest extends HamcrestTestCase
 {
     /** @var WireMock */
     protected static $_wireMock;

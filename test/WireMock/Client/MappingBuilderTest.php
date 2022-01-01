@@ -2,36 +2,29 @@
 
 namespace WireMock\Client;
 
+use Phake;
+use WireMock\HamcrestTestCase;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 
-class MappingBuilderTest extends \PHPUnit_Framework_TestCase
+class MappingBuilderTest extends HamcrestTestCase
 {
-    /** @var RequestPatternBuilder */
     private $_mockRequestPatternBuilder;
-    /** @var ResponseDefinitionBuilder */
     private $_mockResponseDefinitionBuilder;
-    /** @var ResponseDefinition */
-    private $_mockResponseDefinition;
 
     public function setUp()
     {
-        /** @var RequestPatternBuilder $mockRequestPatternBuilder */
-        $mockRequestPatternBuilder = mock('WireMock\Client\RequestPatternBuilder');
-        /** @var RequestPattern $mockRequestPattern */
-        $mockRequestPattern = mock('WireMock\Matching\RequestPattern');
-        when($mockRequestPatternBuilder->build())->return($mockRequestPattern);
-        when($mockRequestPattern->toArray())->return(array('aRequest' => 'pattern'));
+        $mockRequestPatternBuilder = Phake::mock(RequestPatternBuilder::class);
+        $mockRequestPattern = Phake::mock(RequestPattern::class);
+        Phake::when($mockRequestPatternBuilder)->build()->thenReturn($mockRequestPattern);
+        Phake::when($mockRequestPattern)->toArray()->thenReturn(array('aRequest' => 'pattern'));
         $this->_mockRequestPatternBuilder = $mockRequestPatternBuilder;
 
-        /** @var ResponseDefinition $mockResponseDefinition */
-        $mockResponseDefinition = mock('WireMock\Http\ResponseDefinition');
-        when($mockResponseDefinition->toArray())->return(array('aResponse' => 'definition'));
-        $this->_mockResponseDefinition = $mockResponseDefinition;
+        $mockResponseDefinition = Phake::mock(ResponseDefinition::class);
+        Phake::when($mockResponseDefinition)->toArray()->thenReturn(array('aResponse' => 'definition'));
 
-        /** @var ResponseDefinitionBuilder $mockResponseDefinitionBuilder */
-        $mockResponseDefinitionBuilder = mock('WireMock\Client\ResponseDefinitionBuilder');
-        when($mockResponseDefinitionBuilder->build())->return($mockResponseDefinition);
+        $mockResponseDefinitionBuilder = Phake::mock(ResponseDefinitionBuilder::class);
+        Phake::when($mockResponseDefinitionBuilder)->build()->thenReturn($mockResponseDefinition);
         $this->_mockResponseDefinitionBuilder = $mockResponseDefinitionBuilder;
     }
 
@@ -68,7 +61,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $mappingBuilder->withHeader($headerName, $valueMatchingStrategy)->build();
 
         // then
-        verify($this->_mockRequestPatternBuilder)->withHeader($headerName, $valueMatchingStrategy);
+        Phake::verify($this->_mockRequestPatternBuilder)->withHeader($headerName, $valueMatchingStrategy);
     }
 
     /**
@@ -86,7 +79,7 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $mappingBuilder->withQueryParam($paramName, $valueMatchingStrategy)->build();
 
         // then
-        verify($this->_mockRequestPatternBuilder)->withQueryParam($paramName, $valueMatchingStrategy);
+        Phake::verify($this->_mockRequestPatternBuilder)->withQueryParam($paramName, $valueMatchingStrategy);
     }
 
     /**
@@ -104,6 +97,6 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
             ->build();
 
         // then
-        verify($this->_mockRequestPatternBuilder)->withRequestBody($valueMatchingStrategy);
+        Phake::verify($this->_mockRequestPatternBuilder)->withRequestBody($valueMatchingStrategy);
     }
 }

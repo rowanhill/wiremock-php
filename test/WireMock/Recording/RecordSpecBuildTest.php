@@ -3,8 +3,9 @@
 namespace WireMock\Recording;
 
 use WireMock\Client\WireMock;
+use WireMock\HamcrestTestCase;
 
-class RecordSpecBuildTest extends \PHPUnit_Framework_TestCase
+class RecordSpecBuildTest extends HamcrestTestCase
 {
     public function testTargetIsIncludedInArray()
     {

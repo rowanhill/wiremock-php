@@ -2,11 +2,10 @@
 
 namespace WireMock\Matching;
 
-// Dummy use of UrlMatchingStrategy, to force loader to bring the file in, so this class can be mocked (useful for when
-// these tests are run in isolation)
-new UrlMatchingStrategy('foo', 'bar');
+use Phake;
+use WireMock\HamcrestTestCase;
 
-class RequestPatternTest extends \PHPUnit_Framework_TestCase
+class RequestPatternTest extends HamcrestTestCase
 {
     public function testMethodAndMatchingTypeAndMatchingValueAreAvailableAsArray()
     {
@@ -14,9 +13,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
         $method = 'GET';
         $matchingType = 'url';
         $matchingValue = '/some/url';
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array($matchingType => $matchingValue));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array($matchingType => $matchingValue));
         $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy, null);
 
         // when
@@ -30,9 +28,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
     public function testRequestHeaderMatchersAreAvailableInArray()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $headers = array('aHeader' => array('equalTo' => 'aValue'));
         $requestPattern = new RequestPattern(
             'GET',
@@ -51,9 +48,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
     public function testRequestCookieMatchersAreAvailableInArray()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $cookies = array('aCookie' => array('equalTo' => 'aValue'));
         $requestPattern = new RequestPattern(
             'GET',
@@ -73,9 +69,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
     public function testRequestBodyMatchersAreAvailableInArray()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $bodyPatterns = array(array('equalTo' => 'aValue'));
         $requestPattern = new RequestPattern(
             'GET',
@@ -96,9 +91,8 @@ class RequestPatternTest extends \PHPUnit_Framework_TestCase
     public function testQueryParamMatchersAreAvailableInArray()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('Wiremock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $queryParams = array('aParam' => array('equalTo' => 'aValue'));
         $requestPattern = new RequestPattern(
             'GET',

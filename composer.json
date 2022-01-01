@@ -24,12 +24,13 @@
     },
 
     "require": {
-        "ext-json": "*"
+        "ext-json": "*",
+        "php": ">=7.0"
     },
     "require-dev": {
-        "php": ">=7.0",
-        "phpunit/phpunit": "^4.0 | ^5.0",
-        "hafriedlander/phockito": "^1.0"
+        "phpunit/phpunit": "^6.0",
+        "phake/phake": "^3.1",
+        "hamcrest/hamcrest-php": "^2.0"
     },
 
     "suggest": {

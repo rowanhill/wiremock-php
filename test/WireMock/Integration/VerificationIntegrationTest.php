@@ -2,17 +2,37 @@
 
 namespace WireMock\Integration;
 
+use WireMock\Client\RequestPatternBuilder;
 use WireMock\Client\WireMock;
 
 class VerificationIntegrationTest extends WireMockIntegrationTest
 {
+    private $_verificationCount = 0;
+
+    private function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
+    {
+        self::$_wireMock->verify($requestPatternBuilderOrCount, $requestPatternBuilder);
+        $this->_verificationCount++;
+    }
+
+    public function runBare()
+    {
+        $this->_verificationCount = 0;
+
+        try {
+            parent::runBare();
+        } finally {
+            $this->addToAssertionCount($this->_verificationCount);
+        }
+    }
+    
     public function testCanVerifySimpleGetToUrl()
     {
         // given
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
     /**
@@ -21,7 +41,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     public function testVerifyingUnrequestedUrlThrowsException()
     {
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
     public function testCanVerifyRequestHasHeader()
@@ -30,7 +50,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withHeader('Cookie', WireMock::equalTo('foo=bar')));
     }
 
@@ -43,7 +63,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withHeader('Cookie', WireMock::equalTo('foo=bar')));
     }
 
@@ -53,7 +73,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withoutHeader('Cookie'));
     }
 
@@ -66,7 +86,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withoutHeader('Cookie'));
     }
 
@@ -76,7 +96,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url?foo=bar');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlMatching('/some/url.*'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlMatching('/some/url.*'))
             ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
@@ -89,7 +109,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url?foo=bar');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
@@ -102,7 +122,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
@@ -112,7 +132,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->post('/some/url', 'Some Body');
 
         // when
-        self::$_wireMock->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/some/url'))
+        $this->verify(WireMock::postRequestedFor(WireMock::urlEqualTo('/some/url'))
             ->withRequestBody(WireMock::equalTo('Some Body')));
     }
 
@@ -124,7 +144,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
     public function testCanVerifyAsComparisonOperator()
@@ -135,7 +155,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(WireMock::moreThan(2), WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(WireMock::moreThan(2), WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
     /**
@@ -147,7 +167,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(0, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(0, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
     /**
@@ -160,6 +180,6 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_testClient->get('/some/url');
 
         // when
-        self::$_wireMock->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
+        $this->verify(3, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 }

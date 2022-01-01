@@ -2,7 +2,9 @@
 
 namespace WireMock\Client;
 
-class ValueMatchingStrategyTest extends \PHPUnit_Framework_TestCase
+use WireMock\HamcrestTestCase;
+
+class ValueMatchingStrategyTest extends HamcrestTestCase
 {
     public function testMatchingStrategyAndMatchedValueAreInArray()
     {

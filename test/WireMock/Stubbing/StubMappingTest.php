@@ -2,10 +2,12 @@
 
 namespace WireMock\Stubbing;
 
+use Phake;
+use WireMock\HamcrestTestCase;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 
-class StubMappingTest extends \PHPUnit_Framework_TestCase
+class StubMappingTest extends HamcrestTestCase
 {
     /** @var RequestPattern */
     private $_mockRequestPattern;
@@ -14,8 +16,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_mockRequestPattern = mock('WireMock\Matching\RequestPattern');
-        $this->_mockResponseDefinition = mock('WireMock\Http\ResponseDefinition');
+        $this->_mockRequestPattern = Phake::mock(RequestPattern::class);
+        $this->_mockResponseDefinition = Phake::mock(ResponseDefinition::class);
     }
 
     public function testRequestPatternAndResponseDefinitionAreAvailableInArray()
@@ -23,8 +25,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
         // given
         $requestArray = array('request');
         $responseArray = array('response');
-        when($this->_mockRequestPattern->toArray())->return($requestArray);
-        when($this->_mockResponseDefinition->toArray())->return($responseArray);
+        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn($requestArray);
+        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn($responseArray);
         $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition);
 
         // when
@@ -38,8 +40,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     public function testIdIsInArrayIfSpecified()
     {
         // given
-        when($this->_mockRequestPattern->toArray())->return(array());
-        when($this->_mockResponseDefinition->toArray())->return(array());
+        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
+        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
         $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, 'some-long-guid');
 
         // when
@@ -52,8 +54,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     public function testNameIsInArrayIfSpecified()
     {
         // given
-        when($this->_mockRequestPattern->toArray())->return(array());
-        when($this->_mockResponseDefinition->toArray())->return(array());
+        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
+        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
         $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, 'stub-name');
 
         // when
@@ -66,8 +68,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     public function testPriorityIsInArrayIfSpecified()
     {
         // given
-        when($this->_mockRequestPattern->toArray())->return(array());
-        when($this->_mockResponseDefinition->toArray())->return(array());
+        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
+        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
         $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, 5);
 
         // when
@@ -80,8 +82,8 @@ class StubMappingTest extends \PHPUnit_Framework_TestCase
     public function testScenarioArrayIsMergedIntoArrayIfSpecified()
     {
         // given
-        when($this->_mockRequestPattern->toArray())->return(array());
-        when($this->_mockResponseDefinition->toArray())->return(array());
+        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
+        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
         $scenarioMapping = new ScenarioMapping('Some Scenario', 'from', 'to');
         $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, null, $scenarioMapping);
 

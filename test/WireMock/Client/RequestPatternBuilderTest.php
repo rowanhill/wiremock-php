@@ -2,9 +2,11 @@
 
 namespace WireMock\Client;
 
+use Phake;
+use WireMock\HamcrestTestCase;
 use WireMock\Matching\UrlMatchingStrategy;
 
-class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
+class RequestPatternBuilderTest extends HamcrestTestCase
 {
     public function testMethodAndUrlMatchingStrategyAreInArray()
     {
@@ -12,9 +14,8 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
         $method = 'GET';
         $matchingType = 'url';
         $matchingValue = '/some/url';
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array($matchingType => $matchingValue));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array($matchingType => $matchingValue));
         $requestPatternBuilder = new RequestPatternBuilder($method, $mockUrlMatchingStrategy);
 
         // when
@@ -28,13 +29,11 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
     public function testHeaderWithValueMatchingStrategyIsInArrayIfSpecified()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
-        /** @var ValueMatchingStrategy $mockValueMatchingStrategy */
-        $mockValueMatchingStrategy = mock('WireMock\Client\ValueMatchingStrategy');
-        when($mockValueMatchingStrategy->toArray())->return(array('equalTo' => 'something'));
+        $mockValueMatchingStrategy = Phake::mock('WireMock\Client\ValueMatchingStrategy');
+        Phake::when($mockValueMatchingStrategy)->toArray()->thenReturn(array('equalTo' => 'something'));
         $requestPatternBuilder->withHeader('Some-Header', $mockValueMatchingStrategy);
 
         // when
@@ -47,9 +46,8 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
     public function testHeaderAbsenceIsInArrayIfSpecified()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
         $requestPatternBuilder->withoutHeader('Some-Header');
 
@@ -76,9 +74,8 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
     public function testRequestBodyPatternsAreInArrayIfSpecified()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
         $requestPatternBuilder->withRequestBody(new ValueMatchingStrategy('equalTo', 'aValue'));
 
@@ -92,9 +89,8 @@ class RequestPatternBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBasicAuthIsInArrayIfSpecified()
     {
         // given
-        /** @var UrlMatchingStrategy $mockUrlMatchingStrategy */
-        $mockUrlMatchingStrategy = mock('WireMock\Matching\UrlMatchingStrategy');
-        when($mockUrlMatchingStrategy->toArray())->return(array('url' => '/some/url'));
+        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
+        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
         $requestPatternBuilder->withBasicAuth('uname', 'pword');
 
