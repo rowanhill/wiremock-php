@@ -6,6 +6,16 @@ class Curl
 {
     /**
      * @param string $url
+     * @return string The response body
+     * @throws ClientException
+     */
+    public function get(string $url): string
+    {
+        return $this->makeCurlRequest('GET', $url);
+    }
+
+    /**
+     * @param string $url
      * @param array|null $jsonArray
      * @return string The response body
      * @throws ClientException

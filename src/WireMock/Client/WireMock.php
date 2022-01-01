@@ -150,7 +150,7 @@ class WireMock
         }
 
         $url = $this->_makeUrl($pathAndParams);
-        $result = file_get_contents($url);
+        $result = $this->_curl->get($url);
         $resultArray = json_decode($result, true);
         return new GetServeEventsResult($resultArray);
     }
@@ -179,7 +179,7 @@ class WireMock
     public function findUnmatchedRequests()
     {
         $url = $this->_makeUrl('__admin/requests/unmatched');
-        $resultJson = file_get_contents($url);
+        $resultJson = $this->_curl->get($url);
         $resultArray = json_decode($resultJson, true);
         return new UnmatchedRequests($resultArray);
     }
@@ -211,7 +211,7 @@ class WireMock
     public function findNearMissesForAllUnmatched()
     {
         $url = $this->_makeUrl('__admin/requests/unmatched/near-misses');
-        $findResultJson = file_get_contents($url);
+        $findResultJson = $this->_curl->get($url);
         $findResult = json_decode($findResultJson, true);
         return FindNearMissesResult::fromArray($findResult);
     }
@@ -324,7 +324,7 @@ class WireMock
     public function getAllScenarios()
     {
         $url = $this->_makeUrl('__admin/scenarios');
-        $findResultJson = file_get_contents($url);
+        $findResultJson = $this->_curl->get($url);
         $findResult = json_decode($findResultJson, true);
         return GetScenariosResult::fromArray($findResult);
     }
@@ -365,7 +365,7 @@ class WireMock
             }
         }
         $url = $this->_makeUrl($pathAndParams);
-        $result = file_get_contents($url);
+        $result = $this->_curl->get($url);
         $resultArray = json_decode($result, true);
         return new ListStubMappingsResult($resultArray);
     }
@@ -378,7 +378,7 @@ class WireMock
     public function getSingleStubMapping($id)
     {
         $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
-        $result = file_get_contents($url);
+        $result = $this->_curl->get($url);
         $resultArray = json_decode($result, true);
         return StubMapping::fromArray($resultArray);
     }
@@ -427,7 +427,7 @@ class WireMock
     public function getRecordingStatus()
     {
         $url = $this->_makeUrl('__admin/recordings/status');
-        $result = file_get_contents($url);
+        $result = $this->_curl->get($url);
         $resultArray = json_decode($result, true);
         return RecordingStatusResult::fromArray($resultArray);
     }
