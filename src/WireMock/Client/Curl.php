@@ -9,7 +9,7 @@ class Curl
      * @return string The response body
      * @throws ClientException
      */
-    public function get(string $url): string
+    public function get(string $url)
     {
         return $this->makeCurlRequest('GET', $url);
     }
@@ -20,7 +20,7 @@ class Curl
      * @return string The response body
      * @throws ClientException
      */
-    public function post(string $url, array $jsonArray = null): string
+    public function post(string $url, array $jsonArray = null)
     {
         return $this->makeCurlRequest('POST', $url, $jsonArray);
     }
@@ -31,7 +31,7 @@ class Curl
      * @return string The response body
      * @throws ClientException
      */
-    public function put(string $url, array $jsonArray = null): string
+    public function put(string $url, array $jsonArray = null)
     {
         return $this->makeCurlRequest('PUT', $url, $jsonArray);
     }
@@ -41,7 +41,7 @@ class Curl
      * @return string The response body
      * @throws ClientException
      */
-    public function delete(string $url): string
+    public function delete(string $url)
     {
         return $this->makeCurlRequest('DELETE', $url);
     }
