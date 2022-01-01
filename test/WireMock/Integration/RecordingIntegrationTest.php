@@ -2,6 +2,8 @@
 
 namespace WireMock\Integration;
 
+use Exception;
+use WireMock\Client\ClientException;
 use WireMock\Client\WireMock;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpec;
@@ -263,5 +265,17 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThat($result->getMappings(), arrayWithSize(0));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testStoppingRecordingBeforeStartingThrowsException()
+    {
+        // then
+        $this->expectException(ClientException::class);
+
+        // when
+        self::$_wireMock->stopRecording();
     }
 }

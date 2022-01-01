@@ -5,6 +5,7 @@ namespace WireMock\Integration;
 require_once 'WireMockIntegrationTest.php';
 
 use Exception;
+use WireMock\Client\ClientException;
 use WireMock\Client\DateTimeMatchingStrategy;
 use WireMock\Client\WireMock;
 use WireMock\Client\XmlUnitComparisonType;
@@ -1006,5 +1007,22 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         },
             $mappings);
         assertThat($urls, arrayContainingInAnyOrder(array('/one', '/two')));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testStubImportWithMalformedIdThrowsExceptionFromWiremock()
+    {
+        // given
+        $stub = WireMock::get('/one')->willReturn(WireMock::ok());
+        $stub->withId('not-a-uuid');
+
+        // then
+        $this->expectException(ClientException::class);
+
+        // when
+        self::$_wireMock->importStubs(WireMock::stubImport()
+            ->stub($stub));
     }
 }

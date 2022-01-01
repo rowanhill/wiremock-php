@@ -25,6 +25,7 @@
 
     "require": {
         "ext-json": "*",
+        "ext-curl": "*",
         "php": ">=7.0"
     },
     "require-dev": {
