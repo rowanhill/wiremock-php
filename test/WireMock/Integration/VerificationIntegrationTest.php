@@ -15,7 +15,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->_verificationCount++;
     }
 
-    public function runBare()
+    public function runBare(): void
     {
         $this->_verificationCount = 0;
 

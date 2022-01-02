@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class HamcrestTestCase extends TestCase
 {
-    public function runBare()
+    public function runBare(): void
     {
         Util::registerGlobalFunctions();
         MatcherAssert::resetCount();

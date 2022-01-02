@@ -14,7 +14,7 @@ class StubMappingTest extends HamcrestTestCase
     /** @var ResponseDefinition */
     private $_mockResponseDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_mockRequestPattern = Phake::mock(RequestPattern::class);
         $this->_mockResponseDefinition = Phake::mock(ResponseDefinition::class);

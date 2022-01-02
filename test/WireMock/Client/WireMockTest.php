@@ -17,7 +17,7 @@ class WireMockTest extends HamcrestTestCase
     /** @var WireMock */
     private $_wireMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_mockHttpWait = Phake::mock(HttpWait::class);
         $this->_mockCurl = Phake::mock(Curl::class);

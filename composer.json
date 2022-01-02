@@ -19,18 +19,18 @@
 
     "config": {
         "platform": {
-            "php": "7.0"
+            "php": "7.2"
         }
     },
 
     "require": {
         "ext-json": "*",
         "ext-curl": "*",
-        "php": ">=7.0"
+        "php": ">=7.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "phake/phake": "^3.1",
+        "phpunit/phpunit": "^8.5",
+        "phake/phake": "^4.2",
         "hamcrest/hamcrest-php": "^2.0"
     },
 

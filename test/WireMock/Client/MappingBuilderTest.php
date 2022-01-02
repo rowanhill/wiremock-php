@@ -12,7 +12,7 @@ class MappingBuilderTest extends HamcrestTestCase
     private $_mockRequestPatternBuilder;
     private $_mockResponseDefinitionBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $mockRequestPatternBuilder = Phake::mock(RequestPatternBuilder::class);
         $mockRequestPattern = Phake::mock(RequestPattern::class);

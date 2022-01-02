@@ -13,7 +13,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
     /** @var WireMock */
     protected static $_wireMock2;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::runCmd('./../wiremock/start.sh 1 8080');
         self::runCmd('./../wiremock/start.sh 2 8082');
@@ -23,20 +23,20 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         assertThat(self::$_wireMock2->isAlive(), is(true));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::runCmd('./../wiremock/stop.sh 1');
         self::runCmd('./../wiremock/stop.sh 2');
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         self::$_wireMock2->reset();
         $this->clearMappings();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->clearMappings();

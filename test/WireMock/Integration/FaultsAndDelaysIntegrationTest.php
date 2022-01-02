@@ -8,7 +8,7 @@ use WireMock\Stubbing\Fault;
 
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         self::$_wireMock->resetGlobalDelays();

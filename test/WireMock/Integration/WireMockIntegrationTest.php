@@ -13,14 +13,14 @@ abstract class WireMockIntegrationTest extends HamcrestTestCase
     /** @var TestClient */
     protected $_testClient;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::runCmd('./../wiremock/start.sh');
         self::$_wireMock = WireMock::create();
         assertThat(self::$_wireMock->isAlive(), is(true));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::runCmd('./../wiremock/stop.sh');
     }
@@ -38,7 +38,7 @@ abstract class WireMockIntegrationTest extends HamcrestTestCase
         assertThat($result, is(0));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_testClient = new TestClient();
         self::$_wireMock->reset();

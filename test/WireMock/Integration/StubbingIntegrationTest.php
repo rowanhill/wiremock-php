@@ -13,13 +13,13 @@ use WireMock\Stubbing\StubMapping;
 
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->clearMappings();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->clearMappings();
