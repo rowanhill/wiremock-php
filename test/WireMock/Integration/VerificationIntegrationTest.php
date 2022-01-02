@@ -3,6 +3,7 @@
 namespace WireMock\Integration;
 
 use WireMock\Client\RequestPatternBuilder;
+use WireMock\Client\VerificationException;
 use WireMock\Client\WireMock;
 
 class VerificationIntegrationTest extends WireMockIntegrationTest
@@ -35,11 +36,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingUnrequestedUrlThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // when
         $this->verify(WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
@@ -54,11 +55,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withHeader('Cookie', WireMock::equalTo('foo=bar')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingRequestWithMissingHeaderThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $this->_testClient->get('/some/url');
 
@@ -77,11 +78,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withoutHeader('Cookie'));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingAbsenceOfPresentHeaderThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $this->_testClient->get('/some/url', array('Cookie: foo=bar'));
 
@@ -100,11 +101,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingWiremockUrlEqualThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $this->_testClient->get('/some/url?foo=bar');
 
@@ -113,11 +114,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             ->withQueryParam('foo', WireMock::equalTo('bar')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingRequestWithMissingQueryThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $this->_testClient->get('/some/url');
 
@@ -158,11 +159,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->verify(WireMock::moreThan(2), WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingZeroRequestsWhenSomeRequestsWereMadeThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $this->_testClient->get('/some/url');
 
@@ -170,11 +171,11 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
         $this->verify(0, WireMock::getRequestedFor(WireMock::urlEqualTo('/some/url')));
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testVerifyingWrongNumberOfRequestsThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+        
         // given
         $this->_testClient->get('/some/url');
         $this->_testClient->get('/some/url');

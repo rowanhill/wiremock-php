@@ -85,11 +85,11 @@ class WireMockTest extends HamcrestTestCase
         Phake::verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', $stubMappingArray);
     }
 
-    /**
-     * @expectedException \WireMock\Client\VerificationException
-     */
     public function testEditingStubWithoutAnIdThrowsException()
     {
+        // then
+        $this->expectException(VerificationException::class);
+
         // given
         $mockStubMapping = Phake::mock(StubMapping::class);
         Phake::when($mockStubMapping)->getId()->thenReturn(null);
