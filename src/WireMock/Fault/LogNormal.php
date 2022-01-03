@@ -2,7 +2,9 @@
 
 namespace WireMock\Fault;
 
-class LogNormal implements DelayDistribution
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface
 {
     /** @var float */
     private $_median;
@@ -54,5 +56,11 @@ class LogNormal implements DelayDistribution
     public static function fromArray(array $array)
     {
         return new LogNormal($array['median'], $array['sigma']);
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $normalisedArray['type'] = 'lognormal';
+        return $normalisedArray;
     }
 }

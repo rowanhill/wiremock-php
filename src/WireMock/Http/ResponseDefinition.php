@@ -5,8 +5,10 @@ namespace WireMock\Http;
 use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\DelayDistributionFactory;
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class ResponseDefinition
+class ResponseDefinition implements PostNormalizationAmenderInterface
 {
     /** @var int */
     private $_status = 200;
@@ -15,7 +17,7 @@ class ResponseDefinition
     /** @var string */
     private $_body;
     /** @var string */
-    private $_bodyFile;
+    private $_bodyFileName;
     /** @var string */
     private $_base64Body;
     /** @var array */
@@ -76,7 +78,7 @@ class ResponseDefinition
         $this->_status = $status;
         $this->_statusMessage = $statusMessage;
         $this->_body = $body;
-        $this->_bodyFile = $bodyFile;
+        $this->_bodyFileName = $bodyFile;
         $this->_base64Body = $base64Body;
         $this->_headers = $headers;
         $this->_proxyBaseUrl = $proxyBaseUrl;
@@ -117,9 +119,9 @@ class ResponseDefinition
     /**
      * @return string
      */
-    public function getBodyFile()
+    public function getBodyFileName()
     {
-        return $this->_bodyFile;
+        return $this->_bodyFileName;
     }
 
     /**
@@ -220,8 +222,8 @@ class ResponseDefinition
         if ($this->_body) {
             $array['body'] = $this->_body;
         }
-        if ($this->_bodyFile) {
-            $array['bodyFileName'] = $this->_bodyFile;
+        if ($this->_bodyFileName) {
+            $array['bodyFileName'] = $this->_bodyFileName;
         }
         if ($this->_base64Body) {
             $array['base64Body'] = $this->_base64Body;
@@ -289,5 +291,12 @@ class ResponseDefinition
             isset($array['transformerParameters']) ? $array['transformerParameters'] : null,
             isset($array['proxyUrlPrefixToRemove']) ? $array['proxyUrlPrefixToRemove'] : null
         );
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'fixedDelayMillis', 'fixedDelayMilliseconds');
+        NormalizerUtils::renameKey($normalisedArray, 'randomDelayDistribution', 'delayDistribution');
+        return $normalisedArray;
     }
 }

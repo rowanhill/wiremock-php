@@ -2,7 +2,10 @@
 
 namespace WireMock\Client;
 
-class EqualToMatchingStrategy extends ValueMatchingStrategy
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class EqualToMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
 {
     private $_ignoreCase = false;
 
@@ -30,5 +33,14 @@ class EqualToMatchingStrategy extends ValueMatchingStrategy
         $matchingValue = $array['equalTo'];
         $ignoreCase = isset($array['caseInsensitive']) && $array['caseInsensitive'];
         return new self($matchingValue, $ignoreCase);
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $normalisedArray = parent::amendNormalisation($normalisedArray, $object);
+
+        NormalizerUtils::renameKey($normalisedArray, 'ignoreCase', 'caseInsensitive');
+
+        return $normalisedArray;
     }
 }

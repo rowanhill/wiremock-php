@@ -2,7 +2,9 @@
 
 namespace WireMock\Client;
 
-class DateTimeMatchingStrategy extends ValueMatchingStrategy
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
 {
     // Offset units
     const SECONDS = "seconds";
@@ -128,5 +130,16 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy
     public static function after($dateTimeSpec)
     {
         return new self("after", $dateTimeSpec);
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $normalisedArray = parent::amendNormalisation($normalisedArray, $object);
+        if (isset($normalisedArray['expectedOffset'])) {
+            $expectedOffset = $normalisedArray['expectedOffset'];
+            $normalisedArray['expectedOffset'] = $expectedOffset['amount'];
+            $normalisedArray['expectedOffsetUnit'] = $expectedOffset['unit'];
+        }
+        return $normalisedArray;
     }
 }

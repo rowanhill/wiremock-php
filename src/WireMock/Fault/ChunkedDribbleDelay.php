@@ -2,7 +2,10 @@
 
 namespace WireMock\Fault;
 
-class ChunkedDribbleDelay
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class ChunkedDribbleDelay implements PostNormalizationAmenderInterface
 {
     /** @var int */
     private $_numberOfChunks;
@@ -46,5 +49,11 @@ class ChunkedDribbleDelay
     public static function fromArray(array $array)
     {
         return new ChunkedDribbleDelay($array['numberOfChunks'], $array['totalDuration']);
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'totalDurationMillis', 'totalDuration');
+        return $normalisedArray;
     }
 }

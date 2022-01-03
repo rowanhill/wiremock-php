@@ -3,6 +3,7 @@
 namespace WireMock\Client;
 
 use Phake;
+use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\HamcrestTestCase;
 use WireMock\Matching\RequestPattern;
 use WireMock\Stubbing\StubMapping;
@@ -13,6 +14,8 @@ class WireMockTest extends HamcrestTestCase
     private $_mockHttpWait;
     /** @var Curl */
     private $_mockCurl;
+    /** @var SerializerInterface */
+    private $_mockSerializer;
 
     /** @var WireMock */
     private $_wireMock;
@@ -21,8 +24,9 @@ class WireMockTest extends HamcrestTestCase
     {
         $this->_mockHttpWait = Phake::mock(HttpWait::class);
         $this->_mockCurl = Phake::mock(Curl::class);
+        $this->_mockSerializer = Phake::mock(SerializerInterface::class);
 
-        $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl);
+        $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl, $this->_mockSerializer);
     }
 
     public function testApiIsAliveIfServerReturns200()
@@ -54,18 +58,18 @@ class WireMockTest extends HamcrestTestCase
     {
         // given
         $mockStubMapping = Phake::mock(StubMapping::class);
-        $stubMappingArray = array('some' => 'json');
-        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        $json = '{"some": "json"}';
+        Phake::when($this->_mockSerializer)->serialize->thenReturn($json);
         $mockMappingBuilder = Phake::mock(MappingBuilder::class);
         Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
-        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray)
+        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $json)
             ->thenReturn(json_encode(array('id' => 'some-long-guid')));
 
         // when
         $this->_wireMock->stubFor($mockMappingBuilder);
 
         // then
-        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $stubMappingArray);
+        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $json);
     }
 
     public function testEditingStubsPutsJsonSerialisedObjectAtUrlWithIdToWireMock()
@@ -104,12 +108,12 @@ class WireMockTest extends HamcrestTestCase
     {
         // given
         $mockStubMapping = Phake::mock(StubMapping::class);
-        $stubMappingArray = array('some' => 'json');
-        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        $json = '{"some": "json"}';
+        Phake::when($this->_mockSerializer)->serialize->thenReturn($json);
         $mockMappingBuilder = Phake::mock(MappingBuilder::class);
         Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
         $id = 'some-long-guid';
-        Phake::when($this->_mockCurl)->post(anything(), $stubMappingArray)->thenReturn(json_encode(array('id' => $id)));
+        Phake::when($this->_mockCurl)->post(anything(), $json)->thenReturn(json_encode(array('id' => $id)));
 
         // when
         $this->_wireMock->stubFor($mockMappingBuilder);

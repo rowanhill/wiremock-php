@@ -111,7 +111,7 @@ class RequestPatternBuilderTest extends HamcrestTestCase
         $pattern = $builder->build();
         assertThat($pattern->getMethod(), nullValue());
         assertThat($pattern->getUrlMatchingStrategy(), nullValue());
-        assertThat($pattern->getCustomMatcherDefinition()->toArray(), equalTo(array(
+        assertThat($pattern->getCustomMatcher()->toArray(), equalTo(array(
             'name' => 'custom-matcher',
             'parameters' => array('param' => 'val')
         )));
@@ -127,7 +127,7 @@ class RequestPatternBuilderTest extends HamcrestTestCase
 
         // then
         $pattern = $builder->build();
-        assertThat($pattern->getCustomMatcherDefinition()->toArray(), equalTo(array(
+        assertThat($pattern->getCustomMatcher()->toArray(), equalTo(array(
             'name' => 'custom-matcher',
             'parameters' => array('param' => 'val')
         )));

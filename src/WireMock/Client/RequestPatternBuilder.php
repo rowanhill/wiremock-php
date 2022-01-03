@@ -49,7 +49,7 @@ class RequestPatternBuilder
      */
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        $this->_headers[$headerName] = $valueMatchingStrategy;
         return $this;
     }
 

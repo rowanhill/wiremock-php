@@ -5,8 +5,10 @@ namespace WireMock\Stubbing;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 use WireMock\PostServe\PostServeAction;
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class StubMapping
+class StubMapping implements PostNormalizationAmenderInterface
 {
     /** @var string A string representation of a GUID */
     private $_id;
@@ -37,7 +39,7 @@ class StubMapping
     private $name;
 
     /**
-     * @param RequestPattern $requestPattern
+     * @param RequestPattern $request
      * @param ResponseDefinition $responseDefinition
      * @param string $id
      * @param string $name
@@ -48,7 +50,7 @@ class StubMapping
      * @param array|null $postServeActions
      */
     public function __construct(
-        RequestPattern $requestPattern,
+        RequestPattern $request,
         ResponseDefinition $responseDefinition,
         $id = null,
         $name = null,
@@ -61,7 +63,7 @@ class StubMapping
     {
         $this->_id = $id;
         $this->_name = $name;
-        $this->_request = $requestPattern;
+        $this->_request = $request;
         $this->_response = $responseDefinition;
         $this->_priority = $priority;
         $this->_metadata = $metadata;
@@ -226,5 +228,11 @@ class StubMapping
                 array_map(function($action) { return PostServeAction::fromArray($action); }, $array['postServeActions']) :
                 null
         );
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'isPersistent', 'persistent');
+        return $normalisedArray;
     }
 }

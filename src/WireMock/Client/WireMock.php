@@ -3,6 +3,10 @@
 namespace WireMock\Client;
 
 use DateTime;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
@@ -10,6 +14,10 @@ use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpecBuilder;
 use WireMock\Recording\SnapshotRecordResult;
+use WireMock\Serde\EmptyArrayIgnoringNormalizer;
+use WireMock\Serde\PrePostAmendingNormalizer;
+use WireMock\Serde\PrivatePropertyNameConverter;
+use WireMock\Serde\SerializerFactory;
 use WireMock\Stubbing\StubImport;
 use WireMock\Stubbing\StubImportBuilder;
 use WireMock\Stubbing\StubMapping;
@@ -25,20 +33,33 @@ class WireMock
     private $_httpWait;
     /** @var Curl  */
     private $_curl;
+    /** @var Serializer */
+    private $_serializer;
 
     public static function create($hostname = 'localhost', $port = 8080)
     {
         $httpWait = new HttpWait();
         $curl = new Curl();
-        return new self($httpWait, $curl, $hostname, $port);
+
+        $serializer = new Serializer(
+            [new PrePostAmendingNormalizer(new EmptyArrayIgnoringNormalizer(null, new PrivatePropertyNameConverter()))],
+            [new JsonEncoder()]
+        );
+        return new self($httpWait, $curl, $serializer, $hostname, $port);
     }
 
-    public function __construct(HttpWait $httpWait, Curl $curl, $hostname = 'localhost', $port = 8080)
-    {
+    public function __construct(
+        HttpWait $httpWait,
+        Curl $curl,
+        SerializerInterface $serializer,
+        $hostname = 'localhost',
+        $port = 8080
+    ) {
         $this->_hostname = $hostname;
         $this->_port = $port;
         $this->_httpWait = $httpWait;
         $this->_curl = $curl;
+        $this->_serializer = $serializer;
     }
 
     public function isAlive($timeoutSecs = 10, $debug = true)
@@ -57,7 +78,10 @@ class WireMock
     {
         $stubMapping = $mappingBuilder->build();
         $url = $this->_makeUrl('__admin/mappings');
-        $result = $this->_curl->post($url, $stubMapping->toArray());
+        $json = $this->_serializer->serialize($stubMapping, 'json', [
+            AbstractObjectNormalizer::SKIP_NULL_VALUES => true
+        ]);
+        $result = $this->_curl->post($url, $json);
         $resultJson = json_decode($result);
         $stubMapping->setId($resultJson->id);
         return $stubMapping;

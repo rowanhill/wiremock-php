@@ -2,7 +2,9 @@
 
 namespace WireMock\Matching;
 
-class UrlMatchingStrategy
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class UrlMatchingStrategy implements PostNormalizationAmenderInterface
 {
     /** @var string */
     private $_matchingType;
@@ -54,5 +56,12 @@ class UrlMatchingStrategy
             }
         }
         return null;
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $matchingType = $normalisedArray['matchingType'];
+        $matchingValue = $normalisedArray['matchingValue'];
+        return [$matchingType => $matchingValue];
     }
 }

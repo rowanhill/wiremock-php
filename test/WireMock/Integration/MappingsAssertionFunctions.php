@@ -24,7 +24,10 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $expec
         $transformation($localStubMappingArray);
     }
 
-    assertThat($serverStubMappingArray, is($localStubMappingArray));
+    print_r($localStubMappingArray);
+    print_r($serverStubMappingArray);
+
+    assertThat($serverStubMappingArray, equalTo($localStubMappingArray));
 }
 
 function assertThatThereAreNoMappings()

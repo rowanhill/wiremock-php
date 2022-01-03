@@ -2,7 +2,9 @@
 
 namespace WireMock\Client;
 
-class ValueMatchingStrategy
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class ValueMatchingStrategy implements PostNormalizationAmenderInterface
 {
     /** @var string */
     protected $_matchingType;
@@ -13,6 +15,22 @@ class ValueMatchingStrategy
     {
         $this->_matchingType = $matchingType;
         $this->_matchingValue = $matchingValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatchingType(): string
+    {
+        return $this->_matchingType;
+    }
+
+    /**
+     * @return bool|string|ValueMatchingStrategy[]
+     */
+    public function getMatchingValue()
+    {
+        return $this->_matchingValue;
     }
 
     public function toArray()
@@ -64,5 +82,17 @@ class ValueMatchingStrategy
             }
         }
         throw new \Exception("Could not denormalise array to ValueMatchingStrategy");
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $matchingType = $normalisedArray['matchingType'];
+        $matchingValue = $normalisedArray['matchingValue'];
+        unset($normalisedArray['matchingType']);
+        unset($normalisedArray['matchingValue']);
+
+        $normalisedArray[$matchingType] = $matchingValue;
+
+        return $normalisedArray;
     }
 }

@@ -5,8 +5,10 @@ namespace WireMock\Matching;
 use WireMock\Client\BasicCredentials;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\ValueMatchingStrategy;
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class RequestPattern
+class RequestPattern implements PostNormalizationAmenderInterface
 {
     /** @var string */
     private $_method;
@@ -23,11 +25,11 @@ class RequestPattern
     /** @var null|MultipartValuePattern[] */
     private $_multipartPatterns;
     /** @var BasicCredentials */
-    private $_basicCredentials;
+    private $_basicAuthCredentials;
     /** @var CustomMatcherDefinition */
-    private $_customMatcherDefinition;
+    private $_customMatcher;
     /** @var ValueMatchingStrategy */
-    private $_hostPattern;
+    private $_host;
 
     /**
      * @param string $method
@@ -59,10 +61,10 @@ class RequestPattern
         $this->_cookies = $cookies;
         $this->_bodyPatterns = $bodyPatterns;
         $this->_queryParameters = $queryParameters;
-        $this->_basicCredentials = $basicCredentials;
+        $this->_basicAuthCredentials = $basicCredentials;
         $this->_multipartPatterns = $multipartPatterns;
-        $this->_customMatcherDefinition = $customMatcherDefinition;
-        $this->_hostPattern = $hostPattern;
+        $this->_customMatcher = $customMatcherDefinition;
+        $this->_host = $hostPattern;
     }
 
     /**
@@ -124,17 +126,25 @@ class RequestPattern
     /**
      * @return BasicCredentials
      */
-    public function getBasicCredentials()
+    public function getBasicAuthCredentials()
     {
-        return $this->_basicCredentials;
+        return $this->_basicAuthCredentials;
     }
 
     /**
      * @return CustomMatcherDefinition
      */
-    public function getCustomMatcherDefinition()
+    public function getCustomMatcher()
     {
-        return $this->_customMatcherDefinition;
+        return $this->_customMatcher;
+    }
+
+    /**
+     * @return ValueMatchingStrategy|null
+     */
+    public function getHost()
+    {
+        return $this->_host;
     }
 
     public function toArray()
@@ -147,7 +157,7 @@ class RequestPattern
             $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
         }
         if ($this->_headers) {
-            $array['headers'] = $this->_headers;
+            $array['headers'] = array_map(function($h) { if (is_array($h)) { return $h; } else { return $h->toArray(); } }, $this->_headers);
         }
         if ($this->_cookies) {
             $array['cookies'] = $this->_cookies;
@@ -161,14 +171,14 @@ class RequestPattern
         if ($this->_multipartPatterns) {
             $array['multipartPatterns'] = $this->_multipartPatterns;
         }
-        if ($this->_basicCredentials) {
-            $array['basicAuthCredentials'] = $this->_basicCredentials->toArray();
+        if ($this->_basicAuthCredentials) {
+            $array['basicAuthCredentials'] = $this->_basicAuthCredentials->toArray();
         }
-        if ($this->_customMatcherDefinition) {
-            $array['customMatcher'] = $this->_customMatcherDefinition->toArray();
+        if ($this->_customMatcher) {
+            $array['customMatcher'] = $this->_customMatcher->toArray();
         }
-        if ($this->_hostPattern) {
-            $array['host'] = $this->_hostPattern->toArray();
+        if ($this->_host) {
+            $array['host'] = $this->_host->toArray();
         }
         return $array;
     }
@@ -183,7 +193,7 @@ class RequestPattern
         return new RequestPattern(
             $array['method'],
             UrlMatchingStrategy::fromArray($array),
-            isset($array['headers']) ? $array['headers'] : null,
+            isset($array['headers']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['headers']) : null,
             isset($array['cookies']) ? $array['cookies'] : null,
             isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null,
             isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
@@ -192,5 +202,11 @@ class RequestPattern
             isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null,
             isset($array['host']) ? ValueMatchingStrategy::fromArray($array['host']) : null
         );
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        NormalizerUtils::inline($normalisedArray, 'urlMatchingStrategy');
+        return $normalisedArray;
     }
 }

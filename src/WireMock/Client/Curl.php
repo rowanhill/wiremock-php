@@ -16,22 +16,22 @@ class Curl
 
     /**
      * @param string $url
-     * @param array|null $jsonArray
+     * @param array|string|null $jsonArray
      * @return string The response body
      * @throws ClientException
      */
-    public function post($url, array $jsonArray = null)
+    public function post($url, $jsonArray = null)
     {
         return $this->makeCurlRequest('POST', $url, $jsonArray);
     }
 
     /**
      * @param string $url
-     * @param array|null $jsonArray
+     * @param array|string|null $jsonArray
      * @return string The response body
      * @throws ClientException
      */
-    public function put($url, array $jsonArray = null)
+    public function put($url, $jsonArray = null)
     {
         return $this->makeCurlRequest('PUT', $url, $jsonArray);
     }
@@ -51,7 +51,11 @@ class Curl
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         if ($jsonArray !== null) {
-            $json = json_encode($jsonArray);
+            if (is_string($jsonArray)) {
+                $json = $jsonArray;
+            } else {
+                $json = json_encode($jsonArray);
+            }
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
             $contentLength = strlen($json);
         } else {

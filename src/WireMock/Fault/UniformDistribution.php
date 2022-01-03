@@ -2,7 +2,9 @@
 
 namespace WireMock\Fault;
 
-class UniformDistribution implements DelayDistribution
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class UniformDistribution implements DelayDistribution, PostNormalizationAmenderInterface
 {
     /** @var int */
     private $_lower;
@@ -54,5 +56,11 @@ class UniformDistribution implements DelayDistribution
     public static function fromArray(array $array)
     {
         return new UniformDistribution($array['lower'], $array['upper']);
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        $normalisedArray['type'] = 'uniform';
+        return $normalisedArray;
     }
 }

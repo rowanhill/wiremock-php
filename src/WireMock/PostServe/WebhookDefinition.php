@@ -7,8 +7,10 @@ use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
+use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class WebhookDefinition
+class WebhookDefinition implements PostNormalizationAmenderInterface
 {
     /** @var string */
     private $_method;
@@ -156,5 +158,11 @@ class WebhookDefinition
         }
 
         return $webhook;
+    }
+
+    public static function amendNormalisation(array $normalisedArray, $object): array
+    {
+        NormalizerUtils::inline($normalisedArray, 'extraParameters');
+        return $normalisedArray;
     }
 }
