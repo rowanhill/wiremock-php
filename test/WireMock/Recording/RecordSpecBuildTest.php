@@ -4,15 +4,28 @@ namespace WireMock\Recording;
 
 use WireMock\Client\WireMock;
 use WireMock\HamcrestTestCase;
+use WireMock\Serde\SerializerFactory;
 
 class RecordSpecBuildTest extends HamcrestTestCase
 {
+    private $_serializer;
+
+    protected function setUp(): void
+    {
+        $this->_serializer = SerializerFactory::default();
+    }
+
+    private function toArray($obj)
+    {
+        return $this->_serializer->normalize($obj, 'json');
+    }
+
     public function testTargetIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->forTarget('foo')
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('targetBaseUrl', 'foo'));
@@ -21,9 +34,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testRequestPatternIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->onlyRequestsMatching(WireMock::getRequestedFor(WireMock::urlEqualTo('foo')))
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('filters', array(
@@ -35,24 +48,36 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testCaptureHeadersAreIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->captureHeader('Accept')
             ->captureHeader('Content-Type', true)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('captureHeaders', array(
-            'Accept' => new \stdClass(),
+            'Accept' => [],
             'Content-Type' => array('caseInsensitive' => true)
         )));
+    }
+
+    public function testCaptureHeadersWithoutCaseInsensitiveAreSerializedToEmptyObject()
+    {
+        // given
+        $spec = WireMock::recordSpec()->captureHeader('Accept')->build();
+
+        // when
+        $json = $this->_serializer->serialize($spec, 'json');
+
+        // then
+        assertThat($json, equalTo('{"captureHeaders":{"Accept":[]},"persist":true,"repeatsAsScenarios":true}'));
     }
 
     public function testBinaryBodySizeExtractThresholdIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->extractBinaryBodiesOver(10240)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('extractBodyCriteria', array(
@@ -63,9 +88,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testTextBodySizeExtractThresholdIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->extractTextBodiesOver(2048)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('extractBodyCriteria', array(
@@ -76,9 +101,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testPersistenceIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->makeStubsPersistent(false)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('persist', false));
@@ -87,9 +112,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testIgnoringRepeatsIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->ignoreRepeatRequests()
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('repeatsAsScenarios', false));
@@ -98,9 +123,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testTransformersAreIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->transformers('modify-response-header')
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('transformers', array('modify-response-header')));
@@ -109,9 +134,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testTransformerParemetersAreIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->transformerParameters(array('headerValue' => '123'))
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('transformerParameters', array('headerValue' => '123')));
@@ -120,9 +145,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testEqualToJsonRequestBodyPatternIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->matchRequestBodyWithEqualToJson(false, true)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('requestBodyPattern', array(
@@ -135,9 +160,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testEqualToXmlRequestBodyPatternIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->matchRequestBodyWithEqualToXml()
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('requestBodyPattern', array(
@@ -148,9 +173,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testEqualToRequestBodyPatternIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->matchRequestBodyWithEqualTo(true)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('requestBodyPattern', array(
@@ -162,9 +187,9 @@ class RecordSpecBuildTest extends HamcrestTestCase
     public function testAutoRequestBodyPatternIsIncludedInArray()
     {
         // when
-        $array = WireMock::recordSpec()
+        $array = $this->toArray(WireMock::recordSpec()
             ->chooseBodyMatchTypeAutomatically(true, true, true)
-            ->build()->toArray();
+            ->build());
 
         // then
         assertThat($array, hasEntry('requestBodyPattern', array(

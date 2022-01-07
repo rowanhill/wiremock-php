@@ -66,22 +66,4 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
     {
         return $this->_matchingType;
     }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $array = array();
-        if (!empty($this->_bodyPatterns)) {
-            $array['bodyPatterns'] = array_map(function($bp) { return $bp->toArray(); }, $this->_bodyPatterns);
-        }
-        if (!empty($this->_headers)) {
-            $array['headers'] = array_map(function($h) { return $h->toArray(); }, $this->_headers);
-        }
-        if ($this->_matchingType) {
-            $array['matchingType'] = $this->_matchingType;
-        }
-        return $array;
-    }
 }

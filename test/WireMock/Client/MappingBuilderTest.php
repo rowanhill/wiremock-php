@@ -17,11 +17,9 @@ class MappingBuilderTest extends HamcrestTestCase
         $mockRequestPatternBuilder = Phake::mock(RequestPatternBuilder::class);
         $mockRequestPattern = Phake::mock(RequestPattern::class);
         Phake::when($mockRequestPatternBuilder)->build()->thenReturn($mockRequestPattern);
-        Phake::when($mockRequestPattern)->toArray()->thenReturn(array('aRequest' => 'pattern'));
         $this->_mockRequestPatternBuilder = $mockRequestPatternBuilder;
 
         $mockResponseDefinition = Phake::mock(ResponseDefinition::class);
-        Phake::when($mockResponseDefinition)->toArray()->thenReturn(array('aResponse' => 'definition'));
 
         $mockResponseDefinitionBuilder = Phake::mock(ResponseDefinitionBuilder::class);
         Phake::when($mockResponseDefinitionBuilder)->build()->thenReturn($mockResponseDefinition);
@@ -41,9 +39,8 @@ class MappingBuilderTest extends HamcrestTestCase
         $stubMapping = $mappingBuilder->build();
 
         // then
-        $array = $stubMapping->toArray();
-        assertThat($array, hasEntry('request', array('aRequest' => 'pattern')));
-        assertThat($array, hasEntry('response', array('aResponse' => 'definition')));
+        assertThat($stubMapping->getRequest(), notNullValue());
+        assertThat($stubMapping->getResponse(), notNullValue());
     }
 
     /**

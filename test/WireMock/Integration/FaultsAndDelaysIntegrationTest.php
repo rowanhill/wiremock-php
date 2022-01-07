@@ -3,6 +3,8 @@
 namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
+use WireMock\Fault\ChunkedDribbleDelay;
+use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
 use WireMock\Stubbing\Fault;
 
@@ -23,8 +25,7 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['fixedDelayMilliseconds'], is(2000));
+        assertThat($stubMapping->getResponse()->getFixedDelayMillis(), is(2000));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -37,12 +38,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
-            'type' => 'lognormal',
-            'median' => 90,
-            'sigma' => 0.1
-        )));
+        assertThat($stubMapping->getResponse()->getRandomDelayDistribution(),
+            equalTo(new LogNormal(90, 0.1)));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -55,12 +52,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
-            'type' => 'uniform',
-            'lower' => 15,
-            'upper' => 25
-        )));
+        assertThat($stubMapping->getResponse()->getRandomDelayDistribution(),
+            equalTo(new UniformDistribution(15, 25)));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -73,12 +66,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['delayDistribution'], equalTo(array(
-            'type' => 'uniform',
-            'lower' => 15,
-            'upper' => 25
-        )));
+        assertThat($stubMapping->getResponse()->getRandomDelayDistribution(),
+            equalTo(new UniformDistribution(15, 25)));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -91,11 +80,8 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['chunkedDribbleDelay'], equalTo(array(
-            'numberOfChunks' => 5,
-            'totalDuration' => 1000
-        )));
+        assertThat($stubMapping->getResponse()->getChunkedDribbleDelay(),
+            equalTo(new ChunkedDribbleDelay(5, 1000)));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -160,8 +146,7 @@ class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['fault'], is($fault));
+        assertThat($stubMapping->getResponse()->getFault(), is($fault));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 }

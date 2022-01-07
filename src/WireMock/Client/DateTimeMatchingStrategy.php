@@ -80,47 +80,6 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
         return $this;
     }
 
-    public function toArray()
-    {
-        $array = parent::toArray();
-        if ($this->_expectedOffset) {
-            $array['expectedOffset'] = $this->_expectedOffset['amount'];
-            $array['expectedOffsetUnit'] = $this->_expectedOffset['unit'];
-        }
-        if ($this->_actualFormat) {
-            $array['actualFormat'] = $this->_actualFormat;
-        }
-        if ($this->_truncateExpected) {
-            $array['truncateExpected'] = $this->_truncateExpected;
-        }
-        if ($this->_truncateActual) {
-            $array['truncateActual'] = $this->_truncateActual;
-        }
-        return $array;
-    }
-
-    /**
-     * @param array $array
-     * @param DateTimeMatchingStrategy $obj
-     * @return DateTimeMatchingStrategy
-     */
-    public static function extendFromArray(array $array, self $obj)
-    {
-        if (isset($array['expectedOffset']) && isset($array['expectedOffsetUnit'])) {
-            $obj->expectedOffset($array['expectedOffset'], $array['expectedOffsetUnit']);
-        }
-        if (isset($array['actualFormat'])) {
-            $obj->actualFormat($array['actualFormat']);
-        }
-        if (isset($array['truncateExpected'])) {
-            $obj->truncateExpected($array['truncateExpected']);
-        }
-        if (isset($array['truncateActual'])) {
-            $obj->truncateActual($array['truncateActual']);
-        }
-        return $obj;
-    }
-
     public static function before($dateTimeSpec)
     {
         return new self("before", $dateTimeSpec);

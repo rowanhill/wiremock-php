@@ -77,8 +77,8 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
-        assertThat($stubMapping->getRequest()->getUrlMatchingStrategy()->toArray(),
-            equalTo(array('urlPath' => '/some/url')));
+        assertThat($stubMapping->getRequest()->getUrlMatchingStrategy(),
+            equalTo(WireMock::urlPathEqualTo('/some/url')));
     }
 
     public function testRequestUrlPathCanBeMatchedByRegex()
@@ -89,8 +89,8 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
 
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
-        assertThat($stubMapping->getRequest()->getUrlMatchingStrategy()->toArray(),
-            equalTo(array('urlPathPattern' => '/some/.+')));
+        assertThat($stubMapping->getRequest()->getUrlMatchingStrategy(),
+            equalTo(WireMock::urlPathMatching('/some/.+')));
     }
 
     public function testRequestUrlCanByMatchedAsAnyUrl()

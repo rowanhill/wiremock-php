@@ -3,9 +3,11 @@
 namespace WireMock\Stubbing;
 
 use Phake;
+use WireMock\Client\WireMock;
 use WireMock\HamcrestTestCase;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
+use WireMock\Serde\SerializerFactory;
 
 class StubMappingTest extends HamcrestTestCase
 {
@@ -13,39 +15,47 @@ class StubMappingTest extends HamcrestTestCase
     private $_mockRequestPattern;
     /** @var ResponseDefinition */
     private $_mockResponseDefinition;
+    private $_serializer;
 
     public function setUp(): void
     {
+        $this->_serializer = SerializerFactory::default();
         $this->_mockRequestPattern = Phake::mock(RequestPattern::class);
         $this->_mockResponseDefinition = Phake::mock(ResponseDefinition::class);
+    }
+
+    private function toArray($obj)
+    {
+        return $this->_serializer->normalize($obj, 'json');
     }
 
     public function testRequestPatternAndResponseDefinitionAreAvailableInArray()
     {
         // given
-        $requestArray = array('request');
-        $responseArray = array('response');
-        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn($requestArray);
-        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn($responseArray);
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition);
+        $stubMapping = new StubMapping(
+            new RequestPattern('GET', WireMock::anyUrl()),
+            new ResponseDefinition(200)
+        );
 
         // when
-        $stubMappingArray = $stubMapping->toArray();
+        $stubMappingArray = $this->toArray($stubMapping);
 
         // then
-        assertThat($stubMappingArray, hasEntry('request', $requestArray));
-        assertThat($stubMappingArray, hasEntry('response', $responseArray));
+        assertThat($stubMappingArray, hasEntry('request', $this->toArray($stubMapping->getRequest())));
+        assertThat($stubMappingArray, hasEntry('response', $this->toArray($stubMapping->getResponse())));
     }
 
     public function testIdIsInArrayIfSpecified()
     {
         // given
-        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
-        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, 'some-long-guid');
+        $stubMapping = new StubMapping(
+            new RequestPattern('GET', WireMock::anyUrl()),
+            new ResponseDefinition(200),
+            'some-long-guid'
+        );
 
         // when
-        $stubMappingArray = $stubMapping->toArray();
+        $stubMappingArray = $this->toArray($stubMapping);
 
         // then
         assertThat($stubMappingArray, hasEntry('id', 'some-long-guid'));
@@ -54,12 +64,15 @@ class StubMappingTest extends HamcrestTestCase
     public function testNameIsInArrayIfSpecified()
     {
         // given
-        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
-        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, 'stub-name');
+        $stubMapping = new StubMapping(
+            new RequestPattern('GET', WireMock::anyUrl()),
+            new ResponseDefinition(200),
+            null,
+            'stub-name'
+        );
 
         // when
-        $stubMappingArray = $stubMapping->toArray();
+        $stubMappingArray = $this->toArray($stubMapping);
 
         // then
         assertThat($stubMappingArray, hasEntry('name', 'stub-name'));
@@ -68,12 +81,16 @@ class StubMappingTest extends HamcrestTestCase
     public function testPriorityIsInArrayIfSpecified()
     {
         // given
-        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
-        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, 5);
+        $stubMapping = new StubMapping(
+            new RequestPattern('GET', WireMock::anyUrl()),
+            new ResponseDefinition(200),
+            null,
+            null,
+            5
+        );
 
         // when
-        $stubMappingArray = $stubMapping->toArray();
+        $stubMappingArray = $this->toArray($stubMapping);
 
         // then
         assertThat($stubMappingArray, hasEntry('priority', 5));
@@ -82,13 +99,18 @@ class StubMappingTest extends HamcrestTestCase
     public function testScenarioArrayIsMergedIntoArrayIfSpecified()
     {
         // given
-        Phake::when($this->_mockRequestPattern)->toArray()->thenReturn(array());
-        Phake::when($this->_mockResponseDefinition)->toArray()->thenReturn(array());
         $scenarioMapping = new ScenarioMapping('Some Scenario', 'from', 'to');
-        $stubMapping = new StubMapping($this->_mockRequestPattern, $this->_mockResponseDefinition, null, null, null, $scenarioMapping);
+        $stubMapping = new StubMapping(
+            new RequestPattern('GET', WireMock::anyUrl()),
+            new ResponseDefinition(200),
+            null,
+            null,
+            null,
+            $scenarioMapping
+        );
 
         // when
-        $stubMappingArray = $stubMapping->toArray();
+        $stubMappingArray = $this->toArray($stubMapping);
 
         // then
         assertThat($stubMappingArray, hasEntry('scenarioName', 'Some Scenario'));

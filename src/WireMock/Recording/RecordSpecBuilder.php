@@ -70,7 +70,7 @@ class RecordSpecBuilder
     {
         $this->_captureHeaders[$name] = $caseInsensitive ?
             array('caseInsensitive' => true) :
-            new \stdClass();
+            [];
         return $this;
     }
 

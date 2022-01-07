@@ -40,27 +40,6 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
         return $this->_matchingValue;
     }
 
-    public function toArray()
-    {
-        return array(
-            $this->_matchingType => $this->_matchingValue,
-        );
-    }
-
-    /**
-     * @param array $array
-     * @return UrlMatchingStrategy|null
-     */
-    public static function fromArray(array $array)
-    {
-        foreach (array('url', 'urlPattern', 'urlPath', 'urlPathPattern') as $type) {
-            if (isset($array[$type])) {
-                return new UrlMatchingStrategy($type, $array[$type]);
-            }
-        }
-        return null;
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $matchingType = $normalisedArray['matchingType'];

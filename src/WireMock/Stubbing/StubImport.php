@@ -19,15 +19,4 @@ class StubImport
         $this->_mappings = $_mappings;
         $this->_importOptions = $_importOptions;
     }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return array(
-            'mappings' => array_map(function(/**@var $m StubMapping */$m) { return $m->toArray(); }, $this->_mappings),
-            'importOptions' => $this->_importOptions->toArray()
-        );
-    }
 }

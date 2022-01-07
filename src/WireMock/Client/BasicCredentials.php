@@ -39,20 +39,4 @@ class BasicCredentials implements ObjectToPopulateFactoryInterface
     {
         return $this->_password;
     }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return array(
-            'username' => $this->_username,
-            'password' => $this->_password
-        );
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new BasicCredentials($array['username'], $array['password']);
-    }
 }

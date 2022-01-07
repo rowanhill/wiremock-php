@@ -44,22 +44,6 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
     }
 
     /**
-     * @param array $array
-     * @return ServeEvent
-     * @throws \Exception
-     */
-    public static function fromArray(array $array)
-    {
-        return new ServeEvent(
-            $array['id'],
-            LoggedRequest::fromArray($array['request']),
-            StubMapping::fromArray($array['stubMapping']),
-            ResponseDefinition::fromArray($array['responseDefinition']),
-            LoggedResponse::fromArray($array['response'])
-        );
-    }
-
-    /**
      * @return string
      */
     public function getId()

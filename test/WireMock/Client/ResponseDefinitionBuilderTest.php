@@ -13,10 +13,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('status', 200));
+        assertThat($responseDefinition->getStatus(), equalTo(200));
     }
 
     public function testSpecifiedStatusIsAvailableInArray()
@@ -28,10 +27,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('status', $status));
+        assertThat($responseDefinition->getStatus(), equalTo($status));
     }
 
     public function testStatusMessageIsAvailableInArrayIfSet()
@@ -43,24 +41,21 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('statusMessage', $statusMessage));
+        assertThat($responseDefinition->getStatusMessage(), equalTo($statusMessage));
     }
 
     public function testStatusMessageIsNotAvailableInArrayIfNotSet()
     {
         // given
-        $statusMessage = "hello there";
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, not(hasKey('statusMessage')));
+        assertThat($responseDefinition->getStatusMessage(), nullValue());
     }
 
     public function testBodyIsAvailableInArrayIfSet()
@@ -72,10 +67,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('body', $body));
+        assertThat($responseDefinition->getBody(), equalTo($body));
     }
 
     public function testBodyIsNotAvailableInArrayIfNotSet()
@@ -85,10 +79,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, not(hasKey('body')));
+        assertThat($responseDefinition->getBody(), nullValue());
     }
 
     public function testBodyFileIsAvailableInArrayIfSet()
@@ -100,10 +93,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('bodyFileName', $bodyFile));
+        assertThat($responseDefinition->getBodyFileName(), equalTo($bodyFile));
     }
 
     public function testBodyFileIsNotAvailableInArrayIfNotSet()
@@ -113,10 +105,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, not(hasKey('bodyFileName')));
+        assertThat($responseDefinition->getBodyFileName(), nullValue());
     }
 
     public function testBase64BodyIsAvailableInArrayIfSet()
@@ -128,11 +119,10 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
         $base64 = base64_encode($bodyData);
-        assertThat($responseDefArray, hasEntry('base64Body', $base64));
+        assertThat($responseDefinition->getBase64Body(), equalTo($base64));
     }
 
     public function testHeaderIsAvailableInArrayIfSet()
@@ -144,10 +134,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('headers', array('foo1' => 'bar1', 'foo2' => 'bar2')));
+        assertThat($responseDefinition->getHeaders(), equalTo(array('foo1' => 'bar1', 'foo2' => 'bar2')));
     }
 
     public function testHeaderIsAvailableInArrayAsArrayIfSetMultipleTimes()
@@ -159,10 +148,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('headers', array('foo' => array('bar1', 'bar2'))));
+        assertThat($responseDefinition->getHeaders(), equalTo(array('foo' => array('bar1', 'bar2'))));
     }
 
     public function testHeaderIsNotAvailableInArrayIfNotSet()
@@ -172,10 +160,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, not(hasKey('headers')));
+        assertThat($responseDefinition->getHeaders(), equalTo([]));
     }
 
     public function testProxyBaseUrlIsAvailableIfSet()
@@ -186,10 +173,9 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'http://otherhost.com/approot'));
+        assertThat($responseDefinition->getProxyBaseUrl(), equalTo('http://otherhost.com/approot'));
     }
 
     public function testProxyAdditionalHeadersIsNotInArrayIfEmpty()
@@ -198,10 +184,10 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
         $responseDefinitionBuilder = new ResponseDefinitionBuilder();
 
         // when
-        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+        $responseDefinition = $responseDefinitionBuilder->build();
 
         // then
-        assertThat($responseDefArray, not(hasKey('additionalProxyRequestHeaders')));
+        assertThat($responseDefinition->getProxyBaseUrl(), nullValue());
     }
 
     public function testProxiedBuilderRetainsMatchersAddedSoFar()
@@ -214,12 +200,12 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
             ->proxiedFrom('foo');
 
         // when
-        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+        $responseDefinition = $responseDefinitionBuilder->build();
 
         // then
-        assertThat($responseDefArray, hasEntry('status', 404));
-        assertThat($responseDefArray, hasEntry('headers', array('X-Header' => 'four oh four')));
-        assertThat($responseDefArray, hasEntry('proxyBaseUrl', 'foo'));
+        assertThat($responseDefinition->getStatus(), equalTo(404));
+        assertThat($responseDefinition->getHeaders(), equalTo(array('X-Header' => 'four oh four')));
+        assertThat($responseDefinition->getProxyBaseUrl(), equalTo('foo'));
     }
 
     public function testProxyAdditionalHeadersIsInArrayIfSet()
@@ -231,10 +217,10 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
             ->withAdditionalRequestHeader('X-Header', 'val');
 
         // when
-        $responseDefArray = $responseDefinitionBuilder->build()->toArray();
+        $responseDefinition = $responseDefinitionBuilder->build();
 
         // then
-        assertThat($responseDefArray, hasEntry('additionalProxyRequestHeaders', array('X-Header' => 'val')));
+        assertThat($responseDefinition->getAdditionalProxyRequestHeaders(), equalTo(array('X-Header' => 'val')));
     }
 
     public function testFixedDelayMillisecondsIsInArrayIfSet()
@@ -245,9 +231,8 @@ class ResponseDefinitionBuilderTest extends HamcrestTestCase
 
         // when
         $responseDefinition = $responseDefinitionBuilder->build();
-        $responseDefArray = $responseDefinition->toArray();
 
         // then
-        assertThat($responseDefArray, hasEntry('fixedDelayMilliseconds', 2000));
+        assertThat($responseDefinition->getFixedDelayMillis(), equalTo(2000));
     }
 }

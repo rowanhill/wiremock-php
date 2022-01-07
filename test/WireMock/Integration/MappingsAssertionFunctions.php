@@ -9,11 +9,13 @@ use WireMock\Stubbing\StubMapping;
  */
 function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $expectedTransformations = array())
 {
+    $serializer = SerializerFactory::default();
+
     $mappingsFromServer = getMappings();
     assertThat($mappingsFromServer, is(arrayWithSize(1)));
 
-    $serverStubMappingArray = $mappingsFromServer[0]->toArray();
-    $localStubMappingArray = $localStubMapping->toArray();
+    $serverStubMappingArray = $serializer->normalize($mappingsFromServer[0], 'json');
+    $localStubMappingArray = $serializer->normalize($localStubMapping, 'json');
 
     if (!isset($localStubMappingArray['request']['method'])) {
         // If we didn't set a request method in the stub, the server will have returned ANY as the method, causing the

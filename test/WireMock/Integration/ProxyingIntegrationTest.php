@@ -14,8 +14,7 @@ class ProxyingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['proxyBaseUrl'], is('http://otherhost.com/approot'));
+        assertThat($stubMapping->getResponse()->getProxyBaseUrl(), is('http://otherhost.com/approot'));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -30,8 +29,7 @@ class ProxyingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['additionalProxyRequestHeaders'], equalTo(array('X-Header' => 'val')));
+        assertThat($stubMapping->getResponse()->getAdditionalProxyRequestHeaders(), equalTo(array('X-Header' => 'val')));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -44,8 +42,7 @@ class ProxyingIntegrationTest extends WireMockIntegrationTest
                 ->withProxyUrlPrefixToRemove("/other/service")));
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['response']['proxyUrlPrefixToRemove'], equalTo('/other/service'));
+        assertThat($stubMapping->getResponse()->getProxyUrlPrefixToRemove(), equalTo('/other/service'));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 }

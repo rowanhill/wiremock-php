@@ -65,14 +65,4 @@ class Scenario implements ObjectToPopulateFactoryInterface
     {
         return $this->_possibleStates;
     }
-
-    public static function fromArray(array $array)
-    {
-        return new Scenario(
-            $array['id'],
-            $array['name'],
-            $array['state'],
-            $array['possibleStates']
-        );
-    }
 }

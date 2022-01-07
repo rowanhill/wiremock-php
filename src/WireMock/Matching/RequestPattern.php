@@ -150,63 +150,6 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
         return $this->_host;
     }
 
-    public function toArray()
-    {
-        $array = array();
-        if ($this->_method) {
-            $array['method'] = $this->_method;
-        }
-        if ($this->_urlMatchingStrategy) {
-            $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
-        }
-        if ($this->_headers) {
-            $array['headers'] = array_map(function($h) { return $h->toArray(); }, $this->_headers);
-        }
-        if ($this->_cookies) {
-            $array['cookies'] = array_map(function($c) { return $c->toArray(); }, $this->_cookies);
-        }
-        if ($this->_queryParameters) {
-            $array['queryParameters'] = array_map(function($qp) { return $qp->toArray(); }, $this->_queryParameters);
-        }
-        if ($this->_bodyPatterns) {
-            $array['bodyPatterns'] = array_map(function($bp) { return $bp->toArray(); }, $this->_bodyPatterns);
-        }
-        if ($this->_multipartPatterns) {
-            $array['multipartPatterns'] = array_map(function($mpp) { return $mpp->toArray(); }, $this->_multipartPatterns);
-        }
-        if ($this->_basicAuthCredentials) {
-            $array['basicAuthCredentials'] = $this->_basicAuthCredentials->toArray();
-        }
-        if ($this->_customMatcher) {
-            $array['customMatcher'] = $this->_customMatcher->toArray();
-        }
-        if ($this->_host) {
-            $array['host'] = $this->_host->toArray();
-        }
-        return $array;
-    }
-
-    /**
-     * @param array $array
-     * @return RequestPattern
-     * @throws \Exception
-     */
-    public static function fromArray(array $array)
-    {
-        return new RequestPattern(
-            $array['method'],
-            UrlMatchingStrategy::fromArray($array),
-            isset($array['headers']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['headers']) : null,
-            isset($array['cookies']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['cookies']) : null,
-            isset($array['bodyPatterns']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['bodyPatterns']) : null,
-            isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
-            isset($array['queryParameters']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['queryParameters']) : null,
-            isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null,
-            isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null,
-            isset($array['host']) ? ValueMatchingStrategy::fromArray($array['host']) : null
-        );
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::inline($normalisedArray, 'urlMatchingStrategy');

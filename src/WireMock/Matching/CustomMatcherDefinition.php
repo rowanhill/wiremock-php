@@ -39,20 +39,4 @@ class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
     {
         return $this->_parameters;
     }
-
-    public function toArray()
-    {
-        return array(
-            'name' => $this->_name,
-            'parameters' => $this->_parameters
-        );
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new CustomMatcherDefinition(
-            $array['name'],
-            isset($array['parameters']) ? $array['parameters'] : array()
-        );
-    }
 }

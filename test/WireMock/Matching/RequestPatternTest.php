@@ -8,111 +8,78 @@ use WireMock\HamcrestTestCase;
 
 class RequestPatternTest extends HamcrestTestCase
 {
-    public function testMethodAndMatchingTypeAndMatchingValueAreAvailableAsArray()
+    public function testMethodAndMatchingStategyAreAvailable()
     {
         // given
         $method = 'GET';
-        $matchingType = 'url';
-        $matchingValue = '/some/url';
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array($matchingType => $matchingValue));
-        $requestPattern = new RequestPattern($method, $mockUrlMatchingStrategy, null);
-
-        // when
-        $requestPatternArray = $requestPattern->toArray();
+        $urlMatchingStrategy = new UrlMatchingStrategy('url', '/some/url');
+        $requestPattern = new RequestPattern($method, $urlMatchingStrategy);
 
         // then
-        assertThat($requestPatternArray, hasEntry('method', $method));
-        assertThat($requestPatternArray, hasEntry($matchingType, $matchingValue));
+        assertThat($requestPattern->getMethod(), is($method));
+        assertThat($requestPattern->getUrlMatchingStrategy(), is($urlMatchingStrategy));
     }
 
-    public function testRequestHeaderMatchersAreAvailableInArray()
+    public function testRequestHeaderMatchersAreAvailable()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $headers = array('aHeader' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
-            $mockUrlMatchingStrategy,
-            $headers,
-            null
+            new UrlMatchingStrategy('url', '/some/url'),
+            $headers
         );
-        $headersArray = array_map(function($h) { return $h->toArray(); }, $headers);
-
-        // when
-        $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('headers', $headersArray));
+        assertThat($requestPattern->getHeaders(), is($headers));
     }
 
-    public function testRequestCookieMatchersAreAvailableInArray()
+    public function testRequestCookieMatchersAreAvailable()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $cookies = array('aCookie' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
-            $mockUrlMatchingStrategy,
+            new UrlMatchingStrategy('url', '/some/url'),
             null,
-            $cookies,
-            null
+            $cookies
         );
-        $cookiesArray = array_map(function($c) { return $c->toArray(); }, $cookies);
-
-        // when
-        $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('cookies', $cookiesArray));
+        assertThat($requestPattern->getCookies(), is($cookies));
     }
 
-    public function testRequestBodyMatchersAreAvailableInArray()
+    public function testRequestBodyMatchersAreAvailable()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $bodyPatterns = array(WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
-            $mockUrlMatchingStrategy,
+            new UrlMatchingStrategy('url', '/some/url'),
             null,
             null,
-            $bodyPatterns,
-            null
+            $bodyPatterns
         );
-        $bodyPatternsArray = array_map(function($bp) { return $bp->toArray(); }, $bodyPatterns);
-
-        // when
-        $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatternsArray));
+        assertThat($requestPattern->getBodyPatterns(), is($bodyPatterns));
     }
 
-    public function testQueryParamMatchersAreAvailableInArray()
+    public function testQueryParamMatchersAreAvailable()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
         $queryParams = array('aParam' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
-            $mockUrlMatchingStrategy,
+            new UrlMatchingStrategy('url', '/some/url'),
             null,
             null,
             null,
             null,
             $queryParams
         );
-        $queryParamsArray = array_map(function($qp) { return $qp->toArray(); }, $queryParams);
-
-        // when
-        $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('queryParameters', $queryParamsArray));
+        assertThat($requestPattern->getQueryParameters(), is($queryParams));
     }
 }

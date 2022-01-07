@@ -43,19 +43,6 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
         return $this->_totalDurationMillis;
     }
 
-    public function toArray()
-    {
-        return array(
-            'numberOfChunks' => $this->_numberOfChunks,
-            'totalDuration' => $this->_totalDurationMillis
-        );
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new ChunkedDribbleDelay($array['numberOfChunks'], $array['totalDuration']);
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'totalDurationMillis', 'totalDuration');

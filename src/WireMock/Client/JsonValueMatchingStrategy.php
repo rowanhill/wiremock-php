@@ -18,26 +18,6 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy implements ObjectT
         $this->_ignoreExtraElements = $ignoreExtraElements;
     }
 
-    public function toArray()
-    {
-        $array = parent::toArray();
-        if ($this->_ignoreArrayOrder) {
-            $array['ignoreArrayOrder'] = $this->_ignoreArrayOrder;
-        }
-        if ($this->_ignoreExtraElements) {
-            $array['ignoreExtraElements'] = $this->_ignoreExtraElements;
-        }
-        return $array;
-    }
-
-    public static function fromArray(array $array)
-    {
-        $matchingValue = $array['equalToJson'];
-        $ignoreArrayOrder = isset($array['ignoreArrayOrder']) && $array['ignoreArrayOrder'];
-        $ignoreExtraElements = isset($array['ignoreExtraElements']) && $array['ignoreExtraElements'];
-        return new self($matchingValue, $ignoreArrayOrder, $ignoreExtraElements);
-    }
-
     public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
     {
         unset($normalisedArray['matchingType']); // equalToJson

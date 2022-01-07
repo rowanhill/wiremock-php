@@ -2,8 +2,8 @@
 
 namespace WireMock\Client;
 
-use Phake;
 use WireMock\HamcrestTestCase;
+use WireMock\Matching\CustomMatcherDefinition;
 use WireMock\Matching\UrlMatchingStrategy;
 
 class RequestPatternBuilderTest extends HamcrestTestCase
@@ -12,124 +12,113 @@ class RequestPatternBuilderTest extends HamcrestTestCase
     {
         // given
         $method = 'GET';
-        $matchingType = 'url';
-        $matchingValue = '/some/url';
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array($matchingType => $matchingValue));
-        $requestPatternBuilder = new RequestPatternBuilder($method, $mockUrlMatchingStrategy);
+        $matchingStrategy = new UrlMatchingStrategy('url', '/some/url');
+        $requestPatternBuilder = new RequestPatternBuilder($method, $matchingStrategy);
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('method', $method));
-        assertThat($requestPatternArray, hasEntry($matchingType, $matchingValue));
+        assertThat($requestPattern->getMethod(), is($method));
+        assertThat($requestPattern->getUrlMatchingStrategy(), is($matchingStrategy));
     }
 
     public function testHeaderWithValueMatchingStrategyIsInArrayIfSpecified()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
-        $mockValueMatchingStrategy = Phake::mock('WireMock\Client\ValueMatchingStrategy');
-        Phake::when($mockValueMatchingStrategy)->toArray()->thenReturn(array('equalTo' => 'something'));
-        $requestPatternBuilder->withHeader('Some-Header', $mockValueMatchingStrategy);
+        $requestPatternBuilder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
+        $matchingStrategy = WireMock::equalTo('something');
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPatternBuilder->withHeader('Some-Header', $matchingStrategy);
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('equalTo' => 'something'))));
+        assertThat($requestPattern->getHeaders(), hasEntry('Some-Header', $matchingStrategy));
     }
 
     public function testHeaderAbsenceIsInArrayIfSpecified()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
-        $requestPatternBuilder->withoutHeader('Some-Header');
+        $requestPatternBuilder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
+        $matchingStrategy = new ValueMatchingStrategy('absent', true);
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPatternBuilder->withoutHeader('Some-Header');
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('headers', array('Some-Header' => array('absent' => true))));
+        assertThat($requestPattern->getHeaders(), hasEntry('Some-Header', $matchingStrategy));
     }
 
     public function testCookieWithValueMatchingStrategyIsInArrayIfSpecified()
     {
         // given
-        $requestPatternBuilder = new RequestPatternBuilder('GET', new UrlMatchingStrategy('url', '/some/url'));
-        $requestPatternBuilder->withCookie('aCookie', new ValueMatchingStrategy('equalTo', 'something'));
+        $requestPatternBuilder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
+        $matchingStrategy = WireMock::equalTo('something');
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPatternBuilder->withCookie('aCookie', $matchingStrategy);
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('cookies', array('aCookie' => array('equalTo' => 'something'))));
+        assertThat($requestPattern->getCookies(), hasEntry('aCookie', $matchingStrategy));
     }
 
     public function testRequestBodyPatternsAreInArrayIfSpecified()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
-        $requestPatternBuilder->withRequestBody(new ValueMatchingStrategy('equalTo', 'aValue'));
+        $requestPatternBuilder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
+        $matchingStrategy = new ValueMatchingStrategy('equalTo', 'aValue');
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPatternBuilder->withRequestBody($matchingStrategy);
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('bodyPatterns', array(array('equalTo' => 'aValue'))));
+        assertThat($requestPattern->getBodyPatterns(), hasItem($matchingStrategy));
     }
 
     public function testBasicAuthIsInArrayIfSpecified()
     {
         // given
-        $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
-        Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $requestPatternBuilder = new RequestPatternBuilder('GET', $mockUrlMatchingStrategy);
-        $requestPatternBuilder->withBasicAuth('uname', 'pword');
+        $requestPatternBuilder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
 
         // when
-        $requestPatternArray = $requestPatternBuilder->build()->toArray();
+        $requestPatternBuilder->withBasicAuth('uname', 'pword');
+        $requestPattern = $requestPatternBuilder->build();
 
         // then
-        assertThat($requestPatternArray, hasEntry('basicAuthCredentials',
-            array('username' => 'uname', 'password' => 'pword')));
+        assertThat($requestPattern->getBasicAuthCredentials(), equalTo(
+            new BasicCredentials('uname', 'pword')));
     }
 
     public function testBuilderCanBeCreatedWithCustomMatcherNameAndParams()
     {
         // when
-        $builder = new RequestPatternBuilder('custom-matcher', array('param' => 'val'));
+        $customMatcherName = 'custom-matcher';
+        $params = array('param' => 'val');
+        $builder = new RequestPatternBuilder($customMatcherName, $params);
+        $pattern = $builder->build();
 
         // then
-        $pattern = $builder->build();
         assertThat($pattern->getMethod(), nullValue());
         assertThat($pattern->getUrlMatchingStrategy(), nullValue());
-        assertThat($pattern->getCustomMatcher()->toArray(), equalTo(array(
-            'name' => 'custom-matcher',
-            'parameters' => array('param' => 'val')
-        )));
+        assertThat($pattern->getCustomMatcher(), equalTo(new CustomMatcherDefinition($customMatcherName, $params)));
     }
 
     public function testCustomMatcherDefinitionIsInArrayIfSpecified()
     {
         // given
-        $builder = new RequestPatternBuilder('GET', new UrlMatchingStrategy('url', '/some/url'));
+        $builder = new RequestPatternBuilder('GET', WireMock::urlEqualTo('/some/url'));
+        $customMatcherName = 'custom-matcher';
+        $params = array('param' => 'val');
 
         // when
-        $builder->withCustomMatcher('custom-matcher', array('param' => 'val'));
+        $builder->withCustomMatcher($customMatcherName, $params);
+        $pattern = $builder->build();
 
         // then
-        $pattern = $builder->build();
-        assertThat($pattern->getCustomMatcher()->toArray(), equalTo(array(
-            'name' => 'custom-matcher',
-            'parameters' => array('param' => 'val')
-        )));
+        assertThat($pattern->getCustomMatcher(), equalTo(new CustomMatcherDefinition($customMatcherName, $params)));
     }
 }

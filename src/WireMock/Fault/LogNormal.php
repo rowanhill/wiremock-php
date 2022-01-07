@@ -41,27 +41,6 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface,
         return $this->_sigma;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return array(
-            'type' => 'lognormal',
-            'median' => $this->_median,
-            'sigma' => $this->_sigma
-        );
-    }
-
-    /**
-     * @param array $array
-     * @return LogNormal
-     */
-    public static function fromArray(array $array)
-    {
-        return new LogNormal($array['median'], $array['sigma']);
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $normalisedArray['type'] = 'lognormal';

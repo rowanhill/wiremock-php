@@ -77,52 +77,6 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $this->_allowNonProxied = $allowNonProxied;
     }
 
-    public function toArray()
-    {
-        $array = array();
-        if ($this->_targetBaseUrl) {
-            $array['targetBaseUrl'] = $this->_targetBaseUrl;
-        }
-        if ($this->_requestPattern || $this->_requestIds || $this->_allowNonProxied) {
-            $filters = array();
-            if ($this->_requestPattern) {
-                $filters = array_merge($filters, $this->_requestPattern->toArray());
-            }
-            if ($this->_requestIds) {
-                $filters = array_merge($filters, array('ids' => $this->_requestIds));
-            }
-            if ($this->_allowNonProxied) {
-                $filters = array_merge($filters, array('allowNonProxied' => true));
-            }
-            $array['filters'] = $filters;
-        }
-        if ($this->_captureHeaders) {
-            $array['captureHeaders'] = $this->_captureHeaders;
-        }
-        if ($this->_extractBodyCriteria) {
-            $array['extractBodyCriteria'] = $this->_extractBodyCriteria;
-        }
-        if ($this->_persist != true) {
-            $array['persist'] = $this->_persist;
-        }
-        if ($this->_repeatsAsScenarios != true) {
-            $array['repeatsAsScenarios'] = $this->_repeatsAsScenarios;
-        }
-        if (!empty($this->_transformers)) {
-            $array['transformers'] = $this->_transformers;
-        }
-        if (!empty($this->_transformerParameters)) {
-            $array['transformerParameters'] = $this->_transformerParameters;
-        }
-        if ($this->_requestBodyPattern) {
-            $array['requestBodyPattern'] = $this->_requestBodyPattern;
-        }
-        if ($this->_outputFormat) {
-            $array['outputFormat'] = $this->_outputFormat;
-        }
-        return !empty($array) ? $array : new \stdClass();
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         if (isset($normalisedArray['requestPattern']) || isset($normalisedArray['requestIds']) || isset($normalisedArray['allowNonProxied'])) {

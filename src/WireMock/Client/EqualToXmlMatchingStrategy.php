@@ -41,37 +41,6 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements Object
         return $this;
     }
 
-    public function toArray()
-    {
-        $array = parent::toArray();
-        if ($this->_enablePlaceholders) {
-            $array['enablePlaceholders'] = $this->_enablePlaceholders;
-        }
-        if ($this->_placeholderOpeningDelimiterRegex) {
-            $array['placeholderOpeningDelimiterRegex'] = $this->_placeholderOpeningDelimiterRegex;
-        }
-        if ($this->_placeholderClosingDelimiterRegex) {
-            $array['placeholderClosingDelimiterRegex'] = $this->_placeholderClosingDelimiterRegex;
-        }
-        if ($this->_exemptedComparisons) {
-            $array['exemptedComparisons'] = $this->_exemptedComparisons;
-        }
-        return $array;
-    }
-
-    public static function fromArray(array $array)
-    {
-        $matchingValue = $array['equalToXml'];
-        $enablePlaceholders = isset($array['enablePlaceholders']) && $array['enablePlaceholders'];
-        $placeholderOpeningDelimiterRegex = isset($array['placeholderOpeningDelimiterRegex']) && $array['placeholderOpeningDelimiterRegex'];
-        $placeholderClosingDelimiterRegex = isset($array['placeholderClosingDelimiterRegex']) && $array['placeholderClosingDelimiterRegex'];
-        $result = new self($matchingValue, $enablePlaceholders, $placeholderOpeningDelimiterRegex, $placeholderClosingDelimiterRegex);
-        if (isset($array['exemptedComparisons'])) {
-            $result->exemptingComparisons(...$array['exemptedComparisons']);
-        }
-        return $result;
-    }
-
     public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
     {
         unset($normalisedArray['matchingType']); // equalToXml

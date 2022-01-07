@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\Encoder\ContextAwareDecoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\HamcrestTestCase;
 use WireMock\Matching\RequestPattern;
+use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\Stubbing\StubMapping;
 
 class WireMockTest extends HamcrestTestCase
@@ -267,7 +268,8 @@ class WireMockTest extends HamcrestTestCase
 
         // then
         assertThat($mapping->getRequest()->getMethod(), is('ANY'));
-        assertThat($mapping->getRequest()->getUrlMatchingStrategy()->toArray(), is(array('urlPattern' => '.*')));
+        assertThat($mapping->getRequest()->getUrlMatchingStrategy(),
+            is(new UrlMatchingStrategy('urlPattern', '.*')));
         assertThat($mapping->getResponse()->getProxyBaseUrl(), is('http://localhost'));
     }
 
@@ -399,8 +401,8 @@ class WireMockTest extends HamcrestTestCase
 
         // then
         assertThat(
-            $mapping->getRequest()->getUrlMatchingStrategy()->toArray(),
-            equalTo(array('url' => $url))
+            $mapping->getRequest()->getUrlMatchingStrategy(),
+            equalTo(new UrlMatchingStrategy('url', $url))
         );
     }
 }

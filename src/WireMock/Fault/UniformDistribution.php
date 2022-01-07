@@ -41,27 +41,6 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
         return $this->_upper;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return array (
-            'type' => 'uniform',
-            'lower' => $this->_lower,
-            'upper' => $this->_upper
-        );
-    }
-
-    /**
-     * @param array $array
-     * @return UniformDistribution
-     */
-    public static function fromArray(array $array)
-    {
-        return new UniformDistribution($array['lower'], $array['upper']);
-    }
-
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $normalisedArray['type'] = 'uniform';

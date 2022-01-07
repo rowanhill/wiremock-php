@@ -116,26 +116,4 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
     {
         return $this->_loggedDateString;
     }
-
-    public function toArray()
-    {
-        return array(
-            'url' => $this->_url,
-            'absoluteUrl' => $this->_absoluteUrl,
-            'method' => $this->_method,
-            'clientIp' => $this->_clientIp,
-            'headers' => $this->_headers,
-            'cookies' => (object) $this->_cookies,
-            'body' => $this->_body,
-            'bodyAsBase64' => $this->_bodyAsBase64,
-            'browserProxyRequest' => $this->_browserProxyRequest,
-            'loggedDate' => $this->_loggedDate,
-            'loggedDateString' => $this->_loggedDateString
-        );
-    }
-
-    public static function fromArray(array $array)
-    {
-        return new LoggedRequest($array);
-    }
 }

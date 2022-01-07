@@ -13,10 +13,8 @@ class ValueMatchingStrategyTest extends HamcrestTestCase
         $matchingValue = '/some/thing';
         $valueMatchingStrategy = new ValueMatchingStrategy($matchingType, $matchingValue);
 
-        // when
-        $requestPatternArray = $valueMatchingStrategy->toArray();
-
         // then
-        assertThat($requestPatternArray, hasEntry($matchingType, $matchingValue));
+        assertThat($valueMatchingStrategy->getMatchingType(), equalTo($matchingType));
+        assertThat($valueMatchingStrategy->getMatchingValue(), equalTo($matchingValue));
     }
 }

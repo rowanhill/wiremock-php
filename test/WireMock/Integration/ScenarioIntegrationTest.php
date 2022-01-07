@@ -16,8 +16,7 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['scenarioName'], is('Some Scenario'));
+        assertThat($stubMapping->getScenarioName(), is('Some Scenario'));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -31,8 +30,7 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['requiredScenarioState'], is('Some State'));
+        assertThat($stubMapping->getRequiredScenarioState(), is('Some State'));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
@@ -46,8 +44,7 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
-        $stubMappingArray = $stubMapping->toArray();
-        assertThat($stubMappingArray['newScenarioState'], is('Another State'));
+        assertThat($stubMapping->getNewScenarioState(), is('Another State'));
         assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 

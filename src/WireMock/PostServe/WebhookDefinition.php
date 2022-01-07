@@ -73,7 +73,7 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
 
     public function withRandomDelay(DelayDistribution $delayDistribution): self
     {
-        $this->_delay = $delayDistribution->toArray();
+        $this->_delay = $delayDistribution;
         return $this;
     }
 
@@ -94,71 +94,6 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
         }
         $this->_extraParameters[$name] = $value;
         return $this;
-    }
-
-    public function toArray(): array
-    {
-        $array = array(
-            'method' => $this->_method,
-            'url' => $this->_url
-        );
-        if (isset($this->_headers)) {
-            $array['headers'] = $this->_headers;
-        }
-        if (isset($this->_body)) {
-            $array['body'] = $this->_body;
-        }
-        if (isset($this->_base64Body)) {
-            $array['base64Body'] = $this->_base64Body;
-        }
-        if (isset($this->_delay)) {
-            $array['delay'] = $this->_delay;
-        }
-        return array_merge(
-            $array,
-            $this->_extraParameters ?? array()
-        );
-    }
-
-    public static function fromArray(array $array): self
-    {
-        $webhook = new self();
-
-        if (isset($array['method'])) {
-            $webhook->_method = $array['method'];
-            unset($array['method']);
-        }
-
-        if (isset($array['url'])) {
-            $webhook->_url = $array['url'];
-            unset($array['url']);
-        }
-
-        if (isset($array['headers'])) {
-            $webhook->_headers = $array['headers'];
-            unset($array['headers']);
-        }
-
-        if (isset($array['body'])) {
-            $webhook->_body = $array['body'];
-            unset($array['body']);
-        }
-
-        if (isset($array['base64Body'])) {
-            $webhook->_base64Body = $array['base64Body'];
-            unset($array['base64Body']);
-        }
-
-        if (isset($array['delay'])) {
-            $webhook->_delay = $array['delay'];
-            unset($array['delay']);
-        }
-
-        if (!empty($array)) {
-            $webhook->_extraParameters = $array;
-        }
-
-        return $webhook;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

@@ -51,13 +51,4 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
     {
         return $this->_body;
     }
-
-    public static function fromArray(array $array)
-    {
-        return new LoggedResponse(
-            $array['status'],
-            isset($array['headers']) ? $array['headers'] : null,
-            isset($array['bodyAsBase64']) ? base64_decode($array['bodyAsBase64']) : null
-        );
-    }
 }
