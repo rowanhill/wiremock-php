@@ -78,8 +78,7 @@ class WireMockTest extends HamcrestTestCase
         // given
         $mockStubMapping = Phake::mock(StubMapping::class);
         Phake::when($mockStubMapping)->getId()->thenReturn('some-long-guid');
-        $stubMappingArray = array('some' => 'json');
-        Phake::when($mockStubMapping)->toArray()->thenReturn($stubMappingArray);
+        Phake::when($this->_mockSerializer)->serialize->thenReturn('{"some": "json"}');
         $mockMappingBuilder = Phake::mock(MappingBuilder::class);
         Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
 
@@ -87,7 +86,7 @@ class WireMockTest extends HamcrestTestCase
         $this->_wireMock->editStub($mockMappingBuilder);
 
         // then
-        Phake::verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', $stubMappingArray);
+        Phake::verify($this->_mockCurl)->put('http://localhost:8080/__admin/mappings/some-long-guid', '{"some": "json"}');
     }
 
     public function testEditingStubWithoutAnIdThrowsException()

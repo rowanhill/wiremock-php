@@ -71,9 +71,7 @@ class WireMock
     {
         $stubMapping = $mappingBuilder->build();
         $url = $this->_makeUrl('__admin/mappings');
-        $requestJson = $this->_serializer->serialize($stubMapping, 'json', [
-            AbstractObjectNormalizer::SKIP_NULL_VALUES => true
-        ]);
+        $requestJson = $this->_serializer->serialize($stubMapping, 'json');
         $responseJson = $this->_curl->post($url, $requestJson);
         /** @var StubMapping $responseMapping */
         $responseMapping = $this->_serializer->deserialize($responseJson, StubMapping::class, 'json');
@@ -89,7 +87,8 @@ class WireMock
             throw new VerificationException('Cannot edit a stub without an id');
         }
         $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->getId()));
-        $this->_curl->put($url, $stubMapping->toArray());
+        $requestJson = $this->_serializer->serialize($stubMapping, 'json');
+        $this->_curl->put($url, $requestJson);
         return $stubMapping;
     }
 

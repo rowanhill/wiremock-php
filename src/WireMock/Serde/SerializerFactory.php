@@ -4,6 +4,7 @@ namespace WireMock\Serde;
 
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -18,7 +19,10 @@ class SerializerFactory
                     new EmptyArrayIgnoringNormalizer(
                         null,
                         new PrivatePropertyNameConverter(),
-                        new PhpDocExtractor()
+                        new PhpDocExtractor(),
+                        null,
+                        null,
+                        [AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
                     )
                 )
             ],
