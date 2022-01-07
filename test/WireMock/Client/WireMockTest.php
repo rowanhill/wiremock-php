@@ -136,7 +136,8 @@ class WireMockTest extends HamcrestTestCase
         $responseJson = '{"count":1}';
         Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestJson)
             ->thenReturn($responseJson);
-        Phake::when($this->_mockSerializer)->decode($responseJson, 'json')->thenReturn(['count' => 1]);
+        Phake::when($this->_mockSerializer)->deserialize($responseJson, CountMatchingRequestsResult::class, 'json')
+            ->thenReturn(new CountMatchingRequestsResult(1));
 
         // when
         $this->_wireMock->verify($mockRequestPatternBuilder);
