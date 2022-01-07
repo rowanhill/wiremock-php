@@ -2,8 +2,13 @@
 
 namespace WireMock\Client;
 
-class BasicCredentials
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class BasicCredentials implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var string */
     private $_username;
     /** @var string */

@@ -3,6 +3,7 @@
 namespace WireMock\Matching;
 
 use Phake;
+use WireMock\Client\WireMock;
 use WireMock\HamcrestTestCase;
 
 class RequestPatternTest extends HamcrestTestCase
@@ -30,19 +31,20 @@ class RequestPatternTest extends HamcrestTestCase
         // given
         $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
         Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $headers = array('aHeader' => array('equalTo' => 'aValue'));
+        $headers = array('aHeader' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
             $headers,
             null
         );
+        $headersArray = array_map(function($h) { return $h->toArray(); }, $headers);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('headers', $headers));
+        assertThat($requestPatternArray, hasEntry('headers', $headersArray));
     }
 
     public function testRequestCookieMatchersAreAvailableInArray()
@@ -50,7 +52,7 @@ class RequestPatternTest extends HamcrestTestCase
         // given
         $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
         Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $cookies = array('aCookie' => array('equalTo' => 'aValue'));
+        $cookies = array('aCookie' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
@@ -58,12 +60,13 @@ class RequestPatternTest extends HamcrestTestCase
             $cookies,
             null
         );
+        $cookiesArray = array_map(function($c) { return $c->toArray(); }, $cookies);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('cookies', $cookies));
+        assertThat($requestPatternArray, hasEntry('cookies', $cookiesArray));
     }
 
     public function testRequestBodyMatchersAreAvailableInArray()
@@ -71,7 +74,7 @@ class RequestPatternTest extends HamcrestTestCase
         // given
         $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
         Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $bodyPatterns = array(array('equalTo' => 'aValue'));
+        $bodyPatterns = array(WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
@@ -80,12 +83,13 @@ class RequestPatternTest extends HamcrestTestCase
             $bodyPatterns,
             null
         );
+        $bodyPatternsArray = array_map(function($bp) { return $bp->toArray(); }, $bodyPatterns);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatterns));
+        assertThat($requestPatternArray, hasEntry('bodyPatterns', $bodyPatternsArray));
     }
 
     public function testQueryParamMatchersAreAvailableInArray()
@@ -93,7 +97,7 @@ class RequestPatternTest extends HamcrestTestCase
         // given
         $mockUrlMatchingStrategy = Phake::mock(UrlMatchingStrategy::class);
         Phake::when($mockUrlMatchingStrategy)->toArray()->thenReturn(array('url' => '/some/url'));
-        $queryParams = array('aParam' => array('equalTo' => 'aValue'));
+        $queryParams = array('aParam' => WireMock::equalTo('aValue'));
         $requestPattern = new RequestPattern(
             'GET',
             $mockUrlMatchingStrategy,
@@ -103,11 +107,12 @@ class RequestPatternTest extends HamcrestTestCase
             null,
             $queryParams
         );
+        $queryParamsArray = array_map(function($qp) { return $qp->toArray(); }, $queryParams);
 
         // when
         $requestPatternArray = $requestPattern->toArray();
 
         // then
-        assertThat($requestPatternArray, hasEntry('queryParameters', $queryParams));
+        assertThat($requestPatternArray, hasEntry('queryParameters', $queryParamsArray));
     }
 }

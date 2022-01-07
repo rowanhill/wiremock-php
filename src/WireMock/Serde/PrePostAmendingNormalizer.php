@@ -2,10 +2,7 @@
 
 namespace WireMock\Serde;
 
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -13,7 +10,7 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerAwareTrait;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PrePostAmendingNormalizer implements NormalizerInterface, SerializerAwareInterface
+class PrePostAmendingNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     use SerializerAwareTrait {
         setSerializer as traitSetSerializer;
@@ -41,7 +38,7 @@ class PrePostAmendingNormalizer implements NormalizerInterface, SerializerAwareI
         $normalizedArray = $this->_delegateNormalizer->normalize($object, $format, $context);
 
         if ($object instanceof PostNormalizationAmenderInterface) {
-            $normalizedArray = forward_static_call([get_class($object), 'amendNormalisation'], $normalizedArray, $object);
+            $normalizedArray = forward_static_call([get_class($object), 'amendPostNormalisation'], $normalizedArray, $object);
         }
 
         return $normalizedArray;
@@ -50,5 +47,28 @@ class PrePostAmendingNormalizer implements NormalizerInterface, SerializerAwareI
     public function supportsNormalization($data, $format = null)
     {
         return $this->_delegateNormalizer->supportsNormalization($data, $format);
+    }
+
+    public function denormalize($data, $type, $format = null, array $context = [])
+    {
+        if (is_subclass_of($type, PreDenormalizationAmenderInterface::class)) {
+            $data = forward_static_call([$type, 'amendPreNormalisation'], $data);
+        }
+        if (is_subclass_of($type, ObjectToPopulateFactoryInterface::class)) {
+            /** @var ObjectToPopulateResult $result */
+            $result = forward_static_call([$type, 'createObjectToPopulate'], $data, $this->serializer, $format, $context);
+            if ($result->object == null) {
+                return null;
+            }
+            $context[AbstractNormalizer::OBJECT_TO_POPULATE] = $result->object;
+            $data = $result->normalisedArray;
+        }
+        
+        return $this->_delegateNormalizer->denormalize($data, $type, $format, $context);
+    }
+
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return $this->_delegateNormalizer->supportsDenormalization($data, $type, $format);
     }
 }

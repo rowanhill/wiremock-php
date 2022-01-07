@@ -4,9 +4,9 @@ namespace WireMock\Client;
 
 class MultipartValuePatternBuilder
 {
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
     private $_bodyPatterns = array();
-    /** @var array */
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_headers = array();
     /** @var string */
     private $_name;
@@ -19,7 +19,7 @@ class MultipartValuePatternBuilder
      */
     public function withMultipartBody($valueMatchingStrategy)
     {
-        $this->_bodyPatterns[] = $valueMatchingStrategy->toArray();
+        $this->_bodyPatterns[] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -41,7 +41,7 @@ class MultipartValuePatternBuilder
      */
     public function withHeader($headerName, $valueMatchingStrategy)
     {
-        $this->_headers[$headerName] = $valueMatchingStrategy->toArray();
+        $this->_headers[$headerName] = $valueMatchingStrategy;
         return $this;
     }
 

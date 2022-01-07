@@ -2,8 +2,13 @@
 
 namespace WireMock\Client;
 
-class LogicalOperatorMatchingStrategy extends ValueMatchingStrategy
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class LogicalOperatorMatchingStrategy extends ValueMatchingStrategy implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /**
      * @param string $matchingType
      * @param ValueMatchingStrategy[] $matchers

@@ -288,9 +288,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
         assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
-            array(
-                'binaryEqualTo' => 'AQID'
-            )
+            WireMock::binaryEqualTo('AQID')
         )));
     }
 
@@ -328,14 +326,8 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
         assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
-            array(
-                'equalToJson' => '{"key":"value"}'
-            ),
-            array(
-                'equalToJson' => '{}',
-                'ignoreArrayOrder' => true,
-                'ignoreExtraElements' => true
-            )
+            WireMock::equalToJson('{"key":"value"}'),
+            WireMock::equalToJson('{}', true, true)
         )));
     }
 
@@ -350,15 +342,8 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping);
         assertThat($stubMapping->getRequest()->getBodyPatterns(), equalTo(array(
-            array(
-                'matchesJsonPath' => '$.status'
-            ),
-            array(
-                'matchesJsonPath' => array(
-                    'expression' => '$.status',
-                    'contains' => 'ok'
-                )
-            )
+            WireMock::matchingJsonPath('$.status'),
+            WireMock::matchingJsonPath('$.status', WireMock::containing('ok'))
         )));
     }
 
@@ -482,7 +467,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping, array(
             function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = WireMock::before("now +0 seconds");
+                $arr['request']['headers']['X-Munged-Date'] = ['before' => 'now +0 seconds'];
             }
         ));
     }
@@ -508,7 +493,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping, array(
             function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = WireMock::equalToDateTime("now +0 seconds");
+                $arr['request']['headers']['X-Munged-Date'] = ['equalToDateTime' => 'now +0 seconds'];
             }
         ));
     }
@@ -534,7 +519,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping, array(
             function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = WireMock::after("now +0 seconds");
+                $arr['request']['headers']['X-Munged-Date'] = ['after' => 'now +0 seconds'];
             }
         ));
     }
@@ -550,7 +535,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubMapping, array(
             function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = WireMock::after("now +3 days");
+                $arr['request']['headers']['X-Munged-Date'] = ['after' => 'now +3 days'];
             }
         ));
     }

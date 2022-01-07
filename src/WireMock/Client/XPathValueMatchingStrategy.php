@@ -2,10 +2,15 @@
 
 namespace WireMock\Client;
 
-class XPathValueMatchingStrategy extends ValueMatchingStrategy
+use Symfony\Component\Serializer\Serializer;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+use WireMock\Serde\ObjectToPopulateResult;
+use WireMock\Serde\PostNormalizationAmenderInterface;
+
+class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var array */
-    private $_namespaces = array();
+    private $_xPathNamespaces = array();
     /** @var ValueMatchingStrategy */
     private $_valueMatchingStrategy;
 
@@ -27,7 +32,7 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
      */
     public function withXPathNamespace($name, $namespaceUri)
     {
-        $this->_namespaces[$name] = $namespaceUri;
+        $this->_xPathNamespaces[$name] = $namespaceUri;
         return $this;
     }
 
@@ -38,8 +43,8 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
     {
         if (!$this->_valueMatchingStrategy) {
             $array = parent::toArray();
-            if (!empty($this->_namespaces)) {
-                $array['xPathNamespaces'] = $this->_namespaces;
+            if (!empty($this->_xPathNamespaces)) {
+                $array['xPathNamespaces'] = $this->_xPathNamespaces;
             }
             return $array;
         } else {
@@ -73,5 +78,33 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
             }
             return $result;
         }
+    }
+
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
+    {
+        $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);
+        if (isset($normalisedArray['valueMatchingStrategy'])) {
+            $strategy = $normalisedArray['valueMatchingStrategy'];
+            unset($normalisedArray['valueMatchingStrategy']);
+            $xPathExpression = $normalisedArray['matchesXPath'];
+            $strategy['expression'] = $xPathExpression;
+            $normalisedArray['matchesXPath'] = $strategy;
+        }
+        return $normalisedArray;
+    }
+
+    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    {
+        unset($normalisedArray['matchingType']); // matchesXPath
+        $matchingValue = $normalisedArray['matchingValue'];
+        unset($normalisedArray['matchingValue']);
+        if (is_array($matchingValue)) {
+            $xPath = $matchingValue['expression'];
+            unset($matchingValue['expression']);
+            $normalisedArray['valueMatchingStrategy'] = $matchingValue;
+        } else {
+            $xPath = $matchingValue;
+        }
+        return new ObjectToPopulateResult(new self($xPath), $normalisedArray);
     }
 }

@@ -2,14 +2,19 @@
 
 namespace WireMock\Client;
 
-class MultipartValuePattern
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class MultipartValuePattern implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     const ALL = 'ALL';
     const ANY = 'ANY';
 
-    /** @var array */
-    private $_bodyPatterns = array();
-    /** @var array */
+    /** @var ValueMatchingStrategy[] */
+    private $_bodyPatterns;
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_headers;
     /** @var string */
     private $_name;
@@ -17,8 +22,8 @@ class MultipartValuePattern
     private $_matchingType;
 
     /**
-     * @param array $bodyPatterns
-     * @param array $headers
+     * @param ValueMatchingStrategy[] $bodyPatterns
+     * @param array<string, ValueMatchingStrategy> $headers
      * @param string $name
      * @param string $matchingType
      */
@@ -69,10 +74,10 @@ class MultipartValuePattern
     {
         $array = array();
         if (!empty($this->_bodyPatterns)) {
-            $array['bodyPatterns'] = $this->_bodyPatterns;
+            $array['bodyPatterns'] = array_map(function($bp) { return $bp->toArray(); }, $this->_bodyPatterns);
         }
         if (!empty($this->_headers)) {
-            $array['headers'] = $this->_headers;
+            $array['headers'] = array_map(function($h) { return $h->toArray(); }, $this->_headers);
         }
         if ($this->_matchingType) {
             $array['matchingType'] = $this->_matchingType;

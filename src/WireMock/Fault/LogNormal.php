@@ -2,10 +2,14 @@
 
 namespace WireMock\Fault;
 
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface
+class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var float */
     private $_median;
     /** @var float */
@@ -58,7 +62,7 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface
         return new LogNormal($array['median'], $array['sigma']);
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $normalisedArray['type'] = 'lognormal';
         return $normalisedArray;

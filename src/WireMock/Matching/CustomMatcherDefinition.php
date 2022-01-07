@@ -2,8 +2,13 @@
 
 namespace WireMock\Matching;
 
-class CustomMatcherDefinition
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var string */
     private $_name;
     /** @var array */

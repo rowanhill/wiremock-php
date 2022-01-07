@@ -20,6 +20,9 @@
     "config": {
         "platform": {
             "php": "7.2"
+        },
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
         }
     },
 
@@ -28,7 +31,8 @@
         "ext-curl": "*",
         "php": ">=7.2",
         "symfony/serializer": "^4.4",
-        "symfony/property-access": "^4.4"
+        "symfony/property-access": "^4.4",
+        "symfony/property-info": "^4.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",

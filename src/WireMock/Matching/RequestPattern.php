@@ -2,23 +2,26 @@
 
 namespace WireMock\Matching;
 
+use Symfony\Component\Serializer\Serializer;
 use WireMock\Client\BasicCredentials;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\ValueMatchingStrategy;
 use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class RequestPattern implements PostNormalizationAmenderInterface
+class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var string */
     private $_method;
     /** @var UrlMatchingStrategy  */
     private $_urlMatchingStrategy;
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_headers;
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<ValueMatchingStrategy> */
     private $_cookies;
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<ValueMatchingStrategy> */
     private $_queryParameters;
     /** @var ValueMatchingStrategy[] */
     private $_bodyPatterns;
@@ -34,11 +37,11 @@ class RequestPattern implements PostNormalizationAmenderInterface
     /**
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @param ValueMatchingStrategy[] $headers
-     * @param ValueMatchingStrategy[] $cookies
+     * @param array<string, ValueMatchingStrategy> $headers
+     * @param array<string, ValueMatchingStrategy> $cookies
      * @param ValueMatchingStrategy[] $bodyPatterns
      * @param ValueMatchingStrategy[] $multipartPatterns
-     * @param ValueMatchingStrategy[] $queryParameters
+     * @param array<string, ValueMatchingStrategy> $queryParameters
      * @param BasicCredentials $basicCredentials
      * @param CustomMatcherDefinition $customMatcherDefinition
      * @param ValueMatchingStrategy $hostPattern
@@ -84,7 +87,7 @@ class RequestPattern implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return array
+     * @return array<string, ValueMatchingStrategy>
      */
     public function getHeaders()
     {
@@ -92,7 +95,7 @@ class RequestPattern implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return array
+     * @return array<string, ValueMatchingStrategy>
      */
     public function getCookies()
     {
@@ -100,7 +103,7 @@ class RequestPattern implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return array
+     * @return array<string, ValueMatchingStrategy>
      */
     public function getQueryParameters()
     {
@@ -108,7 +111,7 @@ class RequestPattern implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return array
+     * @return ValueMatchingStrategy[]
      */
     public function getBodyPatterns()
     {
@@ -116,7 +119,7 @@ class RequestPattern implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return array
+     * @return ValueMatchingStrategy[]
      */
     public function getMultipartPatterns()
     {
@@ -157,19 +160,19 @@ class RequestPattern implements PostNormalizationAmenderInterface
             $array = array_merge($array, $this->_urlMatchingStrategy->toArray());
         }
         if ($this->_headers) {
-            $array['headers'] = array_map(function($h) { if (is_array($h)) { return $h; } else { return $h->toArray(); } }, $this->_headers);
+            $array['headers'] = array_map(function($h) { return $h->toArray(); }, $this->_headers);
         }
         if ($this->_cookies) {
-            $array['cookies'] = $this->_cookies;
+            $array['cookies'] = array_map(function($c) { return $c->toArray(); }, $this->_cookies);
         }
         if ($this->_queryParameters) {
-            $array['queryParameters'] = $this->_queryParameters;
+            $array['queryParameters'] = array_map(function($qp) { return $qp->toArray(); }, $this->_queryParameters);
         }
         if ($this->_bodyPatterns) {
-            $array['bodyPatterns'] = $this->_bodyPatterns;
+            $array['bodyPatterns'] = array_map(function($bp) { return $bp->toArray(); }, $this->_bodyPatterns);
         }
         if ($this->_multipartPatterns) {
-            $array['multipartPatterns'] = $this->_multipartPatterns;
+            $array['multipartPatterns'] = array_map(function($mpp) { return $mpp->toArray(); }, $this->_multipartPatterns);
         }
         if ($this->_basicAuthCredentials) {
             $array['basicAuthCredentials'] = $this->_basicAuthCredentials->toArray();
@@ -194,19 +197,29 @@ class RequestPattern implements PostNormalizationAmenderInterface
             $array['method'],
             UrlMatchingStrategy::fromArray($array),
             isset($array['headers']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['headers']) : null,
-            isset($array['cookies']) ? $array['cookies'] : null,
-            isset($array['bodyPatterns']) ? $array['bodyPatterns'] : null,
+            isset($array['cookies']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['cookies']) : null,
+            isset($array['bodyPatterns']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['bodyPatterns']) : null,
             isset($array['multipartPatterns']) ? $array['multipartPatterns'] : null,
-            isset($array['queryParameters']) ? $array['queryParameters'] : null,
+            isset($array['queryParameters']) ? array_map(function($value) { return ValueMatchingStrategy::fromArray($value); }, $array['queryParameters']) : null,
             isset($array['basicAuthCredentials']) ? BasicCredentials::fromArray($array['basicAuthCredentials']) : null,
             isset($array['customMatcher']) ? CustomMatcherDefinition::fromArray($array['customMatcher']) : null,
             isset($array['host']) ? ValueMatchingStrategy::fromArray($array['host']) : null
         );
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::inline($normalisedArray, 'urlMatchingStrategy');
         return $normalisedArray;
+    }
+
+    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    {
+        $method = $normalisedArray['method'];
+        unset($normalisedArray['method']);
+
+        $urlMatchingStrategy = $serializer->denormalize($normalisedArray, UrlMatchingStrategy::class, $format, $context);
+
+        return new ObjectToPopulateResult(new self($method, $urlMatchingStrategy), $normalisedArray);
     }
 }

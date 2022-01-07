@@ -1,11 +1,15 @@
 <?php
 namespace WireMock\Client;
 
-class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
+use Symfony\Component\Serializer\Serializer;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+use WireMock\Serde\ObjectToPopulateResult;
+
+class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements ObjectToPopulateFactoryInterface
 {
-    private $_enablePlaceholders = false;
-    private $_placeholderOpeningDelimiterRegex = null;
-    private $_placeholderClosingDelimiterRegex = null;
+    private $_enablePlaceholders;
+    private $_placeholderOpeningDelimiterRegex;
+    private $_placeholderClosingDelimiterRegex;
     private $_exemptedComparisons = null;
 
     /**
@@ -16,9 +20,9 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
      */
     public function __construct(
         $matchingValue,
-        $enablePlaceholders,
-        $placeholderOpeningDelimiterRegex,
-        $placeholderClosingDelimiterRegex
+        $enablePlaceholders = false,
+        $placeholderOpeningDelimiterRegex = null,
+        $placeholderClosingDelimiterRegex = null
     ) {
         parent::__construct('equalToXml', $matchingValue);
         $this->_enablePlaceholders = $enablePlaceholders;
@@ -66,5 +70,13 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
             $result->exemptingComparisons(...$array['exemptedComparisons']);
         }
         return $result;
+    }
+
+    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    {
+        unset($normalisedArray['matchingType']); // equalToXml
+        $matchingValue = $normalisedArray['matchingValue'];
+        unset($normalisedArray['matchingValue']);
+        return new ObjectToPopulateResult(new self($matchingValue), $normalisedArray);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use WireMock\Client\ListStubMappingsResult;
+use WireMock\Serde\SerializerFactory;
 use WireMock\Stubbing\StubMapping;
 
 /**
@@ -24,9 +24,6 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $expec
         $transformation($localStubMappingArray);
     }
 
-    print_r($localStubMappingArray);
-    print_r($serverStubMappingArray);
-
     assertThat($serverStubMappingArray, equalTo($localStubMappingArray));
 }
 
@@ -38,8 +35,9 @@ function assertThatThereAreNoMappings()
 
 function getMappings()
 {
+    $defaultSerializer = SerializerFactory::default();
     $adminJson = file_get_contents('http://localhost:8080/__admin/mappings');
-    $resultArray = json_decode($adminJson, true);
-    $result = new ListStubMappingsResult($resultArray);
-    return $result->getMappings();
+    // TODO: Move to single deserialize step when ListStubMappingsResult is serializer-friendly
+    $resultArray = $defaultSerializer->decode($adminJson, 'json');
+    return $defaultSerializer->denormalize($resultArray['mappings'], StubMapping::class.'[]', 'json');
 }

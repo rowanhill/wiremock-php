@@ -10,15 +10,15 @@ class RequestPatternBuilder
 {
     private $_method;
     private $_urlMatchingStrategy;
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_headers = array();
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_cookies = array();
-    /** @var ValueMatchingStrategy[] */
+    /** @var \array<string, ValueMatchingStrategy> */
     private $_queryParameters = array();
     /** @var ValueMatchingStrategy[] */
     private $_bodyPatterns = array();
-    /** @var ValueMatchingStrategy[] */
+    /** @var MultipartValuePattern[] */
     private $_multipartPatterns = array();
     /** @var BasicCredentials */
     private $_basicCredentials;
@@ -60,7 +60,7 @@ class RequestPatternBuilder
      */
     public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_cookies[$cookieName] = $valueMatchingStrategy->toArray();
+        $this->_cookies[$cookieName] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -70,7 +70,7 @@ class RequestPatternBuilder
      */
     public function withoutHeader($headerName)
     {
-        $this->_headers[$headerName] = array('absent' => true);
+        $this->_headers[$headerName] = new ValueMatchingStrategy('absent', true);
         return $this;
     }
 
@@ -81,7 +81,7 @@ class RequestPatternBuilder
      */
     public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_queryParameters[$name] = $valueMatchingStrategy->toArray();
+        $this->_queryParameters[$name] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -91,7 +91,7 @@ class RequestPatternBuilder
      */
     public function withRequestBody(ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_bodyPatterns[] = $valueMatchingStrategy->toArray();
+        $this->_bodyPatterns[] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -101,7 +101,7 @@ class RequestPatternBuilder
      */
     public function withMultipartRequestBody($multipart)
     {
-        $this->_multipartPatterns[] = $multipart->toArray();
+        $this->_multipartPatterns[] = $multipart;
         return $this;
     }
 

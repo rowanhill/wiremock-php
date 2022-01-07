@@ -2,10 +2,14 @@
 
 namespace WireMock\Client;
 
+use Symfony\Component\Serializer\Serializer;
 use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class EqualToMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
+class EqualToMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     private $_ignoreCase = false;
 
@@ -35,12 +39,26 @@ class EqualToMatchingStrategy extends ValueMatchingStrategy implements PostNorma
         return new self($matchingValue, $ignoreCase);
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
-        $normalisedArray = parent::amendNormalisation($normalisedArray, $object);
+        $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);
 
         NormalizerUtils::renameKey($normalisedArray, 'ignoreCase', 'caseInsensitive');
 
         return $normalisedArray;
+    }
+
+    public static function amendPreNormalisation(array $normalisedArray): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'caseInsensitive', 'ignoreCase');
+        return $normalisedArray;
+    }
+
+    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    {
+        unset($normalisedArray['matchingType']); //equalTo
+        $matchingValue = $normalisedArray['matchingValue'];
+        unset($normalisedArray['matchingValue']);
+        return new ObjectToPopulateResult(new EqualToMatchingStrategy($matchingValue), $normalisedArray);
     }
 }

@@ -3,7 +3,6 @@
 namespace WireMock\Client;
 
 use DateTime;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -14,9 +13,6 @@ use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpecBuilder;
 use WireMock\Recording\SnapshotRecordResult;
-use WireMock\Serde\EmptyArrayIgnoringNormalizer;
-use WireMock\Serde\PrePostAmendingNormalizer;
-use WireMock\Serde\PrivatePropertyNameConverter;
 use WireMock\Serde\SerializerFactory;
 use WireMock\Stubbing\StubImport;
 use WireMock\Stubbing\StubImportBuilder;
@@ -41,10 +37,7 @@ class WireMock
         $httpWait = new HttpWait();
         $curl = new Curl();
 
-        $serializer = new Serializer(
-            [new PrePostAmendingNormalizer(new EmptyArrayIgnoringNormalizer(null, new PrivatePropertyNameConverter()))],
-            [new JsonEncoder()]
-        );
+        $serializer = SerializerFactory::default();
         return new self($httpWait, $curl, $serializer, $hostname, $port);
     }
 
@@ -78,12 +71,14 @@ class WireMock
     {
         $stubMapping = $mappingBuilder->build();
         $url = $this->_makeUrl('__admin/mappings');
-        $json = $this->_serializer->serialize($stubMapping, 'json', [
+        $requestJson = $this->_serializer->serialize($stubMapping, 'json', [
             AbstractObjectNormalizer::SKIP_NULL_VALUES => true
         ]);
-        $result = $this->_curl->post($url, $json);
-        $resultJson = json_decode($result);
-        $stubMapping->setId($resultJson->id);
+        $responseJson = $this->_curl->post($url, $requestJson);
+        /** @var StubMapping $responseMapping */
+        $responseMapping = $this->_serializer->deserialize($responseJson, StubMapping::class, 'json');
+        $stubMapping->setId($responseMapping->getId());
+
         return $stubMapping;
     }
 

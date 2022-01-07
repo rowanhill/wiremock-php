@@ -5,11 +5,16 @@ namespace WireMock\Stubbing;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 use WireMock\PostServe\PostServeAction;
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
 use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class StubMapping implements PostNormalizationAmenderInterface
+class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var string A string representation of a GUID */
     private $_id;
     /** @var string */
@@ -40,7 +45,7 @@ class StubMapping implements PostNormalizationAmenderInterface
 
     /**
      * @param RequestPattern $request
-     * @param ResponseDefinition $responseDefinition
+     * @param ResponseDefinition $response
      * @param string $id
      * @param string $name
      * @param int $priority
@@ -51,7 +56,7 @@ class StubMapping implements PostNormalizationAmenderInterface
      */
     public function __construct(
         RequestPattern $request,
-        ResponseDefinition $responseDefinition,
+        ResponseDefinition $response,
         $id = null,
         $name = null,
         $priority = null,
@@ -64,7 +69,7 @@ class StubMapping implements PostNormalizationAmenderInterface
         $this->_id = $id;
         $this->_name = $name;
         $this->_request = $request;
-        $this->_response = $responseDefinition;
+        $this->_response = $response;
         $this->_priority = $priority;
         $this->_metadata = $metadata;
         $this->_isPersistent = $isPersistent;
@@ -230,9 +235,15 @@ class StubMapping implements PostNormalizationAmenderInterface
         );
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'isPersistent', 'persistent');
+        return $normalisedArray;
+    }
+
+    public static function amendPreNormalisation(array $normalisedArray): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'persistent', 'isPersistent');
         return $normalisedArray;
     }
 }

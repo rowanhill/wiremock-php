@@ -2,11 +2,16 @@
 
 namespace WireMock\Fault;
 
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
 use WireMock\Serde\NormalizerUtils;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class ChunkedDribbleDelay implements PostNormalizationAmenderInterface
+class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var int */
     private $_numberOfChunks;
     /** @var int */
@@ -51,9 +56,15 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface
         return new ChunkedDribbleDelay($array['numberOfChunks'], $array['totalDuration']);
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'totalDurationMillis', 'totalDuration');
+        return $normalisedArray;
+    }
+
+    public static function amendPreNormalisation(array $normalisedArray): array
+    {
+        NormalizerUtils::renameKey($normalisedArray, 'totalDuration', 'totalDurationMillis');
         return $normalisedArray;
     }
 }

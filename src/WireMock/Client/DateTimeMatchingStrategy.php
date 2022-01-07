@@ -2,10 +2,14 @@
 
 namespace WireMock\Client;
 
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
+class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     // Offset units
     const SECONDS = "seconds";
     const MINUTES = "minutes";
@@ -132,9 +136,9 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
         return new self("after", $dateTimeSpec);
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
-        $normalisedArray = parent::amendNormalisation($normalisedArray, $object);
+        $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);
         if (isset($normalisedArray['expectedOffset'])) {
             $expectedOffset = $normalisedArray['expectedOffset'];
             $normalisedArray['expectedOffset'] = $expectedOffset['amount'];

@@ -60,6 +60,7 @@ class WireMockTest extends HamcrestTestCase
         $mockStubMapping = Phake::mock(StubMapping::class);
         $json = '{"some": "json"}';
         Phake::when($this->_mockSerializer)->serialize->thenReturn($json);
+        Phake::when($this->_mockSerializer)->deserialize->thenReturn($mockStubMapping);
         $mockMappingBuilder = Phake::mock(MappingBuilder::class);
         Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
         Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/mappings', $json)
@@ -108,11 +109,13 @@ class WireMockTest extends HamcrestTestCase
     {
         // given
         $mockStubMapping = Phake::mock(StubMapping::class);
+        $id = 'some-long-guid';
+        Phake::when($mockStubMapping)->getId()->thenReturn($id);
         $json = '{"some": "json"}';
         Phake::when($this->_mockSerializer)->serialize->thenReturn($json);
+        Phake::when($this->_mockSerializer)->deserialize->thenReturn($mockStubMapping);
         $mockMappingBuilder = Phake::mock(MappingBuilder::class);
         Phake::when($mockMappingBuilder)->build()->thenReturn($mockStubMapping);
-        $id = 'some-long-guid';
         Phake::when($this->_mockCurl)->post(anything(), $json)->thenReturn(json_encode(array('id' => $id)));
 
         // when

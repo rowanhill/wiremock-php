@@ -2,9 +2,12 @@
 
 namespace WireMock\Matching;
 
+use Symfony\Component\Serializer\Serializer;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class UrlMatchingStrategy implements PostNormalizationAmenderInterface
+class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var string */
     private $_matchingType;
@@ -58,10 +61,24 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface
         return null;
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $matchingType = $normalisedArray['matchingType'];
         $matchingValue = $normalisedArray['matchingValue'];
         return [$matchingType => $matchingValue];
+    }
+
+    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    {
+        $strategy = null;
+        foreach (array('url', 'urlPattern', 'urlPath', 'urlPathPattern') as $type) {
+            if (isset($normalisedArray[$type])) {
+                $matchingValue = $normalisedArray[$type];
+                unset($normalisedArray[$type]);
+                $strategy = new UrlMatchingStrategy($type, $matchingValue);
+                break;
+            }
+        }
+        return new ObjectToPopulateResult($strategy, $normalisedArray);
     }
 }

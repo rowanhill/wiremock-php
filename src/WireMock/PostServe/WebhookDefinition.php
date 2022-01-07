@@ -9,8 +9,9 @@ use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
 use WireMock\Serde\NormalizerUtils;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class WebhookDefinition implements PostNormalizationAmenderInterface
+class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
     /** @var string */
     private $_method;
@@ -160,9 +161,19 @@ class WebhookDefinition implements PostNormalizationAmenderInterface
         return $webhook;
     }
 
-    public static function amendNormalisation(array $normalisedArray, $object): array
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::inline($normalisedArray, 'extraParameters');
+        return $normalisedArray;
+    }
+
+    public static function amendPreNormalisation(array $normalisedArray): array
+    {
+        $extraParameters = array_diff_key($normalisedArray, ['method', 'url', 'headers', 'body', 'base64Body', 'delay']);
+        foreach ($extraParameters as $key => $value) {
+            unset($normalisedArray[$key]);
+        }
+        $normalisedArray['extraParameters'] = $extraParameters;
         return $normalisedArray;
     }
 }

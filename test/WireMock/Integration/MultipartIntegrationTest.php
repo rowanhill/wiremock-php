@@ -20,8 +20,8 @@ class MultipartIntegrationTest extends WireMockIntegrationTest
         assertThatTheOnlyMappingPresentIs($stubbing);
         assertThat($stubbing->getRequest()->getMultipartPatterns(), arrayWithSize(2));
         $patterns = $stubbing->getRequest()->getMultipartPatterns();
-        assertThat($patterns[0]['bodyPatterns'][0], equalTo(array('matches' => 'abc')));
-        assertThat($patterns[1]['bodyPatterns'][0], equalTo(array('matches' => 'def')));
+        assertThat($patterns[0]->getBodyPatterns()[0], equalTo(WireMock::matching('abc')));
+        assertThat($patterns[1]->getBodyPatterns()[0], equalTo(WireMock::matching('def')));
     }
 
     public function testMultipartWithNameCanBeRegistered()
@@ -35,7 +35,7 @@ class MultipartIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubbing);
         $patterns = $stubbing->getRequest()->getMultipartPatterns();
-        assertThat($patterns[0]['headers']['Content-Disposition'], equalTo(array('contains' => 'name="partName"')));
+        assertThat($patterns[0]->getHeaders()['Content-Disposition'], equalTo(WireMock::containing('name="partName"')));
     }
 
     public function testMultipartWithHeaderCanBeRegistered()
@@ -49,7 +49,7 @@ class MultipartIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubbing);
         $patterns = $stubbing->getRequest()->getMultipartPatterns();
-        assertThat($patterns[0]['headers']['X-Header'], equalTo(array('contains' => 'foo')));
+        assertThat($patterns[0]->getHeaders()['X-Header'], equalTo(WireMock::containing('foo')));
     }
 
     public function testMultipartMatchingTypeDefaultsToAny()
@@ -63,7 +63,7 @@ class MultipartIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubbing);
         $patterns = $stubbing->getRequest()->getMultipartPatterns();
-        assertThat($patterns[0]['matchingType'], equalTo(MultipartValuePattern::ANY));
+        assertThat($patterns[0]->getMatchingType(), equalTo(MultipartValuePattern::ANY));
     }
 
     public function testMultipartMatchingTypeCanBetSetToAll()
@@ -77,6 +77,6 @@ class MultipartIntegrationTest extends WireMockIntegrationTest
         // then
         assertThatTheOnlyMappingPresentIs($stubbing);
         $patterns = $stubbing->getRequest()->getMultipartPatterns();
-        assertThat($patterns[0]['matchingType'], equalTo(MultipartValuePattern::ALL));
+        assertThat($patterns[0]->getMatchingType(), equalTo(MultipartValuePattern::ALL));
     }
 }
