@@ -97,16 +97,18 @@ class WireMock
      */
     public function importStubs($stubImportsOrBuilder)
     {
-        $stubImports = ($stubImportsOrBuilder instanceof  StubImport) ?
+        $stubImports = ($stubImportsOrBuilder instanceof StubImport) ?
             $stubImportsOrBuilder :
             $stubImportsOrBuilder->build();
         $url = $this->_makeUrl('__admin/mappings/import');
-        $this->_curl->post($url, $stubImports->toArray());
+        $requestJson = $this->_serializer->serialize($stubImports, 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
      * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
-     * @param RequestPatternBuilder $requestPatternBuilder
+     * @param RequestPatternBuilder|null $requestPatternBuilder
+     * @throws ClientException
      * @throws VerificationException
      */
     public function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
@@ -124,8 +126,9 @@ class WireMock
 
         $requestPattern = $patternBuilder->build();
         $url = $this->_makeUrl('__admin/requests/count');
-        $responseJson = $this->_curl->post($url, $requestPattern->toArray());
-        $response = json_decode($responseJson, true);
+        $requestJson = $this->_serializer->serialize($requestPattern, 'json');
+        $responseJson = $this->_curl->post($url, $requestJson);
+        $response = $this->_serializer->decode($responseJson, 'json');
         $count = $response['count'];
 
         if ($numberOfRequestsMatcher === null) {

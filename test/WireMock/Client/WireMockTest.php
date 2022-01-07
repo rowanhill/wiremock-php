@@ -3,6 +3,7 @@
 namespace WireMock\Client;
 
 use Phake;
+use Symfony\Component\Serializer\Encoder\ContextAwareDecoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\HamcrestTestCase;
 use WireMock\Matching\RequestPattern;
@@ -24,7 +25,7 @@ class WireMockTest extends HamcrestTestCase
     {
         $this->_mockHttpWait = Phake::mock(HttpWait::class);
         $this->_mockCurl = Phake::mock(Curl::class);
-        $this->_mockSerializer = Phake::mock(SerializerInterface::class);
+        $this->_mockSerializer = Phake::mock([SerializerInterface::class, ContextAwareDecoderInterface::class]);
 
         $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl, $this->_mockSerializer);
     }
@@ -128,18 +129,20 @@ class WireMockTest extends HamcrestTestCase
     {
         // given
         $mockRequestPattern = Phake::mock(RequestPattern::class);
-        $requestPatternArray = array('some' => 'json');
-        Phake::when($mockRequestPattern)->toArray()->thenReturn($requestPatternArray);
+        $requestJson = '{"some": "json"}';
+        Phake::when($this->_mockSerializer)->serialize->thenReturn($requestJson);
         $mockRequestPatternBuilder = Phake::mock('WireMock\Client\RequestPatternBuilder');
         Phake::when($mockRequestPatternBuilder)->build()->thenReturn($mockRequestPattern);
-        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray)
-            ->thenReturn('{"count":1}');
+        $responseJson = '{"count":1}';
+        Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestJson)
+            ->thenReturn($responseJson);
+        Phake::when($this->_mockSerializer)->decode($responseJson, 'json')->thenReturn(['count' => 1]);
 
         // when
         $this->_wireMock->verify($mockRequestPatternBuilder);
 
         // then
-        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestPatternArray);
+        Phake::verify($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestJson);
     }
 
     public function testGetWithUrlTreatedAsUrlEqualTo()
