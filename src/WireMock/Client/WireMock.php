@@ -3,7 +3,6 @@
 namespace WireMock\Client;
 
 use DateTime;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\Fault\DelayDistribution;
@@ -83,9 +82,7 @@ class WireMock
         if (!$stubMapping->getId()) {
             throw new VerificationException('Cannot edit a stub without an id');
         }
-        $url = $this->_makeUrl('__admin/mappings/' . urlencode($stubMapping->getId()));
-        $requestJson = $this->_serializer->serialize($stubMapping, 'json');
-        $this->_curl->put($url, $requestJson);
+        $this->doPut('__admin/mappings/' . urlencode($stubMapping->getId()), $stubMapping);
         return $stubMapping;
     }
 
@@ -162,9 +159,7 @@ class WireMock
             $pathAndParams .= '?' . $params;
         }
 
-        $url = $this->_makeUrl($pathAndParams);
-        $responseJson = $this->_curl->get($url);
-        return $this->_serializer->deserialize($responseJson, GetServeEventsResult::class, 'json');
+        return $this->doGet($pathAndParams, GetServeEventsResult::class);
     }
 
     /**
@@ -183,11 +178,7 @@ class WireMock
      */
     public function findUnmatchedRequests()
     {
-        $url = $this->_makeUrl('__admin/requests/unmatched');
-        $resultJson = $this->_curl->get($url);
-        /** @var UnmatchedRequests $result */
-        $result = $this->_serializer->deserialize($resultJson, UnmatchedRequests::class, 'json');
-        return $result;
+        return $this->doGet('__admin/requests/unmatched', UnmatchedRequests::class);
     }
 
     /**
@@ -215,11 +206,7 @@ class WireMock
      */
     public function findNearMissesForAllUnmatched()
     {
-        $url = $this->_makeUrl('__admin/requests/unmatched/near-misses');
-        $findResultJson = $this->_curl->get($url);
-        /** @var FindNearMissesResult $result */
-        $result = $this->_serializer->deserialize($findResultJson, FindNearMissesResult::class, 'json');
-        return $result;
+        return $this->doGet('__admin/requests/unmatched/near-misses', FindNearMissesResult::class);
     }
 
     /**
@@ -227,8 +214,7 @@ class WireMock
      */
     public function resetAllRequests()
     {
-        $url = $this->_makeUrl('__admin/requests');
-        $this->_curl->delete($url);
+        $this->doDelete('__admin/requests');
     }
 
     /**
@@ -237,8 +223,7 @@ class WireMock
      */
     public function removeServeEvent($id)
     {
-        $url = $this->_makeUrl("__admin/requests/$id");
-        $this->_curl->delete($url);
+        $this->doDelete("__admin/requests/$id");
     }
 
     /**
@@ -295,8 +280,7 @@ class WireMock
      */
     public function removeStub($id)
     {
-        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
-        $this->_curl->delete($url);
+        $this->doDelete('__admin/mappings/' . urlencode($id));
     }
 
     /**
@@ -320,11 +304,7 @@ class WireMock
      */
     public function getAllScenarios()
     {
-        $url = $this->_makeUrl('__admin/scenarios');
-        $findResultJson = $this->_curl->get($url);
-        /** @var GetScenariosResult $findResult */
-        $findResult = $this->_serializer->deserialize($findResultJson, GetScenariosResult::class, 'json');
-        return $findResult;
+        return $this->doGet('__admin/scenarios', GetScenariosResult::class);
     }
 
     /**
@@ -360,11 +340,7 @@ class WireMock
                 $pathAndParams .= 'offset=' . urlencode($offset);
             }
         }
-        $url = $this->_makeUrl($pathAndParams);
-        $resultJson = $this->_curl->get($url);
-        /** @var ListStubMappingsResult $result */
-        $result = $this->_serializer->deserialize($resultJson, ListStubMappingsResult::class, 'json');
-        return $result;
+        return $this->doGet($pathAndParams, ListStubMappingsResult::class);
     }
 
     /**
@@ -374,11 +350,7 @@ class WireMock
      */
     public function getSingleStubMapping($id)
     {
-        $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
-        $resultJson = $this->_curl->get($url);
-        /** @var StubMapping $result */
-        $result = $this->_serializer->deserialize($resultJson, StubMapping::class, 'json');
-        return $result;
+        return $this->doGet('__admin/mappings/' . urlencode($id), StubMapping::class);
     }
 
     /**
@@ -417,11 +389,7 @@ class WireMock
      */
     public function getRecordingStatus()
     {
-        $url = $this->_makeUrl('__admin/recordings/status');
-        $resultJson = $this->_curl->get($url);
-        /** @var RecordingStatusResult $result */
-        $result = $this->_serializer->deserialize($resultJson, RecordingStatusResult::class, 'json');
-        return $result;
+        return $this->doGet('__admin/recordings/status', RecordingStatusResult::class);
     }
 
     /**
@@ -444,10 +412,25 @@ class WireMock
 
     /**
      * @param string $path
-     * @param null $body
      * @param string|null $resultType
      * @return mixed
-     * @throws ClientException
+     */
+    private function doGet(string $path, ?string $resultType = null)
+    {
+        $url = $this->_makeUrl($path);
+        $resultJson = $this->_curl->get($url);
+        if ($resultType != null) {
+            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $body
+     * @param string|null $resultType
+     * @return mixed
      */
     private function doPost(string $path, $body = null, ?string $resultType = null)
     {
@@ -458,6 +441,44 @@ class WireMock
             $requestJson = null;
         }
         $resultJson = $this->_curl->post($url, $requestJson);
+        if ($resultType != null) {
+            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $body
+     * @param string|null $resultType
+     * @return mixed
+     */
+    private function doPut(string $path, $body = null, ?string $resultType = null)
+    {
+        $url = $this->_makeUrl($path);
+        if ($body != null) {
+            $requestJson = $this->_serializer->serialize($body, 'json');
+        } else {
+            $requestJson = null;
+        }
+        $resultJson = $this->_curl->put($url, $requestJson);
+        if ($resultType != null) {
+            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param string|null $resultType
+     * @return mixed
+     */
+    private function doDelete(string $path, ?string $resultType = null)
+    {
+        $url = $this->_makeUrl($path);
+        $resultJson = $this->_curl->delete($url);
         if ($resultType != null) {
             return $this->_serializer->deserialize($resultJson, $resultType, 'json');
         } else {
