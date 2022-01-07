@@ -2,24 +2,33 @@
 
 namespace WireMock\Client;
 
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\StubMapping;
 
-class ListStubMappingsResult extends PaginatedResult
+class ListStubMappingsResult extends PaginatedResult implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
+    /** @var StubMapping[] */
+    private $_mappings;
+
     /**
-     * @param array $array
-     * @return StubMapping[]
+     * @param Meta $meta
+     * @param StubMapping[] $_mappings
      */
-    protected function getList(array $array)
+    public function __construct(Meta $meta, array $_mappings)
     {
-        return array_map(function($sm) { return StubMapping::fromArray($sm); }, $array['mappings']);
+        parent::__construct($meta);
+        $this->_mappings = $_mappings;
     }
+
 
     /**
      * @return StubMapping[]
      */
     public function getMappings()
     {
-        return $this->_list;
+        return $this->_mappings;
     }
 }

@@ -8,11 +8,20 @@ abstract class RequestJournalDependentResult extends PaginatedResult
     private $_requestJournalDisabled;
 
     /**
-     * @param array $array
+     * @param Meta $meta
+     * @param bool $requestJournalDisabled
      */
-    public function __construct(array $array)
+    public function __construct(Meta $meta, bool $requestJournalDisabled)
     {
-        parent::__construct($array);
-        $this->_requestJournalDisabled = $array['requestJournalDisabled'];
+        parent::__construct($meta);
+        $this->_requestJournalDisabled = $requestJournalDisabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequestJournalDisabled()
+    {
+        return $this->_requestJournalDisabled;
     }
 }

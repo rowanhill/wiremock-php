@@ -2,11 +2,20 @@
 
 namespace WireMock\Client;
 
-class LoggedRequest
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class LoggedRequest implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
+    /** @var string */
     private $_url;
+    /** @var string */
     private $_absoluteUrl;
+    /** @var string */
     private $_method;
+    /** @var string */
     private $_clientIp;
     private $_headers;
     private $_cookies;
@@ -16,12 +25,8 @@ class LoggedRequest
     private $_loggedDate;
     private $_loggedDateString;
 
-    public function __construct(array $requestArray)
+    public function __construct()
     {
-        foreach ($requestArray as $key => $value) {
-            $property = "_$key";
-            $this->{$property} = $value;
-        }
     }
 
     /**
@@ -49,7 +54,7 @@ class LoggedRequest
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getClientIp()
     {

@@ -2,26 +2,26 @@
 
 namespace WireMock\Client;
 
-class UnmatchedRequests
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class UnmatchedRequests implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+    
     /** @var LoggedRequest[] */
     private $_requests;
     /** @var boolean */
     private $_requestJournalDisabled;
 
     /**
-     * UnmatchedRequests constructor.
-     * @param array $array
+     * @param bool $requestJournalDisabled
+     * @param LoggedRequest[] $requests
      */
-    public function __construct(array $array)
+    public function __construct(bool $requestJournalDisabled, array $requests)
     {
-        $requests = array();
-        foreach ($array['requests'] as $responseArray) {
-            $requests[] = new LoggedRequest($responseArray);
-        }
+        $this->_requestJournalDisabled = $requestJournalDisabled;
         $this->_requests = $requests;
-
-        $this->_requestJournalDisabled = $array['requestJournalDisabled'];
     }
 
     /**

@@ -2,8 +2,13 @@
 
 namespace WireMock\Client;
 
-class MatchResult
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class MatchResult implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     private $_distance;
 
     /**
@@ -20,14 +25,5 @@ class MatchResult
     public function getDistance()
     {
         return $this->_distance;
-    }
-
-    /**
-     * @param array $array
-     * @return MatchResult
-     */
-    public static function fromArray(array $array)
-    {
-        return new MatchResult($array['distance']);
     }
 }

@@ -2,20 +2,25 @@
 
 namespace WireMock\Client;
 
-class GetServeEventsResult extends RequestJournalDependentResult
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class GetServeEventsResult extends RequestJournalDependentResult implements ObjectToPopulateFactoryInterface
 {
-    public function __construct(array $array)
-    {
-        parent::__construct($array);
-    }
+    use DummyConstructorArgsObjectToPopulateFactory;
+
+    /** @var ServeEvent[]  */
+    private $_requests;
 
     /**
-     * @param array $array
-     * @return ServeEvent[]
+     * @param Meta $meta
+     * @param bool $requestJournalDisabled
+     * @param ServeEvent[] $requests
      */
-    protected function getList(array $array)
+    public function __construct(Meta $meta, bool $requestJournalDisabled, array $requests)
     {
-        return array_map(function($r) { return ServeEvent::fromArray($r); }, $array['requests']);
+        parent::__construct($meta, $requestJournalDisabled);
+        $this->_requests = $requests;
     }
 
     /**
@@ -23,6 +28,6 @@ class GetServeEventsResult extends RequestJournalDependentResult
      */
     public function getRequests()
     {
-        return $this->_list;
+        return $this->_requests;
     }
 }

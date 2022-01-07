@@ -2,8 +2,13 @@
 
 namespace WireMock\Client;
 
-class FindNearMissesResult
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class FindNearMissesResult implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var NearMiss[] */
     private $_nearMisses;
 
@@ -21,16 +26,5 @@ class FindNearMissesResult
     public function getNearMisses()
     {
         return $this->_nearMisses;
-    }
-
-    /**
-     * @param array $array
-     * @return FindNearMissesResult
-     */
-    public static function fromArray(array $array)
-    {
-        return new FindNearMissesResult(
-            array_map(function($nm) { return NearMiss::fromArray($nm); }, $array['nearMisses'])
-        );
     }
 }

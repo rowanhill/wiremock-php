@@ -3,10 +3,14 @@
 namespace WireMock\Client;
 
 use WireMock\Http\ResponseDefinition;
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\StubMapping;
 
-class ServeEvent
+class ServeEvent implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var string */
     private $_id;
     /** @var LoggedRequest */

@@ -2,8 +2,13 @@
 
 namespace WireMock\Client;
 
-class LoggedResponse
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class LoggedResponse implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+    
     /** @var int */
     private $_status;
     /** @var array */

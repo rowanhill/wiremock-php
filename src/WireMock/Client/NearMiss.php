@@ -3,14 +3,18 @@
 namespace WireMock\Client;
 
 use WireMock\Matching\RequestPattern;
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\StubMapping;
 
-class NearMiss
+class NearMiss implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+
     /** @var LoggedRequest */
     private $_request;
     /** @var StubMapping */
-    private $_mapping;
+    private $_stubMapping;
     /** @var RequestPattern */
     private $_requestPattern;
     /** @var MatchResult */
@@ -18,18 +22,18 @@ class NearMiss
 
     /**
      * @param LoggedRequest $request
-     * @param StubMapping|null $mapping
+     * @param StubMapping|null $stubMapping
      * @param RequestPattern|null $requestPattern
      * @param MatchResult $matchResult
      */
     public function __construct(
         LoggedRequest $request,
-        $mapping,
-        $requestPattern,
+        ?StubMapping $stubMapping,
+        ?RequestPattern $requestPattern,
         MatchResult $matchResult
     ) {
         $this->_request = $request;
-        $this->_mapping = $mapping;
+        $this->_stubMapping = $stubMapping;
         $this->_requestPattern = $requestPattern;
         $this->_matchResult = $matchResult;
     }
@@ -47,7 +51,7 @@ class NearMiss
      */
     public function getMapping()
     {
-        return $this->_mapping;
+        return $this->_stubMapping;
     }
 
     /**
@@ -64,20 +68,5 @@ class NearMiss
     public function getMatchResult()
     {
         return $this->_matchResult;
-    }
-
-    /**
-     * @param array $array
-     * @return NearMiss
-     * @throws \Exception
-     */
-    public static function fromArray(array $array)
-    {
-        return new NearMiss(
-            LoggedRequest::fromArray($array['request']),
-            isset($array['stubMapping']) ? StubMapping::fromArray($array['stubMapping']) : null,
-            isset($array['requestPattern']) ? RequestPattern::fromArray($array['requestPattern']) : null,
-            MatchResult::fromArray($array['matchResult'])
-        );
     }
 }

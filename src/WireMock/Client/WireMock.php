@@ -171,9 +171,10 @@ class WireMock
         }
 
         $url = $this->_makeUrl($pathAndParams);
-        $result = $this->_curl->get($url);
-        $resultArray = json_decode($result, true);
-        return new GetServeEventsResult($resultArray);
+        $responseJson = $this->_curl->get($url);
+        /** @var GetServeEventsResult $result */
+        $result = $this->_serializer->deserialize($responseJson, GetServeEventsResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -184,13 +185,11 @@ class WireMock
     {
         $requestPattern = $requestPatternBuilder->build();
         $url = $this->_makeUrl('__admin/requests/find');
-        $findResultJson = $this->_curl->post($url, $requestPattern->toArray());
-        $findResultArray = json_decode($findResultJson, true);
-        $requestArrays = $findResultArray['requests'];
-        $requests = array();
-        foreach ($requestArrays as $responseArray) {
-            $requests[] = new LoggedRequest($responseArray);
-        }
+        $requestJson = $this->_serializer->serialize($requestPattern, 'json');
+        $findResultJson = $this->_curl->post($url, $requestJson);
+        $findResultArray = $this->_serializer->decode($findResultJson, 'json');
+        $requestsArray = $findResultArray['requests'];
+        $requests = $this->_serializer->denormalize($requestsArray, LoggedRequest::class.'[]', 'json');
         return $requests;
     }
 
@@ -201,8 +200,9 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/requests/unmatched');
         $resultJson = $this->_curl->get($url);
-        $resultArray = json_decode($resultJson, true);
-        return new UnmatchedRequests($resultArray);
+        /** @var UnmatchedRequests $result */
+        $result = $this->_serializer->deserialize($resultJson, UnmatchedRequests::class, 'json');
+        return $result;
     }
 
     /**
@@ -220,10 +220,11 @@ class WireMock
         } else {
             throw new \Exception('Unexpected near miss specifier: ' . print_r($loggedRequestOrPattern, true));
         }
-        $loggedRequestArray = $loggedRequestOrPattern->toArray();
-        $findResultJson = $this->_curl->post($url, $loggedRequestArray);
-        $findResult = json_decode($findResultJson, true);
-        return FindNearMissesResult::fromArray($findResult);
+        $requestJson = $this->_serializer->serialize($loggedRequestOrPattern, 'json');
+        $findResultJson = $this->_curl->post($url, $requestJson);
+        /** @var FindNearMissesResult $result */
+        $result = $this->_serializer->deserialize($findResultJson, FindNearMissesResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -233,8 +234,9 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/requests/unmatched/near-misses');
         $findResultJson = $this->_curl->get($url);
-        $findResult = json_decode($findResultJson, true);
-        return FindNearMissesResult::fromArray($findResult);
+        /** @var FindNearMissesResult $result */
+        $result = $this->_serializer->deserialize($findResultJson, FindNearMissesResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -263,7 +265,8 @@ class WireMock
     {
         $requestPattern = $requestPatternBuilder->build();
         $url = $this->_makeUrl('__admin/requests/remove');
-        $this->_curl->post($url, $requestPattern->toArray());
+        $requestJson = $this->_serializer->serialize($requestPattern, 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -272,7 +275,8 @@ class WireMock
     public function removeEventsByStubMetadata($valueMatchingStrategy)
     {
         $url = $this->_makeUrl('__admin/requests/remove-by-metadata');
-        $this->_curl->post($url, $valueMatchingStrategy->toArray());
+        $requestJson = $this->_serializer->serialize($valueMatchingStrategy, 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -283,7 +287,8 @@ class WireMock
     public function setGlobalFixedDelay($delayMillis)
     {
         $url = $this->_makeUrl('__admin/settings');
-        $this->_curl->post($url, array('fixedDelay' => $delayMillis));
+        $requestJson = $this->_serializer->serialize(['fixedDelay' => $delayMillis], 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -292,7 +297,8 @@ class WireMock
     public function setGlobalRandomDelay($delayDistribution)
     {
         $url = $this->_makeUrl('__admin/settings');
-        $this->_curl->post($url, array('delayDistribution' => $delayDistribution->toArray()));
+        $requestJson = $this->_serializer->serialize(['delayDistribution' => $delayDistribution], 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -301,7 +307,8 @@ class WireMock
     public function resetGlobalDelays()
     {
         $url = $this->_makeUrl('__admin/settings');
-        $this->_curl->post($url, array('fixedDelay' => null, 'delayDistribution' => null));
+        $requestJson = $this->_serializer->serialize(['fixedDelay' => null, 'delayDistribution' => null], 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     public function saveAllMappings()
@@ -386,9 +393,10 @@ class WireMock
             }
         }
         $url = $this->_makeUrl($pathAndParams);
-        $result = $this->_curl->get($url);
-        $resultArray = json_decode($result, true);
-        return new ListStubMappingsResult($resultArray);
+        $resultJson = $this->_curl->get($url);
+        /** @var ListStubMappingsResult $result */
+        $result = $this->_serializer->deserialize($resultJson, ListStubMappingsResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -413,8 +421,9 @@ class WireMock
         $url = $this->_makeUrl('__admin/mappings/find-by-metadata');
         $strategyArray = $valueMatchingStrategy->toArray();
         $findResultJson = $this->_curl->post($url, $strategyArray);
-        $findResultArray = json_decode($findResultJson, true);
-        return new ListStubMappingsResult($findResultArray);
+        /** @var ListStubMappingsResult $result */
+        $result = $this->_serializer->deserialize($findResultJson, ListStubMappingsResult::class, 'json');
+        return $result;
     }
 
     /**

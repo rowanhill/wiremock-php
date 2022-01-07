@@ -2,20 +2,20 @@
 
 namespace WireMock\Client;
 
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
 abstract class PaginatedResult
 {
     /** @var Meta */
     private $_meta;
-    /** @var array */
-    protected $_list;
 
     /**
-     * @param array $array
+     * @param Meta $meta
      */
-    public function __construct(array $array)
+    public function __construct(Meta $meta)
     {
-        $this->_meta = new Meta($array['meta']);
-        $this->_list = $this->getList($array);
+        $this->_meta = $meta;
     }
 
     /**
@@ -25,26 +25,21 @@ abstract class PaginatedResult
     {
         return $this->_meta;
     }
-
-    /**
-     * Extract the list of paginated items from the top level results array
-     * @param array $array
-     * @return array
-     */
-    protected abstract function getList(array $array);
 }
 
-class Meta
+class Meta implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+    
     /** @var int */
     private $_total;
 
     /**
-     * @param array $array
+     * @param int $total
      */
-    public function __construct(array $array)
+    public function __construct(int $total)
     {
-        $this->_total = $array['total'];
+        $this->_total = $total;
     }
 
     /**
