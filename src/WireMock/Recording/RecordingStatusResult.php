@@ -2,8 +2,13 @@
 
 namespace WireMock\Recording;
 
-class RecordingStatusResult
+use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
+use WireMock\Serde\ObjectToPopulateFactoryInterface;
+
+class RecordingStatusResult implements ObjectToPopulateFactoryInterface
 {
+    use DummyConstructorArgsObjectToPopulateFactory;
+    
     const NEVER_STARTED = 'NeverStarted';
     const RECORDING = 'Recording';
     const STOPPED = 'Stopped';
@@ -25,14 +30,5 @@ class RecordingStatusResult
     public function getStatus()
     {
         return $this->_status;
-    }
-
-    /**
-     * @param array $array
-     * @return RecordingStatusResult
-     */
-    public static function fromArray($array)
-    {
-        return new RecordingStatusResult($array['status']);
     }
 }

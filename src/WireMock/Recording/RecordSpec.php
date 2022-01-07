@@ -3,8 +3,9 @@
 namespace WireMock\Recording;
 
 use WireMock\Matching\RequestPattern;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class RecordSpec
+class RecordSpec implements PostNormalizationAmenderInterface
 {
     const FULL = 'FULL';
     const IDS = 'IDS';
@@ -30,7 +31,7 @@ class RecordSpec
     /** @var array */
     private $_requestBodyPattern;
     /** @var string */
-    private $_format;
+    private $_outputFormat;
     /** @var boolean */
     private $_allowNonProxied;
 
@@ -72,7 +73,7 @@ class RecordSpec
         $this->_transformers = $transformers;
         $this->_transformerParameters = $transformerParameters;
         $this->_requestBodyPattern = $requestBodyPattern;
-        $this->_format = $format;
+        $this->_outputFormat = $format;
         $this->_allowNonProxied = $allowNonProxied;
     }
 
@@ -116,9 +117,30 @@ class RecordSpec
         if ($this->_requestBodyPattern) {
             $array['requestBodyPattern'] = $this->_requestBodyPattern;
         }
-        if ($this->_format) {
-            $array['outputFormat'] = $this->_format;
+        if ($this->_outputFormat) {
+            $array['outputFormat'] = $this->_outputFormat;
         }
         return !empty($array) ? $array : new \stdClass();
+    }
+
+    public static function amendPostNormalisation(array $normalisedArray, $object): array
+    {
+        if (isset($normalisedArray['requestPattern']) || isset($normalisedArray['requestIds']) || isset($normalisedArray['allowNonProxied'])) {
+            $filters = array();
+            if (isset($normalisedArray['requestPattern'])) {
+                $filters = array_merge($filters, $normalisedArray['requestPattern']);
+                unset($normalisedArray['requestPattern']);
+            }
+            if (isset($normalisedArray['requestIds'])) {
+                $filters = array_merge($filters, array('ids' => $normalisedArray['requestIds']));
+                unset($normalisedArray['requestIds']);
+            }
+            if (isset($normalisedArray['allowNonProxied'])) {
+                $filters = array_merge($filters, array('allowNonProxied' => true));
+                unset($normalisedArray['allowNonProxied']);
+            }
+            $normalisedArray['filters'] = $filters;
+        }
+        return $normalisedArray;
     }
 }

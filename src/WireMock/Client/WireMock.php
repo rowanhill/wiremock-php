@@ -353,8 +353,9 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/scenarios');
         $findResultJson = $this->_curl->get($url);
-        $findResult = json_decode($findResultJson, true);
-        return GetScenariosResult::fromArray($findResult);
+        /** @var GetScenariosResult $findResult */
+        $findResult = $this->_serializer->deserialize($findResultJson, GetScenariosResult::class, 'json');
+        return $findResult;
     }
 
     /**
@@ -407,9 +408,10 @@ class WireMock
     public function getSingleStubMapping($id)
     {
         $url = $this->_makeUrl('__admin/mappings/' . urlencode($id));
-        $result = $this->_curl->get($url);
-        $resultArray = json_decode($result, true);
-        return StubMapping::fromArray($resultArray);
+        $resultJson = $this->_curl->get($url);
+        /** @var StubMapping $result */
+        $result = $this->_serializer->deserialize($resultJson, StubMapping::class, 'json');
+        return $result;
     }
 
     /**
@@ -419,8 +421,8 @@ class WireMock
     public function findStubsByMetadata($valueMatchingStrategy)
     {
         $url = $this->_makeUrl('__admin/mappings/find-by-metadata');
-        $strategyArray = $valueMatchingStrategy->toArray();
-        $findResultJson = $this->_curl->post($url, $strategyArray);
+        $requestJson = $this->_serializer->serialize($valueMatchingStrategy, 'json');
+        $findResultJson = $this->_curl->post($url, $requestJson);
         /** @var ListStubMappingsResult $result */
         $result = $this->_serializer->deserialize($findResultJson, ListStubMappingsResult::class, 'json');
         return $result;
@@ -432,8 +434,8 @@ class WireMock
     public function removeStubsByMetadata($valueMatchingStrategy)
     {
         $url = $this->_makeUrl('__admin/mappings/remove-by-metadata');
-        $strategyArray = $valueMatchingStrategy->toArray();
-        $this->_curl->post($url, $strategyArray);
+        $requestJson = $this->_serializer->serialize($valueMatchingStrategy, 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -448,7 +450,8 @@ class WireMock
         }
 
         $url = $this->_makeUrl('__admin/recordings/start');
-        $this->_curl->post($url, $spec->toArray());
+        $requestJson = $this->_serializer->serialize($spec, 'json');
+        $this->_curl->post($url, $requestJson);
     }
 
     /**
@@ -457,9 +460,10 @@ class WireMock
     public function getRecordingStatus()
     {
         $url = $this->_makeUrl('__admin/recordings/status');
-        $result = $this->_curl->get($url);
-        $resultArray = json_decode($result, true);
-        return RecordingStatusResult::fromArray($resultArray);
+        $resultJson = $this->_curl->get($url);
+        /** @var RecordingStatusResult $result */
+        $result = $this->_serializer->deserialize($resultJson, RecordingStatusResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -469,8 +473,9 @@ class WireMock
     {
         $url = $this->_makeUrl('__admin/recordings/stop');
         $resultJson = $this->_curl->post($url);
-        $resultArray = json_decode($resultJson, true);
-        return SnapshotRecordResult::fromArray($resultArray);
+        /** @var SnapshotRecordResult $result */
+        $result = $this->_serializer->deserialize($resultJson, SnapshotRecordResult::class, 'json');
+        return $result;
     }
 
     /**
@@ -482,8 +487,9 @@ class WireMock
         $url = $this->_makeUrl('__admin/recordings/snapshot');
         $recordingSpec = $recordingSpecBuilder ? $recordingSpecBuilder->build()->toArray() : null;
         $resultJson = $this->_curl->post($url, $recordingSpec);
-        $resultArray = json_decode($resultJson, true);
-        return SnapshotRecordResult::fromArray($resultArray);
+        /** @var SnapshotRecordResult $result */
+        $result = $this->_serializer->deserialize($resultJson, SnapshotRecordResult::class, 'json');
+        return $result;
     }
 
     private function _makeUrl($path)
