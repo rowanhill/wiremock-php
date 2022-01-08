@@ -16,32 +16,28 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var string A string representation of a GUID */
-    private $_id;
+    private $id;
     /** @var string */
-    private $_name;
+    private $name;
     /** @var RequestPattern */
-    private $_request;
+    private $request;
     /** @var ResponseDefinition */
-    private $_response;
+    private $response;
     /** @var int */
-    private $_priority;
+    private $priority;
     /** @var array */
-    private $_metadata;
+    private $metadata;
     /** @var boolean */
-    private $_isPersistent;
+    private $isPersistent;
 
     /** @var string */
-    private $_scenarioName;
+    private $scenarioName;
     /** @var string */
-    private $_requiredScenarioState;
+    private $requiredScenarioState;
     /** @var string */
-    private $_newScenarioState;
+    private $newScenarioState;
     /** @var PostServeAction[]|null */
-    private $_postServeActions;
-    /**
-     * @var null
-     */
-    private $name;
+    private $postServeActions;
 
     /**
      * @param RequestPattern $request
@@ -66,21 +62,20 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
         $postServeActions = null
     )
     {
-        $this->_id = $id;
-        $this->_name = $name;
-        $this->_request = $request;
-        $this->_response = $response;
-        $this->_priority = $priority;
-        $this->_metadata = $metadata;
-        $this->_isPersistent = $isPersistent;
-        $this->_postServeActions = $postServeActions;
+        $this->id = $id;
+        $this->name = $name;
+        $this->request = $request;
+        $this->response = $response;
+        $this->priority = $priority;
+        $this->metadata = $metadata;
+        $this->isPersistent = $isPersistent;
+        $this->postServeActions = $postServeActions;
 
         if ($scenarioMapping) {
-            $this->_scenarioName = $scenarioMapping->getScenarioName();
-            $this->_requiredScenarioState = $scenarioMapping->getRequiredScenarioState();
-            $this->_newScenarioState = $scenarioMapping->getNewScenarioState();
+            $this->scenarioName = $scenarioMapping->getScenarioName();
+            $this->requiredScenarioState = $scenarioMapping->getRequiredScenarioState();
+            $this->newScenarioState = $scenarioMapping->getNewScenarioState();
         }
-        $this->name = $name;
     }
 
     /**
@@ -88,7 +83,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -96,7 +91,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function setId($id)
     {
-        $this->_id = $id;
+        $this->id = $id;
     }
 
     /**
@@ -104,7 +99,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -112,7 +107,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
@@ -120,7 +115,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 
     /**
@@ -128,7 +123,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getPriority()
     {
-        return $this->_priority;
+        return $this->priority;
     }
 
     /**
@@ -136,7 +131,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getMetadata()
     {
-        return $this->_metadata;
+        return $this->metadata;
     }
 
     /**
@@ -144,7 +139,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function isPersistent()
     {
-        return $this->_isPersistent;
+        return $this->isPersistent;
     }
 
     /**
@@ -152,7 +147,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getScenarioName()
     {
-        return $this->_scenarioName;
+        return $this->scenarioName;
     }
 
     /**
@@ -160,7 +155,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getRequiredScenarioState()
     {
-        return $this->_requiredScenarioState;
+        return $this->requiredScenarioState;
     }
 
     /**
@@ -168,7 +163,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function getNewScenarioState()
     {
-        return $this->_newScenarioState;
+        return $this->newScenarioState;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

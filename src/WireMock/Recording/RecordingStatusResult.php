@@ -14,14 +14,14 @@ class RecordingStatusResult implements ObjectToPopulateFactoryInterface
     const STOPPED = 'Stopped';
 
     /** @var string */
-    private $_status;
+    private $status;
 
     /**
      * @param string $status
      */
     public function __construct($status)
     {
-        $this->_status = $status;
+        $this->status = $status;
     }
 
     /**
@@ -29,6 +29,6 @@ class RecordingStatusResult implements ObjectToPopulateFactoryInterface
      */
     public function getStatus()
     {
-        return $this->_status;
+        return $this->status;
     }
 }

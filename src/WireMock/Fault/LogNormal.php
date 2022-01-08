@@ -11,9 +11,9 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface,
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var float */
-    private $_median;
+    private $median;
     /** @var float */
-    private $_sigma;
+    private $sigma;
 
     /**
      * @param float $median
@@ -21,8 +21,8 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface,
      */
     public function __construct($median, $sigma)
     {
-        $this->_median = $median;
-        $this->_sigma = $sigma;
+        $this->median = $median;
+        $this->sigma = $sigma;
     }
 
     /**
@@ -30,7 +30,7 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface,
      */
     public function getMedian()
     {
-        return $this->_median;
+        return $this->median;
     }
 
     /**
@@ -38,7 +38,7 @@ class LogNormal implements DelayDistribution, PostNormalizationAmenderInterface,
      */
     public function getSigma()
     {
-        return $this->_sigma;
+        return $this->sigma;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

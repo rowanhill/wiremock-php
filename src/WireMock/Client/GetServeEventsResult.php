@@ -10,7 +10,7 @@ class GetServeEventsResult extends RequestJournalDependentResult implements Obje
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var ServeEvent[]  */
-    private $_requests;
+    private $requests;
 
     /**
      * @param Meta $meta
@@ -20,7 +20,7 @@ class GetServeEventsResult extends RequestJournalDependentResult implements Obje
     public function __construct(Meta $meta, bool $requestJournalDisabled, array $requests)
     {
         parent::__construct($meta, $requestJournalDisabled);
-        $this->_requests = $requests;
+        $this->requests = $requests;
     }
 
     /**
@@ -28,6 +28,6 @@ class GetServeEventsResult extends RequestJournalDependentResult implements Obje
      */
     public function getRequests()
     {
-        return $this->_requests;
+        return $this->requests;
     }
 }

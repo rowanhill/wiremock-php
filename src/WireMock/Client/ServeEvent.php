@@ -12,15 +12,15 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var string */
-    private $_id;
+    private $id;
     /** @var LoggedRequest */
-    private $_request;
+    private $request;
     /** @var StubMapping */
-    private $_stubMapping;
+    private $stubMapping;
     /** @var ResponseDefinition */
-    private $_responseDefinition;
+    private $responseDefinition;
     /** @var LoggedResponse */
-    private $_response;
+    private $response;
 
     /**
      * @param string $id
@@ -36,11 +36,11 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
         ResponseDefinition $responseDefinition,
         LoggedResponse $response
     ) {
-        $this->_id = $id;
-        $this->_request = $request;
-        $this->_stubMapping = $stubMapping;
-        $this->_responseDefinition = $responseDefinition;
-        $this->_response = $response;
+        $this->id = $id;
+        $this->request = $request;
+        $this->stubMapping = $stubMapping;
+        $this->responseDefinition = $responseDefinition;
+        $this->response = $response;
     }
 
     /**
@@ -48,7 +48,7 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -56,7 +56,7 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
      */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
@@ -64,7 +64,7 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
      */
     public function getStubMapping()
     {
-        return $this->_stubMapping;
+        return $this->stubMapping;
     }
 
     /**
@@ -72,7 +72,7 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
      */
     public function getResponseDefinition()
     {
-        return $this->_responseDefinition;
+        return $this->responseDefinition;
     }
 
     /**
@@ -80,6 +80,6 @@ class ServeEvent implements ObjectToPopulateFactoryInterface
      */
     public function getResponse()
     {
-        return $this->_response;
+        return $this->response;
     }
 }

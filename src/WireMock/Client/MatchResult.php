@@ -9,14 +9,14 @@ class MatchResult implements ObjectToPopulateFactoryInterface
 {
     use DummyConstructorArgsObjectToPopulateFactory;
 
-    private $_distance;
+    private $distance;
 
     /**
      * @param float $distance
      */
     public function __construct($distance)
     {
-        $this->_distance = $distance;
+        $this->distance = $distance;
     }
 
     /**
@@ -24,6 +24,6 @@ class MatchResult implements ObjectToPopulateFactoryInterface
      */
     public function getDistance()
     {
-        return $this->_distance;
+        return $this->distance;
     }
 }

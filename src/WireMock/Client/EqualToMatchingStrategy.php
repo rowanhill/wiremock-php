@@ -11,12 +11,12 @@ use WireMock\Serde\PreDenormalizationAmenderInterface;
 
 class EqualToMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
-    private $_ignoreCase = false;
+    private $ignoreCase = false;
 
     public function __construct($matchingValue, $ignoreCase = false)
     {
         parent::__construct('equalTo', $matchingValue);
-        $this->_ignoreCase = $ignoreCase;
+        $this->ignoreCase = $ignoreCase;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

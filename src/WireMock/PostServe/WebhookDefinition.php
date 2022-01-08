@@ -14,57 +14,57 @@ use WireMock\Serde\PreDenormalizationAmenderInterface;
 class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
     /** @var string */
-    private $_method;
+    private $method;
     /** @var string */
-    private $_url;
+    private $url;
     /** @var string[] */
-    private $_headers = null;
+    private $headers = null;
     /** @var string */
-    private $_body;
+    private $body;
     /** @var string */
-    private $_base64Body;
+    private $base64Body;
     /** @var array */
-    private $_delay;
+    private $delay;
     /** @var array */
-    private $_extraParameters = null; // TODO: Check this is accepted by WireMock
+    private $extraParameters = null; // TODO: Check this is accepted by WireMock
 
     public function withMethod(string $method): self
     {
-        $this->_method = $method;
+        $this->method = $method;
         return $this;
     }
 
     public function withUrl(string $url): self
     {
-        $this->_url = $url;
+        $this->url = $url;
         return $this;
     }
 
     public function withHeader(string $header, string $value): self
     {
-        if (!isset($this->_headers)) {
-            $this->_headers = array();
+        if (!isset($this->headers)) {
+            $this->headers = array();
         }
-        $this->_headers[$header] = $value;
+        $this->headers[$header] = $value;
         return $this;
     }
 
     public function withBody(string $body): self
     {
-        $this->_body = $body;
+        $this->body = $body;
         return $this;
     }
 
     public function withBodyData(string $bytesAsString): self
     {
         $base64 = base64_encode($bytesAsString);
-        $this->_base64Body = $base64;
+        $this->base64Body = $base64;
         return $this;
     }
 
     public function withFixedDelay(int $delayMillis): self
     {
-        $this->_delay = array(
+        $this->delay = array(
             'type' => 'fixed',
             'milliseconds' => $delayMillis,
         );
@@ -73,7 +73,7 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
 
     public function withRandomDelay(DelayDistribution $delayDistribution): self
     {
-        $this->_delay = $delayDistribution;
+        $this->delay = $delayDistribution;
         return $this;
     }
 
@@ -89,10 +89,10 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
 
     public function withExtraParameter(string $name, $value): self
     {
-        if (!isset($this->_extraParameters)) {
-            $this->_extraParameters = array();
+        if (!isset($this->extraParameters)) {
+            $this->extraParameters = array();
         }
-        $this->_extraParameters[$name] = $value;
+        $this->extraParameters[$name] = $value;
         return $this;
     }
 

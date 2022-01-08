@@ -13,9 +13,9 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var int */
-    private $_numberOfChunks;
+    private $numberOfChunks;
     /** @var int */
-    private $_totalDurationMillis;
+    private $totalDurationMillis;
 
     /**
      * @param int $numberOfChunks
@@ -23,8 +23,8 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
      */
     public function __construct($numberOfChunks, $totalDurationMillis)
     {
-        $this->_numberOfChunks = $numberOfChunks;
-        $this->_totalDurationMillis = $totalDurationMillis;
+        $this->numberOfChunks = $numberOfChunks;
+        $this->totalDurationMillis = $totalDurationMillis;
     }
 
     /**
@@ -32,7 +32,7 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
      */
     public function getNumberOfChunks()
     {
-        return $this->_numberOfChunks;
+        return $this->numberOfChunks;
     }
 
     /**
@@ -40,7 +40,7 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
      */
     public function getTotalDurationMillis()
     {
-        return $this->_totalDurationMillis;
+        return $this->totalDurationMillis;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

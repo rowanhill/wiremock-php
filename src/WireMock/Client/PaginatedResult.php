@@ -8,14 +8,14 @@ use WireMock\Serde\ObjectToPopulateFactoryInterface;
 abstract class PaginatedResult
 {
     /** @var Meta */
-    private $_meta;
+    private $meta;
 
     /**
      * @param Meta $meta
      */
     public function __construct(Meta $meta)
     {
-        $this->_meta = $meta;
+        $this->meta = $meta;
     }
 
     /**
@@ -23,7 +23,7 @@ abstract class PaginatedResult
      */
     public function getMeta()
     {
-        return $this->_meta;
+        return $this->meta;
     }
 }
 
@@ -32,14 +32,14 @@ class Meta implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var int */
-    private $_total;
+    private $total;
 
     /**
      * @param int $total
      */
     public function __construct(int $total)
     {
-        $this->_total = $total;
+        $this->total = $total;
     }
 
     /**
@@ -47,6 +47,6 @@ class Meta implements ObjectToPopulateFactoryInterface
      */
     public function getTotal()
     {
-        return $this->_total;
+        return $this->total;
     }
 }

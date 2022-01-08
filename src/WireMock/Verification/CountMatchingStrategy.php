@@ -4,9 +4,9 @@ namespace WireMock\Verification;
 
 class CountMatchingStrategy
 {
-    private $_closure;
-    private $_operator;
-    private $_operand;
+    private $closure;
+    private $operator;
+    private $operand;
 
     /**
      * CountMatchingStrategy constructor.
@@ -16,9 +16,9 @@ class CountMatchingStrategy
      */
     private function __construct($closure, $operator, $operand)
     {
-        $this->_closure = $closure;
-        $this->_operator = $operator;
-        $this->_operand = $operand;
+        $this->closure = $closure;
+        $this->operator = $operator;
+        $this->operand = $operand;
     }
 
     /**
@@ -27,13 +27,13 @@ class CountMatchingStrategy
      */
     public function matches($count)
     {
-        $closure = $this->_closure;
+        $closure = $this->closure;
         return $closure($count);
     }
 
     public function describe()
     {
-        return $this->_operator . ' ' . $this->_operand;
+        return $this->operator . ' ' . $this->operand;
     }
 
     public static function lessThan($expected) {

@@ -11,9 +11,9 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var int */
-    private $_lower;
+    private $lower;
     /** @var int */
-    private $_upper;
+    private $upper;
 
     /**
      * @param int $lower
@@ -21,8 +21,8 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
      */
     public function __construct($lower, $upper)
     {
-        $this->_lower = $lower;
-        $this->_upper = $upper;
+        $this->lower = $lower;
+        $this->upper = $upper;
     }
 
     /**
@@ -30,7 +30,7 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
      */
     public function getLower()
     {
-        return $this->_lower;
+        return $this->lower;
     }
 
     /**
@@ -38,7 +38,7 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
      */
     public function getUpper()
     {
-        return $this->_upper;
+        return $this->upper;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

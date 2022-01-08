@@ -10,11 +10,11 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var int */
-    private $_status;
+    private $status;
     /** @var array */
-    private $_headers;
+    private $headers;
     /** @var string */
-    private $_body;
+    private $body;
 
     /**
      * @param int $status
@@ -23,9 +23,9 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
      */
     public function __construct($status, $headers, $body)
     {
-        $this->_status = $status;
-        $this->_headers = $headers;
-        $this->_body = $body;
+        $this->status = $status;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**
@@ -33,7 +33,7 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
      */
     public function getStatus()
     {
-        return $this->_status;
+        return $this->status;
     }
 
     /**
@@ -41,7 +41,7 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
      */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     /**
@@ -49,6 +49,6 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
      */
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 }

@@ -7,11 +7,11 @@ use WireMock\Client\MappingBuilder;
 class StubImportBuilder
 {
     /** @var StubMapping[] */
-    private $_mappings = array();
+    private $mappings = array();
     /** @var string */
-    private $_duplicatePolicy = StubImportOptions::OVERWRITE;
+    private $duplicatePolicy = StubImportOptions::OVERWRITE;
     /** @var boolean */
-    private $_deleteAllNotInImport = false;
+    private $deleteAllNotInImport = false;
 
     /**
      * @param StubMapping|MappingBuilder $mappingOrBuilder
@@ -21,7 +21,7 @@ class StubImportBuilder
     public function stub($mappingOrBuilder)
     {
         $mapping = ($mappingOrBuilder instanceof  StubMapping) ? $mappingOrBuilder : $mappingOrBuilder->build();
-        $this->_mappings[] = $mapping;
+        $this->mappings[] = $mapping;
         return $this;
     }
 
@@ -30,7 +30,7 @@ class StubImportBuilder
      */
     public function ignoreExisting()
     {
-        $this->_duplicatePolicy = StubImportOptions::IGNORE;
+        $this->duplicatePolicy = StubImportOptions::IGNORE;
         return $this;
     }
 
@@ -39,7 +39,7 @@ class StubImportBuilder
      */
     public function overwriteExisting()
     {
-        $this->_duplicatePolicy = StubImportOptions::OVERWRITE;
+        $this->duplicatePolicy = StubImportOptions::OVERWRITE;
         return $this;
     }
 
@@ -48,7 +48,7 @@ class StubImportBuilder
      */
     public function deleteAllExistingStubsNotInImport()
     {
-        $this->_deleteAllNotInImport = true;
+        $this->deleteAllNotInImport = true;
         return $this;
     }
 
@@ -57,7 +57,7 @@ class StubImportBuilder
      */
     public function doNotDeleteExistingStubs()
     {
-        $this->_deleteAllNotInImport = false;
+        $this->deleteAllNotInImport = false;
         return $this;
     }
 
@@ -67,8 +67,8 @@ class StubImportBuilder
     public function build()
     {
         return new StubImport(
-            $this->_mappings,
-            new StubImportOptions($this->_duplicatePolicy, $this->_deleteAllNotInImport)
+            $this->mappings,
+            new StubImportOptions($this->duplicatePolicy, $this->deleteAllNotInImport)
         );
     }
 }

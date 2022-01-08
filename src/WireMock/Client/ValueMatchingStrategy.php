@@ -37,14 +37,14 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
     ];
 
     /** @var string */
-    protected $_matchingType;
+    protected $matchingType;
     /** @var string|boolean|ValueMatchingStrategy[] */
-    protected $_matchingValue;
+    protected $matchingValue;
 
     public function __construct($matchingType, $matchingValue)
     {
-        $this->_matchingType = $matchingType;
-        $this->_matchingValue = $matchingValue;
+        $this->matchingType = $matchingType;
+        $this->matchingValue = $matchingValue;
     }
 
     /**
@@ -52,7 +52,7 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
      */
     public function getMatchingType(): string
     {
-        return $this->_matchingType;
+        return $this->matchingType;
     }
 
     /**
@@ -60,7 +60,7 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
      */
     public function getMatchingValue()
     {
-        return $this->_matchingValue;
+        return $this->matchingValue;
     }
 
     public function and(ValueMatchingStrategy $other)

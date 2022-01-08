@@ -5,9 +5,9 @@ namespace WireMock\Stubbing;
 class StubImport
 {
     /** @var StubMapping[] */
-    private $_mappings;
+    private $mappings;
     /** @var StubImportOptions */
-    private $_importOptions;
+    private $importOptions;
 
     /**
      * StubImport constructor.
@@ -16,7 +16,7 @@ class StubImport
      */
     public function __construct(array $_mappings, StubImportOptions $_importOptions)
     {
-        $this->_mappings = $_mappings;
-        $this->_importOptions = $_importOptions;
+        $this->mappings = $_mappings;
+        $this->importOptions = $_importOptions;
     }
 }

@@ -10,9 +10,9 @@ class UnmatchedRequests implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var LoggedRequest[] */
-    private $_requests;
+    private $requests;
     /** @var boolean */
-    private $_requestJournalDisabled;
+    private $requestJournalDisabled;
 
     /**
      * @param bool $requestJournalDisabled
@@ -20,8 +20,8 @@ class UnmatchedRequests implements ObjectToPopulateFactoryInterface
      */
     public function __construct(bool $requestJournalDisabled, array $requests)
     {
-        $this->_requestJournalDisabled = $requestJournalDisabled;
-        $this->_requests = $requests;
+        $this->requestJournalDisabled = $requestJournalDisabled;
+        $this->requests = $requests;
     }
 
     /**
@@ -29,7 +29,7 @@ class UnmatchedRequests implements ObjectToPopulateFactoryInterface
      */
     public function getRequests()
     {
-        return $this->_requests;
+        return $this->requests;
     }
 
     /**
@@ -37,6 +37,6 @@ class UnmatchedRequests implements ObjectToPopulateFactoryInterface
      */
     public function getRequestJournalDisabled()
     {
-        return $this->_requestJournalDisabled;
+        return $this->requestJournalDisabled;
     }
 }

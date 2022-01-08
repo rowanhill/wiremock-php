@@ -18,7 +18,7 @@ class SerializerFactory
                 new PrePostAmendingNormalizer(
                     new EmptyArrayIgnoringNormalizer(
                         null,
-                        new PrivatePropertyNameConverter(),
+                        null,
                         new PhpDocExtractor(),
                         null,
                         null,

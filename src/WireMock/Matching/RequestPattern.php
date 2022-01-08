@@ -14,25 +14,25 @@ use WireMock\Serde\PostNormalizationAmenderInterface;
 class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var string */
-    private $_method;
+    private $method;
     /** @var UrlMatchingStrategy  */
-    private $_urlMatchingStrategy;
+    private $urlMatchingStrategy;
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_headers;
+    private $headers;
     /** @var \array<ValueMatchingStrategy> */
-    private $_cookies;
+    private $cookies;
     /** @var \array<ValueMatchingStrategy> */
-    private $_queryParameters;
+    private $queryParameters;
     /** @var ValueMatchingStrategy[] */
-    private $_bodyPatterns;
+    private $bodyPatterns;
     /** @var null|MultipartValuePattern[] */
-    private $_multipartPatterns;
+    private $multipartPatterns;
     /** @var BasicCredentials */
-    private $_basicAuthCredentials;
+    private $basicAuthCredentials;
     /** @var CustomMatcherDefinition */
-    private $_customMatcher;
+    private $customMatcher;
     /** @var ValueMatchingStrategy */
-    private $_host;
+    private $host;
 
     /**
      * @param string $method
@@ -58,16 +58,16 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
         $customMatcherDefinition = null,
         $hostPattern = null
     ) {
-        $this->_method = $method;
-        $this->_urlMatchingStrategy = $urlMatchingStrategy;
-        $this->_headers = $headers;
-        $this->_cookies = $cookies;
-        $this->_bodyPatterns = $bodyPatterns;
-        $this->_queryParameters = $queryParameters;
-        $this->_basicAuthCredentials = $basicCredentials;
-        $this->_multipartPatterns = $multipartPatterns;
-        $this->_customMatcher = $customMatcherDefinition;
-        $this->_host = $hostPattern;
+        $this->method = $method;
+        $this->urlMatchingStrategy = $urlMatchingStrategy;
+        $this->headers = $headers;
+        $this->cookies = $cookies;
+        $this->bodyPatterns = $bodyPatterns;
+        $this->queryParameters = $queryParameters;
+        $this->basicAuthCredentials = $basicCredentials;
+        $this->multipartPatterns = $multipartPatterns;
+        $this->customMatcher = $customMatcherDefinition;
+        $this->host = $hostPattern;
     }
 
     /**
@@ -75,7 +75,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getMethod()
     {
-        return $this->_method;
+        return $this->method;
     }
 
     /**
@@ -83,7 +83,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getUrlMatchingStrategy()
     {
-        return $this->_urlMatchingStrategy;
+        return $this->urlMatchingStrategy;
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     /**
@@ -99,7 +99,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getCookies()
     {
-        return $this->_cookies;
+        return $this->cookies;
     }
 
     /**
@@ -107,7 +107,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getQueryParameters()
     {
-        return $this->_queryParameters;
+        return $this->queryParameters;
     }
 
     /**
@@ -115,7 +115,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getBodyPatterns()
     {
-        return $this->_bodyPatterns;
+        return $this->bodyPatterns;
     }
 
     /**
@@ -123,7 +123,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getMultipartPatterns()
     {
-        return $this->_multipartPatterns;
+        return $this->multipartPatterns;
     }
 
     /**
@@ -131,7 +131,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getBasicAuthCredentials()
     {
-        return $this->_basicAuthCredentials;
+        return $this->basicAuthCredentials;
     }
 
     /**
@@ -139,7 +139,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getCustomMatcher()
     {
-        return $this->_customMatcher;
+        return $this->customMatcher;
     }
 
     /**
@@ -147,7 +147,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
      */
     public function getHost()
     {
-        return $this->_host;
+        return $this->host;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

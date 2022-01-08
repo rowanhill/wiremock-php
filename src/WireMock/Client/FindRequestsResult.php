@@ -10,14 +10,14 @@ class FindRequestsResult implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var LoggedRequest[] */
-    private $_requests;
+    private $requests;
 
     /**
      * @param LoggedRequest[] $_requests
      */
     public function __construct(array $_requests)
     {
-        $this->_requests = $_requests;
+        $this->requests = $_requests;
     }
 
     /**
@@ -25,6 +25,6 @@ class FindRequestsResult implements ObjectToPopulateFactoryInterface
      */
     public function getRequests(): array
     {
-        return $this->_requests;
+        return $this->requests;
     }
 }

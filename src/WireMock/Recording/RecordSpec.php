@@ -11,29 +11,29 @@ class RecordSpec implements PostNormalizationAmenderInterface
     const IDS = 'IDS';
 
     /** @var string */
-    private $_targetBaseUrl;
+    private $targetBaseUrl;
     /** @var RequestPattern */
-    private $_requestPattern;
+    private $requestPattern;
     /** @var string[] */
-    private $_requestIds;
+    private $requestIds;
     /** @var array */
-    private $_captureHeaders;
+    private $captureHeaders;
     /** @var array */
-    private $_extractBodyCriteria;
+    private $extractBodyCriteria;
     /** @var boolean */
-    private $_persist;
+    private $persist;
     /** @var boolean */
-    private $_repeatsAsScenarios;
+    private $repeatsAsScenarios;
     /** @var string[] */
-    private $_transformers;
+    private $transformers;
     /** @var array */
-    private $_transformerParameters = array();
+    private $transformerParameters = array();
     /** @var array */
-    private $_requestBodyPattern;
+    private $requestBodyPattern;
     /** @var string */
-    private $_outputFormat;
+    private $outputFormat;
     /** @var boolean */
-    private $_allowNonProxied;
+    private $allowNonProxied;
 
     /**
      * @param string $targetBaseUrl
@@ -63,18 +63,18 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $format,
         $allowNonProxied
     ) {
-        $this->_targetBaseUrl = $targetBaseUrl;
-        $this->_requestPattern = $requestPattern;
-        $this->_requestIds = $requestIds;
-        $this->_captureHeaders = $captureHeaders;
-        $this->_extractBodyCriteria = $extractBodyCriteria;
-        $this->_persist = $persist;
-        $this->_repeatsAsScenarios = $repeatsAsScenarios;
-        $this->_transformers = $transformers;
-        $this->_transformerParameters = $transformerParameters;
-        $this->_requestBodyPattern = $requestBodyPattern;
-        $this->_outputFormat = $format;
-        $this->_allowNonProxied = $allowNonProxied;
+        $this->targetBaseUrl = $targetBaseUrl;
+        $this->requestPattern = $requestPattern;
+        $this->requestIds = $requestIds;
+        $this->captureHeaders = $captureHeaders;
+        $this->extractBodyCriteria = $extractBodyCriteria;
+        $this->persist = $persist;
+        $this->repeatsAsScenarios = $repeatsAsScenarios;
+        $this->transformers = $transformers;
+        $this->transformerParameters = $transformerParameters;
+        $this->requestBodyPattern = $requestBodyPattern;
+        $this->outputFormat = $format;
+        $this->allowNonProxied = $allowNonProxied;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

@@ -5,7 +5,7 @@ namespace WireMock\Client;
 abstract class RequestJournalDependentResult extends PaginatedResult
 {
     /** @var boolean */
-    private $_requestJournalDisabled;
+    private $requestJournalDisabled;
 
     /**
      * @param Meta $meta
@@ -14,7 +14,7 @@ abstract class RequestJournalDependentResult extends PaginatedResult
     public function __construct(Meta $meta, bool $requestJournalDisabled)
     {
         parent::__construct($meta);
-        $this->_requestJournalDisabled = $requestJournalDisabled;
+        $this->requestJournalDisabled = $requestJournalDisabled;
     }
 
     /**
@@ -22,6 +22,6 @@ abstract class RequestJournalDependentResult extends PaginatedResult
      */
     public function isRequestJournalDisabled()
     {
-        return $this->_requestJournalDisabled;
+        return $this->requestJournalDisabled;
     }
 }

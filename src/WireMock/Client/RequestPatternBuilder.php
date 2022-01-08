@@ -8,24 +8,24 @@ use WireMock\Matching\UrlMatchingStrategy;
 
 class RequestPatternBuilder
 {
-    private $_method;
-    private $_urlMatchingStrategy;
+    private $method;
+    private $urlMatchingStrategy;
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_headers = array();
+    private $headers = array();
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_cookies = array();
+    private $cookies = array();
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_queryParameters = array();
+    private $queryParameters = array();
     /** @var ValueMatchingStrategy[] */
-    private $_bodyPatterns = array();
+    private $bodyPatterns = array();
     /** @var MultipartValuePattern[] */
-    private $_multipartPatterns = array();
+    private $multipartPatterns = array();
     /** @var BasicCredentials */
-    private $_basicCredentials;
+    private $basicCredentials;
     /** @var CustomMatcherDefinition */
-    private $_customMatcherDefinition;
+    private $customMatcherDefinition;
     /** @var ValueMatchingStrategy[] */
-    private $_hostPattern;
+    private $hostPattern;
 
     /**
      * @param string $methodOrCustomMatcherName
@@ -34,10 +34,10 @@ class RequestPatternBuilder
     public function __construct($methodOrCustomMatcherName, $urlMatchingStrategyOrCustomParams)
     {
         if ($urlMatchingStrategyOrCustomParams instanceof UrlMatchingStrategy) {
-            $this->_method = $methodOrCustomMatcherName;
-            $this->_urlMatchingStrategy = $urlMatchingStrategyOrCustomParams;
+            $this->method = $methodOrCustomMatcherName;
+            $this->urlMatchingStrategy = $urlMatchingStrategyOrCustomParams;
         } else {
-            $this->_customMatcherDefinition =
+            $this->customMatcherDefinition =
                 new CustomMatcherDefinition($methodOrCustomMatcherName, $urlMatchingStrategyOrCustomParams);
         }
     }
@@ -49,7 +49,7 @@ class RequestPatternBuilder
      */
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_headers[$headerName] = $valueMatchingStrategy;
+        $this->headers[$headerName] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -60,7 +60,7 @@ class RequestPatternBuilder
      */
     public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_cookies[$cookieName] = $valueMatchingStrategy;
+        $this->cookies[$cookieName] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -70,7 +70,7 @@ class RequestPatternBuilder
      */
     public function withoutHeader($headerName)
     {
-        $this->_headers[$headerName] = new ValueMatchingStrategy('absent', true);
+        $this->headers[$headerName] = new ValueMatchingStrategy('absent', true);
         return $this;
     }
 
@@ -81,7 +81,7 @@ class RequestPatternBuilder
      */
     public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_queryParameters[$name] = $valueMatchingStrategy;
+        $this->queryParameters[$name] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -91,7 +91,7 @@ class RequestPatternBuilder
      */
     public function withRequestBody(ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_bodyPatterns[] = $valueMatchingStrategy;
+        $this->bodyPatterns[] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -101,7 +101,7 @@ class RequestPatternBuilder
      */
     public function withMultipartRequestBody($multipart)
     {
-        $this->_multipartPatterns[] = $multipart;
+        $this->multipartPatterns[] = $multipart;
         return $this;
     }
 
@@ -112,7 +112,7 @@ class RequestPatternBuilder
      */
     public function withBasicAuth($username, $password)
     {
-        $this->_basicCredentials = new BasicCredentials($username, $password);
+        $this->basicCredentials = new BasicCredentials($username, $password);
         return $this;
     }
 
@@ -123,7 +123,7 @@ class RequestPatternBuilder
      */
     public function withCustomMatcher($customMatcherName, $customParams)
     {
-        $this->_customMatcherDefinition = new CustomMatcherDefinition($customMatcherName, $customParams);
+        $this->customMatcherDefinition = new CustomMatcherDefinition($customMatcherName, $customParams);
         return $this;
     }
 
@@ -133,7 +133,7 @@ class RequestPatternBuilder
      */
     public function withHost($hostMatcher)
     {
-        $this->_hostPattern = $hostMatcher;
+        $this->hostPattern = $hostMatcher;
         return $this;
     }
 
@@ -143,16 +143,16 @@ class RequestPatternBuilder
     public function build()
     {
         return new RequestPattern(
-            $this->_method,
-            $this->_urlMatchingStrategy,
-            $this->_headers,
-            $this->_cookies,
-            $this->_bodyPatterns,
-            $this->_multipartPatterns,
-            $this->_queryParameters,
-            $this->_basicCredentials,
-            $this->_customMatcherDefinition,
-            $this->_hostPattern
+            $this->method,
+            $this->urlMatchingStrategy,
+            $this->headers,
+            $this->cookies,
+            $this->bodyPatterns,
+            $this->multipartPatterns,
+            $this->queryParameters,
+            $this->basicCredentials,
+            $this->customMatcherDefinition,
+            $this->hostPattern
         );
     }
 }

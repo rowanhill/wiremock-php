@@ -10,7 +10,7 @@ use WireMock\Serde\PostNormalizationAmenderInterface;
 class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var ValueMatchingStrategy */
-    private $_valueMatchingStrategy;
+    private $valueMatchingStrategy;
 
     /**
      * @param string $jsonPath
@@ -19,7 +19,7 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
     public function __construct($jsonPath, $valueMatchingStrategy = null)
     {
         parent::__construct('matchesJsonPath', $jsonPath);
-        $this->_valueMatchingStrategy = $valueMatchingStrategy;
+        $this->valueMatchingStrategy = $valueMatchingStrategy;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

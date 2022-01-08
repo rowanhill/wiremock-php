@@ -5,13 +5,13 @@ namespace WireMock\Client;
 class MultipartValuePatternBuilder
 {
     /** @var ValueMatchingStrategy[] */
-    private $_bodyPatterns = array();
+    private $bodyPatterns = array();
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_headers = array();
+    private $headers = array();
     /** @var string */
-    private $_name;
+    private $name;
     /** @var string */
-    private $_matchingType = MultipartValuePattern::ANY;
+    private $matchingType = MultipartValuePattern::ANY;
 
     /**
      * @param ValueMatchingStrategy $valueMatchingStrategy
@@ -19,7 +19,7 @@ class MultipartValuePatternBuilder
      */
     public function withMultipartBody($valueMatchingStrategy)
     {
-        $this->_bodyPatterns[] = $valueMatchingStrategy;
+        $this->bodyPatterns[] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -29,7 +29,7 @@ class MultipartValuePatternBuilder
      */
     public function withName($name)
     {
-        $this->_name = $name;
+        $this->name = $name;
         $this->withHeader('Content-Disposition', WireMock::containing("name=\"$name\""));
         return $this;
     }
@@ -41,7 +41,7 @@ class MultipartValuePatternBuilder
      */
     public function withHeader($headerName, $valueMatchingStrategy)
     {
-        $this->_headers[$headerName] = $valueMatchingStrategy;
+        $this->headers[$headerName] = $valueMatchingStrategy;
         return $this;
     }
 
@@ -51,17 +51,17 @@ class MultipartValuePatternBuilder
      */
     public function matchingType($type)
     {
-        $this->_matchingType = $type;
+        $this->matchingType = $type;
         return $this;
     }
 
     public function build()
     {
         return new MultipartValuePattern(
-            $this->_bodyPatterns,
-            $this->_headers,
-            $this->_name,
-            $this->_matchingType
+            $this->bodyPatterns,
+            $this->headers,
+            $this->name,
+            $this->matchingType
         );
     }
 }

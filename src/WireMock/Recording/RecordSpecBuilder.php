@@ -7,29 +7,29 @@ use WireMock\Client\RequestPatternBuilder;
 class RecordSpecBuilder
 {
     /** @var string */
-    private $_targetBaseUrl;
+    private $targetBaseUrl;
     /** @var RequestPatternBuilder */
-    private $_requestPatternBuilder;
+    private $requestPatternBuilder;
     /** @var string[] */
-    private $_requestIds;
+    private $requestIds;
     /** @var array */
-    private $_captureHeaders = array();
+    private $captureHeaders = array();
     /** @var array */
-    private $_extractBodyCriteria = array();
+    private $extractBodyCriteria = array();
     /** @var bool */
-    private $_persist = true;
+    private $persist = true;
     /** @var bool */
-    private $_repeatsAsScenarios = true;
+    private $repeatsAsScenarios = true;
     /** @var string[] */
-    private $_transformers = array();
+    private $transformers = array();
     /** @var array */
-    private $_transformerParameters = array();
+    private $transformerParameters = array();
     /** @var array */
-    private $_requestBodyPattern = null;
+    private $requestBodyPattern = null;
     /** @var string */
-    private $_format = null;
+    private $format = null;
     /** @var boolean */
-    private $_allowNonProxied = null;
+    private $allowNonProxied = null;
 
     /**
      * @param $targetBaseUrl
@@ -37,7 +37,7 @@ class RecordSpecBuilder
      */
     public function forTarget($targetBaseUrl)
     {
-        $this->_targetBaseUrl = $targetBaseUrl;
+        $this->targetBaseUrl = $targetBaseUrl;
         return $this;
     }
 
@@ -47,7 +47,7 @@ class RecordSpecBuilder
      */
     public function onlyRequestsMatching($requestPatternBuilder)
     {
-        $this->_requestPatternBuilder = $requestPatternBuilder;
+        $this->requestPatternBuilder = $requestPatternBuilder;
         return $this;
     }
 
@@ -57,7 +57,7 @@ class RecordSpecBuilder
      */
     public function onlyRequestIds(array $ids)
     {
-        $this->_requestIds = $ids;
+        $this->requestIds = $ids;
         return $this;
     }
 
@@ -68,7 +68,7 @@ class RecordSpecBuilder
      */
     public function captureHeader($name, $caseInsensitive = false)
     {
-        $this->_captureHeaders[$name] = $caseInsensitive ?
+        $this->captureHeaders[$name] = $caseInsensitive ?
             array('caseInsensitive' => true) :
             [];
         return $this;
@@ -80,7 +80,7 @@ class RecordSpecBuilder
      */
     public function extractBinaryBodiesOver($bytes)
     {
-        $this->_extractBodyCriteria['binarySizeThreshold'] = (string)$bytes;
+        $this->extractBodyCriteria['binarySizeThreshold'] = (string)$bytes;
         return $this;
     }
 
@@ -90,7 +90,7 @@ class RecordSpecBuilder
      */
     public function extractTextBodiesOver($bytes)
     {
-        $this->_extractBodyCriteria['textSizeThreshold'] = (string)$bytes;
+        $this->extractBodyCriteria['textSizeThreshold'] = (string)$bytes;
         return $this;
     }
 
@@ -100,7 +100,7 @@ class RecordSpecBuilder
      */
     public function makeStubsPersistent($persist)
     {
-        $this->_persist = $persist;
+        $this->persist = $persist;
         return $this;
     }
 
@@ -109,7 +109,7 @@ class RecordSpecBuilder
      */
     public function ignoreRepeatRequests()
     {
-        $this->_repeatsAsScenarios = false;
+        $this->repeatsAsScenarios = false;
         return $this;
     }
 
@@ -120,7 +120,7 @@ class RecordSpecBuilder
      */
     public function transformers()
     {
-        $this->_transformers = func_get_args();
+        $this->transformers = func_get_args();
         return $this;
     }
 
@@ -130,7 +130,7 @@ class RecordSpecBuilder
      */
     public function transformerParameters($paramsArray)
     {
-        $this->_transformerParameters = $paramsArray;
+        $this->transformerParameters = $paramsArray;
         return $this;
     }
 
@@ -141,14 +141,14 @@ class RecordSpecBuilder
      */
     public function matchRequestBodyWithEqualToJson($ignoreArrayOrder = null, $ignoreExtraElements = null)
     {
-        $this->_requestBodyPattern = array(
+        $this->requestBodyPattern = array(
             'matcher' => 'equalToJson'
         );
         if (!is_null($ignoreArrayOrder)) {
-            $this->_requestBodyPattern['ignoreArrayOrder'] = $ignoreArrayOrder;
+            $this->requestBodyPattern['ignoreArrayOrder'] = $ignoreArrayOrder;
         }
         if (!is_null($ignoreExtraElements)) {
-            $this->_requestBodyPattern['ignoreExtraElements'] = $ignoreExtraElements;
+            $this->requestBodyPattern['ignoreExtraElements'] = $ignoreExtraElements;
         }
         return $this;
     }
@@ -158,7 +158,7 @@ class RecordSpecBuilder
      */
     public function matchRequestBodyWithEqualToXml()
     {
-        $this->_requestBodyPattern = array(
+        $this->requestBodyPattern = array(
             'matcher' => 'equalToXml'
         );
         return $this;
@@ -170,7 +170,7 @@ class RecordSpecBuilder
      */
     public function matchRequestBodyWithEqualTo($caseInsensitive = null)
     {
-        $this->_requestBodyPattern = array(
+        $this->requestBodyPattern = array(
             'matcher' => 'equalTo',
             'caseInsensitive' => $caseInsensitive
         );
@@ -185,7 +185,7 @@ class RecordSpecBuilder
      */
     public function chooseBodyMatchTypeAutomatically($ignoreArrayOrder, $ignoreExtraElements, $caseInsensitive)
     {
-        $this->_requestBodyPattern = array(
+        $this->requestBodyPattern = array(
             'matcher' => 'auto',
             'caseInsensitive' => $caseInsensitive,
             'ignoreArrayOrder' => $ignoreArrayOrder,
@@ -200,7 +200,7 @@ class RecordSpecBuilder
      */
     public function withOutputFormat($format)
     {
-        $this->_format = $format;
+        $this->format = $format;
         return $this;
     }
 
@@ -210,7 +210,7 @@ class RecordSpecBuilder
      */
     public function allowNonProxied($allow)
     {
-        $this->_allowNonProxied = $allow;
+        $this->allowNonProxied = $allow;
         return $this;
     }
 
@@ -220,18 +220,18 @@ class RecordSpecBuilder
     public function build()
     {
         return new RecordSpec(
-            $this->_targetBaseUrl,
-            $this->_requestPatternBuilder ? $this->_requestPatternBuilder->build() : null,
-            $this->_requestIds,
-            $this->_captureHeaders,
-            $this->_extractBodyCriteria,
-            $this->_persist,
-            $this->_repeatsAsScenarios,
-            $this->_transformers,
-            $this->_transformerParameters,
-            $this->_requestBodyPattern,
-            $this->_format,
-            $this->_allowNonProxied
+            $this->targetBaseUrl,
+            $this->requestPatternBuilder ? $this->requestPatternBuilder->build() : null,
+            $this->requestIds,
+            $this->captureHeaders,
+            $this->extractBodyCriteria,
+            $this->persist,
+            $this->repeatsAsScenarios,
+            $this->transformers,
+            $this->transformerParameters,
+            $this->requestBodyPattern,
+            $this->format,
+            $this->allowNonProxied
         );
     }
 }

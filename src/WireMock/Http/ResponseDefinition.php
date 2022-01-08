@@ -21,35 +21,35 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var int */
-    private $_status = 200;
+    private $status = 200;
     /** @var string */
-    private $_statusMessage;
+    private $statusMessage;
     /** @var string */
-    private $_body;
+    private $body;
     /** @var string */
-    private $_bodyFileName;
+    private $bodyFileName;
     /** @var string */
-    private $_base64Body;
+    private $base64Body;
     /** @var array */
-    private $_headers;
+    private $headers;
     /** @var string */
-    private $_proxyBaseUrl;
+    private $proxyBaseUrl;
     /** @var array */
-    private $_additionalProxyRequestHeaders;
+    private $additionalProxyRequestHeaders;
     /** @var int */
-    private $_fixedDelayMillis;
+    private $fixedDelayMillis;
     /** @var DelayDistribution */
-    protected $_randomDelayDistribution;
+    protected $randomDelayDistribution;
     /** @var ChunkedDribbleDelay */
-    protected $_chunkedDribbleDelay;
+    protected $chunkedDribbleDelay;
     /** @var string */
-    private $_fault;
+    private $fault;
     /** @var string[] */
-    private $_transformers = array();
+    private $transformers = array();
     /** @var array */
-    private $_transformerParameters = array();
+    private $transformerParameters = array();
     /** @var string */
-    private $_proxyUrlPrefixToRemove;
+    private $proxyUrlPrefixToRemove;
 
     /**
      * ResponseDefinition constructor.
@@ -85,21 +85,21 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
         $transformerParameters = null,
         $proxyUrlPrefixToRemove = null
     ) {
-        $this->_status = $status;
-        $this->_statusMessage = $statusMessage;
-        $this->_body = $body;
-        $this->_bodyFileName = $bodyFile;
-        $this->_base64Body = $base64Body;
-        $this->_headers = $headers;
-        $this->_proxyBaseUrl = $proxyBaseUrl;
-        $this->_fixedDelayMillis = $fixedDelayMillis;
-        $this->_randomDelayDistribution = $randomDelayDistribution;
-        $this->_chunkedDribbleDelay = $chunkedDribbleDelay;
-        $this->_fault = $fault;
-        $this->_transformers = $transformers;
-        $this->_transformerParameters = $transformerParameters;
-        $this->_additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
-        $this->_proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
+        $this->status = $status;
+        $this->statusMessage = $statusMessage;
+        $this->body = $body;
+        $this->bodyFileName = $bodyFile;
+        $this->base64Body = $base64Body;
+        $this->headers = $headers;
+        $this->proxyBaseUrl = $proxyBaseUrl;
+        $this->fixedDelayMillis = $fixedDelayMillis;
+        $this->randomDelayDistribution = $randomDelayDistribution;
+        $this->chunkedDribbleDelay = $chunkedDribbleDelay;
+        $this->fault = $fault;
+        $this->transformers = $transformers;
+        $this->transformerParameters = $transformerParameters;
+        $this->additionalProxyRequestHeaders = $additionalProxyRequestHeaders;
+        $this->proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
     }
 
     /**
@@ -107,7 +107,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getStatus()
     {
-        return $this->_status;
+        return $this->status;
     }
 
     /**
@@ -115,7 +115,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getStatusMessage()
     {
-        return $this->_statusMessage;
+        return $this->statusMessage;
     }
 
     /**
@@ -123,7 +123,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     /**
@@ -131,7 +131,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getBodyFileName()
     {
-        return $this->_bodyFileName;
+        return $this->bodyFileName;
     }
 
     /**
@@ -139,7 +139,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getBase64Body()
     {
-        return $this->_base64Body;
+        return $this->base64Body;
     }
 
     /**
@@ -147,7 +147,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     /**
@@ -155,7 +155,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getProxyBaseUrl()
     {
-        return $this->_proxyBaseUrl;
+        return $this->proxyBaseUrl;
     }
 
     /**
@@ -163,7 +163,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getAdditionalProxyRequestHeaders()
     {
-        return $this->_additionalProxyRequestHeaders;
+        return $this->additionalProxyRequestHeaders;
     }
 
     /**
@@ -171,7 +171,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getFixedDelayMillis()
     {
-        return $this->_fixedDelayMillis;
+        return $this->fixedDelayMillis;
     }
 
     /**
@@ -179,7 +179,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getRandomDelayDistribution()
     {
-        return $this->_randomDelayDistribution;
+        return $this->randomDelayDistribution;
     }
 
     /**
@@ -187,7 +187,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getChunkedDribbleDelay()
     {
-        return $this->_chunkedDribbleDelay;
+        return $this->chunkedDribbleDelay;
     }
 
     /**
@@ -195,7 +195,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getFault()
     {
-        return $this->_fault;
+        return $this->fault;
     }
 
     /**
@@ -203,7 +203,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getTransformers()
     {
-        return $this->_transformers;
+        return $this->transformers;
     }
 
     /**
@@ -211,7 +211,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getTransformerParameters()
     {
-        return $this->_transformerParameters;
+        return $this->transformerParameters;
     }
 
     /**
@@ -219,7 +219,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
      */
     public function getProxyUrlPrefixToRemove()
     {
-        return $this->_proxyUrlPrefixToRemove;
+        return $this->proxyUrlPrefixToRemove;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array
@@ -254,7 +254,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
             } else {
                 throw new NotNormalizableValueException("Unknown DelayDistribution type '$type'");
             }
-            $object->_randomDelayDistribution = $delayDistrib;
+            $object->randomDelayDistribution = $delayDistrib;
         }
 
         return new ObjectToPopulateResult($object, $normalisedArray);

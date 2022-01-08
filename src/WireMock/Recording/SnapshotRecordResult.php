@@ -11,9 +11,9 @@ class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var StubMapping[] */
-    private $_mappings;
+    private $mappings;
     /** @var string[] */
-    private $_ids;
+    private $ids;
 
     /**
      * @param StubMapping[] $mappings
@@ -21,8 +21,8 @@ class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
      */
     public function __construct($mappings, $ids)
     {
-        $this->_mappings = $mappings;
-        $this->_ids = $ids;
+        $this->mappings = $mappings;
+        $this->ids = $ids;
     }
 
     /**
@@ -30,7 +30,7 @@ class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
      */
     public function getMappings()
     {
-        return $this->_mappings;
+        return $this->mappings;
     }
 
     /**
@@ -38,6 +38,6 @@ class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
      */
     public function getIds()
     {
-        return $this->_ids;
+        return $this->ids;
     }
 }

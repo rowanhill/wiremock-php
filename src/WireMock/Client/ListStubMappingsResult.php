@@ -11,7 +11,7 @@ class ListStubMappingsResult extends PaginatedResult implements ObjectToPopulate
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var StubMapping[] */
-    private $_mappings;
+    private $mappings;
 
     /**
      * @param Meta $meta
@@ -20,7 +20,7 @@ class ListStubMappingsResult extends PaginatedResult implements ObjectToPopulate
     public function __construct(Meta $meta, array $_mappings)
     {
         parent::__construct($meta);
-        $this->_mappings = $_mappings;
+        $this->mappings = $_mappings;
     }
 
 
@@ -29,6 +29,6 @@ class ListStubMappingsResult extends PaginatedResult implements ObjectToPopulate
      */
     public function getMappings()
     {
-        return $this->_mappings;
+        return $this->mappings;
     }
 }

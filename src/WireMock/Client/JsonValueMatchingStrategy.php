@@ -8,14 +8,14 @@ use WireMock\Serde\ObjectToPopulateResult;
 
 class JsonValueMatchingStrategy extends ValueMatchingStrategy implements ObjectToPopulateFactoryInterface
 {
-    private $_ignoreArrayOrder = null;
-    private $_ignoreExtraElements = null;
+    private $ignoreArrayOrder = null;
+    private $ignoreExtraElements = null;
 
     public function __construct($matchingValue, $ignoreArrayOrder = null, $ignoreExtraElements = null)
     {
         parent::__construct('equalToJson', $matchingValue);
-        $this->_ignoreArrayOrder = $ignoreArrayOrder;
-        $this->_ignoreExtraElements = $ignoreExtraElements;
+        $this->ignoreArrayOrder = $ignoreArrayOrder;
+        $this->ignoreExtraElements = $ignoreExtraElements;
     }
 
     public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult

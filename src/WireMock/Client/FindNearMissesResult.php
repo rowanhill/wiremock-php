@@ -10,14 +10,14 @@ class FindNearMissesResult implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var NearMiss[] */
-    private $_nearMisses;
+    private $nearMisses;
 
     /**
      * @param NearMiss[] $nearMisses
      */
     public function __construct(array $nearMisses)
     {
-        $this->_nearMisses = $nearMisses;
+        $this->nearMisses = $nearMisses;
     }
 
     /**
@@ -25,6 +25,6 @@ class FindNearMissesResult implements ObjectToPopulateFactoryInterface
      */
     public function getNearMisses()
     {
-        return $this->_nearMisses;
+        return $this->nearMisses;
     }
 }

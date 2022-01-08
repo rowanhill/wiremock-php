@@ -5,11 +5,11 @@ namespace WireMock\Stubbing;
 class ScenarioMapping
 {
     /** @var string */
-    private $_scenarioName;
+    private $scenarioName;
     /** @var string */
-    private $_requiredScenarioState;
+    private $requiredScenarioState;
     /** @var string */
-    private $_newScenarioState;
+    private $newScenarioState;
 
     /**
      * @param string $scenarioName
@@ -22,9 +22,9 @@ class ScenarioMapping
         $newScenarioState = null
     )
     {
-        $this->_scenarioName = $scenarioName;
-        $this->_requiredScenarioState = $requiredScenarioState;
-        $this->_newScenarioState = $newScenarioState;
+        $this->scenarioName = $scenarioName;
+        $this->requiredScenarioState = $requiredScenarioState;
+        $this->newScenarioState = $newScenarioState;
     }
 
     /**
@@ -32,7 +32,7 @@ class ScenarioMapping
      */
     public function getScenarioName()
     {
-        return $this->_scenarioName;
+        return $this->scenarioName;
     }
 
     /**
@@ -40,7 +40,7 @@ class ScenarioMapping
      */
     public function getRequiredScenarioState()
     {
-        return $this->_requiredScenarioState;
+        return $this->requiredScenarioState;
     }
 
     /**
@@ -48,6 +48,6 @@ class ScenarioMapping
      */
     public function getNewScenarioState()
     {
-        return $this->_newScenarioState;
+        return $this->newScenarioState;
     }
 }

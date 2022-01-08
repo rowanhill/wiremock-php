@@ -12,13 +12,13 @@ class NearMiss implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var LoggedRequest */
-    private $_request;
+    private $request;
     /** @var StubMapping */
-    private $_stubMapping;
+    private $stubMapping;
     /** @var RequestPattern */
-    private $_requestPattern;
+    private $requestPattern;
     /** @var MatchResult */
-    private $_matchResult;
+    private $matchResult;
 
     /**
      * @param LoggedRequest $request
@@ -32,10 +32,10 @@ class NearMiss implements ObjectToPopulateFactoryInterface
         ?RequestPattern $requestPattern,
         MatchResult $matchResult
     ) {
-        $this->_request = $request;
-        $this->_stubMapping = $stubMapping;
-        $this->_requestPattern = $requestPattern;
-        $this->_matchResult = $matchResult;
+        $this->request = $request;
+        $this->stubMapping = $stubMapping;
+        $this->requestPattern = $requestPattern;
+        $this->matchResult = $matchResult;
     }
 
     /**
@@ -43,7 +43,7 @@ class NearMiss implements ObjectToPopulateFactoryInterface
      */
     public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
     /**
@@ -51,7 +51,7 @@ class NearMiss implements ObjectToPopulateFactoryInterface
      */
     public function getMapping()
     {
-        return $this->_stubMapping;
+        return $this->stubMapping;
     }
 
     /**
@@ -59,7 +59,7 @@ class NearMiss implements ObjectToPopulateFactoryInterface
      */
     public function getRequestPattern()
     {
-        return $this->_requestPattern;
+        return $this->requestPattern;
     }
 
     /**
@@ -67,6 +67,6 @@ class NearMiss implements ObjectToPopulateFactoryInterface
      */
     public function getMatchResult()
     {
-        return $this->_matchResult;
+        return $this->matchResult;
     }
 }

@@ -10,13 +10,13 @@ class PostServeAction implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var string */
-    private $_name;
+    private $name;
     /** @var WebhookDefinition */
-    private $_parameters;
+    private $parameters;
 
     public function __construct(string $name, WebhookDefinition $parameters)
     {
-        $this->_name = $name;
-        $this->_parameters = $parameters;
+        $this->name = $name;
+        $this->parameters = $parameters;
     }
 }

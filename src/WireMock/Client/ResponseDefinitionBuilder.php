@@ -10,27 +10,27 @@ use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
-    protected $_status = 200;
-    protected $_statusMessage;
-    protected $_body;
-    protected $_bodyFile;
-    protected $_bodyData;
-    protected $_headers = array();
-    protected $_proxyBaseUrl;
-    protected $_fixedDelayMillis;
+    protected $status = 200;
+    protected $statusMessage;
+    protected $body;
+    protected $bodyFile;
+    protected $bodyData;
+    protected $headers = array();
+    protected $proxyBaseUrl;
+    protected $fixedDelayMillis;
     /** @var DelayDistribution */
-    protected $_randomDelayDistribution;
+    protected $randomDelayDistribution;
     /** @var ChunkedDribbleDelay */
-    protected $_chunkedDribbleDelay;
-    protected $_fault;
+    protected $chunkedDribbleDelay;
+    protected $fault;
     /** @var string[] */
-    private $_transformers = array();
+    private $transformers = array();
     /** @var array */
-    private $_transformerParameters = array();
+    private $transformerParameters = array();
 
-    protected $_additionalRequestHeaders = array();
+    protected $additionalRequestHeaders = array();
     /** @var string */
-    protected $_proxyUrlPrefixToRemove;
+    protected $proxyUrlPrefixToRemove;
 
     /**
      * @param int $status
@@ -38,7 +38,7 @@ class ResponseDefinitionBuilder
      */
     public function withStatus($status)
     {
-        $this->_status = $status;
+        $this->status = $status;
         return $this;
     }
 
@@ -48,7 +48,7 @@ class ResponseDefinitionBuilder
      */
     public function withStatusMessage($statusMessage)
     {
-        $this->_statusMessage = $statusMessage;
+        $this->statusMessage = $statusMessage;
         return $this;
     }
 
@@ -58,7 +58,7 @@ class ResponseDefinitionBuilder
      */
     public function withBody($body)
     {
-        $this->_body = $body;
+        $this->body = $body;
         return $this;
     }
 
@@ -68,7 +68,7 @@ class ResponseDefinitionBuilder
      */
     public function withBodyFile($bodyFile)
     {
-        $this->_bodyFile = $bodyFile;
+        $this->bodyFile = $bodyFile;
         return $this;
     }
 
@@ -79,7 +79,7 @@ class ResponseDefinitionBuilder
     public function withBodyData($bytesAsString)
     {
         $base64 = base64_encode($bytesAsString);
-        $this->_bodyData = $base64;
+        $this->bodyData = $base64;
         return $this;
     }
 
@@ -90,14 +90,14 @@ class ResponseDefinitionBuilder
      */
     public function withHeader($headerName, $headerValue)
     {
-        if (isset($this->_headers[$headerName])) {
-            if (is_array($this->_headers[$headerName])) {
-                $this->_headers[$headerName][] = $headerValue;
+        if (isset($this->headers[$headerName])) {
+            if (is_array($this->headers[$headerName])) {
+                $this->headers[$headerName][] = $headerValue;
             } else {
-                $this->_headers[$headerName] = array($this->_headers[$headerName], $headerValue);
+                $this->headers[$headerName] = array($this->headers[$headerName], $headerValue);
             }
         } else {
-            $this->_headers[$headerName] = $headerValue;
+            $this->headers[$headerName] = $headerValue;
         }
         return $this;
     }
@@ -108,7 +108,7 @@ class ResponseDefinitionBuilder
      */
     public function proxiedFrom($proxyBaseUrl)
     {
-        $this->_proxyBaseUrl = $proxyBaseUrl;
+        $this->proxyBaseUrl = $proxyBaseUrl;
         return new ProxiedResponseDefinitionBuilder($this);
     }
 
@@ -118,7 +118,7 @@ class ResponseDefinitionBuilder
      */
     public function withFixedDelay($delayMillis)
     {
-        $this->_fixedDelayMillis = $delayMillis;
+        $this->fixedDelayMillis = $delayMillis;
         return $this;
     }
 
@@ -128,7 +128,7 @@ class ResponseDefinitionBuilder
      */
     public function withRandomDelay($delayDistribution)
     {
-        $this->_randomDelayDistribution = $delayDistribution;
+        $this->randomDelayDistribution = $delayDistribution;
         return $this;
     }
 
@@ -139,7 +139,7 @@ class ResponseDefinitionBuilder
      */
     public function withLogNormalRandomDelay($median, $sigma)
     {
-        $this->_randomDelayDistribution = new LogNormal($median, $sigma);
+        $this->randomDelayDistribution = new LogNormal($median, $sigma);
         return $this;
     }
 
@@ -150,7 +150,7 @@ class ResponseDefinitionBuilder
      */
     public function withUniformRandomDelay($lower, $upper)
     {
-        $this->_randomDelayDistribution = new UniformDistribution($lower, $upper);
+        $this->randomDelayDistribution = new UniformDistribution($lower, $upper);
         return $this;
     }
 
@@ -161,7 +161,7 @@ class ResponseDefinitionBuilder
      */
     public function withChunkedDribbleDelay($numberOfChunks, $totalDurationMillis)
     {
-        $this->_chunkedDribbleDelay = new ChunkedDribbleDelay($numberOfChunks, $totalDurationMillis);
+        $this->chunkedDribbleDelay = new ChunkedDribbleDelay($numberOfChunks, $totalDurationMillis);
         return $this;
     }
 
@@ -171,7 +171,7 @@ class ResponseDefinitionBuilder
      */
     public function withFault($fault)
     {
-        $this->_fault = $fault;
+        $this->fault = $fault;
         return $this;
     }
 
@@ -180,7 +180,7 @@ class ResponseDefinitionBuilder
      */
     public function withTransformers()
     {
-        $this->_transformers = func_get_args();
+        $this->transformers = func_get_args();
         return $this;
     }
 
@@ -191,7 +191,7 @@ class ResponseDefinitionBuilder
      */
     public function withTransformerParameter($name, $value)
     {
-        $this->_transformerParameters[$name] = $value;
+        $this->transformerParameters[$name] = $value;
         return $this;
     }
 
@@ -211,21 +211,21 @@ class ResponseDefinitionBuilder
     public function build()
     {
         return new ResponseDefinition(
-            $this->_status,
-            $this->_statusMessage,
-            $this->_body,
-            $this->_bodyFile,
-            $this->_bodyData,
-            $this->_headers,
-            $this->_proxyBaseUrl,
-            $this->_additionalRequestHeaders,
-            $this->_fixedDelayMillis,
-            $this->_randomDelayDistribution,
-            $this->_chunkedDribbleDelay,
-            $this->_fault,
-            $this->_transformers,
-            $this->_transformerParameters,
-            $this->_proxyUrlPrefixToRemove
+            $this->status,
+            $this->statusMessage,
+            $this->body,
+            $this->bodyFile,
+            $this->bodyData,
+            $this->headers,
+            $this->proxyBaseUrl,
+            $this->additionalRequestHeaders,
+            $this->fixedDelayMillis,
+            $this->randomDelayDistribution,
+            $this->chunkedDribbleDelay,
+            $this->fault,
+            $this->transformers,
+            $this->transformerParameters,
+            $this->proxyUrlPrefixToRemove
         );
     }
 }
@@ -250,7 +250,7 @@ class ProxiedResponseDefinitionBuilder extends ResponseDefinitionBuilder
      */
     public function withAdditionalRequestHeader($headerName, $value)
     {
-        $this->_additionalRequestHeaders[$headerName] = $value;
+        $this->additionalRequestHeaders[$headerName] = $value;
         return $this;
     }
 
@@ -260,7 +260,7 @@ class ProxiedResponseDefinitionBuilder extends ResponseDefinitionBuilder
      */
     public function withProxyUrlPrefixToRemove($proxyUrlPrefixToRemove)
     {
-        $this->_proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
+        $this->proxyUrlPrefixToRemove = $proxyUrlPrefixToRemove;
         return $this;
     }
 }

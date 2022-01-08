@@ -9,14 +9,14 @@ class CountMatchingRequestsResult implements ObjectToPopulateFactoryInterface
 {
     use DummyConstructorArgsObjectToPopulateFactory;
 
-    private $_count;
+    private $count;
 
     /**
      * @param $count
      */
     public function __construct($count)
     {
-        $this->_count = $count;
+        $this->count = $count;
     }
 
     /**
@@ -24,6 +24,6 @@ class CountMatchingRequestsResult implements ObjectToPopulateFactoryInterface
      */
     public function getCount()
     {
-        return $this->_count;
+        return $this->count;
     }
 }

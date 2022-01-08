@@ -22,15 +22,15 @@ use WireMock\Verification\CountMatchingStrategy;
 class WireMock
 {
     /** @var string */
-    private $_hostname;
+    private $hostname;
     /** @var int */
-    private $_port;
+    private $port;
     /** @var HttpWait */
-    private $_httpWait;
+    private $httpWait;
     /** @var Curl  */
-    private $_curl;
+    private $curl;
     /** @var Serializer */
-    private $_serializer;
+    private $serializer;
 
     public static function create($hostname = 'localhost', $port = 8080)
     {
@@ -48,23 +48,23 @@ class WireMock
         $hostname = 'localhost',
         $port = 8080
     ) {
-        $this->_hostname = $hostname;
-        $this->_port = $port;
-        $this->_httpWait = $httpWait;
-        $this->_curl = $curl;
-        $this->_serializer = $serializer;
+        $this->hostname = $hostname;
+        $this->port = $port;
+        $this->httpWait = $httpWait;
+        $this->curl = $curl;
+        $this->serializer = $serializer;
     }
 
     public function isAlive($timeoutSecs = 10, $debug = true)
     {
         $url = $this->_makeUrl('__admin/');
-        return $this->_httpWait->waitForServerToGive200($url, $timeoutSecs, $debug);
+        return $this->httpWait->waitForServerToGive200($url, $timeoutSecs, $debug);
     }
 
     public function isShutDown()
     {
         $url = $this->_makeUrl('__admin/');
-        return $this->_httpWait->waitForServerToFailToRespond($url);
+        return $this->httpWait->waitForServerToFailToRespond($url);
     }
 
     public function stubFor(MappingBuilder $mappingBuilder)
@@ -418,9 +418,9 @@ class WireMock
     private function doGet(string $path, ?string $resultType = null)
     {
         $url = $this->_makeUrl($path);
-        $resultJson = $this->_curl->get($url);
+        $resultJson = $this->curl->get($url);
         if ($resultType != null) {
-            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType, 'json');
         } else {
             return null;
         }
@@ -436,13 +436,13 @@ class WireMock
     {
         $url = $this->_makeUrl($path);
         if ($body != null) {
-            $requestJson = $this->_serializer->serialize($body, 'json');
+            $requestJson = $this->serializer->serialize($body, 'json');
         } else {
             $requestJson = null;
         }
-        $resultJson = $this->_curl->post($url, $requestJson);
+        $resultJson = $this->curl->post($url, $requestJson);
         if ($resultType != null) {
-            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType, 'json');
         } else {
             return null;
         }
@@ -458,13 +458,13 @@ class WireMock
     {
         $url = $this->_makeUrl($path);
         if ($body != null) {
-            $requestJson = $this->_serializer->serialize($body, 'json');
+            $requestJson = $this->serializer->serialize($body, 'json');
         } else {
             $requestJson = null;
         }
-        $resultJson = $this->_curl->put($url, $requestJson);
+        $resultJson = $this->curl->put($url, $requestJson);
         if ($resultType != null) {
-            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType, 'json');
         } else {
             return null;
         }
@@ -478,9 +478,9 @@ class WireMock
     private function doDelete(string $path, ?string $resultType = null)
     {
         $url = $this->_makeUrl($path);
-        $resultJson = $this->_curl->delete($url);
+        $resultJson = $this->curl->delete($url);
         if ($resultType != null) {
-            return $this->_serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType, 'json');
         } else {
             return null;
         }
@@ -488,7 +488,7 @@ class WireMock
 
     private function _makeUrl($path)
     {
-        return "http://$this->_hostname:$this->_port/$path";
+        return "http://$this->hostname:$this->port/$path";
     }
 
     /**

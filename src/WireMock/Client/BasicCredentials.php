@@ -10,9 +10,9 @@ class BasicCredentials implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var string */
-    private $_username;
+    private $username;
     /** @var string */
-    private $_password;
+    private $password;
 
     /**
      * @param string $username
@@ -20,8 +20,8 @@ class BasicCredentials implements ObjectToPopulateFactoryInterface
      */
     public function __construct($username, $password)
     {
-        $this->_username = $username;
-        $this->_password = $password;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
@@ -29,7 +29,7 @@ class BasicCredentials implements ObjectToPopulateFactoryInterface
      */
     public function getUsername()
     {
-        return $this->_username;
+        return $this->username;
     }
 
     /**
@@ -37,6 +37,6 @@ class BasicCredentials implements ObjectToPopulateFactoryInterface
      */
     public function getPassword()
     {
-        return $this->_password;
+        return $this->password;
     }
 }

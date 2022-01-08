@@ -10,9 +10,9 @@ class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var string */
-    private $_name;
+    private $name;
     /** @var array */
-    private $_parameters;
+    private $parameters;
 
     /**
      * @param string $name
@@ -20,8 +20,8 @@ class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
      */
     public function __construct($name, array $parameters)
     {
-        $this->_name = $name;
-        $this->_parameters = $parameters;
+        $this->name = $name;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -29,7 +29,7 @@ class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -37,6 +37,6 @@ class CustomMatcherDefinition implements ObjectToPopulateFactoryInterface
      */
     public function getParameters()
     {
-        return $this->_parameters;
+        return $this->parameters;
     }
 }

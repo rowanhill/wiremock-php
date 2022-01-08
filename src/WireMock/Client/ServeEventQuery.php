@@ -7,13 +7,13 @@ use DateTime;
 class ServeEventQuery
 {
     /** @var DateTime|null */
-    private $_since;
+    private $since;
     /** @var int|null */
-    private $_limit;
+    private $limit;
     /** @var boolean|null */
-    private $_unmatched;
+    private $unmatched;
     /** @var string|null */
-    private $_matchingStubId;
+    private $matchingStubId;
 
     /**
      * @param DateTime $since
@@ -21,7 +21,7 @@ class ServeEventQuery
      */
     public function withSince($since)
     {
-        $this->_since = $since;
+        $this->since = $since;
         return $this;
     }
 
@@ -31,7 +31,7 @@ class ServeEventQuery
      */
     public function withLimit($limit)
     {
-        $this->_limit = $limit;
+        $this->limit = $limit;
         return $this;
     }
 
@@ -40,7 +40,7 @@ class ServeEventQuery
      */
     public function withUnmatched()
     {
-        $this->_unmatched = true;
+        $this->unmatched = true;
         return $this;
     }
 
@@ -50,24 +50,24 @@ class ServeEventQuery
      */
     public function withStubMapping($stubId)
     {
-        $this->_matchingStubId = $stubId;
+        $this->matchingStubId = $stubId;
         return $this;
     }
 
     public function toParamsString()
     {
         $params = [];
-        if ($this->_since) {
-            $params[] = 'since=' . urlencode($this->_since->format(DateTime::ATOM));
+        if ($this->since) {
+            $params[] = 'since=' . urlencode($this->since->format(DateTime::ATOM));
         }
-        if ($this->_limit) {
-            $params[] = 'limit=' . urlencode($this->_limit);
+        if ($this->limit) {
+            $params[] = 'limit=' . urlencode($this->limit);
         }
-        if ($this->_unmatched) {
+        if ($this->unmatched) {
             $params[] = 'unmatched=true';
         }
-        if ($this->_matchingStubId) {
-            $params[] = 'matchingStub=' . urlencode($this->_matchingStubId);
+        if ($this->matchingStubId) {
+            $params[] = 'matchingStub=' . urlencode($this->matchingStubId);
         }
         return join('&', $params);
     }

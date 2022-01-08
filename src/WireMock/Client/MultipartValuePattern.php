@@ -13,13 +13,13 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
     const ANY = 'ANY';
 
     /** @var ValueMatchingStrategy[] */
-    private $_bodyPatterns;
+    private $bodyPatterns;
     /** @var \array<string, ValueMatchingStrategy> */
-    private $_headers;
+    private $headers;
     /** @var string */
-    private $_name;
+    private $name;
     /** @var string */
-    private $_matchingType;
+    private $matchingType;
 
     /**
      * @param ValueMatchingStrategy[] $bodyPatterns
@@ -29,10 +29,10 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      */
     public function __construct($bodyPatterns, $headers, $name, $matchingType)
     {
-        $this->_bodyPatterns = $bodyPatterns;
-        $this->_headers = $headers;
-        $this->_name = $name;
-        $this->_matchingType = $matchingType;
+        $this->bodyPatterns = $bodyPatterns;
+        $this->headers = $headers;
+        $this->name = $name;
+        $this->matchingType = $matchingType;
     }
 
     /**
@@ -40,7 +40,7 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      */
     public function getBodyPatterns()
     {
-        return $this->_bodyPatterns;
+        return $this->bodyPatterns;
     }
 
     /**
@@ -48,7 +48,7 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     /**
@@ -56,7 +56,7 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -64,6 +64,6 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      */
     public function getMatchingType()
     {
-        return $this->_matchingType;
+        return $this->matchingType;
     }
 }

@@ -7,11 +7,11 @@ use WireMock\Stubbing\ScenarioMapping;
 class ScenarioMappingBuilder
 {
     /** @var string */
-    private $_scenarioName;
+    private $scenarioName;
     /** @var string */
-    private $_requiredScenarioState;
+    private $requiredScenarioState;
     /** @var string */
-    private $_newScenarioState;
+    private $newScenarioState;
 
     /**
      * @param string $scenarioName
@@ -19,7 +19,7 @@ class ScenarioMappingBuilder
      */
     public function withScenarioName($scenarioName)
     {
-        $this->_scenarioName = $scenarioName;
+        $this->scenarioName = $scenarioName;
         return $this;
     }
 
@@ -29,7 +29,7 @@ class ScenarioMappingBuilder
      */
     public function withRequiredState($requiredScenarioState)
     {
-        $this->_requiredScenarioState = $requiredScenarioState;
+        $this->requiredScenarioState = $requiredScenarioState;
         return $this;
     }
 
@@ -39,7 +39,7 @@ class ScenarioMappingBuilder
      */
     public function withNewScenarioState($newScenarioState)
     {
-        $this->_newScenarioState = $newScenarioState;
+        $this->newScenarioState = $newScenarioState;
         return $this;
     }
 
@@ -49,14 +49,14 @@ class ScenarioMappingBuilder
      */
     public function build()
     {
-        if ($this->_scenarioName === null) {
-            if ($this->_requiredScenarioState !== null || $this->_newScenarioState !== null) {
+        if ($this->scenarioName === null) {
+            if ($this->requiredScenarioState !== null || $this->newScenarioState !== null) {
                 throw new \Exception('Scenario name must be set');
             }
 
             return null;
         }
 
-        return new ScenarioMapping($this->_scenarioName, $this->_requiredScenarioState, $this->_newScenarioState);
+        return new ScenarioMapping($this->scenarioName, $this->requiredScenarioState, $this->newScenarioState);
     }
 }

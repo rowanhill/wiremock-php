@@ -10,20 +10,20 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
 
     /** @var string */
-    private $_url;
+    private $url;
     /** @var string */
-    private $_absoluteUrl;
+    private $absoluteUrl;
     /** @var string */
-    private $_method;
+    private $method;
     /** @var string */
-    private $_clientIp;
-    private $_headers;
-    private $_cookies;
-    private $_body;
-    private $_bodyAsBase64;
-    private $_browserProxyRequest;
-    private $_loggedDate;
-    private $_loggedDateString;
+    private $clientIp;
+    private $headers;
+    private $cookies;
+    private $body;
+    private $bodyAsBase64;
+    private $browserProxyRequest;
+    private $loggedDate;
+    private $loggedDateString;
 
     public function __construct()
     {
@@ -34,7 +34,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getUrl()
     {
-        return $this->_url;
+        return $this->url;
     }
 
     /**
@@ -42,7 +42,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getAbsoluteUrl()
     {
-        return $this->_absoluteUrl;
+        return $this->absoluteUrl;
     }
 
     /**
@@ -50,7 +50,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getMethod()
     {
-        return $this->_method;
+        return $this->method;
     }
 
     /**
@@ -58,7 +58,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getClientIp()
     {
-        return $this->_clientIp;
+        return $this->clientIp;
     }
 
     /**
@@ -66,7 +66,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     /**
@@ -74,7 +74,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getCookies()
     {
-        return $this->_cookies;
+        return $this->cookies;
     }
 
     /**
@@ -82,7 +82,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     /**
@@ -90,7 +90,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getBodyAsBase64()
     {
-        return $this->_bodyAsBase64;
+        return $this->bodyAsBase64;
     }
 
     /**
@@ -98,7 +98,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function isBrowserProxyRequest()
     {
-        return $this->_browserProxyRequest;
+        return $this->browserProxyRequest;
     }
 
     /**
@@ -106,7 +106,7 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getLoggedDate()
     {
-        return $this->_loggedDate;
+        return $this->loggedDate;
     }
 
     /**
@@ -114,6 +114,6 @@ class LoggedRequest implements ObjectToPopulateFactoryInterface
      */
     public function getLoggedDateString()
     {
-        return $this->_loggedDateString;
+        return $this->loggedDateString;
     }
 }

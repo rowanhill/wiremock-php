@@ -10,9 +10,9 @@ use WireMock\Serde\PostNormalizationAmenderInterface;
 class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var string */
-    private $_matchingType;
+    private $matchingType;
     /** @var string */
-    private $_matchingValue;
+    private $matchingValue;
 
     /**
      * @param string $matchingType
@@ -20,8 +20,8 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
      */
     public function __construct($matchingType, $matchingValue)
     {
-        $this->_matchingType = $matchingType;
-        $this->_matchingValue = $matchingValue;
+        $this->matchingType = $matchingType;
+        $this->matchingValue = $matchingValue;
     }
 
     /**
@@ -29,7 +29,7 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
      */
     public function getMatchingType()
     {
-        return $this->_matchingType;
+        return $this->matchingType;
     }
 
     /**
@@ -37,7 +37,7 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
      */
     public function getMatchingValue()
     {
-        return $this->_matchingValue;
+        return $this->matchingValue;
     }
 
     public static function amendPostNormalisation(array $normalisedArray, $object): array

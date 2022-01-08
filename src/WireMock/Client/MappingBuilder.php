@@ -9,28 +9,28 @@ use WireMock\Stubbing\StubMapping;
 class MappingBuilder
 {
     /** @var string A string representation of a GUID  */
-    private $_id;
+    private $id;
     /** @var string */
-    private $_name;
+    private $name;
     /** @var RequestPatternBuilder */
-    private $_requestPatternBuilder;
+    private $requestPatternBuilder;
     /** @var ResponseDefinitionBuilder */
-    private $_responseDefinitionBuilder;
+    private $responseDefinitionBuilder;
     /** @var int */
-    private $_priority;
+    private $priority;
     /** @var ScenarioMappingBuilder */
-    private $_scenarioBuilder;
+    private $scenarioBuilder;
     /** @var array */
-    private $_metadata;
+    private $metadata;
     /** @var boolean */
-    private $_isPersistent;
+    private $isPersistent;
     /** @var PostServeAction[]|null */
-    private $_postServeActions;
+    private $postServeActions;
 
     public function __construct(RequestPatternBuilder $requestPatternBuilder)
     {
-        $this->_requestPatternBuilder = $requestPatternBuilder;
-        $this->_scenarioBuilder = new ScenarioMappingBuilder();
+        $this->requestPatternBuilder = $requestPatternBuilder;
+        $this->scenarioBuilder = new ScenarioMappingBuilder();
     }
 
     /**
@@ -39,7 +39,7 @@ class MappingBuilder
      */
     public function withId($id)
     {
-        $this->_id = $id;
+        $this->id = $id;
         return $this;
     }
 
@@ -49,7 +49,7 @@ class MappingBuilder
      */
     public function withName($name)
     {
-        $this->_name = $name;
+        $this->name = $name;
         return $this;
     }
 
@@ -59,7 +59,7 @@ class MappingBuilder
      */
     public function willReturn(ResponseDefinitionBuilder $responseDefinitionBuilder)
     {
-        $this->_responseDefinitionBuilder = $responseDefinitionBuilder;
+        $this->responseDefinitionBuilder = $responseDefinitionBuilder;
         return $this;
     }
 
@@ -69,7 +69,7 @@ class MappingBuilder
      */
     public function atPriority($priority)
     {
-        $this->_priority = $priority;
+        $this->priority = $priority;
         return $this;
     }
 
@@ -80,7 +80,7 @@ class MappingBuilder
      */
     public function withHeader($headerName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_requestPatternBuilder->withHeader($headerName, $valueMatchingStrategy);
+        $this->requestPatternBuilder->withHeader($headerName, $valueMatchingStrategy);
         return $this;
     }
 
@@ -91,7 +91,7 @@ class MappingBuilder
      */
     public function withQueryParam($name, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_requestPatternBuilder->withQueryParam($name, $valueMatchingStrategy);
+        $this->requestPatternBuilder->withQueryParam($name, $valueMatchingStrategy);
         return $this;
     }
 
@@ -102,7 +102,7 @@ class MappingBuilder
      */
     public function withCookie($cookieName, ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_requestPatternBuilder->withCookie($cookieName, $valueMatchingStrategy);
+        $this->requestPatternBuilder->withCookie($cookieName, $valueMatchingStrategy);
         return $this;
     }
 
@@ -112,7 +112,7 @@ class MappingBuilder
      */
     public function withRequestBody(ValueMatchingStrategy $valueMatchingStrategy)
     {
-        $this->_requestPatternBuilder->withRequestBody($valueMatchingStrategy);
+        $this->requestPatternBuilder->withRequestBody($valueMatchingStrategy);
         return $this;
     }
 
@@ -122,7 +122,7 @@ class MappingBuilder
      */
     public function withMultipartRequestBody($multipartBuilder)
     {
-        $this->_requestPatternBuilder->withMultipartRequestBody($multipartBuilder->build());
+        $this->requestPatternBuilder->withMultipartRequestBody($multipartBuilder->build());
         return $this;
     }
 
@@ -133,7 +133,7 @@ class MappingBuilder
      */
     public function withBasicAuth($username, $password)
     {
-        $this->_requestPatternBuilder->withBasicAuth($username, $password);
+        $this->requestPatternBuilder->withBasicAuth($username, $password);
         return $this;
     }
 
@@ -143,7 +143,7 @@ class MappingBuilder
      */
     public function withHost($hostMatcher)
     {
-        $this->_requestPatternBuilder->withHost($hostMatcher);
+        $this->requestPatternBuilder->withHost($hostMatcher);
         return $this;
     }
 
@@ -153,7 +153,7 @@ class MappingBuilder
      */
     public function inScenario($scenarioName)
     {
-        $this->_scenarioBuilder->withScenarioName($scenarioName);
+        $this->scenarioBuilder->withScenarioName($scenarioName);
         return $this;
     }
 
@@ -163,7 +163,7 @@ class MappingBuilder
      */
     public function whenScenarioStateIs($requiredScenarioState)
     {
-        $this->_scenarioBuilder->withRequiredState($requiredScenarioState);
+        $this->scenarioBuilder->withRequiredState($requiredScenarioState);
         return $this;
     }
 
@@ -173,7 +173,7 @@ class MappingBuilder
      */
     public function willSetStateTo($newScenarioState)
     {
-        $this->_scenarioBuilder->withNewScenarioState($newScenarioState);
+        $this->scenarioBuilder->withNewScenarioState($newScenarioState);
         return $this;
     }
 
@@ -183,7 +183,7 @@ class MappingBuilder
      */
     public function withMetadata(array $metadata)
     {
-        $this->_metadata = $metadata;
+        $this->metadata = $metadata;
         return $this;
     }
 
@@ -194,7 +194,7 @@ class MappingBuilder
      */
     public function andMatching($matcherName, $params = array())
     {
-        $this->_requestPatternBuilder->withCustomMatcher($matcherName, $params);
+        $this->requestPatternBuilder->withCustomMatcher($matcherName, $params);
         return $this;
     }
 
@@ -203,7 +203,7 @@ class MappingBuilder
      */
     public function persistent()
     {
-        $this->_isPersistent = true;
+        $this->isPersistent = true;
         return $this;
     }
 
@@ -214,10 +214,10 @@ class MappingBuilder
      */
     public function withPostServeAction($name, WebhookDefinition $webhook)
     {
-        if (!isset($this->_postServeActions)) {
-            $this->_postServeActions = array();
+        if (!isset($this->postServeActions)) {
+            $this->postServeActions = array();
         }
-        $this->_postServeActions[] = new PostServeAction($name, $webhook);
+        $this->postServeActions[] = new PostServeAction($name, $webhook);
         return $this;
     }
 
@@ -227,17 +227,17 @@ class MappingBuilder
      */
     public function build()
     {
-        $responseDefinition = $this->_responseDefinitionBuilder->build();
+        $responseDefinition = $this->responseDefinitionBuilder->build();
         return new StubMapping(
-            $this->_requestPatternBuilder->build(),
+            $this->requestPatternBuilder->build(),
             $responseDefinition,
-            $this->_id,
-            $this->_name,
-            $this->_priority,
-            $this->_scenarioBuilder->build(),
-            $this->_metadata,
-            $this->_isPersistent,
-            $this->_postServeActions
+            $this->id,
+            $this->name,
+            $this->priority,
+            $this->scenarioBuilder->build(),
+            $this->metadata,
+            $this->isPersistent,
+            $this->postServeActions
         );
     }
 }

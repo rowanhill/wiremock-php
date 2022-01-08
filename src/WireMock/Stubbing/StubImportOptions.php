@@ -8,9 +8,9 @@ class StubImportOptions
     const IGNORE = 'IGNORE';
 
     /** @var string */
-    private $_duplicatePolicy;
+    private $duplicatePolicy;
     /** @var boolean */
-    private $_deleteAllNotInImport;
+    private $deleteAllNotInImport;
 
     /**
      * StubImportOptions constructor.
@@ -19,7 +19,7 @@ class StubImportOptions
      */
     public function __construct($_duplicatePolicy, $_deleteAllNotInImport)
     {
-        $this->_duplicatePolicy = $_duplicatePolicy;
-        $this->_deleteAllNotInImport = $_deleteAllNotInImport;
+        $this->duplicatePolicy = $_duplicatePolicy;
+        $this->deleteAllNotInImport = $_deleteAllNotInImport;
     }
 }

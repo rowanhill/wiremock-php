@@ -7,10 +7,10 @@ use WireMock\Serde\ObjectToPopulateResult;
 
 class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements ObjectToPopulateFactoryInterface
 {
-    private $_enablePlaceholders;
-    private $_placeholderOpeningDelimiterRegex;
-    private $_placeholderClosingDelimiterRegex;
-    private $_exemptedComparisons = null;
+    private $enablePlaceholders;
+    private $placeholderOpeningDelimiterRegex;
+    private $placeholderClosingDelimiterRegex;
+    private $exemptedComparisons = null;
 
     /**
      * @param string $matchingValue
@@ -25,9 +25,9 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements Object
         $placeholderClosingDelimiterRegex = null
     ) {
         parent::__construct('equalToXml', $matchingValue);
-        $this->_enablePlaceholders = $enablePlaceholders;
-        $this->_placeholderOpeningDelimiterRegex = $placeholderOpeningDelimiterRegex;
-        $this->_placeholderClosingDelimiterRegex = $placeholderClosingDelimiterRegex;
+        $this->enablePlaceholders = $enablePlaceholders;
+        $this->placeholderOpeningDelimiterRegex = $placeholderOpeningDelimiterRegex;
+        $this->placeholderClosingDelimiterRegex = $placeholderClosingDelimiterRegex;
     }
 
     /**
@@ -37,7 +37,7 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements Object
     public function exemptingComparisons($comparisonTypes)
     {
         $comparisonTypes = func_get_args();
-        $this->_exemptedComparisons = $comparisonTypes;
+        $this->exemptedComparisons = $comparisonTypes;
         return $this;
     }
 

@@ -11,14 +11,14 @@ class GetScenariosResult implements ObjectToPopulateFactoryInterface
     use DummyConstructorArgsObjectToPopulateFactory;
     
     /** @var Scenario[] */
-    private $_scenarios;
+    private $scenarios;
 
     /**
      * @param Scenario[] $scenarios
      */
     public function __construct(array $scenarios)
     {
-        $this->_scenarios = $scenarios;
+        $this->scenarios = $scenarios;
     }
 
     /**
@@ -26,6 +26,6 @@ class GetScenariosResult implements ObjectToPopulateFactoryInterface
      */
     public function getScenarios()
     {
-        return $this->_scenarios;
+        return $this->scenarios;
     }
 }

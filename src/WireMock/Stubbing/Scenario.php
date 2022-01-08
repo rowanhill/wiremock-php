@@ -12,13 +12,13 @@ class Scenario implements ObjectToPopulateFactoryInterface
     const STARTED = 'Started';
 
     /** @var string UUID */
-    private $_id;
+    private $id;
     /** @var string */
-    private $_name;
+    private $name;
     /** @var string */
-    private $_state;
+    private $state;
     /** @var string[] */
-    private $_possibleStates;
+    private $possibleStates;
 
     /**
      * @param string $id
@@ -28,10 +28,10 @@ class Scenario implements ObjectToPopulateFactoryInterface
      */
     public function __construct($id, $name, $state, array $possibleStates)
     {
-        $this->_id = $id;
-        $this->_name = $name;
-        $this->_state = $state;
-        $this->_possibleStates = $possibleStates;
+        $this->id = $id;
+        $this->name = $name;
+        $this->state = $state;
+        $this->possibleStates = $possibleStates;
     }
 
     /**
@@ -39,7 +39,7 @@ class Scenario implements ObjectToPopulateFactoryInterface
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -47,7 +47,7 @@ class Scenario implements ObjectToPopulateFactoryInterface
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -55,7 +55,7 @@ class Scenario implements ObjectToPopulateFactoryInterface
      */
     public function getState()
     {
-        return $this->_state;
+        return $this->state;
     }
 
     /**
@@ -63,6 +63,6 @@ class Scenario implements ObjectToPopulateFactoryInterface
      */
     public function getPossibleStates()
     {
-        return $this->_possibleStates;
+        return $this->possibleStates;
     }
 }

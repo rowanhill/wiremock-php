@@ -10,9 +10,9 @@ use WireMock\Serde\PostNormalizationAmenderInterface;
 class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
     /** @var array */
-    private $_xPathNamespaces = array();
+    private $xPathNamespaces = array();
     /** @var ValueMatchingStrategy */
-    private $_valueMatchingStrategy;
+    private $valueMatchingStrategy;
 
     /**
      * XPathValueMatchingStrategy constructor.
@@ -22,7 +22,7 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
     public function __construct($matchingValue, $valueMatchingStrategy = null)
     {
         parent::__construct('matchesXPath', $matchingValue);
-        $this->_valueMatchingStrategy = $valueMatchingStrategy;
+        $this->valueMatchingStrategy = $valueMatchingStrategy;
     }
 
     /**
@@ -32,7 +32,7 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
      */
     public function withXPathNamespace($name, $namespaceUri)
     {
-        $this->_xPathNamespaces[$name] = $namespaceUri;
+        $this->xPathNamespaces[$name] = $namespaceUri;
         return $this;
     }
 
