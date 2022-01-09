@@ -1,5 +1,6 @@
 <?php
 
+use WireMock\Client\ListStubMappingsResult;
 use WireMock\Serde\SerializerFactory;
 use WireMock\Stubbing\StubMapping;
 
@@ -39,7 +40,7 @@ function getMappings()
 {
     $defaultSerializer = SerializerFactory::default();
     $adminJson = file_get_contents('http://localhost:8080/__admin/mappings');
-    // TODO: Move to single deserialize step when ListStubMappingsResult is serializer-friendly
-    $resultArray = $defaultSerializer->decode($adminJson, 'json');
-    return $defaultSerializer->denormalize($resultArray['mappings'], StubMapping::class.'[]', 'json');
+    /** @var ListStubMappingsResult $listResult */
+    $listResult = $defaultSerializer->deserialize($adminJson, ListStubMappingsResult::class, 'json');
+    return $listResult->getMappings();
 }
