@@ -93,9 +93,13 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
                 unset($normalisedArray[$key]);
 
                 if ($subclass != self::class) {
-                    $method = new \ReflectionMethod($subclass, 'amendPreDenormalisation');
-                    if ($method->getDeclaringClass()->name == $subclass) {
-                        $normalisedArray = $method->invoke(null, $normalisedArray);
+                    try {
+                        $method = new \ReflectionMethod($subclass, 'amendPreDenormalisation');
+                        if ($method->getDeclaringClass()->name == $subclass) {
+                            $normalisedArray = $method->invoke(null, $normalisedArray);
+                        }
+                    } catch (\ReflectionException $e) {
+                        // Subclass doesn't implement amendPreNormalisation, nothing to be done
                     }
                 }
 
