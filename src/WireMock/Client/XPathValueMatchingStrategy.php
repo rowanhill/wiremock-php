@@ -2,8 +2,6 @@
 
 namespace WireMock\Client;
 
-use Symfony\Component\Serializer\Serializer;
-use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 
