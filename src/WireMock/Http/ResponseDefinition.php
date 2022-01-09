@@ -225,7 +225,7 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'fixedDelayMilliseconds', 'fixedDelayMillis');
         NormalizerUtils::renameKey($normalisedArray, 'delayDistribution', 'randomDelayDistribution');

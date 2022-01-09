@@ -49,7 +49,7 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         $matchingValue = $normalisedArray['matchingValue'];
         unset($normalisedArray['matchingValue']);

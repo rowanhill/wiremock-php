@@ -52,7 +52,7 @@ class PrePostAmendingNormalizer implements NormalizerInterface, DenormalizerInte
     public function denormalize($data, $type, $format = null, array $context = [])
     {
         if (is_subclass_of($type, PreDenormalizationAmenderInterface::class)) {
-            $data = forward_static_call([$type, 'amendPreNormalisation'], $data);
+            $data = forward_static_call([$type, 'amendPreDenormalisation'], $data);
         }
         if (is_subclass_of($type, ObjectToPopulateFactoryInterface::class)) {
             /** @var ObjectToPopulateResult $result */

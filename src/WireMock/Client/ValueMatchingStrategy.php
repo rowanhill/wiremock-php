@@ -83,7 +83,7 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         foreach ($normalisedArray as $key => $value) {
             if (isset(self::$subclassByMatchingType[$key])) {
@@ -93,7 +93,7 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
                 unset($normalisedArray[$key]);
 
                 if ($subclass != self::class) {
-                    $method = new \ReflectionMethod($subclass, 'amendPreNormalisation');
+                    $method = new \ReflectionMethod($subclass, 'amendPreDenormalisation');
                     if ($method->getDeclaringClass()->name == $subclass) {
                         $normalisedArray = $method->invoke(null, $normalisedArray);
                     }

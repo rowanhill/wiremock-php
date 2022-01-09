@@ -4,5 +4,5 @@ namespace WireMock\Serde;
 
 interface PreDenormalizationAmenderInterface
 {
-    public static function amendPreNormalisation(array $normalisedArray): array;
+    public static function amendPreDenormalisation(array $normalisedArray): array;
 }

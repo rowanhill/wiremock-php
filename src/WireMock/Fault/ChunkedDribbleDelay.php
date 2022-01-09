@@ -45,7 +45,7 @@ class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenor
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'totalDuration', 'totalDurationMillis');
         return $normalisedArray;

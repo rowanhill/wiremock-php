@@ -168,7 +168,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'persistent', 'isPersistent');
         return $normalisedArray;

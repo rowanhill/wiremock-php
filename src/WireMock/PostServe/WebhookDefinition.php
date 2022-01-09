@@ -102,7 +102,7 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
         return $normalisedArray;
     }
 
-    public static function amendPreNormalisation(array $normalisedArray): array
+    public static function amendPreDenormalisation(array $normalisedArray): array
     {
         $extraParameters = array_diff_key($normalisedArray, ['method', 'url', 'headers', 'body', 'base64Body', 'delay']);
         foreach ($extraParameters as $key => $value) {
