@@ -2,14 +2,10 @@
 
 namespace WireMock\Recording;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\StubMapping;
 
-class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
+class SnapshotRecordResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var StubMapping[] */
     private $mappings;
     /** @var string[] */
@@ -19,7 +15,7 @@ class SnapshotRecordResult implements ObjectToPopulateFactoryInterface
      * @param StubMapping[] $mappings
      * @param string[] $ids
      */
-    public function __construct($mappings, $ids)
+    public function __construct($mappings = [], $ids = [])
     {
         $this->mappings = $mappings;
         $this->ids = $ids;

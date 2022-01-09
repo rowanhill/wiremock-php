@@ -1,11 +1,7 @@
 <?php
 namespace WireMock\Client;
 
-use Symfony\Component\Serializer\Serializer;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-use WireMock\Serde\ObjectToPopulateResult;
-
-class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements ObjectToPopulateFactoryInterface
+class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
 {
     private $enablePlaceholders;
     private $placeholderOpeningDelimiterRegex;
@@ -39,13 +35,5 @@ class EqualToXmlMatchingStrategy extends ValueMatchingStrategy implements Object
         $comparisonTypes = func_get_args();
         $this->exemptedComparisons = $comparisonTypes;
         return $this;
-    }
-
-    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
-    {
-        unset($normalisedArray['matchingType']); // equalToXml
-        $matchingValue = $normalisedArray['matchingValue'];
-        unset($normalisedArray['matchingValue']);
-        return new ObjectToPopulateResult(new self($matchingValue), $normalisedArray);
     }
 }

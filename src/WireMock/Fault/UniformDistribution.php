@@ -2,14 +2,8 @@
 
 namespace WireMock\Fault;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-
-class UniformDistribution implements DelayDistribution, PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class UniformDistribution extends DelayDistribution
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var int */
     private $lower;
     /** @var int */
@@ -19,8 +13,9 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
      * @param int $lower
      * @param int $upper
      */
-    public function __construct($lower, $upper)
+    public function __construct(int $lower, int $upper)
     {
+        parent::__construct('uniform');
         $this->lower = $lower;
         $this->upper = $upper;
     }
@@ -39,11 +34,5 @@ class UniformDistribution implements DelayDistribution, PostNormalizationAmender
     public function getUpper()
     {
         return $this->upper;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        $normalisedArray['type'] = 'uniform';
-        return $normalisedArray;
     }
 }

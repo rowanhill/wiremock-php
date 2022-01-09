@@ -2,14 +2,12 @@
 
 namespace WireMock\Client;
 
-use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
-use Symfony\Component\Serializer\Serializer;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-use WireMock\Serde\ObjectToPopulateResult;
+use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
+use WireMock\Serde\MappingProvider;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, MappingProvider
 {
     private static $subclassByMatchingType = [
         'absent' => ValueMatchingStrategy::class,
@@ -88,8 +86,8 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
     public static function amendPreNormalisation(array $normalisedArray): array
     {
         foreach ($normalisedArray as $key => $value) {
-            $subclass = static::$subclassByMatchingType[$key];
-            if ($subclass != null) {
+            if (isset(self::$subclassByMatchingType[$key])) {
+                $subclass = self::$subclassByMatchingType[$key];
                 $normalisedArray['matchingType'] = $key;
                 $normalisedArray['matchingValue'] = $normalisedArray[$key];
                 unset($normalisedArray[$key]);
@@ -101,33 +99,14 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
                     }
                 }
 
-                return $normalisedArray;
+                break;
             }
         }
         return $normalisedArray;
     }
 
-    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    static function getDiscriminatorMapping(): ClassDiscriminatorMapping
     {
-        $matchingType = $normalisedArray['matchingType'];
-        $subclass = self::$subclassByMatchingType[$matchingType];
-        if ($subclass != self::class) {
-            $method = new \ReflectionMethod($subclass, 'createObjectToPopulate');
-            if ($method->getDeclaringClass()->name == $subclass) {
-                return $method->invoke(null, $normalisedArray, $serializer, $format, $context);
-            } else {
-                throw new NotNormalizableValueException(sprintf(
-                    'Cannot create object to populate for class %s (with matching type %s) because it does not implement createObjectToPopulate',
-                    $subclass,
-                    $matchingType
-                ));
-            }
-        } else {
-            unset($normalisedArray['matchingType']);
-            $matchingValue = $normalisedArray['matchingValue'];
-            unset($normalisedArray['matchingValue']);
-
-            return new ObjectToPopulateResult(new ValueMatchingStrategy($matchingType, $matchingValue), $normalisedArray);
-        }
+        return new ClassDiscriminatorMapping('matchingType', self::$subclassByMatchingType);
     }
 }

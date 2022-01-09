@@ -2,22 +2,17 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class FindRequestsResult implements ObjectToPopulateFactoryInterface
+class FindRequestsResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var LoggedRequest[] */
     private $requests;
 
     /**
-     * @param LoggedRequest[] $_requests
+     * @param LoggedRequest[] $requests
      */
-    public function __construct(array $_requests)
+    public function __construct(array $requests)
     {
-        $this->requests = $_requests;
+        $this->requests = $requests;
     }
 
     /**

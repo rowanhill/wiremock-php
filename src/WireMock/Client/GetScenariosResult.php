@@ -2,14 +2,10 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\Scenario;
 
-class GetScenariosResult implements ObjectToPopulateFactoryInterface
+class GetScenariosResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var Scenario[] */
     private $scenarios;
 

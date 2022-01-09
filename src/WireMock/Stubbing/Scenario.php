@@ -2,13 +2,8 @@
 
 namespace WireMock\Stubbing;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class Scenario implements ObjectToPopulateFactoryInterface
+class Scenario
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     const STARTED = 'Started';
 
     /** @var string UUID */

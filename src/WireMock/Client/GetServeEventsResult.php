@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class GetServeEventsResult extends RequestJournalDependentResult implements ObjectToPopulateFactoryInterface
+class GetServeEventsResult extends RequestJournalDependentResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var ServeEvent[]  */
     private $requests;
 

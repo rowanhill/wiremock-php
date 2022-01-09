@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class FindNearMissesResult implements ObjectToPopulateFactoryInterface
+class FindNearMissesResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var NearMiss[] */
     private $nearMisses;
 

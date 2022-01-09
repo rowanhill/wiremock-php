@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class MultipartValuePattern implements ObjectToPopulateFactoryInterface
+class MultipartValuePattern
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     const ALL = 'ALL';
     const ANY = 'ANY';
 
@@ -27,7 +22,7 @@ class MultipartValuePattern implements ObjectToPopulateFactoryInterface
      * @param string $name
      * @param string $matchingType
      */
-    public function __construct($bodyPatterns, $headers, $name, $matchingType)
+    public function __construct($bodyPatterns = [], $headers = [], $name = null, $matchingType = null)
     {
         $this->bodyPatterns = $bodyPatterns;
         $this->headers = $headers;

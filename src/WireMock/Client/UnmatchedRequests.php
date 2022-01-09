@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class UnmatchedRequests implements ObjectToPopulateFactoryInterface
+class UnmatchedRequests
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var LoggedRequest[] */
     private $requests;
     /** @var boolean */

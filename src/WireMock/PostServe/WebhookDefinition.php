@@ -23,7 +23,7 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
     private $body;
     /** @var string */
     private $base64Body;
-    /** @var array */
+    /** @var DelayDistribution */
     private $delay;
     /** @var array */
     private $extraParameters = null; // TODO: Check this is accepted by WireMock

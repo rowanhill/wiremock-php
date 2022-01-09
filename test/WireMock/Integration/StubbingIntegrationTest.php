@@ -7,7 +7,6 @@ require_once 'WireMockIntegrationTest.php';
 use Exception;
 use WireMock\Client\ClientException;
 use WireMock\Client\DateTimeMatchingStrategy;
-use WireMock\Client\EqualToMatchingStrategy;
 use WireMock\Client\WireMock;
 use WireMock\Client\XmlUnitComparisonType;
 use WireMock\Stubbing\StubMapping;

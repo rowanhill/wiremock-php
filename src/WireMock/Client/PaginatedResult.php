@@ -2,9 +2,6 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
 abstract class PaginatedResult
 {
     /** @var Meta */
@@ -27,10 +24,8 @@ abstract class PaginatedResult
     }
 }
 
-class Meta implements ObjectToPopulateFactoryInterface
+class Meta
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var int */
     private $total;
 

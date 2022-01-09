@@ -2,13 +2,8 @@
 
 namespace WireMock\Recording;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class RecordingStatusResult implements ObjectToPopulateFactoryInterface
+class RecordingStatusResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     const NEVER_STARTED = 'NeverStarted';
     const RECORDING = 'Recording';
     const STOPPED = 'Stopped';

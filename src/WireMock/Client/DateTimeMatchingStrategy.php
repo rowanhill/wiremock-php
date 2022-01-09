@@ -2,14 +2,10 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 
-class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     // Offset units
     const SECONDS = "seconds";
     const MINUTES = "minutes";
@@ -34,9 +30,9 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     private $truncateActual = null;
     private $truncateExpected = null;
 
-    public function __construct($matchingType, $dateTimeSpec)
+    public function __construct($matchingType, $matchingValue)
     {
-        parent::__construct($matchingType, $dateTimeSpec);
+        parent::__construct($matchingType, $matchingValue);
     }
 
     /**

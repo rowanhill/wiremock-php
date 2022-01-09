@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class MatchResult implements ObjectToPopulateFactoryInterface
+class MatchResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     private $distance;
 
     /**

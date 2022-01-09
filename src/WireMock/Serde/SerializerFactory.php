@@ -20,7 +20,7 @@ class SerializerFactory
                         null,
                         null,
                         new PhpDocExtractor(),
-                        null,
+                        new WireMockClassDiscriminator(),
                         null,
                         [AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
                     )

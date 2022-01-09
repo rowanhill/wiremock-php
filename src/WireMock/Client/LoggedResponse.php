@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class LoggedResponse implements ObjectToPopulateFactoryInterface
+class LoggedResponse
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var int */
     private $status;
     /** @var array */
@@ -21,7 +16,7 @@ class LoggedResponse implements ObjectToPopulateFactoryInterface
      * @param array $headers
      * @param string $body
      */
-    public function __construct($status, $headers, $body)
+    public function __construct($status, $body, $headers = [])
     {
         $this->status = $status;
         $this->headers = $headers;

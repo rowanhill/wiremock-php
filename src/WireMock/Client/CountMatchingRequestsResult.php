@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class CountMatchingRequestsResult implements ObjectToPopulateFactoryInterface
+class CountMatchingRequestsResult
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     private $count;
 
     /**

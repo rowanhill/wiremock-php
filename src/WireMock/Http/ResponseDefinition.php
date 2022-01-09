@@ -9,17 +9,13 @@ use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\DelayDistributionFactory;
 use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
 use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var int */
     private $status = 200;
     /** @var string */

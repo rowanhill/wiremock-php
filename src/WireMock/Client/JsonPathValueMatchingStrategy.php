@@ -3,22 +3,22 @@
 namespace WireMock\Client;
 
 use Symfony\Component\Serializer\Serializer;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
     /** @var ValueMatchingStrategy */
     private $valueMatchingStrategy;
 
     /**
-     * @param string $jsonPath
-     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @param string $matchingValue
+     * @param ?ValueMatchingStrategy $valueMatchingStrategy
      */
-    public function __construct($jsonPath, $valueMatchingStrategy = null)
+    public function __construct(string $matchingValue, ?ValueMatchingStrategy $valueMatchingStrategy = null)
     {
-        parent::__construct('matchesJsonPath', $jsonPath);
+        parent::__construct('matchesJsonPath', $matchingValue);
         $this->valueMatchingStrategy = $valueMatchingStrategy;
     }
 
@@ -35,9 +35,8 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
         return $normalisedArray;
     }
 
-    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    public static function amendPreNormalisation(array $normalisedArray): array
     {
-        unset($normalisedArray['matchingType']); // matchesJsonPath
         $matchingValue = $normalisedArray['matchingValue'];
         unset($normalisedArray['matchingValue']);
         if (is_array($matchingValue)) {
@@ -47,6 +46,7 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
         } else {
             $jsonPath = $matchingValue;
         }
-        return new ObjectToPopulateResult(new self($jsonPath), $normalisedArray);
+        $normalisedArray['matchingValue'] = $jsonPath;
+        return $normalisedArray;
     }
 }

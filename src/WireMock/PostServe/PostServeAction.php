@@ -2,13 +2,8 @@
 
 namespace WireMock\PostServe;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class PostServeAction implements ObjectToPopulateFactoryInterface
+class PostServeAction
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-    
     /** @var string */
     private $name;
     /** @var WebhookDefinition */

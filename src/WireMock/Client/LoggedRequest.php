@@ -2,13 +2,8 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-
-class LoggedRequest implements ObjectToPopulateFactoryInterface
+class LoggedRequest
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var string */
     private $url;
     /** @var string */

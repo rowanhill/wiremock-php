@@ -3,11 +3,11 @@
 namespace WireMock\Client;
 
 use Symfony\Component\Serializer\Serializer;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
     /** @var array */
     private $xPathNamespaces = array();
@@ -49,9 +49,8 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
         return $normalisedArray;
     }
 
-    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    public static function amendPreNormalisation(array $normalisedArray): array
     {
-        unset($normalisedArray['matchingType']); // matchesXPath
         $matchingValue = $normalisedArray['matchingValue'];
         unset($normalisedArray['matchingValue']);
         if (is_array($matchingValue)) {
@@ -61,6 +60,7 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
         } else {
             $xPath = $matchingValue;
         }
-        return new ObjectToPopulateResult(new self($xPath), $normalisedArray);
+        $normalisedArray['matchingValue'] = $xPath;
+        return $normalisedArray;
     }
 }

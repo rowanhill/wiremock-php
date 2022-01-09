@@ -2,16 +2,12 @@
 
 namespace WireMock\Fault;
 
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
 use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class ChunkedDribbleDelay implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var int */
     private $numberOfChunks;
     /** @var int */

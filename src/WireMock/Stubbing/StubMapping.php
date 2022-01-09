@@ -5,16 +5,12 @@ namespace WireMock\Stubbing;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 use WireMock\PostServe\PostServeAction;
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
 use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var string A string representation of a GUID */
     private $id;
     /** @var string */

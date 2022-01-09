@@ -3,14 +3,10 @@
 namespace WireMock\Client;
 
 use WireMock\Matching\RequestPattern;
-use WireMock\Serde\DummyConstructorArgsObjectToPopulateFactory;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Stubbing\StubMapping;
 
-class NearMiss implements ObjectToPopulateFactoryInterface
+class NearMiss
 {
-    use DummyConstructorArgsObjectToPopulateFactory;
-
     /** @var LoggedRequest */
     private $request;
     /** @var StubMapping */
