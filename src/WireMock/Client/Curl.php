@@ -49,16 +49,11 @@ class Curl
     /**
      * @throws ClientException
      */
-    private function makeCurlRequest($method, $url, $jsonArray = null)
+    private function makeCurlRequest(string $method, string $url, ?string $json = null)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        if ($jsonArray !== null) {
-            if (is_string($jsonArray)) {
-                $json = $jsonArray;
-            } else {
-                $json = json_encode($jsonArray);
-            }
+        if ($json !== null) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
             $contentLength = strlen($json);
         } else {
