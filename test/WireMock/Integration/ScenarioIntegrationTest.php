@@ -96,4 +96,53 @@ class ScenarioIntegrationTest extends WireMockIntegrationTest
         assertThat($scenarios[0]->getState(), equalTo(Scenario::STARTED));
         assertThat($scenarios[0]->getPossibleStates(), equalTo(array('Another State')));
     }
+
+    public function testSingleScenarioCanBeReset()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/one'))->inScenario('scenario1')
+            ->whenScenarioStateIs(Scenario::STARTED)
+            ->willReturn(WireMock::aResponse()->withBody('1-a'))
+            ->willSetStateTo('scenario1-modified-state'));
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/one'))->inScenario('scenario1')
+            ->whenScenarioStateIs('scenario1-modified-state')
+            ->willReturn(WireMock::aResponse()->withBody('1-b')));
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/two'))->inScenario('scenario2')
+            ->whenScenarioStateIs(Scenario::STARTED)
+            ->willReturn(WireMock::aResponse()->withBody('2-a'))
+            ->willSetStateTo('scenario2-modified-state'));
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/two'))->inScenario('scenario2')
+            ->whenScenarioStateIs('scenario2-modified-state')
+            ->willReturn(WireMock::aResponse()->withBody('2-b')));
+
+        // when
+        $this->_testClient->get('/one');
+        $this->_testClient->get('/two');
+        self::$_wireMock->resetScenario('scenario1');
+        $scenarioOneResponse = $this->_testClient->get('/one');
+        $scenarioTwoResponse = $this->_testClient->get('/two');
+
+        // then
+        assertThat($scenarioOneResponse, is('1-a'));
+        assertThat($scenarioTwoResponse, is('2-b'));
+    }
+
+    public function testScenarioStateCanBeSetDirectly()
+    {
+        // given
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/one'))->inScenario('scenario1')
+            ->whenScenarioStateIs(Scenario::STARTED)
+            ->willReturn(WireMock::aResponse()->withBody('1-a'))
+            ->willSetStateTo('scenario1-modified-state'));
+        self::$_wireMock->stubFor(WireMock::get(WireMock::urlEqualTo('/one'))->inScenario('scenario1')
+            ->whenScenarioStateIs('scenario1-modified-state')
+            ->willReturn(WireMock::aResponse()->withBody('1-b')));
+
+        // when
+        self::$_wireMock->setScenarioState('scenario1', 'scenario1-modified-state');
+        $response = $this->_testClient->get('/one');
+
+        // then
+        assertThat($response, is('1-b'));
+    }
 }

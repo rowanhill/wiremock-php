@@ -315,6 +315,27 @@ class WireMock
         $this->doPost('__admin/scenarios/reset');
     }
 
+    /**
+     * Reset a single scenario to the Scenario.STARTED state
+     * @param string $scenarioName
+     */
+    public function resetScenario($scenarioName)
+    {
+        $this->doPut('__admin/scenarios/' . urlencode($scenarioName) . '/state');
+    }
+
+    /**
+     * @param string $scenarioName
+     * @param string $stateName
+     */
+    public function setScenarioState($scenarioName, $stateName)
+    {
+        $this->doPut(
+            '__admin/scenarios/' . urlencode($scenarioName) . '/state',
+            array('state' => $stateName)
+        );
+    }
+
     public function shutdownServer()
     {
         $this->doPost('__admin/shutdown');
