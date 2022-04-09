@@ -19,7 +19,7 @@ You might want to investigate the following:
 
 Installation
 ------------
-It easiest to install wiremock-php via Composer:
+It's easiest to install wiremock-php via Composer:
 
 ```bash
 php composer.phar require --dev wiremock-php/wiremock-php:2.33.1
@@ -36,9 +36,8 @@ To provide a fluent interface, the WireMock Java API makes use of statically imp
 static instance), but it's also possible to act directly upon a Java WireMock instance (using slightly differently
 named methods).
 
-Unfortunately, PHP doesn't support anything like Java's static import of methods, so there's not much point in mimicking
-the Java API's static instance pattern. Instead, in wiremock-php some methods which are static in Java are instance
-methods. Those methods are:
+Prior to version 5.6 (back when wiremock-php was created), PHP didn't support anything like Java's static import of
+methods. Instead, in wiremock-php some methods which are static in Java are instance methods. Those methods are:
 
 - `stubFor`, `editStub`, `importStubs`
 - `verify`
