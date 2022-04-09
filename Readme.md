@@ -41,11 +41,16 @@ methods. Instead, in wiremock-php some methods which are static in Java are inst
 
 - `stubFor`, `editStub`, `importStubs`
 - `verify`
-- `findAll`
+- `get`, `post`, `put`, `delete`, `patch`, `head`, `options`, `trace`, `any`
+- all the various matcher methods
+- `getAllServeEvents`, `findAll`, `findUnmatchedRequests`, `findNearMissesFor`, `findNearMissesForAllUnmatched`
+- `listAllStubMappings`, `getSingleStubMapping`, `findStubsByMetadata`, `removeStubsByMetadata`
 - `saveAllMappings`
 - `reset`, `resetToDefault`
-- `resetAllScenarios`, `resetScenario`, `setScenarioState`
-- `setGlobalFixedDelay`, `addRequestProcessingDelay`
+- `resetAllRequests`, `removeServeEvent`, `removeServeEvents`, `removeEventsByStubMetadata`
+- `getAllScenarios`, `resetAllScenarios`, `resetScenario`, `setScenarioState`
+- `setGlobalFixedDelay`, `setGlobalRandomDelay`, `resetGlobalDelays`
+- `startRecording`, `getRecordingStatus`, `stopRecording`, `snapshotRecord`
 - `shutdownServer`
 
 Also, the Java API has methods (`ResponseDefinitionBuilder::withBody` and `WebhookDefinition::withBinaryBody`) that take
