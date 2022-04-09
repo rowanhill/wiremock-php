@@ -44,7 +44,8 @@ methods. Those methods are:
 - `verify`
 - `findAll`
 - `saveAllMappings`
-- `reset`, `resetToDefault`, `resetAllScenarios`
+- `reset`, `resetToDefault`
+- `resetAllScenarios`, `resetScenario`, `setScenarioState`
 - `setGlobalFixedDelay`, `addRequestProcessingDelay`
 - `shutdownServer`
 
