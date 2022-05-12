@@ -12,6 +12,10 @@ function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping)
     $mappingsFromServer = getMappings();
     assertThat($mappingsFromServer, is(arrayWithSize(1)));
 
+    /** @noinspection PhpNonStrictObjectEqualityInspection */
+    if ($mappingsFromServer[0] != $localStubMapping) {
+        var_dump('Server', $mappingsFromServer[0], 'Local', $localStubMapping);
+    }
     assertThat($mappingsFromServer[0], equalTo($localStubMapping));
 }
 
