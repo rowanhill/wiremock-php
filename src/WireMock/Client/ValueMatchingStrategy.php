@@ -2,10 +2,11 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\ClassDiscriminatorMapping;
+use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
+use WireMock\Serde\SerializationException;
 
 class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, MappingProvider
 {
@@ -87,30 +88,33 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
     {
         foreach ($normalisedArray as $key => $value) {
             if (isset(self::$subclassByMatchingType[$key])) {
-                $subclass = self::$subclassByMatchingType[$key];
                 $normalisedArray['matchingType'] = $key;
                 $normalisedArray['matchingValue'] = $normalisedArray[$key];
                 unset($normalisedArray[$key]);
-
-                if ($subclass != self::class) {
-                    try {
-                        $method = new \ReflectionMethod($subclass, 'amendPreDenormalisation');
-                        if ($method->getDeclaringClass()->name == $subclass) {
-                            $normalisedArray = $method->invoke(null, $normalisedArray);
-                        }
-                    } catch (\ReflectionException $e) {
-                        // Subclass doesn't implement amendPreNormalisation, nothing to be done
-                    }
-                }
-
                 break;
             }
         }
         return $normalisedArray;
     }
 
-    static function getDiscriminatorMapping(): ClassDiscriminatorMapping
+    static function getDiscriminatorMapping(): ClassDiscriminator
     {
-        return new ClassDiscriminatorMapping('matchingType', self::$subclassByMatchingType);
+        return new class(self::$subclassByMatchingType) implements ClassDiscriminator {
+            private $subclassByMatchingType;
+            public function __construct($subclassByMatchingType)
+            {
+                $this->subclassByMatchingType = $subclassByMatchingType;
+            }
+
+            function getDiscriminatedType($data): string
+            {
+                foreach ($data as $key => $value) {
+                    if (isset($this->subclassByMatchingType[$key])) {
+                        return $this->subclassByMatchingType[$key];
+                    }
+                }
+                throw new SerializationException("Cannot discriminate subclass of ValueMatchingStrategy");
+            }
+        };
     }
 }

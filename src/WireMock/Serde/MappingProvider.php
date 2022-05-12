@@ -4,5 +4,5 @@ namespace WireMock\Serde;
 
 interface MappingProvider
 {
-    static function getDiscriminatorMapping(): ClassDiscriminatorMapping;
+    static function getDiscriminatorMapping(): ClassDiscriminator;
 }

@@ -2,7 +2,7 @@
 
 namespace WireMock\Serde;
 
-class ClassDiscriminatorMapping
+class ClassDiscriminatorMapping implements ClassDiscriminator
 {
     /** @var string */
     private $discriminatorPropName;
@@ -19,19 +19,16 @@ class ClassDiscriminatorMapping
         $this->discriminatorValueToClassMap = $discriminatorValueToClassMap;
     }
 
-    /**
-     * @return string
-     */
-    public function getDiscriminatorPropName(): string
+    function getDiscriminatedType($data): string
     {
-        return $this->discriminatorPropName;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDiscriminatorValueToClassMap(): array
-    {
-        return $this->discriminatorValueToClassMap;
+        $discriminatorName = $this->discriminatorPropName;
+        if (array_key_exists($discriminatorName, $data)) {
+            $discriminatorValue = $data[$discriminatorName];
+            $map = $this->discriminatorValueToClassMap;
+            if (array_key_exists($discriminatorValue, $map)) {
+                return $map[$discriminatorValue];
+            }
+        }
+        throw new SerializationException("Could not discriminate class type because $discriminatorName not present in data");
     }
 }

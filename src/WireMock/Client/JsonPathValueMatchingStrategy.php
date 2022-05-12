@@ -35,6 +35,7 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
 
     public static function amendPreDenormalisation(array $normalisedArray): array
     {
+        $normalisedArray = parent::amendPreDenormalisation($normalisedArray);
         $matchingValue = $normalisedArray['matchingValue'];
         unset($normalisedArray['matchingValue']);
         if (is_array($matchingValue)) {

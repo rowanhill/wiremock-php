@@ -4,6 +4,8 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
+use WireMock\Serde\ClassDiscriminator;
+use WireMock\Serde\MappingProvider;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
@@ -38,13 +40,13 @@ class SerdeTypeClass extends SerdeTypeSingle
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 ' from data of type ' . gettype($data));
         }
-        if (is_subclass_of($this->typeString, PreDenormalizationAmenderInterface::class)) {
-            $data = forward_static_call([$this->typeString, 'amendPreDenormalisation'], $data);
-        }
-        $discriminatedType = $serializer->getDiscriminatedType($data, $this->typeString);
+        $discriminatedType = $this->getDiscriminatedType($data, $this->typeString);
         if (!class_exists($discriminatedType)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 " because no class named $discriminatedType exists");
+        }
+        if (is_subclass_of($discriminatedType, PreDenormalizationAmenderInterface::class)) {
+            $data = forward_static_call([$discriminatedType, 'amendPreDenormalisation'], $data);
         }
         $propertyMap = $this->propertyMapCache->getPropertyMap($discriminatedType);
         $refClass = new ReflectionClass($discriminatedType);
@@ -53,6 +55,16 @@ class SerdeTypeClass extends SerdeTypeSingle
             $this->populateObject($data, $propertyMap, $object, $refClass, $serializer);
         }
         return $object;
+    }
+
+    private function getDiscriminatedType(&$data, string $type): string
+    {
+        if (!is_subclass_of($type, MappingProvider::class)) {
+            return $type;
+        }
+        /** @var ClassDiscriminator $classDiscriminator */
+        $classDiscriminator = forward_static_call(array($type, 'getDiscriminatorMapping'));
+        return $classDiscriminator->getDiscriminatedType($data, $type);
     }
 
     /**

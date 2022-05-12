@@ -182,23 +182,4 @@ class Serializer
         $serdeType = $this->serdeTypeFactory->parseTypeString($type, $this->propertyMapCache);
         return $serdeType->denormalize($data, $this);
     }
-
-    // TODO: Move this to it's own class?
-    public function getDiscriminatedType(&$data, string $type): string
-    {
-        if (!is_subclass_of($type, MappingProvider::class)) {
-            return $type;
-        }
-        /** @var ClassDiscriminatorMapping $classDiscriminatorMapping */
-        $classDiscriminatorMapping = forward_static_call(array($type, 'getDiscriminatorMapping'));
-        $discriminatorName = $classDiscriminatorMapping->getDiscriminatorPropName();
-        if (array_key_exists($discriminatorName, $data)) {
-            $discriminatorValue = $data[$discriminatorName];
-            $map = $classDiscriminatorMapping->getDiscriminatorValueToClassMap();
-            if (array_key_exists($discriminatorValue, $map)) {
-                return $map[$discriminatorValue];
-            }
-        }
-        return $type;
-    }
 }
