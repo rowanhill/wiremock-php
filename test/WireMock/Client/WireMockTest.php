@@ -3,11 +3,10 @@
 namespace WireMock\Client;
 
 use Phake;
-use Symfony\Component\Serializer\Encoder\ContextAwareDecoderInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\HamcrestTestCase;
 use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
+use WireMock\Serde\Serializer;
 use WireMock\Stubbing\StubMapping;
 
 class WireMockTest extends HamcrestTestCase
@@ -16,7 +15,7 @@ class WireMockTest extends HamcrestTestCase
     private $_mockHttpWait;
     /** @var Curl */
     private $_mockCurl;
-    /** @var SerializerInterface */
+    /** @var Serializer */
     private $_mockSerializer;
 
     /** @var WireMock */
@@ -26,7 +25,7 @@ class WireMockTest extends HamcrestTestCase
     {
         $this->_mockHttpWait = Phake::mock(HttpWait::class);
         $this->_mockCurl = Phake::mock(Curl::class);
-        $this->_mockSerializer = Phake::mock([SerializerInterface::class, ContextAwareDecoderInterface::class]);
+        $this->_mockSerializer = Phake::mock(Serializer::class);
 
         $this->_wireMock = new WireMock($this->_mockHttpWait, $this->_mockCurl, $this->_mockSerializer);
     }
@@ -137,7 +136,7 @@ class WireMockTest extends HamcrestTestCase
         $responseJson = '{"count":1}';
         Phake::when($this->_mockCurl)->post('http://localhost:8080/__admin/requests/count', $requestJson)
             ->thenReturn($responseJson);
-        Phake::when($this->_mockSerializer)->deserialize($responseJson, CountMatchingRequestsResult::class, 'json')
+        Phake::when($this->_mockSerializer)->deserialize($responseJson, CountMatchingRequestsResult::class)
             ->thenReturn(new CountMatchingRequestsResult(1));
 
         // when

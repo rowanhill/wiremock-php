@@ -2,7 +2,7 @@
 
 namespace WireMock\Client;
 
-use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
+use WireMock\Serde\ClassDiscriminatorMapping;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;

@@ -4,6 +4,7 @@ namespace WireMock\Client;
 
 class CountMatchingRequestsResult
 {
+    /** @var integer */
     private $count;
 
     /**
@@ -15,7 +16,7 @@ class CountMatchingRequestsResult
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getCount()
     {

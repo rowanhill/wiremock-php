@@ -19,4 +19,20 @@ class StubImport
         $this->mappings = $_mappings;
         $this->importOptions = $_importOptions;
     }
+
+    /**
+     * @return StubMapping[]
+     */
+    public function getMappings(): array
+    {
+        return $this->mappings;
+    }
+
+    /**
+     * @return StubImportOptions
+     */
+    public function getImportOptions(): StubImportOptions
+    {
+        return $this->importOptions;
+    }
 }

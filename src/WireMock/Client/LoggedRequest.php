@@ -12,17 +12,20 @@ class LoggedRequest
     private $method;
     /** @var string */
     private $clientIp;
+    /** @var array */
     private $headers;
+    /** @var array */
     private $cookies;
+    /** @var string */
     private $body;
+    /** @var string */
     private $bodyAsBase64;
+    /** @var bool */
     private $browserProxyRequest;
+    /** @var int */
     private $loggedDate;
+    /** @var string */
     private $loggedDateString;
-
-    public function __construct()
-    {
-    }
 
     /**
      * @return string

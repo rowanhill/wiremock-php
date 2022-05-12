@@ -162,6 +162,14 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
         return $this->newScenarioState;
     }
 
+    /**
+     * @return PostServeAction[]|null
+     */
+    public function getPostServeActions(): ?array
+    {
+        return $this->postServeActions;
+    }
+
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::renameKey($normalisedArray, 'isPersistent', 'persistent');

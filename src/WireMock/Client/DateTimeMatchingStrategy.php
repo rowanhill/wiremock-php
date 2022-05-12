@@ -25,9 +25,13 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     const FIRST_DAY_OF_NEXT_YEAR = "first day of next year";
     const LAST_DAY_OF_YEAR = "last day of year";
 
+    /** @var array|null */
     private $expectedOffset = null;
+    /** @var string|null */
     private $actualFormat = null;
+    /** @var string|null */
     private $truncateActual = null;
+    /** @var string|null */
     private $truncateExpected = null;
 
     public function __construct($matchingType, $matchingValue)
@@ -74,6 +78,38 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     {
         $this->truncateActual = $truncationType;
         return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getExpectedOffset(): ?array
+    {
+        return $this->expectedOffset;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getActualFormat(): ?string
+    {
+        return $this->actualFormat;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTruncateActual(): ?string
+    {
+        return $this->truncateActual;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTruncateExpected(): ?string
+    {
+        return $this->truncateExpected;
     }
 
     public static function before($dateTimeSpec)

@@ -34,6 +34,22 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getXPathNamespaces(): array
+    {
+        return $this->xPathNamespaces;
+    }
+
+    /**
+     * @return ValueMatchingStrategy|null
+     */
+    public function getValueMatchingStrategy(): ?ValueMatchingStrategy
+    {
+        return $this->valueMatchingStrategy;
+    }
+
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);

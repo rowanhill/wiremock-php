@@ -2,10 +2,10 @@
 
 namespace WireMock\Matching;
 
-use Symfony\Component\Serializer\Serializer;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\Serializer;
 
 class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
@@ -47,7 +47,7 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
         return [$matchingType => $matchingValue];
     }
 
-    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer): ObjectToPopulateResult
     {
         $strategy = null;
         foreach (array('url', 'urlPattern', 'urlPath', 'urlPathPattern') as $type) {

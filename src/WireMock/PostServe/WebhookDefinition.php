@@ -5,6 +5,7 @@ namespace WireMock\PostServe;
 use WireMock\Client\ResponseDefinitionBuilder;
 use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
+use WireMock\Fault\FixedDelay;
 use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
 use WireMock\Serde\NormalizerUtils;
@@ -13,19 +14,19 @@ use WireMock\Serde\PreDenormalizationAmenderInterface;
 
 class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
 {
-    /** @var string */
+    /** @var string|null */
     private $method;
-    /** @var string */
+    /** @var string|null */
     private $url;
-    /** @var string[] */
+    /** @var string[]|null */
     private $headers = null;
-    /** @var string */
+    /** @var string|null */
     private $body;
-    /** @var string */
+    /** @var string|null */
     private $base64Body;
-    /** @var DelayDistribution */
+    /** @var DelayDistribution|null */
     private $delay;
-    /** @var array */
+    /** @var array|null */
     private $extraParameters = null; // TODO: Check this is accepted by WireMock
 
     public function withMethod(string $method): self
@@ -64,10 +65,7 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
 
     public function withFixedDelay(int $delayMillis): self
     {
-        $this->delay = array(
-            'type' => 'fixed',
-            'milliseconds' => $delayMillis,
-        );
+        $this->delay = new FixedDelay($delayMillis);
         return $this;
     }
 
@@ -96,6 +94,64 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
         return $this;
     }
 
+    // TODO: Split out getters and fluent builder methods into separate classes
+
+    /**
+     * @return string|null
+     */
+    public function getMethod(): ?string
+    {
+        return $this->method;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getHeaders(): ?array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBase64Body(): ?string
+    {
+        return $this->base64Body;
+    }
+
+    /**
+     * @return DelayDistribution|null
+     */
+    public function getDelay(): ?DelayDistribution
+    {
+        return $this->delay;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getExtraParameters(): ?array
+    {
+        return $this->extraParameters;
+    }
+
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         NormalizerUtils::inline($normalisedArray, 'extraParameters');
@@ -104,11 +160,17 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
 
     public static function amendPreDenormalisation(array $normalisedArray): array
     {
-        $extraParameters = array_diff_key($normalisedArray, ['method', 'url', 'headers', 'body', 'base64Body', 'delay']);
-        foreach ($extraParameters as $key => $value) {
-            unset($normalisedArray[$key]);
+        $standardPropNames = ['method', 'url', 'headers', 'body', 'base64Body', 'delay'];
+        $standardProps = [];
+        foreach ($standardPropNames as $propName) {
+            if (array_key_exists($propName, $normalisedArray)) {
+                $standardProps[$propName] = $normalisedArray[$propName];
+                unset($normalisedArray[$propName]);
+            }
         }
-        $normalisedArray['extraParameters'] = $extraParameters;
-        return $normalisedArray;
+        if (!empty($normalisedArray)) {
+            $standardProps['extraParameters'] = $normalisedArray;
+        }
+        return $standardProps;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace WireMock\Matching;
 
-use Symfony\Component\Serializer\Serializer;
 use WireMock\Client\BasicCredentials;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\ValueMatchingStrategy;
@@ -10,6 +9,7 @@ use WireMock\Serde\NormalizerUtils;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
+use WireMock\Serde\Serializer;
 
 class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
 {
@@ -25,7 +25,7 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
     private $queryParameters;
     /** @var ValueMatchingStrategy[] */
     private $bodyPatterns;
-    /** @var null|MultipartValuePattern[] */
+    /** @var MultipartValuePattern[]|null */
     private $multipartPatterns;
     /** @var BasicCredentials */
     private $basicAuthCredentials;
@@ -156,12 +156,12 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
         return $normalisedArray;
     }
 
-    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
+    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer): ObjectToPopulateResult
     {
         $method = $normalisedArray['method'];
         unset($normalisedArray['method']);
 
-        $urlMatchingStrategy = $serializer->denormalize($normalisedArray, UrlMatchingStrategy::class, $format, $context);
+        $urlMatchingStrategy = $serializer->denormalize($normalisedArray, UrlMatchingStrategy::class);
 
         return new ObjectToPopulateResult(new self($method, $urlMatchingStrategy), $normalisedArray);
     }

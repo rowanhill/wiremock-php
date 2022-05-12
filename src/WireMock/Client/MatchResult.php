@@ -4,6 +4,7 @@ namespace WireMock\Client;
 
 class MatchResult
 {
+    /** @var float */
     private $distance;
 
     /**

@@ -22,4 +22,20 @@ class StubImportOptions
         $this->duplicatePolicy = $_duplicatePolicy;
         $this->deleteAllNotInImport = $_deleteAllNotInImport;
     }
+
+    /**
+     * @return string
+     */
+    public function getDuplicatePolicy(): string
+    {
+        return $this->duplicatePolicy;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleteAllNotInImport(): bool
+    {
+        return $this->deleteAllNotInImport;
+    }
 }

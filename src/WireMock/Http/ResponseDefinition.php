@@ -231,28 +231,4 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
         NormalizerUtils::renameKey($normalisedArray, 'delayDistribution', 'randomDelayDistribution');
         return $normalisedArray;
     }
-
-    public static function createObjectToPopulate(array $normalisedArray, Serializer $serializer, string $format, array $context): ObjectToPopulateResult
-    {
-        $object = new self(0);
-
-        // Cannot automatically deserialize DelayDistribution, because it's an interface (and type discrimination
-        // described in Serializer docs doesn't seem to work)
-        if (isset($normalisedArray['randomDelayDistribution'])) {
-            $delayDistribArray = $normalisedArray['randomDelayDistribution'];
-            unset($normalisedArray['randomDelayDistribution']);
-            $type = $delayDistribArray['type'];
-            unset($delayDistribArray['type']);
-            if ($type === 'lognormal') {
-                $delayDistrib = $serializer->denormalize($delayDistribArray, LogNormal::class, $format, $context);
-            } else if ($type === 'uniform') {
-                $delayDistrib = $serializer->denormalize($delayDistribArray, UniformDistribution::class, $format, $context);
-            } else {
-                throw new NotNormalizableValueException("Unknown DelayDistribution type '$type'");
-            }
-            $object->randomDelayDistribution = $delayDistrib;
-        }
-
-        return new ObjectToPopulateResult($object, $normalisedArray);
-    }
 }

@@ -29,10 +29,7 @@
     "require": {
         "ext-json": "*",
         "ext-curl": "*",
-        "php": ">=7.2",
-        "symfony/serializer": "^4.4",
-        "symfony/property-access": "^4.4",
-        "symfony/property-info": "^4.4"
+        "php": ">=7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",

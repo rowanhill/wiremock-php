@@ -6,28 +6,13 @@ use WireMock\Stubbing\StubMapping;
 
 /**
  * @param StubMapping $localStubMapping
- * @param callable[] $expectedTransformations
  */
-function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping, $expectedTransformations = array())
+function assertThatTheOnlyMappingPresentIs(StubMapping $localStubMapping)
 {
-    $serializer = SerializerFactory::default();
-
     $mappingsFromServer = getMappings();
     assertThat($mappingsFromServer, is(arrayWithSize(1)));
 
-    $serverStubMappingArray = $serializer->normalize($mappingsFromServer[0], 'json');
-    $localStubMappingArray = $serializer->normalize($localStubMapping, 'json');
-
-    if (!isset($localStubMappingArray['request']['method'])) {
-        // If we didn't set a request method in the stub, the server will have returned ANY as the method, causing the
-        // local and server mapping arrays not to match, unless we delete the server-returned method
-        unset($serverStubMappingArray['request']['method']);
-    }
-    foreach ($expectedTransformations as $transformation) {
-        $transformation($localStubMappingArray);
-    }
-
-    assertThat($serverStubMappingArray, equalTo($localStubMappingArray));
+    assertThat($mappingsFromServer[0], equalTo($localStubMapping));
 }
 
 function assertThatThereAreNoMappings()
@@ -41,6 +26,6 @@ function getMappings()
     $defaultSerializer = SerializerFactory::default();
     $adminJson = file_get_contents('http://localhost:8080/__admin/mappings');
     /** @var ListStubMappingsResult $listResult */
-    $listResult = $defaultSerializer->deserialize($adminJson, ListStubMappingsResult::class, 'json');
+    $listResult = $defaultSerializer->deserialize($adminJson, ListStubMappingsResult::class);
     return $listResult->getMappings();
 }

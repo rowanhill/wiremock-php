@@ -9,9 +9,9 @@ class NearMiss
 {
     /** @var LoggedRequest */
     private $request;
-    /** @var StubMapping */
+    /** @var ?StubMapping */
     private $stubMapping;
-    /** @var RequestPattern */
+    /** @var ?RequestPattern */
     private $requestPattern;
     /** @var MatchResult */
     private $matchResult;

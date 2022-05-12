@@ -14,4 +14,20 @@ class PostServeAction
         $this->name = $name;
         $this->parameters = $parameters;
     }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return WebhookDefinition
+     */
+    public function getParameters(): WebhookDefinition
+    {
+        return $this->parameters;
+    }
 }

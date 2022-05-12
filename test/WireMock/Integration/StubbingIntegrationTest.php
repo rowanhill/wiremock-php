@@ -464,11 +464,13 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::ok()));
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, array(
-            function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = ['before' => 'now +0 seconds'];
-            }
-        ));
+        // The server will modify "now" to "now +0 seconds", so we change the locally generated stub mapping to be the
+        // same before asserting
+        $matchingStrat = $stubMapping->getRequest()->getHeaders()['X-Munged-Date'];
+        $matchValProp = new \ReflectionProperty($matchingStrat, 'matchingValue');
+        $matchValProp->setAccessible(true);
+        $matchValProp->setValue($matchingStrat, 'now +0 seconds');
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     public function testResponsesCanBeStubbedByEqualToDateTimeLiteralMatcher()
@@ -490,11 +492,13 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::ok()));
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, array(
-            function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = ['equalToDateTime' => 'now +0 seconds'];
-            }
-        ));
+        // The server will modify "now" to "now +0 seconds", so we change the locally generated stub mapping to be the
+        // same before asserting
+        $matchingStrat = $stubMapping->getRequest()->getHeaders()['X-Munged-Date'];
+        $matchValProp = new \ReflectionProperty($matchingStrat, 'matchingValue');
+        $matchValProp->setAccessible(true);
+        $matchValProp->setValue($matchingStrat, 'now +0 seconds');
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     public function testResponsesCanBeStubbedByAfterLiteralMatcher()
@@ -516,11 +520,13 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::ok()));
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, array(
-            function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = ['after' => 'now +0 seconds'];
-            }
-        ));
+        // The server will modify "now" to "now +0 seconds", so we change the locally generated stub mapping to be the
+        // same before asserting
+        $matchingStrat = $stubMapping->getRequest()->getHeaders()['X-Munged-Date'];
+        $matchValProp = new \ReflectionProperty($matchingStrat, 'matchingValue');
+        $matchValProp->setAccessible(true);
+        $matchValProp->setValue($matchingStrat, 'now +0 seconds');
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     public function testResponsesCanBeStubbedByDateTimeMatcherWithOffset()
@@ -532,11 +538,16 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
             ->willReturn(WireMock::ok()));
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, array(
-            function(&$arr) {
-                $arr['request']['headers']['X-Munged-Date'] = ['after' => 'now +3 days'];
-            }
-        ));
+        // The server will return the offset in the matching value string, so we change the locally generated stub
+        // mapping to be the same before asserting
+        $matchingStrat = $stubMapping->getRequest()->getHeaders()['X-Munged-Date'];
+        $matchValProp = new \ReflectionProperty($matchingStrat, 'matchingValue');
+        $matchValProp->setAccessible(true);
+        $matchValProp->setValue($matchingStrat, 'now +3 days');
+        $expectedOffsetProp = new \ReflectionProperty($matchingStrat, 'expectedOffset');
+        $expectedOffsetProp->setAccessible(true);
+        $expectedOffsetProp->setValue($matchingStrat, null);
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     public function testResponsesCanBeStubbedByDateTimeMatcherWithOffsetInStringSpec()
@@ -768,6 +779,12 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         );
 
         // then
+        // Locally created stub mapping will have null request method, but version returned from server will
+        // have that defaulted to ANY. Our public API doesn't allow that modification, so we make some cheeky
+        // changes via reflection before asserting.
+        $methodProp = new \ReflectionProperty($stubMapping->getRequest(), 'method');
+        $methodProp->setAccessible(true);
+        $methodProp->setValue($stubMapping->getRequest(), 'ANY');
         assertThatTheOnlyMappingPresentIs($stubMapping);
         $customMatcher = $stubMapping->getRequest()->getCustomMatcher();
         assertThat($customMatcher->getName(), is('custom-matcher'));
@@ -815,11 +832,12 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         self::setUpBeforeClass(); // start the server again
 
         // then
-        assertThatTheOnlyMappingPresentIs($stubMapping, array(
-            function(&$arr) {
-                $arr['persistent'] = true;
-            }
-        ));
+        // The stub mapping will be marked as persistent by the server, so we update the locally created version to
+        // match before asserting
+        $persistentProp = new \ReflectionProperty($stubMapping, 'isPersistent');
+        $persistentProp->setAccessible(true);
+        $persistentProp->setValue($stubMapping, true);
+        assertThatTheOnlyMappingPresentIs($stubMapping);
     }
 
     public function testStubsCanBeImmediatelyPersisted()

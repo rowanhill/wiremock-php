@@ -3,8 +3,6 @@
 namespace WireMock\Client;
 
 use DateTime;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\GlobalDelaySettings;
 use WireMock\Matching\RequestPattern;
@@ -13,6 +11,7 @@ use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpecBuilder;
 use WireMock\Recording\SnapshotRecordResult;
+use WireMock\Serde\Serializer;
 use WireMock\Serde\SerializerFactory;
 use WireMock\Stubbing\StubImport;
 use WireMock\Stubbing\StubImportBuilder;
@@ -44,7 +43,7 @@ class WireMock
     public function __construct(
         HttpWait $httpWait,
         Curl $curl,
-        SerializerInterface $serializer,
+        Serializer $serializer,
         $hostname = 'localhost',
         $port = 8080
     ) {
@@ -441,7 +440,7 @@ class WireMock
         $url = $this->_makeUrl($path);
         $resultJson = $this->curl->get($url);
         if ($resultType != null) {
-            return $this->serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType);
         } else {
             return null;
         }
@@ -457,13 +456,13 @@ class WireMock
     {
         $url = $this->_makeUrl($path);
         if ($body != null) {
-            $requestJson = $this->serializer->serialize($body, 'json');
+            $requestJson = $this->serializer->serialize($body);
         } else {
             $requestJson = null;
         }
         $resultJson = $this->curl->post($url, $requestJson);
         if ($resultType != null) {
-            return $this->serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType);
         } else {
             return null;
         }
@@ -479,13 +478,13 @@ class WireMock
     {
         $url = $this->_makeUrl($path);
         if ($body != null) {
-            $requestJson = $this->serializer->serialize($body, 'json');
+            $requestJson = $this->serializer->serialize($body);
         } else {
             $requestJson = null;
         }
         $resultJson = $this->curl->put($url, $requestJson);
         if ($resultType != null) {
-            return $this->serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType);
         } else {
             return null;
         }
@@ -501,7 +500,7 @@ class WireMock
         $url = $this->_makeUrl($path);
         $resultJson = $this->curl->delete($url);
         if ($resultType != null) {
-            return $this->serializer->deserialize($resultJson, $resultType, 'json');
+            return $this->serializer->deserialize($resultJson, $resultType);
         } else {
             return null;
         }

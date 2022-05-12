@@ -47,4 +47,12 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
         $normalisedArray['matchingValue'] = $jsonPath;
         return $normalisedArray;
     }
+
+    /**
+     * @return ValueMatchingStrategy
+     */
+    public function getValueMatchingStrategy(): ?ValueMatchingStrategy
+    {
+        return $this->valueMatchingStrategy;
+    }
 }

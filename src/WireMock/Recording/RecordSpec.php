@@ -32,7 +32,7 @@ class RecordSpec implements PostNormalizationAmenderInterface
     private $requestBodyPattern;
     /** @var string */
     private $outputFormat;
-    /** @var boolean */
+    /** @var ?boolean */
     private $allowNonProxied;
 
     /**
@@ -96,5 +96,101 @@ class RecordSpec implements PostNormalizationAmenderInterface
             $normalisedArray['filters'] = $filters;
         }
         return $normalisedArray;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetBaseUrl(): ?string
+    {
+        return $this->targetBaseUrl;
+    }
+
+    /**
+     * @return RequestPattern
+     */
+    public function getRequestPattern(): ?RequestPattern
+    {
+        return $this->requestPattern;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRequestIds(): ?array
+    {
+        return $this->requestIds;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCaptureHeaders(): ?array
+    {
+        return $this->captureHeaders;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtractBodyCriteria(): ?array
+    {
+        return $this->extractBodyCriteria;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPersist(): bool
+    {
+        return $this->persist;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRepeatsAsScenarios(): bool
+    {
+        return $this->repeatsAsScenarios;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTransformers(): ?array
+    {
+        return $this->transformers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTransformerParameters(): ?array
+    {
+        return $this->transformerParameters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequestBodyPattern(): ?array
+    {
+        return $this->requestBodyPattern;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOutputFormat(): ?string
+    {
+        return $this->outputFormat;
+    }
+
+    /**
+     * @return ?bool
+     */
+    public function getAllowNonProxied(): ?bool
+    {
+        return $this->allowNonProxied;
     }
 }
