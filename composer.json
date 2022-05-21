@@ -42,6 +42,7 @@
     },
 
     "scripts": {
+        "serdegen": "WireMock\\SerdeGen\\WireMockSerdeGen::generateAndSaveWireMockSerdeLookup",
         "test": "cd test && phpunit --configuration phpunit.xml --debug --verbose && cd .."
     }
 }
