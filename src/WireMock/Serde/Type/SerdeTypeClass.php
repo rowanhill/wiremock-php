@@ -10,19 +10,18 @@ use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\PropertyMap;
-use WireMock\Serde\PropertyMapCache;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Serializer;
 
 class SerdeTypeClass extends SerdeTypeSingle
 {
-    /** @var PropertyMapCache */
-    private $propertyMapCache;
+    /** @var PropertyMap */
+    private $propertyMap;
 
-    public function __construct(bool $isNullable, string $typeString, PropertyMapCache $propertyMapCache)
+    public function __construct(bool $isNullable, string $typeString, PropertyMap $propertyMap)
     {
         parent::__construct($isNullable, $typeString);
-        $this->propertyMapCache = $propertyMapCache;
+        $this->propertyMap = $propertyMap;
     }
 
     public function displayName(): string
@@ -48,11 +47,27 @@ class SerdeTypeClass extends SerdeTypeSingle
         if (is_subclass_of($discriminatedType, PreDenormalizationAmenderInterface::class)) {
             $data = forward_static_call([$discriminatedType, 'amendPreDenormalisation'], $data);
         }
-        $propertyMap = $this->propertyMapCache->getPropertyMap($discriminatedType);
-        $refClass = new ReflectionClass($discriminatedType);
-        $object = $this->constructObject($data, $propertyMap, $refClass, $serializer);
+        $discriminatedSerdeType = $serializer->getSerdeType($discriminatedType);
+        if (!($discriminatedSerdeType instanceof SerdeTypeClass)) {
+            throw new SerializationException("Discriminated type of $this->typeString was $discriminatedType" .
+            ", which was expected to be represented by a SerdeTypeClass, but is actually represented by " .
+            get_class($discriminatedSerdeType));
+        }
+        return $discriminatedSerdeType->instantiate($data, $serializer);
+    }
+
+    /**
+     * @param $data
+     * @param Serializer $serializer
+     * @return object|null
+     * @throws ReflectionException|SerializationException
+     */
+    function instantiate(&$data, Serializer $serializer): ?object
+    {
+        $refClass = new ReflectionClass($this->typeString);
+        $object = $this->constructObject($data, $refClass, $serializer);
         if ($object !== null) {
-            $this->populateObject($data, $propertyMap, $object, $refClass, $serializer);
+            $this->populateObject($data, $object, $refClass, $serializer);
         }
         return $object;
     }
@@ -71,7 +86,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function constructObject(array &$data, PropertyMap $propertyMap, ReflectionClass $refClass, Serializer $serializer): ?object
+    private function constructObject(array &$data, ReflectionClass $refClass, Serializer $serializer): ?object
     {
         // Delegate to createObjectToPopulate if specified
         if (is_subclass_of($this->typeString, ObjectToPopulateFactoryInterface::class)) {
@@ -89,7 +104,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             function($param) use (&$data, $serializer) {
                 return $param->instantiateAndConsumeData($data, $serializer);
             },
-            $propertyMap->getConstructorArgProps()
+            $this->propertyMap->getConstructorArgProps()
         );
 
         return $refClass->newInstanceArgs($args);
@@ -99,10 +114,10 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function populateObject(array &$data, PropertyMap $propertyMap, object $object, ReflectionClass $refClass, Serializer $serializer)
+    private function populateObject(array &$data, object $object, ReflectionClass $refClass, Serializer $serializer)
     {
         foreach ($data as $propertyName => $propertyData) {
-            $serdeProp = $propertyMap->getProperty($propertyName);
+            $serdeProp = $this->propertyMap->getProperty($propertyName);
             if ($serdeProp === null) {
                 // Ignore properties from JSON that don't exist on the PHP class
                 // (This allows for newer versions of WireMock to add new properties and older versions of wiremock-php
