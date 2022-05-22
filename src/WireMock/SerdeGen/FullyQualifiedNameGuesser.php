@@ -2,9 +2,10 @@
 
 namespace WireMock\SerdeGen;
 
+use WireMock\Serde\CanonicalNameUtils;
 use WireMock\Serde\SerializationException;
 
-class CanonicalNameFormer
+class FullyQualifiedNameGuesser
 {
     /** @var string[] */
     private $canonicalNames;
@@ -17,21 +18,12 @@ class CanonicalNameFormer
         $this->canonicalNames = $canonicalNames;
     }
 
-    public static function prependBackslashIfNeeded(string $str): string
-    {
-        if (substr($str, 0, 1) === '\\') {
-            return $str;
-        } else {
-            return '\\'.$str;
-        }
-    }
-
     /**
      * @throws SerializationException
      */
     public function getFullyQualifiedName(string $partialType): ?string
     {
-        $partialType = self::prependBackslashIfNeeded($partialType);
+        $partialType = CanonicalNameUtils::prependBackslashIfNeeded($partialType);
         $matches = array_filter(
             $this->canonicalNames,
             function($fqn) use ($partialType) {

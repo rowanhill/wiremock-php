@@ -20,17 +20,17 @@ class SerdeTypeFactory
 {
     /** @var PartialSerdeTypeLookup */
     private $partialSerdeTypeLookup;
-    /** @var CanonicalNameFormer */
-    private $canonicalNameFormer;
+    /** @var FullyQualifiedNameGuesser */
+    private $fqnGuesser;
 
     /**
      * @param PartialSerdeTypeLookup $partialSerdeTypeLookup
-     * @param CanonicalNameFormer $canonicalNameFormer
+     * @param FullyQualifiedNameGuesser $fqnGuesser
      */
-    public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup, CanonicalNameFormer $canonicalNameFormer)
+    public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup, FullyQualifiedNameGuesser $fqnGuesser)
     {
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
-        $this->canonicalNameFormer = $canonicalNameFormer;
+        $this->fqnGuesser = $fqnGuesser;
     }
 
     /**
@@ -96,7 +96,7 @@ class SerdeTypeFactory
                     $isNullable = true;
                     $type = substr($type, 1);
                 }
-                $fqn = $this->canonicalNameFormer->getFullyQualifiedName($type);
+                $fqn = $this->fqnGuesser->getFullyQualifiedName($type);
                 if ($fqn === null) {
                     throw new SerializationException("Tried to parse unexpected type: $type");
                 }

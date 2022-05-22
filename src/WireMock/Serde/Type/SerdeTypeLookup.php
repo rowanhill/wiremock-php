@@ -2,8 +2,8 @@
 
 namespace WireMock\Serde\Type;
 
+use WireMock\Serde\CanonicalNameUtils;
 use WireMock\Serde\SerializationException;
-use WireMock\SerdeGen\CanonicalNameFormer;
 
 class SerdeTypeLookup
 {
@@ -23,7 +23,7 @@ class SerdeTypeLookup
      */
     public function getSerdeType(string $type, bool $isNullable): SerdeType
     {
-        $canonicalType = CanonicalNameFormer::prependBackslashIfNeeded($type);
+        $canonicalType = CanonicalNameUtils::prependBackslashIfNeeded($type);
         $key = $this->getKey($canonicalType, $isNullable);
         if (!array_key_exists($key, $this->lookup)) {
             throw new SerializationException("Type $key does not exist in the serde type cache");
