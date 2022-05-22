@@ -16,7 +16,7 @@ use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
 
-class SerdeTypeFactory
+class SerdeTypeParser
 {
     /** @var PartialSerdeTypeLookup */
     private $partialSerdeTypeLookup;

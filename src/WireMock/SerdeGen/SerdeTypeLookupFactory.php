@@ -19,10 +19,10 @@ class SerdeTypeLookupFactory
             return CanonicalNameUtils::prependBackslashIfNeeded($fqn);
         }, $types);
         $fqnGuesser = new FullyQualifiedNameGuesser($canonicalTypes);
-        $serdeTypeFactory = new SerdeTypeFactory($partialLookup, $fqnGuesser);
+        $serdeTypeParser = new SerdeTypeParser($partialLookup, $fqnGuesser);
         foreach ($canonicalTypes as $type) {
             // This creates the SerdeType and adds it to the lookup as a side-effect
-            $serdeTypeFactory->parseTypeString($type);
+            $serdeTypeParser->parseTypeString($type);
         }
         return $partialLookup;
     }
