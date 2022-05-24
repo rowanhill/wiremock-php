@@ -2,6 +2,9 @@
 
 namespace WireMock\SerdeGen;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Array_;
@@ -35,6 +38,8 @@ class SerdeTypeParser
 {
     /** @var PartialSerdeTypeLookup */
     private $partialSerdeTypeLookup;
+    /** @var DocBlockFactory */
+    private $docBlockFactory;
 
     /**
      * @param PartialSerdeTypeLookup $partialSerdeTypeLookup
@@ -42,6 +47,7 @@ class SerdeTypeParser
     public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup)
     {
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
+        $this->docBlockFactory = DocBlockFactory::createInstance();
     }
 
     /**
@@ -181,28 +187,19 @@ class SerdeTypeParser
                 continue;
             }
             $propName = $refProp->getName();
-            $docComment = $refProp->getDocComment();
-            if ($docComment === false) {
-                throw new SerializationException("The property $propName on class $refClass->name has no doc comment");
+            $docBlock = $this->docBlockFactory->create($refProp, $context);
+            $varTags = $docBlock->getTagsByName('var');
+            if (count($varTags) !== 1) {
+                throw new SerializationException("Expected exactly 1 @var tag on property $propName but found "
+                    . count($varTags));
             }
-            $propType = $this->getTypeFromPropertyComment($docComment, $context);
+            /** @var Var_ $varTag */
+            $varTag = $varTags[0];
+            $propType = $this->resolveTypeToSerdeType($varTag->getType());
             $serdeProp = new SerdeProp($propName, $propType);
             $result[$propName] = $serdeProp;
         }
         return $result;
-    }
-
-    /**
-     * @throws SerializationException
-     * @throws ReflectionException
-     */
-    private function getTypeFromPropertyComment(string $docComment, Context $context): SerdeType
-    {
-        $matches = array();
-        if (preg_match('/@var\s+(\\\?array<[^>]+>|\S+)/', $docComment, $matches) !== 1) {
-            throw new SerializationException("No @var annotation in comment:\n$docComment");
-        }
-        return $this->parseTypeString($matches[1], $context);
     }
 
     /**
@@ -225,7 +222,13 @@ class SerdeTypeParser
             return array();
         }
 
-        $docComment = $constructor->getDocComment();
+        if ($constructor->getDocComment()) {
+            $docBlock = $this->docBlockFactory->create($constructor, $context);
+            /** @var Param[] $paramTags */
+            $paramTags = $docBlock->getTagsByName('param');
+        } else {
+            $paramTags = [];
+        }
 
         /** @var SerdeProp[] $result */
         $result = array();
@@ -237,30 +240,21 @@ class SerdeTypeParser
             if (array_key_exists($paramName, $properties)) {
                 $result[] = $properties[$paramName];
             } else {
-                if ($docComment === false) {
-                    throw new SerializationException(
-                        "Could not find type for constructor param $paramName on type $refClass->name because it has no type"
-                    );
+                $found = false;
+                foreach ($paramTags as $paramTag) {
+                    if ($paramTag->getVariableName() === $paramName) {
+                        $paramType = $this->resolveTypeToSerdeType($paramTag->getType());
+                        $serdeProp = new SerdeProp($paramName, $paramType);
+                        $result[] = $serdeProp;
+                        $found = true;
+                        break;
+                    }
                 }
-                $paramType = $this->getTypeFromParamComment($paramName, $docComment, $context);
-                $serdeProp = new SerdeProp($paramName, $paramType);
-                $result[] = $serdeProp;
+                if (!$found) {
+                    throw new SerializationException("Could not find type for constructor param $paramName on type $refClass->name because it has no @param tag in the constructor docblock");
+                }
             }
         }
         return $result;
-    }
-
-    /**
-     * @throws SerializationException
-     * @throws ReflectionException
-     */
-    private function getTypeFromParamComment(string $paramName, string $docComment, Context $context): SerdeType
-    {
-        $matches = array();
-        if (preg_match("/@param\\s+(?:\\$$paramName\\s+(\\S+))|(?:(\\S+)\\s+\\$$paramName)/", $docComment, $matches) !== 1) {
-            throw new SerializationException("No @param annotation for $paramName in comment:\n$docComment");
-        }
-        $type = empty($matches[1]) ? $matches[2] : $matches[1];
-        return $this->parseTypeString($type, $context);
     }
 }
