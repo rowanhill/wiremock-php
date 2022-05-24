@@ -13,9 +13,8 @@ class SerdeTypeTypedArray extends SerdeTypeArray
     /**
      * @param SerdeType $type
      */
-    public function __construct(bool $isNullable, SerdeType $type)
+    public function __construct(SerdeType $type)
     {
-        parent::__construct($isNullable);
         $this->type = $type;
     }
 

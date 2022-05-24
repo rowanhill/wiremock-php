@@ -12,12 +12,17 @@ abstract class SerdeTypeArray extends SerdeType
      */
     abstract function denormalizeFromArray(array &$data, Serializer $serializer): array;
 
+    public function canDenormalize($data): bool
+    {
+        return is_array($data);
+    }
+
     /**
      * @throws SerializationException
      */
     function denormalize(&$data, Serializer $serializer): array
     {
-        if (!is_array($data)) {
+        if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 ' from data of type ' . gettype($data));
         }

@@ -26,15 +26,7 @@ class SerdeProp
      */
     public function instantiateAndConsumeData(array &$data, Serializer $serializer)
     {
-        if (!array_key_exists($this->name, $data)) {
-            if ($this->serdeType->getIsNullable()) {
-                return null;
-            } else {
-                $type = $this->serdeType->displayName();
-                throw new SerializationException("Cannot instantiate prop $this->name of type $type because there is no data for the key $this->name");
-            }
-        }
-        $propData = $data[$this->name];
+        $propData = array_key_exists($this->name, $data) ? $data[$this->name] : null;
         unset($data[$this->name]);
         return $this->serdeType->denormalize($propData, $serializer);
     }

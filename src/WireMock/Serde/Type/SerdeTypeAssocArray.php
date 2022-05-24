@@ -13,13 +13,11 @@ class SerdeTypeAssocArray extends SerdeTypeArray
     public $valueType;
 
     /**
-     * @param bool $isNullable
      * @param SerdeTypePrimitive $keyType
      * @param SerdeType $valueType
      */
-    public function __construct(bool $isNullable, SerdeTypePrimitive $keyType, SerdeType $valueType)
+    public function __construct(SerdeTypePrimitive $keyType, SerdeType $valueType)
     {
-        parent::__construct($isNullable);
         $this->keyType = $keyType;
         $this->valueType = $valueType;
     }

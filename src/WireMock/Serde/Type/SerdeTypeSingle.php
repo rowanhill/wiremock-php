@@ -8,12 +8,15 @@ abstract class SerdeTypeSingle extends SerdeType
     public $typeString;
 
     /**
-     * @param bool $isNullable
      * @param $typeString string
      */
-    public function __construct(bool $isNullable, string $typeString)
+    public function __construct(string $typeString)
     {
-        parent::__construct($isNullable);
         $this->typeString = $typeString;
+    }
+
+    public function displayName(): string
+    {
+        return $this->typeString;
     }
 }

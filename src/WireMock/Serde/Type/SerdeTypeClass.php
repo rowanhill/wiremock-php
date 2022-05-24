@@ -18,15 +18,15 @@ class SerdeTypeClass extends SerdeTypeSingle
     /** @var PropertyMap */
     private $propertyMap;
 
-    public function __construct(bool $isNullable, string $typeString, PropertyMap $propertyMap)
+    public function __construct(string $typeString, PropertyMap $propertyMap)
     {
-        parent::__construct($isNullable, $typeString);
+        parent::__construct($typeString);
         $this->propertyMap = $propertyMap;
     }
 
-    public function displayName(): string
+    public function canDenormalize($data): bool
     {
-        return $this->typeString;
+        return is_array($data);
     }
 
     /**
@@ -35,7 +35,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     function denormalize(&$data, Serializer $serializer): ?object
     {
-        if (!is_array($data)) {
+        if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 ' from data of type ' . gettype($data));
         }

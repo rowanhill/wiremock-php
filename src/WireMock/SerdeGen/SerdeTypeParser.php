@@ -11,6 +11,7 @@ use WireMock\Serde\Type\SerdeType;
 use WireMock\Serde\Type\SerdeTypeArray;
 use WireMock\Serde\Type\SerdeTypeAssocArray;
 use WireMock\Serde\Type\SerdeTypeClass;
+use WireMock\Serde\Type\SerdeTypeNull;
 use WireMock\Serde\Type\SerdeTypePrimitive;
 use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
@@ -57,9 +58,13 @@ class SerdeTypeParser
             $type === 'float' || $type === 'double' ||
             $type === 'string'
         ) {
-            return new SerdeTypePrimitive($isNullable, $type);
+            $serdeType = new SerdeTypePrimitive($type);
+            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
         } elseif ($type === 'array') {
-            return new SerdeTypeUntypedArray($isNullable);
+            $serdeType = new SerdeTypeUntypedArray();
+            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
+        } elseif ($type === 'null') {
+            return new SerdeTypeNull();
         } elseif (strpos($type, '|') !== false) {
             $unionTypes = array_map(function($t) { return $this->parseTypeString($t); }, preg_split('/\|/', $type));
             $primitives = [];
@@ -77,11 +82,15 @@ class SerdeTypeParser
                     throw new SerializationException("Serde of union types only supported for primitives, classes, and arrays: $type");
                 }
             }
-            return new SerdeTypeUnion($isNullable, $type, $primitives, $nonPrimitive);
+            if ($isNullable) {
+                $primitives[] = new SerdeTypeNull();
+            }
+            return new SerdeTypeUnion($primitives, $nonPrimitive);
         } elseif (substr($type, -2) === '[]') {
             $elementTypeString = substr($type, 0, -2);
             $elementType = $this->parseTypeString($elementTypeString);
-            return new SerdeTypeTypedArray($isNullable, $elementType);
+            $serdeType = new SerdeTypeTypedArray($elementType);
+            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
         } else {
             $matches = array();
             if (preg_match('/array<\s*([^,]+?)\s*,\s*([^>]+?)\s*>/', $type, $matches) === 1) {
@@ -90,7 +99,8 @@ class SerdeTypeParser
                 if (!($key instanceof SerdeTypePrimitive)) {
                     throw new SerializationException("Unexpected key type of associative array: $type");
                 }
-                return new SerdeTypeAssocArray($isNullable, $key, $value);
+                $serdeType = new SerdeTypeAssocArray($key, $value);
+                return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
             } else {
                 if (substr($type, 0, 1) === '?') {
                     $isNullable = true;
@@ -103,7 +113,8 @@ class SerdeTypeParser
                 if (!$this->partialSerdeTypeLookup->contains($fqn, $isNullable)) {
                     // Add a SerdeTypeClass with a placeholder property map, to break cycles
                     $placeholderPropMap = new PropertyMap([], []);
-                    $serdeType = new SerdeTypeClass($isNullable, $fqn, $placeholderPropMap);
+                    $serdeTypeClass = new SerdeTypeClass($fqn, $placeholderPropMap);
+                    $serdeType = $isNullable ? $this->unionWithNull($serdeTypeClass) : $serdeTypeClass;
                     $this->partialSerdeTypeLookup->addSerdeType($fqn, $isNullable, $serdeType);
 
                     // Create the actual property map
@@ -111,12 +122,21 @@ class SerdeTypeParser
 
                     // Overwrite the placeholder property map on the existing SerdeTypeClass reference
                     // Because this property is private, we do so via reflection
-                    $refProp = new \ReflectionProperty($serdeType, 'propertyMap');
+                    $refProp = new \ReflectionProperty($serdeTypeClass, 'propertyMap');
                     $refProp->setAccessible(true);
-                    $refProp->setValue($serdeType, $propertyMap);
+                    $refProp->setValue($serdeTypeClass, $propertyMap);
                 }
                 return $this->partialSerdeTypeLookup->getSerdeType($fqn, $isNullable);
             }
+        }
+    }
+
+    private function unionWithNull(SerdeType $serdeType): SerdeTypeUnion
+    {
+        if ($serdeType instanceof SerdeTypePrimitive) {
+            return new SerdeTypeUnion([$serdeType, new SerdeTypeNull()], null);
+        } else {
+            return new SerdeTypeUnion([new SerdeTypeNull()], $serdeType);
         }
     }
 
