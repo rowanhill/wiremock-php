@@ -2,8 +2,22 @@
 
 namespace WireMock\SerdeGen;
 
+use phpDocumentor\Reflection\Type;
+use phpDocumentor\Reflection\TypeResolver;
+use phpDocumentor\Reflection\Types\Array_;
+use phpDocumentor\Reflection\Types\Boolean;
+use phpDocumentor\Reflection\Types\Compound;
+use phpDocumentor\Reflection\Types\Context;
+use phpDocumentor\Reflection\Types\ContextFactory;
+use phpDocumentor\Reflection\Types\Float_;
+use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Types\Null_;
+use phpDocumentor\Reflection\Types\Nullable;
+use phpDocumentor\Reflection\Types\Object_;
+use phpDocumentor\Reflection\Types\String_;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionProperty;
 use WireMock\Serde\PropertyMap;
 use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
@@ -21,122 +35,112 @@ class SerdeTypeParser
 {
     /** @var PartialSerdeTypeLookup */
     private $partialSerdeTypeLookup;
-    /** @var FullyQualifiedNameGuesser */
-    private $fqnGuesser;
 
     /**
      * @param PartialSerdeTypeLookup $partialSerdeTypeLookup
-     * @param FullyQualifiedNameGuesser $fqnGuesser
      */
-    public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup, FullyQualifiedNameGuesser $fqnGuesser)
+    public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup)
     {
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
-        $this->fqnGuesser = $fqnGuesser;
     }
 
     /**
+     * @param $context Context|null
      * @throws SerializationException|ReflectionException
      */
-    public function parseTypeString(string $type): SerdeType
+    public function parseTypeString(string $type, Context $context = null): SerdeType
     {
-        $isNullable = false;
+        $typeResolver = new TypeResolver();
+        $resolvedType = $typeResolver->resolve($type, $context);
 
-        // Eat nullability by union
-        // TODO: null not at end of type union? regex replace?
-        if (substr($type, -5) === '|null') {
-            $type = substr($type, 0, -5);
-            $isNullable = true;
-        } else if (substr($type, -7) === ' | null') {
-            $type = substr($type, 0, -7);
-            $isNullable = true;
-        }
-        // TODO: nullability by ? (in other cases)
+        return $this->resolveTypeToSerdeType($resolvedType);
+    }
 
-        if (
-            $type === 'bool' || $type === 'boolean' ||
-            $type === 'int' || $type === 'integer' ||
-            $type === 'float' || $type === 'double' ||
-            $type === 'string'
-        ) {
-            $serdeType = new SerdeTypePrimitive($type);
-            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
-        } elseif ($type === 'array') {
-            $serdeType = new SerdeTypeUntypedArray();
-            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
-        } elseif ($type === 'null') {
-            return new SerdeTypeNull();
-        } elseif (strpos($type, '|') !== false) {
-            $unionTypes = array_map(function($t) { return $this->parseTypeString($t); }, preg_split('/\|/', $type));
+    /**
+     * Translate from a phpDocumentor Type to a wiremock-php SerdeType
+     * @throws SerializationException
+     * @throws ReflectionException
+     */
+    private function resolveTypeToSerdeType(Type $type): SerdeType
+    {
+        if ($type instanceof Array_) {
+            $typeString = $type->__toString();
+            if ($typeString === 'array') {
+                return new SerdeTypeUntypedArray();
+            }
+            $valueSerdeType = $this->resolveTypeToSerdeType($type->getValueType());
+            if (substr($typeString, -2) === '[]') {
+                return new SerdeTypeTypedArray($valueSerdeType);
+            }
+            $keySerdeType = $this->resolveTypeToSerdeType($type->getKeyType());
+            if (!($keySerdeType instanceof SerdeTypePrimitive)) {
+                throw new SerializationException(
+                    'Expected associative array to have primitive key type, but found' .
+                        $keySerdeType->displayName()
+                );
+            }
+            return new SerdeTypeAssocArray($keySerdeType, $valueSerdeType);
+        } elseif ($type instanceof Boolean) {
+            return new SerdeTypePrimitive('bool');
+        } elseif ($type instanceof Compound) {
             $primitives = [];
             $nonPrimitive = null;
-            foreach ($unionTypes as $t) {
-                if ($t instanceof SerdeTypePrimitive) {
-                    $primitives[] = $t;
-                } elseif (($t instanceof SerdeTypeClass) || ($t instanceof SerdeTypeArray)) {
+            foreach ($type->getIterator() as $subtype) {
+                $serdeSubtype = $this->resolveTypeToSerdeType($subtype);
+                if ($serdeSubtype instanceof SerdeTypePrimitive) {
+                    $primitives[] = $serdeSubtype;
+                } elseif (($serdeSubtype instanceof SerdeTypeClass) || ($serdeSubtype instanceof SerdeTypeArray)) {
                     if ($nonPrimitive !== null) {
                         throw new SerializationException("Serde of union types with more than one non-primitive type are not supported: $type");
                     } else {
-                        $nonPrimitive = $t;
+                        $nonPrimitive = $serdeSubtype;
                     }
                 } else {
                     throw new SerializationException("Serde of union types only supported for primitives, classes, and arrays: $type");
                 }
             }
-            if ($isNullable) {
-                $primitives[] = new SerdeTypeNull();
-            }
             return new SerdeTypeUnion($primitives, $nonPrimitive);
-        } elseif (substr($type, -2) === '[]') {
-            $elementTypeString = substr($type, 0, -2);
-            $elementType = $this->parseTypeString($elementTypeString);
-            $serdeType = new SerdeTypeTypedArray($elementType);
-            return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
-        } else {
-            $matches = array();
-            if (preg_match('/array<\s*([^,]+?)\s*,\s*([^>]+?)\s*>/', $type, $matches) === 1) {
-                $key = $this->parseTypeString($matches[1]);
-                $value = $this->parseTypeString($matches[2]);
-                if (!($key instanceof SerdeTypePrimitive)) {
-                    throw new SerializationException("Unexpected key type of associative array: $type");
-                }
-                $serdeType = new SerdeTypeAssocArray($key, $value);
-                return $isNullable ? $this->unionWithNull($serdeType) : $serdeType;
+        } elseif ($type instanceof Float_) {
+            return new SerdeTypePrimitive('float');
+        } elseif ($type instanceof Integer) {
+            return new SerdeTypePrimitive('int');
+        } elseif ($type instanceof Null_) {
+            return new SerdeTypeNull();
+        } elseif ($type instanceof Nullable) {
+            $innerType = $this->resolveTypeToSerdeType($type->getActualType());
+            if ($innerType instanceof SerdeTypePrimitive) {
+                return new SerdeTypeUnion([$innerType, new SerdeTypeNull()], null);
+            } elseif ($innerType instanceof SerdeTypeClass || $innerType instanceof SerdeTypeArray) {
+                return new SerdeTypeUnion([new SerdeTypeNull()], $innerType);
             } else {
-                if (substr($type, 0, 1) === '?') {
-                    $isNullable = true;
-                    $type = substr($type, 1);
-                }
-                $fqn = $this->fqnGuesser->getFullyQualifiedName($type);
-                if ($fqn === null) {
-                    throw new SerializationException("Tried to parse unexpected type: $type");
-                }
-                if (!$this->partialSerdeTypeLookup->contains($fqn, $isNullable)) {
-                    // Add a SerdeTypeClass with a placeholder property map, to break cycles
-                    $placeholderPropMap = new PropertyMap([], []);
-                    $serdeTypeClass = new SerdeTypeClass($fqn, $placeholderPropMap);
-                    $serdeType = $isNullable ? $this->unionWithNull($serdeTypeClass) : $serdeTypeClass;
-                    $this->partialSerdeTypeLookup->addSerdeType($fqn, $isNullable, $serdeType);
-
-                    // Create the actual property map
-                    $propertyMap = $this->createPropertyMap($fqn);
-
-                    // Overwrite the placeholder property map on the existing SerdeTypeClass reference
-                    // Because this property is private, we do so via reflection
-                    $refProp = new \ReflectionProperty($serdeTypeClass, 'propertyMap');
-                    $refProp->setAccessible(true);
-                    $refProp->setValue($serdeTypeClass, $propertyMap);
-                }
-                return $this->partialSerdeTypeLookup->getSerdeType($fqn, $isNullable);
+                throw new SerializationException('Unexpected nullable type: ' . $innerType->displayName());
             }
-        }
-    }
+        } elseif ($type instanceof Object_) {
+            $fqsen = $type->getFqsen();
+            if ($fqsen === null) {
+                throw new SerializationException('Unsupported use of type "object"');
+            }
 
-    private function unionWithNull(SerdeType $serdeType): SerdeTypeUnion
-    {
-        if ($serdeType instanceof SerdeTypePrimitive) {
-            return new SerdeTypeUnion([$serdeType, new SerdeTypeNull()], null);
+            if (!$this->partialSerdeTypeLookup->contains($fqsen, false)) {
+                // Add a SerdeTypeClass with a placeholder property map, to break cycles
+                $placeholderPropMap = new PropertyMap([], []);
+                $serdeType = new SerdeTypeClass($fqsen, $placeholderPropMap);
+                $this->partialSerdeTypeLookup->addSerdeType($fqsen, false, $serdeType);
+
+                // Create the actual property map
+                $propertyMap = $this->createPropertyMap($fqsen);
+
+                // Overwrite the placeholder property map on the existing SerdeTypeClass reference
+                // Because this property is private, we do so via reflection
+                $refProp = new ReflectionProperty($serdeType, 'propertyMap');
+                $refProp->setAccessible(true);
+                $refProp->setValue($serdeType, $propertyMap);
+            }
+            return $this->partialSerdeTypeLookup->getSerdeType($fqsen, false);
+        } elseif ($type instanceof String_) {
+            return new SerdeTypePrimitive('string');
         } else {
-            return new SerdeTypeUnion([new SerdeTypeNull()], $serdeType);
+            throw new SerializationException('Unexpected type ' . get_class($type) . ": $type");
         }
     }
 
@@ -146,8 +150,11 @@ class SerdeTypeParser
     private function createPropertyMap(string $classType): PropertyMap
     {
         $refClass = new ReflectionClass($classType);
-        $properties = $this->getProperties($refClass);
-        $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $properties);
+        $contextFactory = new ContextFactory();
+        $context = $contextFactory->createFromReflector($refClass);
+
+        $properties = $this->getProperties($refClass, $context);
+        $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $properties, $context);
 
         foreach ($mandatoryConstructorParams as $param) {
             if (array_key_exists($param->name, $properties)) {
@@ -160,11 +167,12 @@ class SerdeTypeParser
 
     /**
      * @param ReflectionClass $refClass
+     * @param Context $context
      * @return SerdeProp[] keyed by prop name
-     * @throws SerializationException
      * @throws ReflectionException
+     * @throws SerializationException
      */
-    private function getProperties(ReflectionClass $refClass): array
+    private function getProperties(ReflectionClass $refClass, Context $context): array
     {
         $refProps = $refClass->getProperties();
         $result = array();
@@ -177,7 +185,7 @@ class SerdeTypeParser
             if ($docComment === false) {
                 throw new SerializationException("The property $propName on class $refClass->name has no doc comment");
             }
-            $propType = $this->getTypeFromPropertyComment($docComment);
+            $propType = $this->getTypeFromPropertyComment($docComment, $context);
             $serdeProp = new SerdeProp($propName, $propType);
             $result[$propName] = $serdeProp;
         }
@@ -188,23 +196,24 @@ class SerdeTypeParser
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function getTypeFromPropertyComment(string $docComment): SerdeType
+    private function getTypeFromPropertyComment(string $docComment, Context $context): SerdeType
     {
         $matches = array();
         if (preg_match('/@var\s+(\\\?array<[^>]+>|\S+)/', $docComment, $matches) !== 1) {
             throw new SerializationException("No @var annotation in comment:\n$docComment");
         }
-        return $this->parseTypeString($matches[1]);
+        return $this->parseTypeString($matches[1], $context);
     }
 
     /**
      * @param ReflectionClass $refClass
      * @param SerdeProp[] $properties keyed by prop name
+     * @param Context $context
      * @return SerdeProp[] in constructor args order
-     * @throws SerializationException
      * @throws ReflectionException
+     * @throws SerializationException
      */
-    private function getMandatoryConstructorParams(ReflectionClass $refClass, array $properties): array
+    private function getMandatoryConstructorParams(ReflectionClass $refClass, array $properties, Context $context): array
     {
         $constructor = $refClass->getConstructor();
         if ($constructor === null) {
@@ -233,7 +242,7 @@ class SerdeTypeParser
                         "Could not find type for constructor param $paramName on type $refClass->name because it has no type"
                     );
                 }
-                $paramType = $this->getTypeFromParamComment($paramName, $docComment);
+                $paramType = $this->getTypeFromParamComment($paramName, $docComment, $context);
                 $serdeProp = new SerdeProp($paramName, $paramType);
                 $result[] = $serdeProp;
             }
@@ -245,13 +254,13 @@ class SerdeTypeParser
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function getTypeFromParamComment(string $paramName, string $docComment): SerdeType
+    private function getTypeFromParamComment(string $paramName, string $docComment, Context $context): SerdeType
     {
         $matches = array();
         if (preg_match("/@param\\s+(?:\\$$paramName\\s+(\\S+))|(?:(\\S+)\\s+\\$$paramName)/", $docComment, $matches) !== 1) {
             throw new SerializationException("No @param annotation for $paramName in comment:\n$docComment");
         }
         $type = empty($matches[1]) ? $matches[2] : $matches[1];
-        return $this->parseTypeString($type);
+        return $this->parseTypeString($type, $context);
     }
 }

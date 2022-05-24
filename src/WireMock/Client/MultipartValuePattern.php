@@ -9,7 +9,7 @@ class MultipartValuePattern
 
     /** @var ValueMatchingStrategy[] */
     private $bodyPatterns;
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $headers;
     /** @var string */
     private $name;

@@ -6,7 +6,7 @@ class MultipartValuePatternBuilder
 {
     /** @var ValueMatchingStrategy[] */
     private $bodyPatterns = array();
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $headers = array();
     /** @var string */
     private $name;

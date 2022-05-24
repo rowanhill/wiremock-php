@@ -4,51 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ea1be6ebe12524eef30d354a718683e",
-    "packages": [
-        {
-            "name": "php-di/phpdoc-reader",
-            "version": "2.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHP-DI/PhpDocReader.git",
-                "reference": "66daff34cbd2627740ffec9469ffbac9f8c8185c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PhpDocReader/zipball/66daff34cbd2627740ffec9469ffbac9f8c8185c",
-                "reference": "66daff34cbd2627740ffec9469ffbac9f8c8185c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.0"
-            },
-            "require-dev": {
-                "mnapoli/hard-mode": "~0.3.0",
-                "phpunit/phpunit": "^8.5|^9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpDocReader\\": "src/PhpDocReader"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PhpDocReader parses @var and @param values in PHP docblocks (supports namespaced class names with the same resolution rules as PHP)",
-            "keywords": [
-                "phpdoc",
-                "reflection"
-            ],
-            "support": {
-                "issues": "https://github.com/PHP-DI/PhpDocReader/issues",
-                "source": "https://github.com/PHP-DI/PhpDocReader/tree/2.2.1"
-            },
-            "time": "2020-10-12T12:39:22+00:00"
-        }
-    ],
+    "content-hash": "0f6868b611f430083f503a94bdefd899",
+    "packages": [],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -1965,5 +1922,5 @@
     "platform-overrides": {
         "php": "7.2"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

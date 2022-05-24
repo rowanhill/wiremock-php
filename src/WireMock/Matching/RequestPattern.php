@@ -17,11 +17,11 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
     private $method;
     /** @var UrlMatchingStrategy  */
     private $urlMatchingStrategy;
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $headers;
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $cookies;
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $queryParameters;
     /** @var ValueMatchingStrategy[] */
     private $bodyPatterns;

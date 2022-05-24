@@ -10,11 +10,11 @@ class RequestPatternBuilder
 {
     private $method;
     private $urlMatchingStrategy;
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $headers = array();
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $cookies = array();
-    /** @var \array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy> */
     private $queryParameters = array();
     /** @var ValueMatchingStrategy[] */
     private $bodyPatterns = array();

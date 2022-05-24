@@ -18,8 +18,7 @@ class SerdeTypeLookupFactory
         $canonicalTypes = array_map(function($fqn) {
             return CanonicalNameUtils::prependBackslashIfNeeded($fqn);
         }, $types);
-        $fqnGuesser = new FullyQualifiedNameGuesser($canonicalTypes);
-        $serdeTypeParser = new SerdeTypeParser($partialLookup, $fqnGuesser);
+        $serdeTypeParser = new SerdeTypeParser($partialLookup);
         foreach ($canonicalTypes as $type) {
             // This creates the SerdeType and adds it to the lookup as a side-effect
             $serdeTypeParser->parseTypeString($type);
