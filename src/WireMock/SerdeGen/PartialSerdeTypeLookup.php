@@ -13,15 +13,13 @@ class PartialSerdeTypeLookup extends SerdeTypeLookup
         parent::__construct([]);
     }
 
-    public function addSerdeType(string $type, bool $isNullable, SerdeType $serdeType)
+    public function addSerdeType(string $type, SerdeType $serdeType)
     {
-        $key = $this->getKey($type, $isNullable);
-        $this->lookup[$key] = $serdeType;
+        $this->lookup[$type] = $serdeType;
     }
 
-    public function contains(string $type, bool $isNullable): bool
+    public function contains(string $type): bool
     {
-        $key = $this->getKey($type, $isNullable);
-        return isset($this->lookup[$key]);
+        return isset($this->lookup[$type]);
     }
 }

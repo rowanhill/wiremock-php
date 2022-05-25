@@ -110,6 +110,6 @@ class Serializer
      */
     public function getSerdeType(string $type): SerdeType
     {
-        return $this->serdeTypeLookup->getSerdeType($type, false);
+        return $this->serdeTypeLookup->getSerdeType($type);
     }
 }

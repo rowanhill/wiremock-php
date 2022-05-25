@@ -127,11 +127,11 @@ class SerdeTypeParser
                 throw new SerializationException('Unsupported use of type "object"');
             }
 
-            if (!$this->partialSerdeTypeLookup->contains($fqsen, false)) {
+            if (!$this->partialSerdeTypeLookup->contains($fqsen)) {
                 // Add a SerdeTypeClass with a placeholder property map, to break cycles
                 $placeholderPropMap = new PropertyMap([], []);
                 $serdeType = new SerdeTypeClass($fqsen, $placeholderPropMap);
-                $this->partialSerdeTypeLookup->addSerdeType($fqsen, false, $serdeType);
+                $this->partialSerdeTypeLookup->addSerdeType($fqsen, $serdeType);
 
                 // Create the actual property map
                 $propertyMap = $this->createPropertyMap($fqsen);
@@ -142,7 +142,7 @@ class SerdeTypeParser
                 $refProp->setAccessible(true);
                 $refProp->setValue($serdeType, $propertyMap);
             }
-            return $this->partialSerdeTypeLookup->getSerdeType($fqsen, false);
+            return $this->partialSerdeTypeLookup->getSerdeType($fqsen);
         } elseif ($type instanceof String_) {
             return new SerdeTypePrimitive('string');
         } else {

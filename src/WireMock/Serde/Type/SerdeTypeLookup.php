@@ -21,18 +21,12 @@ class SerdeTypeLookup
     /**
      * @throws SerializationException
      */
-    public function getSerdeType(string $type, bool $isNullable): SerdeType
+    public function getSerdeType(string $type): SerdeType
     {
-        $canonicalType = CanonicalNameUtils::prependBackslashIfNeeded($type);
-        $key = $this->getKey($canonicalType, $isNullable);
+        $key = CanonicalNameUtils::prependBackslashIfNeeded($type);
         if (!array_key_exists($key, $this->lookup)) {
             throw new SerializationException("Type $key does not exist in the serde type cache");
         }
         return $this->lookup[$key];
-    }
-
-    protected function getKey(string $type, bool $isNullable): string
-    {
-        return $type . '__nullable_' . ($isNullable ? 'true' : 'false');
     }
 }
