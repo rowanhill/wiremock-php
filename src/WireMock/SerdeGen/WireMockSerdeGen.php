@@ -52,7 +52,19 @@ class WireMockSerdeGen
     public static function generateAndSaveWireMockSerdeLookup()
     {
         $lookup = SerdeTypeLookupFactory::createLookup(
+            // Entry point classes (i.e. explicitly passed to deserialize())
+            GetServeEventsResult::class,
+            UnmatchedRequests::class,
+            FindNearMissesResult::class,
+            GetScenariosResult::class,
+            ListStubMappingsResult::class,
             StubMapping::class,
+            RecordingStatusResult::class,
+            CountMatchingRequestsResult::class,
+            FindRequestsResult::class,
+            SnapshotRecordResult::class,
+
+            // Other classes used
             RequestPattern::class,
             ResponseDefinition::class,
             PostServeAction::class,
@@ -66,22 +78,13 @@ class WireMockSerdeGen
             UniformDistribution::class,
             ChunkedDribbleDelay::class,
             WebhookDefinition::class,
-            ListStubMappingsResult::class,
             Meta::class,
-            RecordingStatusResult::class,
-            GetServeEventsResult::class,
             ServeEvent::class,
             LoggedRequest::class,
             LoggedResponse::class,
-            UnmatchedRequests::class,
-            FindNearMissesResult::class,
-            SnapshotRecordResult::class,
-            FindRequestsResult::class,
-            GetScenariosResult::class,
             JsonValueMatchingStrategy::class,
             EqualToXmlMatchingStrategy::class,
             XPathValueMatchingStrategy::class,
-            CountMatchingRequestsResult::class,
             NearMiss::class,
             Scenario::class,
             MatchResult::class,
