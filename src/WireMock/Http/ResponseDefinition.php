@@ -2,19 +2,10 @@
 
 namespace WireMock\Http;
 
-use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
-use Symfony\Component\Serializer\Serializer;
 use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
-use WireMock\Fault\DelayDistributionFactory;
-use WireMock\Fault\LogNormal;
-use WireMock\Fault\UniformDistribution;
-use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\ObjectToPopulateResult;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
+class ResponseDefinition
 {
     /** @var int */
     private $status = 200;
@@ -32,9 +23,15 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
     private $proxyBaseUrl;
     /** @var array */
     private $additionalProxyRequestHeaders;
-    /** @var int */
+    /**
+     * @var int
+     * @serde-name fixedDelayMilliseconds
+     */
     private $fixedDelayMillis;
-    /** @var DelayDistribution */
+    /**
+     * @var DelayDistribution
+     * @serde-name delayDistribution
+     */
     protected $randomDelayDistribution;
     /** @var ChunkedDribbleDelay */
     protected $chunkedDribbleDelay;
@@ -216,19 +213,5 @@ class ResponseDefinition implements PostNormalizationAmenderInterface, PreDenorm
     public function getProxyUrlPrefixToRemove()
     {
         return $this->proxyUrlPrefixToRemove;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        NormalizerUtils::renameKey($normalisedArray, 'fixedDelayMillis', 'fixedDelayMilliseconds');
-        NormalizerUtils::renameKey($normalisedArray, 'randomDelayDistribution', 'delayDistribution');
-        return $normalisedArray;
-    }
-
-    public static function amendPreDenormalisation(array $normalisedArray): array
-    {
-        NormalizerUtils::renameKey($normalisedArray, 'fixedDelayMilliseconds', 'fixedDelayMillis');
-        NormalizerUtils::renameKey($normalisedArray, 'delayDistribution', 'randomDelayDistribution');
-        return $normalisedArray;
     }
 }

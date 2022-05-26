@@ -6,7 +6,7 @@ class PropertyMap
 {
     /** @var SerdeProp[] */
     private $constructorArgProps;
-    /** @var SerdeProp[] keyed by name */
+    /** @var SerdeProp[] keyed by serialized name */
     private $properties;
 
     /**
@@ -27,12 +27,20 @@ class PropertyMap
         return $this->constructorArgProps;
     }
 
-    public function getProperty(string $name): ?SerdeProp
+    public function getPropertyBySerializedName(string $name): ?SerdeProp
     {
         if (array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return SerdeProp[]
+     */
+    public function getAllPropertiesAndArgs(): array
+    {
+        return array_merge($this->constructorArgProps, $this->properties);
     }
 }

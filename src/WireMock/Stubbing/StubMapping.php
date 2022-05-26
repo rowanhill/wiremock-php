@@ -5,11 +5,8 @@ namespace WireMock\Stubbing;
 use WireMock\Http\ResponseDefinition;
 use WireMock\Matching\RequestPattern;
 use WireMock\PostServe\PostServeAction;
-use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
+class StubMapping
 {
     /** @var string A string representation of a GUID */
     private $id;
@@ -24,7 +21,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
     /** @var array */
     private $metadata;
     /** @var boolean */
-    private $isPersistent;
+    private $persistent;
 
     /** @var string */
     private $scenarioName;
@@ -43,7 +40,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      * @param int $priority
      * @param ScenarioMapping|null $scenarioMapping
      * @param array $metadata
-     * @param boolean $isPersistent
+     * @param boolean $persistent
      * @param array|null $postServeActions
      */
     public function __construct(
@@ -54,7 +51,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
         $priority = null,
         $scenarioMapping = null,
         $metadata = null,
-        $isPersistent = null,
+        $persistent = null,
         $postServeActions = null
     )
     {
@@ -64,7 +61,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
         $this->response = $response;
         $this->priority = $priority;
         $this->metadata = $metadata;
-        $this->isPersistent = $isPersistent;
+        $this->persistent = $persistent;
         $this->postServeActions = $postServeActions;
 
         if ($scenarioMapping) {
@@ -135,7 +132,7 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
      */
     public function isPersistent()
     {
-        return $this->isPersistent;
+        return $this->persistent;
     }
 
     /**
@@ -168,17 +165,5 @@ class StubMapping implements PostNormalizationAmenderInterface, PreDenormalizati
     public function getPostServeActions(): ?array
     {
         return $this->postServeActions;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        NormalizerUtils::renameKey($normalisedArray, 'isPersistent', 'persistent');
-        return $normalisedArray;
-    }
-
-    public static function amendPreDenormalisation(array $normalisedArray): array
-    {
-        NormalizerUtils::renameKey($normalisedArray, 'persistent', 'isPersistent');
-        return $normalisedArray;
     }
 }

@@ -46,7 +46,7 @@ class RecordSpec implements PostNormalizationAmenderInterface
      * @param string[] $transformers
      * @param array $transformerParameters
      * @param array $requestBodyPattern
-     * @param string $format
+     * @param string $outputFormat
      * @param boolean $allowNonProxied
      */
     public function __construct(
@@ -60,7 +60,7 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $transformers,
         $transformerParameters,
         $requestBodyPattern,
-        $format,
+        $outputFormat,
         $allowNonProxied
     ) {
         $this->targetBaseUrl = $targetBaseUrl;
@@ -73,7 +73,7 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $this->transformers = $transformers;
         $this->transformerParameters = $transformerParameters;
         $this->requestBodyPattern = $requestBodyPattern;
-        $this->outputFormat = $format;
+        $this->outputFormat = $outputFormat;
         $this->allowNonProxied = $allowNonProxied;
     }
 

@@ -14,13 +14,13 @@ class StubImportOptions
 
     /**
      * StubImportOptions constructor.
-     * @param string $_duplicatePolicy
-     * @param bool $_deleteAllNotInImport
+     * @param string $duplicatePolicy
+     * @param bool $deleteAllNotInImport
      */
-    public function __construct($_duplicatePolicy, $_deleteAllNotInImport)
+    public function __construct($duplicatePolicy, $deleteAllNotInImport)
     {
-        $this->duplicatePolicy = $_duplicatePolicy;
-        $this->deleteAllNotInImport = $_deleteAllNotInImport;
+        $this->duplicatePolicy = $duplicatePolicy;
+        $this->deleteAllNotInImport = $deleteAllNotInImport;
     }
 
     /**

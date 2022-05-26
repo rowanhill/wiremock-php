@@ -11,13 +11,13 @@ class StubImport
 
     /**
      * StubImport constructor.
-     * @param StubMapping[] $_mappings
-     * @param StubImportOptions $_importOptions
+     * @param StubMapping[] $mappings
+     * @param StubImportOptions $importOptions
      */
-    public function __construct(array $_mappings, StubImportOptions $_importOptions)
+    public function __construct(array $mappings, StubImportOptions $importOptions)
     {
-        $this->mappings = $_mappings;
-        $this->importOptions = $_importOptions;
+        $this->mappings = $mappings;
+        $this->importOptions = $importOptions;
     }
 
     /**

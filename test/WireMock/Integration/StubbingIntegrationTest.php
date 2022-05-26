@@ -834,7 +834,7 @@ class StubbingIntegrationTest extends WireMockIntegrationTest
         // then
         // The stub mapping will be marked as persistent by the server, so we update the locally created version to
         // match before asserting
-        $persistentProp = new \ReflectionProperty($stubMapping, 'isPersistent');
+        $persistentProp = new \ReflectionProperty($stubMapping, 'persistent');
         $persistentProp->setAccessible(true);
         $persistentProp->setValue($stubMapping, true);
         assertThatTheOnlyMappingPresentIs($stubMapping);

@@ -38,9 +38,11 @@ use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\PostServe\PostServeAction;
 use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
+use WireMock\Recording\RecordSpec;
 use WireMock\Recording\SnapshotRecordResult;
 use WireMock\Serde\SerializationException;
 use WireMock\Stubbing\Scenario;
+use WireMock\Stubbing\StubImport;
 use WireMock\Stubbing\StubMapping;
 
 class WireMockSerdeGen
@@ -92,7 +94,9 @@ class WireMockSerdeGen
             JsonPathValueMatchingStrategy::class,
             DateTimeMatchingStrategy::class,
             LogicalOperatorMatchingStrategy::class,
-            FixedDelay::class
+            FixedDelay::class,
+            RecordSpec::class,
+            StubImport::class
         );
 
         // Use native PHP serialization to create a string of binary data

@@ -21,6 +21,7 @@ use phpDocumentor\Reflection\Types\String_;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
+use WireMock\Serde\ArrayMapUtils;
 use WireMock\Serde\PropertyMap;
 use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
@@ -33,6 +34,7 @@ use WireMock\Serde\Type\SerdeTypePrimitive;
 use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
+use WireMock\SerdeGen\Tag\SerdeNameTag;
 
 class SerdeTypeParser
 {
@@ -47,7 +49,9 @@ class SerdeTypeParser
     public function __construct(PartialSerdeTypeLookup $partialSerdeTypeLookup)
     {
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
-        $this->docBlockFactory = DocBlockFactory::createInstance();
+        $this->docBlockFactory = DocBlockFactory::createInstance([
+            'serde-name' => SerdeNameTag::class
+        ]);
     }
 
     /**
@@ -168,7 +172,14 @@ class SerdeTypeParser
             }
         }
 
-        return new PropertyMap($mandatoryConstructorParams, $properties);
+        $propertiesBySerializedName = ArrayMapUtils::array_map_assoc(
+            function($key, $prop) {
+                return [$prop->getSerializedName(), $prop];
+            },
+            $properties
+        );
+
+        return new PropertyMap($mandatoryConstructorParams, $propertiesBySerializedName);
     }
 
     /**
@@ -180,7 +191,11 @@ class SerdeTypeParser
      */
     private function getProperties(ReflectionClass $refClass, Context $context): array
     {
-        $refProps = $refClass->getProperties();
+        $refProps = [];
+        do {
+            $refProps = array_merge($refProps, $refClass->getProperties());
+            $refClass = $refClass->getParentClass();
+        } while ($refClass !== false);
         $result = array();
         foreach ($refProps as $refProp) {
             if ($refProp->isStatic()) {
@@ -188,6 +203,7 @@ class SerdeTypeParser
             }
             $propName = $refProp->getName();
             $docBlock = $this->docBlockFactory->create($refProp, $context);
+
             $varTags = $docBlock->getTagsByName('var');
             if (count($varTags) !== 1) {
                 throw new SerializationException("Expected exactly 1 @var tag on property $propName but found "
@@ -196,7 +212,21 @@ class SerdeTypeParser
             /** @var Var_ $varTag */
             $varTag = $varTags[0];
             $propType = $this->resolveTypeToSerdeType($varTag->getType());
-            $serdeProp = new SerdeProp($propName, $propType);
+
+            $serdeNameTags = $docBlock->getTagsByName('serde-name');
+            if (count($serdeNameTags) > 1) {
+                throw new SerializationException("Expected 0 or 1 @serde-name tag on property $propName but "
+                    . ' found ' . count($serdeNameTags));
+            }
+            if (count($serdeNameTags) === 1) {
+                /** @var SerdeNameTag $serdeNameTag */
+                $serdeNameTag = $serdeNameTags[0];
+                $serializedPropName = $serdeNameTag->getSerializedPropertyName();
+            } else {
+                $serializedPropName = null;
+            }
+
+            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $serializedPropName);
             $result[$propName] = $serdeProp;
         }
         return $result;
@@ -244,7 +274,7 @@ class SerdeTypeParser
                 foreach ($paramTags as $paramTag) {
                     if ($paramTag->getVariableName() === $paramName) {
                         $paramType = $this->resolveTypeToSerdeType($paramTag->getType());
-                        $serdeProp = new SerdeProp($paramName, $paramType);
+                        $serdeProp = new SerdeProp($paramName, $refParam->getDeclaringClass()->name, $paramType);
                         $result[] = $serdeProp;
                         $found = true;
                         break;

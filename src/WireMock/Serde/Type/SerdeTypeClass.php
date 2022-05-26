@@ -4,12 +4,15 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
+use WireMock\Serde\ArrayMapUtils;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
+use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\PropertyMap;
+use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Serializer;
 
@@ -24,6 +27,29 @@ class SerdeTypeClass extends SerdeTypeSingle
         $this->propertyMap = $propertyMap;
     }
 
+    public function normalize($object, Serializer $serializer): array
+    {
+        $props = $this->propertyMap->getAllPropertiesAndArgs();
+        $result = ArrayMapUtils::array_map_assoc(
+            function($index, SerdeProp $prop) use ($object, $serializer) {
+                $value = $prop->getData($object);
+                $normalizedValue = $serializer->normalize($value);
+                return [$prop->getSerializedName(), $normalizedValue];
+            },
+            $props
+        );
+        if ($object instanceof PostNormalizationAmenderInterface) {
+            $result = forward_static_call([get_class($object), 'amendPostNormalisation'], $result, $object);
+        }
+        foreach ($result as $key => $item) {
+            if ((is_array($item) && empty($item)) || is_null($item)) {
+                unset($result[$key]);
+            }
+        }
+
+        return $result;
+    }
+
     public function canDenormalize($data): bool
     {
         return is_array($data);
@@ -33,7 +59,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    function denormalize(&$data, Serializer $serializer): ?object
+    public function denormalize(&$data, Serializer $serializer): ?object
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
@@ -62,12 +88,11 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @return object|null
      * @throws ReflectionException|SerializationException
      */
-    function instantiate(&$data, Serializer $serializer): ?object
+    private function instantiate(&$data, Serializer $serializer): ?object
     {
-        $refClass = new ReflectionClass($this->typeString);
-        $object = $this->constructObject($data, $refClass, $serializer);
+        $object = $this->constructObject($data, $serializer);
         if ($object !== null) {
-            $this->populateObject($data, $object, $refClass, $serializer);
+            $this->populateObject($data, $object, $serializer);
         }
         return $object;
     }
@@ -86,8 +111,9 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function constructObject(array &$data, ReflectionClass $refClass, Serializer $serializer): ?object
+    private function constructObject(array &$data, Serializer $serializer): ?object
     {
+        $refClass = new ReflectionClass($this->typeString);
         // Delegate to createObjectToPopulate if specified
         if (is_subclass_of($this->typeString, ObjectToPopulateFactoryInterface::class)) {
             /** @var ObjectToPopulateResult $result */
@@ -114,10 +140,10 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function populateObject(array &$data, object $object, ReflectionClass $refClass, Serializer $serializer)
+    private function populateObject(array &$data, object $object, Serializer $serializer)
     {
         foreach ($data as $propertyName => $propertyData) {
-            $serdeProp = $this->propertyMap->getProperty($propertyName);
+            $serdeProp = $this->propertyMap->getPropertyBySerializedName($propertyName);
             if ($serdeProp === null) {
                 // Ignore properties from JSON that don't exist on the PHP class
                 // (This allows for newer versions of WireMock to add new properties and older versions of wiremock-php
@@ -125,6 +151,7 @@ class SerdeTypeClass extends SerdeTypeSingle
                 continue;
             }
             $propertyValue = $serdeProp->instantiateAndConsumeData($data, $serializer);
+            $refClass = new ReflectionClass($serdeProp->owningClassName);
             $refProp = $refClass->getProperty($serdeProp->name);
             $refProp->setAccessible(true);
             $refProp->setValue($object, $propertyValue);
