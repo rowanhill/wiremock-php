@@ -2,9 +2,7 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\PostNormalizationAmenderInterface;
-
-class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface
+class DateTimeMatchingStrategy extends ValueMatchingStrategy
 {
     // Offset units
     const SECONDS = "seconds";
@@ -25,8 +23,10 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     const FIRST_DAY_OF_NEXT_YEAR = "first day of next year";
     const LAST_DAY_OF_YEAR = "last day of year";
 
-    //TODO: Use a new DateTimeMatchExpectedOffset class and a @serde-unwrapped annotation
-    /** @var array|null */
+    /**
+     * @var DateTimeMatchExpectedOffset
+     * @serde-unwrapped
+     */
     private $expectedOffset = null;
     /** @var string|null */
     private $actualFormat = null;
@@ -47,7 +47,7 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
      */
     public function expectedOffset($amount, $unit)
     {
-        $this->expectedOffset = array('amount' => $amount, 'unit' => $unit);
+        $this->expectedOffset = new DateTimeMatchExpectedOffset($amount, $unit);
         return $this;
     }
 
@@ -82,9 +82,9 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     }
 
     /**
-     * @return array|null
+     * @return DateTimeMatchExpectedOffset|null
      */
-    public function getExpectedOffset(): ?array
+    public function getExpectedOffset(): ?DateTimeMatchExpectedOffset
     {
         return $this->expectedOffset;
     }
@@ -126,16 +126,5 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     public static function after($dateTimeSpec)
     {
         return new self("after", $dateTimeSpec);
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);
-        if (isset($normalisedArray['expectedOffset'])) {
-            $expectedOffset = $normalisedArray['expectedOffset'];
-            $normalisedArray['expectedOffset'] = $expectedOffset['amount'];
-            $normalisedArray['expectedOffsetUnit'] = $expectedOffset['unit'];
-        }
-        return $normalisedArray;
     }
 }
