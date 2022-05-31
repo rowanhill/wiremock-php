@@ -17,7 +17,7 @@ class RecordSpecBuildTest extends HamcrestTestCase
 
     private function toArray($obj)
     {
-        return $this->_serializer->normalize($obj, 'json');
+        return $this->_serializer->normalize($obj);
     }
 
     public function testTargetIsIncludedInArray()
@@ -42,6 +42,19 @@ class RecordSpecBuildTest extends HamcrestTestCase
         assertThat($array, hasEntry('filters', array(
             'method' => 'GET',
             'url' => 'foo'
+        )));
+    }
+
+    public function testRequestIdsAreIncludedInArray()
+    {
+        // when
+        $array = $this->toArray(WireMock::recordSpec()
+            ->onlyRequestIds(['123', '456'])
+            ->build());
+
+        // then
+        assertThat($array, hasEntry('filters', array(
+            'ids' => ['123', '456']
         )));
     }
 

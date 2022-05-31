@@ -2,6 +2,7 @@
 
 namespace WireMock\SerdeGen;
 
+use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -35,6 +36,7 @@ use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
 use WireMock\SerdeGen\Tag\SerdeNameTag;
+use WireMock\SerdeGen\Tag\SerdeUnwrappedTag;
 
 class SerdeTypeParser
 {
@@ -50,7 +52,8 @@ class SerdeTypeParser
     {
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
         $this->docBlockFactory = DocBlockFactory::createInstance([
-            'serde-name' => SerdeNameTag::class
+            'serde-name' => SerdeNameTag::class,
+            'serde-unwrapped' => SerdeUnwrappedTag::class
         ]);
     }
 
@@ -213,23 +216,35 @@ class SerdeTypeParser
             $varTag = $varTags[0];
             $propType = $this->resolveTypeToSerdeType($varTag->getType());
 
-            $serdeNameTags = $docBlock->getTagsByName('serde-name');
-            if (count($serdeNameTags) > 1) {
-                throw new SerializationException("Expected 0 or 1 @serde-name tag on property $propName but "
-                    . ' found ' . count($serdeNameTags));
-            }
-            if (count($serdeNameTags) === 1) {
-                /** @var SerdeNameTag $serdeNameTag */
-                $serdeNameTag = $serdeNameTags[0];
-                $serializedPropName = $serdeNameTag->getSerializedPropertyName();
-            } else {
-                $serializedPropName = null;
-            }
+            /** @var SerdeNameTag|null $serdeNameTag */
+            $serdeNameTag = $this->getSingleTagIfPresent($docBlock, 'serde-name', $propName);
+            $serializedPropName = $serdeNameTag ? $serdeNameTag->getSerializedPropertyName() : null;
 
-            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $serializedPropName);
+            /** @var SerdeUnwrappedTag|null $serdeUnwrappedTag */
+            $serdeUnwrappedTag = $this->getSingleTagIfPresent($docBlock, 'serde-unwrapped', $propName);
+            $unwrapped = !!$serdeUnwrappedTag;
+
+            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $serializedPropName, $unwrapped);
             $result[$propName] = $serdeProp;
         }
         return $result;
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    private function getSingleTagIfPresent(DocBlock $docBlock, string $tagName, string $propName)
+    {
+        $tags = $docBlock->getTagsByName($tagName);
+        if (count($tags) > 1) {
+            throw new SerializationException("Expected 0 or 1 @$tagName tag on property $propName but "
+                . ' found ' . count($tags));
+        }
+        if (count($tags) === 1) {
+            return $tags[0];
+        } else {
+            return null;
+        }
     }
 
     /**

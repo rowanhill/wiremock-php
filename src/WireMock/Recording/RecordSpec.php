@@ -2,20 +2,15 @@
 
 namespace WireMock\Recording;
 
-use WireMock\Matching\RequestPattern;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-
-class RecordSpec implements PostNormalizationAmenderInterface
+class RecordSpec
 {
     const FULL = 'FULL';
     const IDS = 'IDS';
 
     /** @var string */
     private $targetBaseUrl;
-    /** @var RequestPattern */
-    private $requestPattern;
-    /** @var string[] */
-    private $requestIds;
+    /** @var ProxiedServeEventFilters|null */
+    private $filters;
     /** @var array */
     private $captureHeaders;
     /** @var array */
@@ -32,13 +27,10 @@ class RecordSpec implements PostNormalizationAmenderInterface
     private $requestBodyPattern;
     /** @var string */
     private $outputFormat;
-    /** @var ?boolean */
-    private $allowNonProxied;
 
     /**
      * @param string $targetBaseUrl
-     * @param RequestPattern $requestPattern
-     * @param string[] $requestIds
+     * @param ProxiedServeEventFilters $filters
      * @param array $captureHeaders
      * @param array $extractBodyCriteria
      * @param boolean $persist
@@ -47,12 +39,10 @@ class RecordSpec implements PostNormalizationAmenderInterface
      * @param array $transformerParameters
      * @param array $requestBodyPattern
      * @param string $outputFormat
-     * @param boolean $allowNonProxied
      */
     public function __construct(
         $targetBaseUrl,
-        $requestPattern,
-        $requestIds,
+        $filters,
         $captureHeaders,
         $extractBodyCriteria,
         $persist,
@@ -60,12 +50,10 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $transformers,
         $transformerParameters,
         $requestBodyPattern,
-        $outputFormat,
-        $allowNonProxied
+        $outputFormat
     ) {
         $this->targetBaseUrl = $targetBaseUrl;
-        $this->requestPattern = $requestPattern;
-        $this->requestIds = $requestIds;
+        $this->filters = $filters;
         $this->captureHeaders = $captureHeaders;
         $this->extractBodyCriteria = $extractBodyCriteria;
         $this->persist = $persist;
@@ -74,28 +62,6 @@ class RecordSpec implements PostNormalizationAmenderInterface
         $this->transformerParameters = $transformerParameters;
         $this->requestBodyPattern = $requestBodyPattern;
         $this->outputFormat = $outputFormat;
-        $this->allowNonProxied = $allowNonProxied;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        if (isset($normalisedArray['requestPattern']) || isset($normalisedArray['requestIds']) || isset($normalisedArray['allowNonProxied'])) {
-            $filters = array();
-            if (isset($normalisedArray['requestPattern'])) {
-                $filters = array_merge($filters, $normalisedArray['requestPattern']);
-                unset($normalisedArray['requestPattern']);
-            }
-            if (isset($normalisedArray['requestIds'])) {
-                $filters = array_merge($filters, array('ids' => $normalisedArray['requestIds']));
-                unset($normalisedArray['requestIds']);
-            }
-            if (isset($normalisedArray['allowNonProxied'])) {
-                $filters = array_merge($filters, array('allowNonProxied' => true));
-                unset($normalisedArray['allowNonProxied']);
-            }
-            $normalisedArray['filters'] = $filters;
-        }
-        return $normalisedArray;
     }
 
     /**
@@ -107,19 +73,11 @@ class RecordSpec implements PostNormalizationAmenderInterface
     }
 
     /**
-     * @return RequestPattern
+     * @return ProxiedServeEventFilters|null
      */
-    public function getRequestPattern(): ?RequestPattern
+    public function getFilters(): ?ProxiedServeEventFilters
     {
-        return $this->requestPattern;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRequestIds(): ?array
-    {
-        return $this->requestIds;
+        return $this->filters;
     }
 
     /**
@@ -184,13 +142,5 @@ class RecordSpec implements PostNormalizationAmenderInterface
     public function getOutputFormat(): ?string
     {
         return $this->outputFormat;
-    }
-
-    /**
-     * @return ?bool
-     */
-    public function getAllowNonProxied(): ?bool
-    {
-        return $this->allowNonProxied;
     }
 }

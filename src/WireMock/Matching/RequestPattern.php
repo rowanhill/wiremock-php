@@ -5,17 +5,15 @@ namespace WireMock\Matching;
 use WireMock\Client\BasicCredentials;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\ValueMatchingStrategy;
-use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-use WireMock\Serde\ObjectToPopulateResult;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\Serializer;
 
-class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class RequestPattern
 {
     /** @var string */
     private $method;
-    /** @var UrlMatchingStrategy  */
+    /**
+     * @var UrlMatchingStrategy
+     * @serde-unwrapped
+     */
     private $urlMatchingStrategy;
     /** @var array<string, ValueMatchingStrategy> */
     private $headers;
@@ -148,21 +146,5 @@ class RequestPattern implements PostNormalizationAmenderInterface, ObjectToPopul
     public function getHost()
     {
         return $this->host;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        NormalizerUtils::inline($normalisedArray, 'urlMatchingStrategy');
-        return $normalisedArray;
-    }
-
-    static function createObjectToPopulate(array $normalisedArray, Serializer $serializer): ObjectToPopulateResult
-    {
-        $method = $normalisedArray['method'];
-        unset($normalisedArray['method']);
-
-        $urlMatchingStrategy = $serializer->denormalize($normalisedArray, UrlMatchingStrategy::class);
-
-        return new ObjectToPopulateResult(new self($method, $urlMatchingStrategy), $normalisedArray);
     }
 }

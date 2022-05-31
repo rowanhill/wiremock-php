@@ -25,6 +25,7 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy implements PostNorm
     const FIRST_DAY_OF_NEXT_YEAR = "first day of next year";
     const LAST_DAY_OF_YEAR = "last day of year";
 
+    //TODO: Use a new DateTimeMatchExpectedOffset class and a @serde-unwrapped annotation
     /** @var array|null */
     private $expectedOffset = null;
     /** @var string|null */

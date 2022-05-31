@@ -26,7 +26,7 @@ class StubMappingTest extends HamcrestTestCase
 
     private function toArray($obj)
     {
-        return $this->_serializer->normalize($obj, 'json');
+        return $this->_serializer->normalize($obj);
     }
 
     public function testRequestPatternAndResponseDefinitionAreAvailableInArray()

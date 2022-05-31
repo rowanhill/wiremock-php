@@ -4,7 +4,6 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
-use WireMock\Serde\ArrayMapUtils;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
@@ -12,7 +11,6 @@ use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\PropertyMap;
-use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Serializer;
 
@@ -27,17 +25,22 @@ class SerdeTypeClass extends SerdeTypeSingle
         $this->propertyMap = $propertyMap;
     }
 
+    /**
+     * @throws ReflectionException|SerializationException
+     */
     public function normalize($object, Serializer $serializer): array
     {
         $props = $this->propertyMap->getAllPropertiesAndArgs();
-        $result = ArrayMapUtils::array_map_assoc(
-            function($index, SerdeProp $prop) use ($object, $serializer) {
-                $value = $prop->getData($object);
-                $normalizedValue = $serializer->normalize($value);
-                return [$prop->getSerializedName(), $normalizedValue];
-            },
-            $props
-        );
+        $result = [];
+        foreach ($props as $prop) {
+            $value = $prop->getData($object);
+            $normalizedValue = $serializer->normalize($value);
+            if ($prop->unwrapped && is_array($normalizedValue)) {
+                $result = array_merge($result, $normalizedValue);
+            } else {
+                $result[$prop->getSerializedName()] = $normalizedValue;
+            }
+        }
         if ($object instanceof PostNormalizationAmenderInterface) {
             $result = forward_static_call([get_class($object), 'amendPostNormalisation'], $result, $object);
         }

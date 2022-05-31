@@ -17,19 +17,29 @@ class SerdeProp
     public $serdeType;
     /** @var string|null */
     private $serializedName;
+    /** @var bool */
+    public $unwrapped;
 
     /**
      * @param string $name
      * @param string $owningClassName
      * @param SerdeType $serdeType
      * @param string|null $serializedName
+     * @param bool $unwrapped
      */
-    public function __construct(string $name, string $owningClassName, SerdeType $serdeType, string $serializedName = null)
+    public function __construct(
+        string $name,
+        string $owningClassName,
+        SerdeType $serdeType,
+        string $serializedName = null,
+        bool $unwrapped = false
+    )
     {
         $this->name = $name;
         $this->owningClassName = $owningClassName;
         $this->serdeType = $serdeType;
         $this->serializedName = $serializedName;
+        $this->unwrapped = $unwrapped;
     }
 
     /**
@@ -37,10 +47,14 @@ class SerdeProp
      */
     public function instantiateAndConsumeData(array &$data, Serializer $serializer)
     {
-        $name = $this->getSerializedName();
-        $propData = array_key_exists($name, $data) ? $data[$name] : null;
-        unset($data[$name]);
-        return $this->serdeType->denormalize($propData, $serializer);
+        if (!$this->unwrapped) {
+            $name = $this->getSerializedName();
+            $propData = array_key_exists($name, $data) ? $data[$name] : null;
+            unset($data[$name]);
+            return $this->serdeType->denormalize($propData, $serializer);
+        } else {
+            return $this->serdeType->denormalize($data, $serializer);
+        }
     }
 
     /**

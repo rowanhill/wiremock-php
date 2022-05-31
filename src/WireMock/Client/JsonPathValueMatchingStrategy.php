@@ -20,6 +20,31 @@ class JsonPathValueMatchingStrategy extends ValueMatchingStrategy implements Pos
         $this->valueMatchingStrategy = $valueMatchingStrategy;
     }
 
+    // TODO: allow $matchingValue to be string|AdvancedPathPattern (cf WireMock class) with a @serde-unwrapped annotation
+    // TODO: might need to allow @serde-unwrapped on primitives (and just ignore)?
+    // (Can also do the same for XPathValueMatchingStrategy)
+    /*
+     * Native:
+     * {
+     *   "matchingType": "matchesJsonPath",
+     *   "matchingValue: "some-path",
+     *   "valueMatchingStrategy": { [vms] },
+     * }
+     *
+     * Parent amend:
+     * {
+     *   "valueMatchingStrategy": { [vms] },
+     *   "matchesJsonPath": "some-path"
+     * }
+     *
+     * Child amend:
+     * {
+     *   "matchesJsonPath": {
+     *     [vms],
+     *     "expression": "some-path"
+     *   }
+     * }
+     */
     public static function amendPostNormalisation(array $normalisedArray, $object): array
     {
         $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);

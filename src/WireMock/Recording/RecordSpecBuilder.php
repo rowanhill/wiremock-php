@@ -219,10 +219,18 @@ class RecordSpecBuilder
      */
     public function build()
     {
+        if ($this->requestPatternBuilder !== null || $this->requestIds !== null || $this->allowNonProxied !== null) {
+            $filters = new ProxiedServeEventFilters(
+                $this->requestPatternBuilder !== null ? $this->requestPatternBuilder->build() : null,
+                $this->requestIds !== null ? $this->requestIds : null,
+                $this->allowNonProxied !== null ? $this->allowNonProxied : null
+            );
+        } else {
+            $filters = null;
+        }
         return new RecordSpec(
             $this->targetBaseUrl,
-            $this->requestPatternBuilder ? $this->requestPatternBuilder->build() : null,
-            $this->requestIds,
+            $filters,
             $this->captureHeaders,
             $this->extractBodyCriteria,
             $this->persist,
@@ -230,8 +238,7 @@ class RecordSpecBuilder
             $this->transformers,
             $this->transformerParameters,
             $this->requestBodyPattern,
-            $this->format,
-            $this->allowNonProxied
+            $this->format
         );
     }
 }
