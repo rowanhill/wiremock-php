@@ -196,7 +196,8 @@ class SerdeTypeParser
     {
         $refProps = [];
         do {
-            $refProps = array_merge($refProps, $refClass->getProperties());
+            // Merge the props, ignoring antecedent props that have already been defined on descendants
+            $refProps = array_merge($refClass->getProperties(), $refProps);
             $refClass = $refClass->getParentClass();
         } while ($refClass !== false);
         $result = array();

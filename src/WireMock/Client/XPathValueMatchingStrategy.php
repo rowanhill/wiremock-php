@@ -2,25 +2,19 @@
 
 namespace WireMock\Client;
 
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
-
-class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
+class XPathValueMatchingStrategy extends ValueMatchingStrategy
 {
+    /** @var string|AdvancedPathPattern */
+    protected $matchingValue;
     /** @var array */
     private $xPathNamespaces = array();
-    /** @var ValueMatchingStrategy */
-    private $valueMatchingStrategy;
 
     /**
-     * XPathValueMatchingStrategy constructor.
-     * @param string $matchingValue
-     * @param ValueMatchingStrategy $valueMatchingStrategy
+     * @param string|AdvancedPathPattern $matchingValue
      */
-    public function __construct($matchingValue, $valueMatchingStrategy = null)
+    public function __construct($matchingValue)
     {
         parent::__construct('matchesXPath', $matchingValue);
-        $this->valueMatchingStrategy = $valueMatchingStrategy;
     }
 
     /**
@@ -40,42 +34,5 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy implements PostNo
     public function getXPathNamespaces(): array
     {
         return $this->xPathNamespaces;
-    }
-
-    /**
-     * @return ValueMatchingStrategy|null
-     */
-    public function getValueMatchingStrategy(): ?ValueMatchingStrategy
-    {
-        return $this->valueMatchingStrategy;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        $normalisedArray = parent::amendPostNormalisation($normalisedArray, $object);
-        if (isset($normalisedArray['valueMatchingStrategy'])) {
-            $strategy = $normalisedArray['valueMatchingStrategy'];
-            unset($normalisedArray['valueMatchingStrategy']);
-            $xPathExpression = $normalisedArray['matchesXPath'];
-            $strategy['expression'] = $xPathExpression;
-            $normalisedArray['matchesXPath'] = $strategy;
-        }
-        return $normalisedArray;
-    }
-
-    public static function amendPreDenormalisation(array $normalisedArray): array
-    {
-        $normalisedArray = parent::amendPreDenormalisation($normalisedArray);
-        $matchingValue = $normalisedArray['matchingValue'];
-        unset($normalisedArray['matchingValue']);
-        if (is_array($matchingValue)) {
-            $xPath = $matchingValue['expression'];
-            unset($matchingValue['expression']);
-            $normalisedArray['valueMatchingStrategy'] = $matchingValue;
-        } else {
-            $xPath = $matchingValue;
-        }
-        $normalisedArray['matchingValue'] = $xPath;
-        return $normalisedArray;
     }
 }
