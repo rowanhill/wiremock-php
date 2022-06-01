@@ -68,7 +68,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 ' from data of type ' . gettype($data));
         }
-        $discriminatedType = $this->getDiscriminatedType($data, $this->typeString);
+        $discriminatedType = $this->getDiscriminatedType($data);
         if (!class_exists($discriminatedType)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 " because no class named $discriminatedType exists");
@@ -100,8 +100,10 @@ class SerdeTypeClass extends SerdeTypeSingle
         return $object;
     }
 
-    private function getDiscriminatedType(&$data, string $type): string
+    private function getDiscriminatedType($data): string
     {
+        $type = $this->typeString;
+
         if (!is_subclass_of($type, MappingProvider::class)) {
             return $type;
         }
@@ -114,7 +116,7 @@ class SerdeTypeClass extends SerdeTypeSingle
 
         /** @var ClassDiscriminator $classDiscriminator */
         $classDiscriminator = forward_static_call(array($type, 'getDiscriminatorMapping'));
-        return $classDiscriminator->getDiscriminatedType($data, $type);
+        return $classDiscriminator->getDiscriminatedType($data);
     }
 
     /**
