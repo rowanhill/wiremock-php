@@ -50,15 +50,15 @@ class SerdeTypeUnion extends SerdeType
      * @throws ReflectionException
      * @throws SerializationException
      */
-    function denormalize(&$data, Serializer $serializer)
+    function denormalize(&$data, Serializer $serializer, array $path)
     {
         if ($this->classOrArraySerdeType !== null && $this->classOrArraySerdeType->canDenormalize($data)) {
-            return $this->classOrArraySerdeType->denormalize($data, $serializer);
+            return $this->classOrArraySerdeType->denormalize($data, $serializer, $path);
         }
 
         foreach ($this->primitiveSerdeTypes as $serdeType) {
             if ($serdeType->canDenormalize($data)) {
-                return $serdeType->denormalize($data, $serializer);
+                return $serdeType->denormalize($data, $serializer, $path);
             }
         }
 

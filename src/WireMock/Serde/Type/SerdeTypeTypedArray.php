@@ -26,11 +26,14 @@ class SerdeTypeTypedArray extends SerdeTypeArray
     /**
      * @throws SerializationException
      */
-    function denormalizeFromArray(array &$data, Serializer $serializer): array
+    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
     {
-        return array_map(
-            function($element) use ($serializer) { return $this->type->denormalize($element, $serializer); },
-            $data
-        );
+        $result = [];
+        foreach ($data as $index => $element) {
+            $newPath = $path;
+            $newPath[] = "[$index]";
+            $result[$index] = $this->type->denormalize($element, $serializer, $newPath);
+        }
+        return $result;
     }
 }

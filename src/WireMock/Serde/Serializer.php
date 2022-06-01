@@ -77,7 +77,7 @@ class Serializer
     public function denormalize(&$data, string $type)
     {
         $serdeType = $this->getSerdeType($type);
-        return $serdeType->denormalize($data, $this);
+        return $serdeType->denormalize($data, $this, []);
     }
 
     /**

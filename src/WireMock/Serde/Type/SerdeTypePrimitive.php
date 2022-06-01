@@ -32,7 +32,7 @@ class SerdeTypePrimitive extends SerdeTypeSingle
         }
     }
 
-    function denormalize(&$data, Serializer $serializer)
+    function denormalize(&$data, Serializer $serializer, array $path)
     {
         if (!$this->canDenormalize($data)) {
             $dataType = gettype($data);

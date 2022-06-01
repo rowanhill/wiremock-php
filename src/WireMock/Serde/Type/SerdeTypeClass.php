@@ -62,7 +62,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    public function denormalize(&$data, Serializer $serializer): ?object
+    public function denormalize(&$data, Serializer $serializer, array $path): ?object
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
@@ -82,7 +82,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             ", which was expected to be represented by a SerdeTypeClass, but is actually represented by " .
             get_class($discriminatedSerdeType));
         }
-        return $discriminatedSerdeType->instantiate($data, $serializer);
+        return $discriminatedSerdeType->instantiate($data, $serializer, $path);
     }
 
     /**
@@ -91,11 +91,11 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @return object|null
      * @throws ReflectionException|SerializationException
      */
-    private function instantiate(&$data, Serializer $serializer): ?object
+    private function instantiate(&$data, Serializer $serializer, array $path): ?object
     {
-        $object = $this->constructObject($data, $serializer);
+        $object = $this->constructObject($data, $serializer, $path);
         if ($object !== null) {
-            $this->populateObject($data, $object, $serializer);
+            $this->populateObject($data, $object, $serializer, $path);
         }
         return $object;
     }
@@ -123,7 +123,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function constructObject(array &$data, Serializer $serializer): ?object
+    private function constructObject(array &$data, Serializer $serializer, array $path): ?object
     {
         $refClass = new ReflectionClass($this->typeString);
         // Delegate to createObjectToPopulate if specified
@@ -139,8 +139,8 @@ class SerdeTypeClass extends SerdeTypeSingle
 
         // Otherwise, make the constructor args from the data and then call the constructor
         $args = array_map(
-            function($param) use (&$data, $serializer) {
-                return $param->instantiateAndConsumeData($data, $serializer);
+            function($param) use (&$data, $serializer, $path) {
+                return $param->instantiateAndConsumeData($data, $serializer, $path);
             },
             $this->propertyMap->getConstructorArgProps()
         );
@@ -152,7 +152,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function populateObject(array &$data, object $object, Serializer $serializer)
+    private function populateObject(array &$data, object $object, Serializer $serializer, array $path)
     {
         foreach ($data as $propertyName => $propertyData) {
             $serdeProp = $this->propertyMap->getPropertyBySerializedName($propertyName);
@@ -162,7 +162,7 @@ class SerdeTypeClass extends SerdeTypeSingle
                 // to still work okay, for example)
                 continue;
             }
-            $propertyValue = $serdeProp->instantiateAndConsumeData($data, $serializer);
+            $propertyValue = $serdeProp->instantiateAndConsumeData($data, $serializer, $path);
             $refClass = new ReflectionClass($serdeProp->owningClassName);
             $refProp = $refClass->getProperty($serdeProp->name);
             $refProp->setAccessible(true);

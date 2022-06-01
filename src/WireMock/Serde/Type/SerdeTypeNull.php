@@ -17,7 +17,7 @@ class SerdeTypeNull extends SerdeTypePrimitive
         return $data === null;
     }
 
-    function denormalize(&$data, Serializer $serializer)
+    function denormalize(&$data, Serializer $serializer, array $path)
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot deserialize non-null data to null');

@@ -14,5 +14,5 @@ abstract class SerdeType
     /**
      * @throws SerializationException
      */
-    abstract function denormalize(&$data, Serializer $serializer);
+    abstract function denormalize(&$data, Serializer $serializer, array $path);
 }

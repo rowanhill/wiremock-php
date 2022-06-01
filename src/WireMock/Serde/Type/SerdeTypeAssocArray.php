@@ -29,14 +29,19 @@ class SerdeTypeAssocArray extends SerdeTypeArray
         return "array<$key, $value>";
     }
 
-    function denormalizeFromArray(array &$data, Serializer $serializer): array
+    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
     {
         return ArrayMapUtils::array_map_assoc(
-            function($key, $value) use ($serializer) {
-                return [
-                    $this->keyType->denormalize($key, $serializer),
-                    $this->valueType->denormalize($value, $serializer)
-                ];
+            function($key, $value) use ($serializer, $path) {
+                $newKeyPath = $path;
+                $newKeyPath[] = "key<$key>";
+                $newKey = $this->keyType->denormalize($key, $serializer, $newKeyPath);
+
+                $newValuePath = $path;
+                $newValuePath[] = "[$key]";
+                $newValue = $this->valueType->denormalize($value, $serializer, $newValuePath);
+
+                return [$newKey, $newValue];
             },
             $data
         );

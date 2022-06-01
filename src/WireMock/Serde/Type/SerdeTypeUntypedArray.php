@@ -11,7 +11,7 @@ class SerdeTypeUntypedArray extends SerdeTypeArray
         return 'array';
     }
 
-    function denormalizeFromArray(array &$data, Serializer $serializer): array
+    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
     {
         return $data;
     }
