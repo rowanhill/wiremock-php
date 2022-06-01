@@ -105,6 +105,13 @@ class SerdeTypeClass extends SerdeTypeSingle
         if (!is_subclass_of($type, MappingProvider::class)) {
             return $type;
         }
+
+        $refType = new ReflectionClass($type);
+        $refMeth = $refType->getMethod('getDiscriminatorMapping');
+        if ($refMeth->getDeclaringClass()->name !== $refType->name) {
+            return $type;
+        }
+
         /** @var ClassDiscriminator $classDiscriminator */
         $classDiscriminator = forward_static_call(array($type, 'getDiscriminatorMapping'));
         return $classDiscriminator->getDiscriminatedType($data, $type);
