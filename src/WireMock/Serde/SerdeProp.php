@@ -2,9 +2,9 @@
 
 namespace WireMock\Serde;
 
-use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
+use WireMock\Serde\PropNaming\PropertyNamingStrategy;
 use WireMock\Serde\Type\SerdeType;
 
 class SerdeProp
@@ -15,31 +15,34 @@ class SerdeProp
     public $owningClassName;
     /** @var SerdeType */
     public $serdeType;
-    /** @var string|null */
-    private $serializedName;
+    /** @var PropertyNamingStrategy|null */
+    public $propertyNamingStrategy;
     /** @var bool */
     public $unwrapped;
+    /** @var bool */
+    public $includeInNormalizedForm;
 
     /**
      * @param string $name
      * @param string $owningClassName
      * @param SerdeType $serdeType
-     * @param string|null $serializedName
+     * @param ?PropertyNamingStrategy $propertyNamingStrategy
      * @param bool $unwrapped
      */
     public function __construct(
         string $name,
         string $owningClassName,
         SerdeType $serdeType,
-        string $serializedName = null,
+        PropertyNamingStrategy $propertyNamingStrategy = null,
         bool $unwrapped = false
     )
     {
         $this->name = $name;
         $this->owningClassName = $owningClassName;
         $this->serdeType = $serdeType;
-        $this->serializedName = $serializedName;
+        $this->propertyNamingStrategy = $propertyNamingStrategy;
         $this->unwrapped = $unwrapped;
+        $this->includeInNormalizedForm = true;
     }
 
     /**
@@ -49,7 +52,7 @@ class SerdeProp
     {
         $path[] = $this->name;
         if (!$this->unwrapped) {
-            $name = $this->getSerializedName();
+            $name = $this->name;
             $propData = array_key_exists($name, $data) ? $data[$name] : null;
             unset($data[$name]);
             return $this->serdeType->denormalize($propData, $serializer, $path);
@@ -68,8 +71,11 @@ class SerdeProp
         return $refProp->getValue($object);
     }
 
-    public function getSerializedName(): string
+    public function getSerializedName(array $data): string
     {
-        return $this->serializedName !== null ? $this->serializedName : $this->name;
+        if (!$this->propertyNamingStrategy) {
+            return $this->name;
+        }
+        return $this->propertyNamingStrategy->getSerializedName($data);
     }
 }

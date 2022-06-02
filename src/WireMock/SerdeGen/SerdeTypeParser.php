@@ -22,8 +22,9 @@ use phpDocumentor\Reflection\Types\String_;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
-use WireMock\Serde\ArrayMapUtils;
 use WireMock\Serde\PropertyMap;
+use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
+use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
 use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Type\SerdeType;
@@ -35,7 +36,9 @@ use WireMock\Serde\Type\SerdeTypePrimitive;
 use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
+use WireMock\SerdeGen\Tag\SerdeNamedByTag;
 use WireMock\SerdeGen\Tag\SerdeNameTag;
+use WireMock\SerdeGen\Tag\SerdePossibleNamesTag;
 use WireMock\SerdeGen\Tag\SerdeUnwrappedTag;
 
 class SerdeTypeParser
@@ -53,7 +56,9 @@ class SerdeTypeParser
         $this->partialSerdeTypeLookup = $partialSerdeTypeLookup;
         $this->docBlockFactory = DocBlockFactory::createInstance([
             'serde-name' => SerdeNameTag::class,
-            'serde-unwrapped' => SerdeUnwrappedTag::class
+            'serde-unwrapped' => SerdeUnwrappedTag::class,
+            'serde-named-by' => SerdeNamedByTag::class,
+            'serde-possible-names' => SerdePossibleNamesTag::class,
         ]);
     }
 
@@ -166,29 +171,16 @@ class SerdeTypeParser
         $contextFactory = new ContextFactory();
         $context = $contextFactory->createFromReflector($refClass);
 
-        $properties = $this->getProperties($refClass, $context);
-        $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $properties, $context);
+        $allProperties = $this->getProperties($refClass, $context);
+        $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $allProperties, $context);
 
-        foreach ($mandatoryConstructorParams as $param) {
-            if (array_key_exists($param->name, $properties)) {
-                unset($properties[$param->name]);
-            }
-        }
-
-        $propertiesBySerializedName = ArrayMapUtils::array_map_assoc(
-            function($key, $prop) {
-                return [$prop->getSerializedName(), $prop];
-            },
-            $properties
-        );
-
-        return new PropertyMap($mandatoryConstructorParams, $propertiesBySerializedName);
+        return new PropertyMap($mandatoryConstructorParams, $allProperties);
     }
 
     /**
      * @param ReflectionClass $refClass
      * @param Context $context
-     * @return SerdeProp[] keyed by prop name
+     * @return SerdeProp[]
      * @throws ReflectionException
      * @throws SerializationException
      */
@@ -197,7 +189,12 @@ class SerdeTypeParser
         $refProps = [];
         do {
             // Merge the props, ignoring antecedent props that have already been defined on descendants
-            $refProps = array_merge($refClass->getProperties(), $refProps);
+            foreach ($refClass->getProperties() as $refProp) {
+                if (array_key_exists($refProp->name, $refProps)) {
+                    continue;
+                }
+                $refProps[$refProp->name] = $refProp;
+            }
             $refClass = $refClass->getParentClass();
         } while ($refClass !== false);
         $result = array();
@@ -219,14 +216,34 @@ class SerdeTypeParser
 
             /** @var SerdeNameTag|null $serdeNameTag */
             $serdeNameTag = $this->getSingleTagIfPresent($docBlock, 'serde-name', $propName);
-            $serializedPropName = $serdeNameTag ? $serdeNameTag->getSerializedPropertyName() : null;
+
+            /** @var SerdeNamedByTag|null $serdeNamedByTag */
+            $serdeNamedByTag = $this->getSingleTagIfPresent($docBlock, 'serde-named-by', $propName);
+
+            /** @var SerdePossibleNamesTag|null $serdePossibleNamesTag */
+            $serdePossibleNamesTag = $this->getSingleTagIfPresent($docBlock, 'serde-possible-names', $propName);
+
+            $namingStrategy = null;
+            if ($serdeNameTag && $serdeNamedByTag) {
+                throw new SerializationException("Property $propName on $refClass has both @serde-name and @serde-named-by tags, but only (max) one is allowed");
+            } else if ($serdeNameTag) {
+                $serializedPropName = $serdeNameTag->getSerializedPropertyName();
+                $namingStrategy = new ConstantPropertyNamingStrategy($serializedPropName);
+            } elseif ($serdeNamedByTag) {
+                if ($serdePossibleNamesTag === null) {
+                    throw new SerializationException("Property $propName has @serde-named-by, so must also have @serde-possible-names");
+                }
+                $namingPropName = $serdeNamedByTag->getNamingPropertyName();
+                $possibleNamesGenerator = $serdePossibleNamesTag->getPossibleNamesGenerator();
+                $namingStrategy = new ReferencingPropertyNamingStrategy($namingPropName, $possibleNamesGenerator);
+            }
 
             /** @var SerdeUnwrappedTag|null $serdeUnwrappedTag */
             $serdeUnwrappedTag = $this->getSingleTagIfPresent($docBlock, 'serde-unwrapped', $propName);
             $unwrapped = !!$serdeUnwrappedTag;
 
-            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $serializedPropName, $unwrapped);
-            $result[$propName] = $serdeProp;
+            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $namingStrategy, $unwrapped);
+            $result[] = $serdeProp;
         }
         return $result;
     }
@@ -249,14 +266,17 @@ class SerdeTypeParser
     }
 
     /**
+     * Gets all mandatory constructor arg SerdeProps, in order, as references to elements in $properties. Adds new
+     * elements to $properties if necessary.
+     *
      * @param ReflectionClass $refClass
-     * @param SerdeProp[] $properties keyed by prop name
+     * @param SerdeProp[] $properties
      * @param Context $context
      * @return SerdeProp[] in constructor args order
      * @throws ReflectionException
      * @throws SerializationException
      */
-    private function getMandatoryConstructorParams(ReflectionClass $refClass, array $properties, Context $context): array
+    private function getMandatoryConstructorParams(ReflectionClass $refClass, array &$properties, Context $context): array
     {
         $constructor = $refClass->getConstructor();
         if ($constructor === null) {
@@ -283,15 +303,26 @@ class SerdeTypeParser
                 break;
             }
             $paramName = $refParam->getName();
-            if (array_key_exists($paramName, $properties)) {
-                $result[] = $properties[$paramName];
-            } else {
+
+            $paramExistsAsVarProp = false;
+            foreach ($properties as &$prop) {
+                if ($prop->name === $paramName) {
+                    $result[] = &$prop;
+                    $paramExistsAsVarProp = true;
+                    break;
+                }
+            }
+            if (!$paramExistsAsVarProp) {
                 $found = false;
                 foreach ($paramTags as $paramTag) {
                     if ($paramTag->getVariableName() === $paramName) {
                         $paramType = $this->resolveTypeToSerdeType($paramTag->getType());
                         $serdeProp = new SerdeProp($paramName, $refParam->getDeclaringClass()->name, $paramType);
-                        $result[] = $serdeProp;
+                        // This is a constructor-only prop, so shouldn't be included in the serialized (or therefore
+                        // denormalized) form
+                        $serdeProp->includeInNormalizedForm = false;
+                        $properties[] = $serdeProp;
+                        $result[] = &$properties[count($properties) - 1];
                         $found = true;
                         break;
                     }

@@ -4,7 +4,11 @@ namespace WireMock\Client;
 
 class XPathValueMatchingStrategy extends ValueMatchingStrategy
 {
-    /** @var string|AdvancedPathPattern */
+    /**
+     * @var string|AdvancedPathPattern
+     * @serde-named-by matchingType
+     * @serde-possible-names matchingValueNames
+     */
     protected $matchingValue;
     /** @var array */
     private $xPathNamespaces = array();

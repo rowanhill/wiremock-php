@@ -4,6 +4,7 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
@@ -11,6 +12,8 @@ use WireMock\Serde\ObjectToPopulateResult;
 use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\PropertyMap;
+use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
+use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Serializer;
 
@@ -31,15 +34,46 @@ class SerdeTypeClass extends SerdeTypeSingle
     public function normalize($object, Serializer $serializer): array
     {
         $props = $this->propertyMap->getAllPropertiesAndArgs();
-        $result = [];
+        $simpleNamedProps = [];
+        $referenceNamedProps = [];
         foreach ($props as $prop) {
+            if ($prop->includeInNormalizedForm !== true) {
+                // Skip any props that shouldn't be included in the normalized form
+                continue;
+            }
+
+            if ($prop->propertyNamingStrategy === null || $prop->propertyNamingStrategy instanceof ConstantPropertyNamingStrategy) {
+                $simpleNamedProps[] = $prop;
+            } elseif ($prop->propertyNamingStrategy instanceof ReferencingPropertyNamingStrategy) {
+                $referenceNamedProps[] = $prop;
+            } else {
+                throw new SerializationException("Unexpected prop naming strategy of type " .
+                    get_class($prop->propertyNamingStrategy));
+            }
+        }
+        $result = [];
+        // These props don't care about the data passed in to getSerializedName, which is why we do them first
+        foreach ($simpleNamedProps as $prop) {
             $value = $prop->getData($object);
             $normalizedValue = $serializer->normalize($value);
             if ($prop->unwrapped && is_array($normalizedValue)) {
                 $result = array_merge($result, $normalizedValue);
             } else {
-                $result[$prop->getSerializedName()] = $normalizedValue;
+                $result[$prop->getSerializedName($result)] = $normalizedValue;
             }
+        }
+        // These props rely on the values of other props to name themselves
+        foreach ($referenceNamedProps as $prop) {
+            $value = $prop->getData($object);
+            $normalizedValue = $serializer->normalize($value);
+            if ($prop->unwrapped) {
+                throw new SerializationException("Did not expect $prop->name to be both @serde-unwrapped and @serde-named-by");
+            }
+            /** @var ReferencingPropertyNamingStrategy $namingStrat */
+            $namingStrat = $prop->propertyNamingStrategy;
+            $namingPropName = $namingStrat->namingPropertyName;
+            $result[$prop->getSerializedName($result)] = $normalizedValue;
+            unset($result[$namingPropName]);
         }
         if ($object instanceof PostNormalizationAmenderInterface) {
             $result = forward_static_call([get_class($object), 'amendPostNormalisation'], $result, $object);
@@ -93,6 +127,8 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     private function instantiate(&$data, Serializer $serializer, array $path): ?object
     {
+        $this->reverseNamedByProps($data);
+        $this->reverseNamedProps($data);
         $object = $this->constructObject($data, $serializer, $path);
         if ($object !== null) {
             $this->populateObject($data, $object, $serializer, $path);
@@ -117,6 +153,58 @@ class SerdeTypeClass extends SerdeTypeSingle
         /** @var ClassDiscriminator $classDiscriminator */
         $classDiscriminator = forward_static_call(array($type, 'getDiscriminatorMapping'));
         return $classDiscriminator->getDiscriminatedType($data);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws SerializationException
+     */
+    private function reverseNamedByProps(array &$data)
+    {
+        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+            $namingStrategy = $prop->propertyNamingStrategy;
+            if (!($namingStrategy instanceof ReferencingPropertyNamingStrategy)) {
+                continue;
+            }
+            $possibleNamesMethodName = $namingStrategy->possibleNamesGenerator;
+            $refMethod = new ReflectionMethod($this->typeString, $possibleNamesMethodName);
+            if (!$refMethod->isStatic()) {
+                throw new SerializationException("Methods used with @serde-possible-names must be static, but $possibleNamesMethodName is not");
+            }
+            $numRequiredParams = $refMethod->getNumberOfRequiredParameters();
+            if ($numRequiredParams > 0) {
+                throw new SerializationException("Methods used with @serde-possible-names must take no required args, but $possibleNamesMethodName requires $numRequiredParams");
+            }
+            $refMethod->setAccessible(true);
+            /** @var string[] $possibleNames */
+            $possibleNames = $refMethod->invoke(null);
+
+            foreach ($possibleNames as $possibleName) {
+                if (array_key_exists($possibleName, $data)) {
+                    $value = $data[$possibleName];
+                    unset($data[$possibleName]);
+                    $data[$namingStrategy->namingPropertyName] = $possibleName;
+                    $data[$prop->name] = $value;
+                    break;
+                }
+            }
+        }
+    }
+
+    private function reverseNamedProps(array &$data)
+    {
+        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+            $namingStrategy = $prop->propertyNamingStrategy;
+            if (!($namingStrategy instanceof ConstantPropertyNamingStrategy)) {
+                continue;
+            }
+            $serializedName = $namingStrategy->getSerializedName($data);
+            if (array_key_exists($serializedName, $data)) {
+                $value = $data[$serializedName];
+                unset($data[$serializedName]);
+                $data[$prop->name] = $value;
+            }
+        }
     }
 
     /**
@@ -155,7 +243,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     private function populateObject(array &$data, object $object, Serializer $serializer, array $path)
     {
         foreach ($data as $propertyName => $propertyData) {
-            $serdeProp = $this->propertyMap->getPropertyBySerializedName($propertyName);
+            $serdeProp = $this->propertyMap->getPropertyByPhpName($propertyName);
             if ($serdeProp === null) {
                 // Ignore properties from JSON that don't exist on the PHP class
                 // (This allows for newer versions of WireMock to add new properties and older versions of wiremock-php

@@ -4,11 +4,9 @@ namespace WireMock\Client;
 
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\SerializationException;
 
-class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface, MappingProvider
+class ValueMatchingStrategy implements MappingProvider
 {
     private static $subclassByMatchingType = [
         'absent' => ValueMatchingStrategy::class,
@@ -34,10 +32,16 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
         'and' => LogicalOperatorMatchingStrategy::class,
         'or' => LogicalOperatorMatchingStrategy::class,
     ];
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private static function matchingValueNames(): array { return array_keys(self::$subclassByMatchingType); }
 
     /** @var string */
     protected $matchingType;
-    /** @var string|boolean|ValueMatchingStrategy[] */
+    /**
+     * @var string|boolean|ValueMatchingStrategy[]
+     * @serde-named-by matchingType
+     * @serde-possible-names matchingValueNames
+     */
     protected $matchingValue;
 
     public function __construct($matchingType, $matchingValue)
@@ -70,31 +74,6 @@ class ValueMatchingStrategy implements PostNormalizationAmenderInterface, PreDen
     public function or(ValueMatchingStrategy $other)
     {
         return LogicalOperatorMatchingStrategy::orAll($this, $other);
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        $matchingType = $normalisedArray['matchingType'];
-        $matchingValue = $normalisedArray['matchingValue'];
-        unset($normalisedArray['matchingType']);
-        unset($normalisedArray['matchingValue']);
-
-        $normalisedArray[$matchingType] = $matchingValue;
-
-        return $normalisedArray;
-    }
-
-    public static function amendPreDenormalisation(array $normalisedArray): array
-    {
-        foreach ($normalisedArray as $key => $value) {
-            if (isset(self::$subclassByMatchingType[$key])) {
-                $normalisedArray['matchingType'] = $key;
-                $normalisedArray['matchingValue'] = $normalisedArray[$key];
-                unset($normalisedArray[$key]);
-                break;
-            }
-        }
-        return $normalisedArray;
     }
 
     static function getDiscriminatorMapping(): ClassDiscriminator

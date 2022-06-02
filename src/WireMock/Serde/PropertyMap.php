@@ -6,7 +6,7 @@ class PropertyMap
 {
     /** @var SerdeProp[] */
     private $constructorArgProps;
-    /** @var SerdeProp[] keyed by serialized name */
+    /** @var SerdeProp[] */
     private $properties;
 
     /**
@@ -27,12 +27,31 @@ class PropertyMap
         return $this->constructorArgProps;
     }
 
-    public function getPropertyBySerializedName(string $name): ?SerdeProp
+    public function getPropertyBySerializedName(string $name, array $data): ?SerdeProp
     {
-        if (array_key_exists($name, $this->properties)) {
-            return $this->properties[$name];
-        } else {
+        $matchingProps = array_filter($this->properties, function($prop) use ($name, $data) {
+            return $prop->getSerializedName($data) === $name;
+        });
+        if (count($matchingProps) === 0) {
             return null;
+        } elseif (count($matchingProps) === 1) {
+            return current($matchingProps);
+        } else {
+            throw new SerializationException("Expected 0 or 1 prop to match serialized name $name but found multiple");
+        }
+    }
+
+    public function getPropertyByPhpName(string $name): ?SerdeProp
+    {
+        $matchingProps = array_filter($this->properties, function($prop) use ($name) {
+            return $prop->name === $name;
+        });
+        if (count($matchingProps) === 0) {
+            return null;
+        } elseif (count($matchingProps) === 1) {
+            return current($matchingProps);
+        } else {
+            throw new SerializationException("Expected 0 or 1 prop to match serialized name $name but found multiple");
         }
     }
 
@@ -41,6 +60,6 @@ class PropertyMap
      */
     public function getAllPropertiesAndArgs(): array
     {
-        return array_merge($this->constructorArgProps, $this->properties);
+        return $this->properties;
     }
 }

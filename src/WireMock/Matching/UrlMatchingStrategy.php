@@ -4,15 +4,24 @@ namespace WireMock\Matching;
 
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
 use WireMock\Serde\ObjectToPopulateResult;
-use WireMock\Serde\PostNormalizationAmenderInterface;
 use WireMock\Serde\Serializer;
 
-class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectToPopulateFactoryInterface
+class UrlMatchingStrategy implements ObjectToPopulateFactoryInterface
 {
     /** @var string */
     private $matchingType;
-    /** @var string */
+    /**
+     * @var string
+     * @serde-named-by matchingType
+     * @serde-possible-names matchingValueNames
+     */
     private $matchingValue;
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private static function matchingValueNames(): array
+    {
+        return ['url', 'urlPattern', 'urlPath', 'urlPathPattern'];
+    }
 
     /**
      * @param string $matchingType
@@ -40,23 +49,19 @@ class UrlMatchingStrategy implements PostNormalizationAmenderInterface, ObjectTo
         return $this->matchingValue;
     }
 
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        $matchingType = $normalisedArray['matchingType'];
-        $matchingValue = $normalisedArray['matchingValue'];
-        return [$matchingType => $matchingValue];
-    }
-
+    /*
+     * Object creation here follows the standard, automatic pattern _except_ if the required keys are missing it returns
+     * null, rather than throwing an exception
+     */
     static function createObjectToPopulate(array $normalisedArray, Serializer $serializer): ObjectToPopulateResult
     {
         $strategy = null;
-        foreach (array('url', 'urlPattern', 'urlPath', 'urlPathPattern') as $type) {
-            if (isset($normalisedArray[$type])) {
-                $matchingValue = $normalisedArray[$type];
-                unset($normalisedArray[$type]);
-                $strategy = new UrlMatchingStrategy($type, $matchingValue);
-                break;
-            }
+        if (array_key_exists('matchingType', $normalisedArray)) {
+            $matchingType = $normalisedArray['matchingType'];
+            $matchingValue = $normalisedArray['matchingValue'];
+            unset($normalisedArray['matchingType']);
+            unset($normalisedArray['matchingValue']);
+            $strategy = new UrlMatchingStrategy($matchingType, $matchingValue);
         }
         return new ObjectToPopulateResult($strategy, $normalisedArray);
     }
