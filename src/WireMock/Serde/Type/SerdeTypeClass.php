@@ -55,7 +55,7 @@ class SerdeTypeClass extends SerdeTypeSingle
         foreach ($simpleNamedProps as $prop) {
             $value = $prop->getData($object);
             $normalizedValue = $serializer->normalize($value);
-            if ($prop->unwrapped && is_array($normalizedValue)) {
+            if (($prop->unwrapped || $prop->catchAll) && is_array($normalizedValue)) {
                 $result = array_merge($result, $normalizedValue);
             } else {
                 $result[$prop->getSerializedName($result)] = $normalizedValue;
@@ -65,8 +65,8 @@ class SerdeTypeClass extends SerdeTypeSingle
         foreach ($referenceNamedProps as $prop) {
             $value = $prop->getData($object);
             $normalizedValue = $serializer->normalize($value);
-            if ($prop->unwrapped) {
-                throw new SerializationException("Did not expect $prop->name to be both @serde-unwrapped and @serde-named-by");
+            if ($prop->unwrapped || $prop->catchAll) {
+                throw new SerializationException("Did not expect $prop->name to be both @serde-unwrapped/@serde-catch-all and @serde-named-by");
             }
             /** @var ReferencingPropertyNamingStrategy $namingStrat */
             $namingStrat = $prop->propertyNamingStrategy;
@@ -129,6 +129,7 @@ class SerdeTypeClass extends SerdeTypeSingle
         $this->reverseNamedByProps($data);
         $this->reverseNamedProps($data);
         $this->reverseUnwrappedProps($data);
+        $this->reverseCatchAllProp($data);
         $object = $this->constructObject($data, $serializer, $path);
         if ($object !== null) {
             $this->populateObject($data, $object, $serializer, $path);
@@ -224,6 +225,27 @@ class SerdeTypeClass extends SerdeTypeSingle
             if (count($nestedData) > 0) {
                 $data[$prop->name] = $nestedData;
             }
+        }
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    private function reverseCatchAllProp(array &$data)
+    {
+        $prop = $this->propertyMap->getCatchAllProp();
+        if ($prop === null) {
+            return;
+        }
+        $remainder = [];
+        foreach ($data as $key => $value) {
+            if (!$this->propertyMap->isPhpName($key)) {
+                $remainder[$key] = $value;
+                unset($data[$key]);
+            }
+        }
+        if (count($remainder) > 0) {
+            $data[$prop->name] = $remainder;
         }
     }
 

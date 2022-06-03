@@ -22,6 +22,8 @@ class SerdeProp
     /** @var bool */
     public $unwrapped;
     /** @var bool */
+    public $catchAll;
+    /** @var bool */
     public $includeInNormalizedForm;
 
     /**
@@ -30,13 +32,15 @@ class SerdeProp
      * @param SerdeType $serdeType
      * @param ?PropertyNamingStrategy $propertyNamingStrategy
      * @param bool $unwrapped
+     * @param bool $catchAll
      */
     public function __construct(
         string $name,
         string $owningClassName,
         SerdeType $serdeType,
         PropertyNamingStrategy $propertyNamingStrategy = null,
-        bool $unwrapped = false
+        bool $unwrapped = false,
+        bool $catchAll = false
     )
     {
         $this->name = $name;
@@ -44,6 +48,7 @@ class SerdeProp
         $this->serdeType = $serdeType;
         $this->propertyNamingStrategy = $propertyNamingStrategy;
         $this->unwrapped = $unwrapped;
+        $this->catchAll = $catchAll;
         $this->includeInNormalizedForm = true;
     }
 
@@ -94,7 +99,7 @@ class SerdeProp
         if ($this->serdeType instanceof SerdeTypeClass) {
             return $this->serdeType;
         } elseif ($this->serdeType instanceof SerdeTypeUnion) {
-            if ($this->serdeType->isPotentiallyNullableClassOnly()) {
+            if ($this->serdeType->isNullableClass()) {
                 return $this->serdeType->getClassTypeOrThrow();
             }
         }

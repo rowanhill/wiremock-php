@@ -36,6 +36,7 @@ use WireMock\Serde\Type\SerdeTypePrimitive;
 use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
+use WireMock\SerdeGen\Tag\SerdeCatchAllTag;
 use WireMock\SerdeGen\Tag\SerdeNamedByTag;
 use WireMock\SerdeGen\Tag\SerdeNameTag;
 use WireMock\SerdeGen\Tag\SerdePossibleNamesTag;
@@ -243,7 +244,18 @@ class SerdeTypeParser
             $serdeUnwrappedTag = $this->getSingleTagIfPresent($docBlock, 'serde-unwrapped', $propName);
             $unwrapped = !!$serdeUnwrappedTag;
 
-            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $namingStrategy, $unwrapped);
+            /** @var SerdeCatchAllTag|null $serdeCatchAllTag */
+            $serdeCatchAllTag = $this->getSingleTagIfPresent($docBlock, 'serde-catch-all', $propName);
+            $catchAll = !!$serdeCatchAllTag;
+
+            if ($unwrapped && $catchAll) {
+                throw new SerializationException("Property $propName on $refClass has both @serde-unwrapped and @serde-catch-all, but only (max) one is allowed");
+            }
+            if ($catchAll && !($propType instanceof SerdeTypeArray || ($propType instanceof SerdeTypeUnion && $propType->isNullableArray()))) {
+                throw new SerializationException("Catch-all property $propName on $refClass must be some kind of array type, but is " . $propType->displayName());
+            }
+
+            $serdeProp = new SerdeProp($propName, $refProp->class, $propType, $namingStrategy, $unwrapped, $catchAll);
             $result[] = $serdeProp;
         }
         return $result;

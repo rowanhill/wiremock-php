@@ -2,17 +2,12 @@
 
 namespace WireMock\PostServe;
 
-use WireMock\Client\ResponseDefinitionBuilder;
-use WireMock\Fault\ChunkedDribbleDelay;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\FixedDelay;
 use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
-use WireMock\Serde\NormalizerUtils;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
 
-class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenormalizationAmenderInterface
+class WebhookDefinition
 {
     /** @var string|null */
     private $method;
@@ -26,7 +21,10 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
     private $base64Body;
     /** @var DelayDistribution|null */
     private $delay;
-    /** @var array|null */
+    /**
+     * @var array|null
+     * @serde-catch-all
+     */
     private $extraParameters = null; // TODO: Check this is accepted by WireMock
 
     public function withMethod(string $method): self
@@ -150,27 +148,5 @@ class WebhookDefinition implements PostNormalizationAmenderInterface, PreDenorma
     public function getExtraParameters(): ?array
     {
         return $this->extraParameters;
-    }
-
-    public static function amendPostNormalisation(array $normalisedArray, $object): array
-    {
-        NormalizerUtils::inline($normalisedArray, 'extraParameters');
-        return $normalisedArray;
-    }
-
-    public static function amendPreDenormalisation(array $normalisedArray): array
-    {
-        $standardPropNames = ['method', 'url', 'headers', 'body', 'base64Body', 'delay'];
-        $standardProps = [];
-        foreach ($standardPropNames as $propName) {
-            if (array_key_exists($propName, $normalisedArray)) {
-                $standardProps[$propName] = $normalisedArray[$propName];
-                unset($normalisedArray[$propName]);
-            }
-        }
-        if (!empty($normalisedArray)) {
-            $standardProps['extraParameters'] = $normalisedArray;
-        }
-        return $standardProps;
     }
 }

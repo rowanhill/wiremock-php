@@ -68,16 +68,23 @@ class SerdeTypeUnion extends SerdeType
     }
 
     /**
-     * @return bool Whether the union represents either a class type or a nullable class type (and nothing more)
+     * @return bool Whether the union represents either a nullable class type (and nothing more)
      */
-    function isPotentiallyNullableClassOnly(): bool
+    function isNullableClass(): bool
     {
         return $this->classOrArraySerdeType instanceof SerdeTypeClass &&
-            (
-                count($this->primitiveSerdeTypes) === 0 || (
-                    count($this->primitiveSerdeTypes) === 1 && $this->primitiveSerdeTypes[0] instanceof SerdeTypeNull
-                )
-            );
+            count($this->primitiveSerdeTypes) === 1 &&
+            $this->primitiveSerdeTypes[0] instanceof SerdeTypeNull;
+    }
+
+    /**
+     * @return bool Whether the union represents either a nullable class type (and nothing more)
+     */
+    function isNullableArray(): bool
+    {
+        return $this->classOrArraySerdeType instanceof SerdeTypeArray &&
+            count($this->primitiveSerdeTypes) === 1 &&
+            $this->primitiveSerdeTypes[0] instanceof SerdeTypeNull;
     }
 
     /**

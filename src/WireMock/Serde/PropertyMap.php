@@ -42,6 +42,23 @@ class PropertyMap
     }
 
     /**
+     * @throws SerializationException
+     */
+    public function getCatchAllProp(): ?SerdeProp
+    {
+        $matchingProps = array_filter($this->properties, function($prop) {
+            return $prop->catchAll;
+        });
+        if (count($matchingProps) === 0) {
+            return null;
+        } elseif (count($matchingProps) === 1) {
+            return current($matchingProps);
+        } else {
+            throw new SerializationException("Expected 0 or 1 prop to be marked @serde-catch-all but found multiple");
+        }
+    }
+
+    /**
      * @return SerdeProp[]
      */
     public function getAllPropertiesAndArgs(): array
@@ -59,5 +76,13 @@ class PropertyMap
             }
         }
         return false;
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    public function isPhpName(string $name): bool
+    {
+        return $this->getPropertyByPhpName($name) !== null;
     }
 }
