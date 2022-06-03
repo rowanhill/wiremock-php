@@ -6,10 +6,6 @@ use ReflectionClass;
 use ReflectionException;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
-use WireMock\Serde\ObjectToPopulateFactoryInterface;
-use WireMock\Serde\ObjectToPopulateResult;
-use WireMock\Serde\PostNormalizationAmenderInterface;
-use WireMock\Serde\PreDenormalizationAmenderInterface;
 use WireMock\Serde\PropertyMap;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
@@ -74,9 +70,6 @@ class SerdeTypeClass extends SerdeTypeSingle
             $result[$prop->getSerializedName($result)] = $normalizedValue;
             unset($result[$namingPropName]);
         }
-        if ($object instanceof PostNormalizationAmenderInterface) {
-            $result = forward_static_call([get_class($object), 'amendPostNormalisation'], $result, $object);
-        }
         foreach ($result as $key => $item) {
             if ((is_array($item) && empty($item)) || is_null($item)) {
                 unset($result[$key]);
@@ -105,9 +98,6 @@ class SerdeTypeClass extends SerdeTypeSingle
         if (!class_exists($discriminatedType)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 " because no class named $discriminatedType exists");
-        }
-        if (is_subclass_of($discriminatedType, PreDenormalizationAmenderInterface::class)) {
-            $data = forward_static_call([$discriminatedType, 'amendPreDenormalisation'], $data);
         }
         $discriminatedSerdeType = $serializer->getSerdeType($discriminatedType);
         if (!($discriminatedSerdeType instanceof SerdeTypeClass)) {
@@ -256,18 +246,8 @@ class SerdeTypeClass extends SerdeTypeSingle
     private function constructObject(array &$data, Serializer $serializer, array $path): ?object
     {
         $refClass = new ReflectionClass($this->typeString);
-        // Delegate to createObjectToPopulate if specified
-        if (is_subclass_of($this->typeString, ObjectToPopulateFactoryInterface::class)) {
-            /** @var ObjectToPopulateResult $result */
-            $result = forward_static_call([$this->typeString, 'createObjectToPopulate'], $data, $serializer);
-            if ($result->object == null) {
-                return null;
-            }
-            $data = $result->normalisedArray;
-            return $result->object;
-        }
 
-        // Otherwise, make the constructor args from the data and then call the constructor
+        // Make the constructor args from the data
         $args = array_map(
             function($param) use (&$data, $serializer, $path) {
                 return $param->instantiateAndConsumeData($data, $serializer, $path);
@@ -275,6 +255,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             $this->propertyMap->getConstructorArgProps()
         );
 
+        // Call the constructor with the instantiated args
         return $refClass->newInstanceArgs($args);
     }
 
