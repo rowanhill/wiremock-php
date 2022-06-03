@@ -9,13 +9,17 @@ class SerdeTypeLookup
 {
     /** @var array<string, SerdeType> */
     protected $lookup;
+    /** @var array<string, bool> */
+    protected $rootTypes;
 
     /**
      * @param array<string, SerdeType> $lookup
+     * @param array<string, bool> $rootTypes
      */
-    public function __construct(array $lookup)
+    public function __construct(array $lookup, array $rootTypes)
     {
         $this->lookup = $lookup;
+        $this->rootTypes = $rootTypes;
     }
 
     /**
@@ -28,5 +32,11 @@ class SerdeTypeLookup
             throw new SerializationException("Type $key does not exist in the serde type cache");
         }
         return $this->lookup[$key];
+    }
+
+    public function isRootType(string $type): bool
+    {
+        $key = CanonicalNameUtils::prependBackslashIfNeeded($type);
+        return array_key_exists($key, $this->rootTypes);
     }
 }

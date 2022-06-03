@@ -3,7 +3,6 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
-use ReflectionMethod;
 use WireMock\Serde\Type\SerdeType;
 use WireMock\Serde\Type\SerdeTypeClass;
 use WireMock\Serde\Type\SerdeTypeLookup;
@@ -23,26 +22,30 @@ class Serializer
      *
      * @param mixed $object object to serialize
      * @return string JSON serialization of object
-     * @throws ReflectionException
+     * @throws ReflectionException|SerializationException
      */
     public function serialize($object): string
     {
-        $normalizedArray = $this->normalize($object);
+        $normalizedArray = $this->normalize($object, true);
         return json_encode($normalizedArray, JSON_UNESCAPED_SLASHES);
     }
 
     /**
      * @param mixed $object object to normalize
+     * @param bool $isRoot whether this is the root object being normalized
      * @return mixed An associative array or a primitive type
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public function normalize($object)
+    public function normalize($object, bool $isRoot = false)
     {
         if (is_object($object)) {
             $type = get_class($object);
             /** @var SerdeTypeClass $serdeType */
             $serdeType = $this->getSerdeType($type);
+            if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
+                fwrite(STDERR, "Warning: serializing from $type, but this is not a root type\n");
+            }
             $result = $serdeType->normalize($object, $this);
         } elseif (is_array($object)) {
             $result = ArrayMapUtils::array_map_assoc(
@@ -68,15 +71,19 @@ class Serializer
     public function deserialize(string $json, string $type)
     {
         $data = json_decode($json, true);
-        return $this->denormalize($data, $type);
+        return $this->denormalize($data, $type, true);
     }
 
     /**
      * @throws SerializationException
      */
-    public function denormalize(&$data, string $type)
+    public function denormalize(&$data, string $type, bool $isRoot = false)
     {
         $serdeType = $this->getSerdeType($type);
+        if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
+            fwrite(STDERR, "Warning: deserializing to $type, but this is not a root type\n");
+            throw new \Exception();
+        }
         return $serdeType->denormalize($data, $this, []);
     }
 
