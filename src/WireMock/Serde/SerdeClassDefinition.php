@@ -2,7 +2,7 @@
 
 namespace WireMock\Serde;
 
-class PropertyMap
+class SerdeClassDefinition
 {
     /** @var SerdeProp[] */
     private $constructorArgProps;

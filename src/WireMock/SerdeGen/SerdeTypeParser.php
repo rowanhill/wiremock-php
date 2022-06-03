@@ -22,7 +22,7 @@ use phpDocumentor\Reflection\Types\String_;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
-use WireMock\Serde\PropertyMap;
+use WireMock\Serde\SerdeClassDefinition;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
 use WireMock\Serde\SerdeProp;
@@ -141,19 +141,19 @@ class SerdeTypeParser
             }
 
             if (!$this->partialSerdeTypeLookup->contains($fqsen)) {
-                // Add a SerdeTypeClass with a placeholder property map, to break cycles
-                $placeholderPropMap = new PropertyMap([], []);
-                $serdeType = new SerdeTypeClass($fqsen, $placeholderPropMap);
+                // Add a SerdeTypeClass with a placeholder class definition, to break cycles
+                $placeholderClassDef = new SerdeClassDefinition([], []);
+                $serdeType = new SerdeTypeClass($fqsen, $placeholderClassDef);
                 $this->partialSerdeTypeLookup->addSerdeType($fqsen, $serdeType);
 
-                // Create the actual property map
-                $propertyMap = $this->createPropertyMap($fqsen);
+                // Create the actual class definition
+                $classDefinition = $this->createClassDefinition($fqsen);
 
-                // Overwrite the placeholder property map on the existing SerdeTypeClass reference
+                // Overwrite the placeholder class definition on the existing SerdeTypeClass reference
                 // Because this property is private, we do so via reflection
-                $refProp = new ReflectionProperty($serdeType, 'propertyMap');
+                $refProp = new ReflectionProperty($serdeType, 'classDefinition');
                 $refProp->setAccessible(true);
-                $refProp->setValue($serdeType, $propertyMap);
+                $refProp->setValue($serdeType, $classDefinition);
             }
             return $this->partialSerdeTypeLookup->getSerdeType($fqsen);
         } elseif ($type instanceof String_) {
@@ -166,7 +166,7 @@ class SerdeTypeParser
     /**
      * @throws SerializationException|ReflectionException
      */
-    private function createPropertyMap(string $classType): PropertyMap
+    private function createClassDefinition(string $classType): SerdeClassDefinition
     {
         $refClass = new ReflectionClass($classType);
         $contextFactory = new ContextFactory();
@@ -175,7 +175,7 @@ class SerdeTypeParser
         $allProperties = $this->getProperties($refClass, $context);
         $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $allProperties, $context);
 
-        return new PropertyMap($mandatoryConstructorParams, $allProperties);
+        return new SerdeClassDefinition($mandatoryConstructorParams, $allProperties);
     }
 
     /**

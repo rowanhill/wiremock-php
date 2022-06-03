@@ -6,7 +6,7 @@ use ReflectionClass;
 use ReflectionException;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
-use WireMock\Serde\PropertyMap;
+use WireMock\Serde\SerdeClassDefinition;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
 use WireMock\Serde\SerializationException;
@@ -14,13 +14,13 @@ use WireMock\Serde\Serializer;
 
 class SerdeTypeClass extends SerdeTypeSingle
 {
-    /** @var PropertyMap */
-    private $propertyMap;
+    /** @var SerdeClassDefinition */
+    private $classDefinition;
 
-    public function __construct(string $typeString, PropertyMap $propertyMap)
+    public function __construct(string $typeString, SerdeClassDefinition $classDefinition)
     {
         parent::__construct($typeString);
-        $this->propertyMap = $propertyMap;
+        $this->classDefinition = $classDefinition;
     }
 
     /**
@@ -28,7 +28,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     public function normalize($object, Serializer $serializer): array
     {
-        $props = $this->propertyMap->getAllPropertiesAndArgs();
+        $props = $this->classDefinition->getAllPropertiesAndArgs();
         $simpleNamedProps = [];
         $referenceNamedProps = [];
         foreach ($props as $prop) {
@@ -151,7 +151,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     private function reverseNamedByProps(array &$data)
     {
-        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+        foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             $namingStrategy = $prop->propertyNamingStrategy;
             if (!($namingStrategy instanceof ReferencingPropertyNamingStrategy)) {
                 continue;
@@ -172,7 +172,7 @@ class SerdeTypeClass extends SerdeTypeSingle
 
     private function reverseNamedProps(array &$data)
     {
-        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+        foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             $namingStrategy = $prop->propertyNamingStrategy;
             if (!($namingStrategy instanceof ConstantPropertyNamingStrategy)) {
                 continue;
@@ -191,7 +191,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     private function reverseUnwrappedProps(array &$data)
     {
-        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+        foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             if (!$prop->unwrapped) {
                 continue;
             }
@@ -200,10 +200,10 @@ class SerdeTypeClass extends SerdeTypeSingle
             $nestedClassType = $prop->getPotentiallyNullableSerdeTypeClassOrThrow();
 
             // Pull out all entries in $data that matches a prop on the @serde-unwrapped prop class
-            $propMap = $nestedClassType->propertyMap;
+            $nestedClassDef = $nestedClassType->classDefinition;
             $nestedData = [];
             foreach ($data as $key => $value) {
-                if (!$propMap->isPossibleSerializedName($key)) {
+                if (!$nestedClassDef->isPossibleSerializedName($key)) {
                     continue;
                 }
                 $nestedData[$key] = $value;
@@ -223,13 +223,13 @@ class SerdeTypeClass extends SerdeTypeSingle
      */
     private function reverseCatchAllProp(array &$data)
     {
-        $prop = $this->propertyMap->getCatchAllProp();
+        $prop = $this->classDefinition->getCatchAllProp();
         if ($prop === null) {
             return;
         }
         $remainder = [];
         foreach ($data as $key => $value) {
-            if (!$this->propertyMap->isPhpName($key)) {
+            if (!$this->classDefinition->isPhpName($key)) {
                 $remainder[$key] = $value;
                 unset($data[$key]);
             }
@@ -252,7 +252,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             function($param) use (&$data, $serializer, $path) {
                 return $param->instantiateAndConsumeData($data, $serializer, $path);
             },
-            $this->propertyMap->getConstructorArgProps()
+            $this->classDefinition->getConstructorArgProps()
         );
 
         // Call the constructor with the instantiated args
@@ -266,7 +266,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     private function populateObject(array &$data, object $object, Serializer $serializer, array $path)
     {
         foreach ($data as $propertyName => $propertyData) {
-            $serdeProp = $this->propertyMap->getPropertyByPhpName($propertyName);
+            $serdeProp = $this->classDefinition->getPropertyByPhpName($propertyName);
             if ($serdeProp === null) {
                 // Ignore properties from JSON that don't exist on the PHP class
                 // (This allows for newer versions of WireMock to add new properties and older versions of wiremock-php
