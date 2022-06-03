@@ -4,8 +4,6 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
-use WireMock\Serde\ClassDiscriminator;
-use WireMock\Serde\MappingProvider;
 use WireMock\Serde\SerdeClassDefinition;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
@@ -127,23 +125,17 @@ class SerdeTypeClass extends SerdeTypeSingle
         return $object;
     }
 
+    /**
+     * @throws ReflectionException
+     */
     private function getDiscriminatedType($data): string
     {
-        $type = $this->typeString;
-
-        if (!is_subclass_of($type, MappingProvider::class)) {
-            return $type;
+        $classDiscriminator = $this->classDefinition->getDiscriminator();
+        if ($classDiscriminator === null) {
+            return $this->typeString;
+        } else {
+            return $classDiscriminator->getDiscriminatedType($data);
         }
-
-        $refType = new ReflectionClass($type);
-        $refMeth = $refType->getMethod('getDiscriminatorMapping');
-        if ($refMeth->getDeclaringClass()->name !== $refType->name) {
-            return $type;
-        }
-
-        /** @var ClassDiscriminator $classDiscriminator */
-        $classDiscriminator = forward_static_call(array($type, 'getDiscriminatorMapping'));
-        return $classDiscriminator->getDiscriminatedType($data);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace WireMock\Serde\PropNaming;
 use ReflectionException;
 use ReflectionMethod;
 use WireMock\Serde\SerializationException;
+use WireMock\Serde\StaticFactoryMethodValidator;
 
 class ReferencingPropertyNamingStrategy implements PropertyNamingStrategy
 {
@@ -25,16 +26,7 @@ class ReferencingPropertyNamingStrategy implements PropertyNamingStrategy
     {
         $this->namingPropertyName = $namingPropertyName;
         $this->possibleNamesGenerator = $possibleNamesGenerator;
-
-        // Validate the method is static and has no required params
-        $refMethod = new ReflectionMethod($possibleNamesGenerator);
-        if (!$refMethod->isStatic()) {
-            throw new SerializationException("Methods used with @serde-possible-names must be static, but $possibleNamesGenerator is not");
-        }
-        $numRequiredParams = $refMethod->getNumberOfRequiredParameters();
-        if ($numRequiredParams > 0) {
-            throw new SerializationException("Methods used with @serde-possible-names must take no required args, but $possibleNamesGenerator requires $numRequiredParams");
-        }
+        StaticFactoryMethodValidator::validate($possibleNamesGenerator);
     }
 
     function getSerializedName(array $data): string

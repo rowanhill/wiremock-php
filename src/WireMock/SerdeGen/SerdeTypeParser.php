@@ -25,6 +25,7 @@ use ReflectionProperty;
 use WireMock\Serde\SerdeClassDefinition;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
+use WireMock\Serde\SerdeClassDiscriminationInfo;
 use WireMock\Serde\SerdeProp;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\Type\SerdeType;
@@ -37,9 +38,11 @@ use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
 use WireMock\SerdeGen\Tag\SerdeCatchAllTag;
+use WireMock\SerdeGen\Tag\SerdeDiscriminateTypeTag;
 use WireMock\SerdeGen\Tag\SerdeNamedByTag;
 use WireMock\SerdeGen\Tag\SerdeNameTag;
 use WireMock\SerdeGen\Tag\SerdePossibleNamesTag;
+use WireMock\SerdeGen\Tag\SerdePossibleSubtypeTag;
 use WireMock\SerdeGen\Tag\SerdeUnwrappedTag;
 
 class SerdeTypeParser
@@ -60,6 +63,8 @@ class SerdeTypeParser
             'serde-unwrapped' => SerdeUnwrappedTag::class,
             'serde-named-by' => SerdeNamedByTag::class,
             'serde-possible-names' => SerdePossibleNamesTag::class,
+            'serde-discriminate-type' => SerdeDiscriminateTypeTag::class,
+            'serde-possible-subtype' => SerdePossibleSubtypeTag::class,
         ]);
     }
 
@@ -142,7 +147,7 @@ class SerdeTypeParser
 
             if (!$this->partialSerdeTypeLookup->contains($fqsen)) {
                 // Add a SerdeTypeClass with a placeholder class definition, to break cycles
-                $placeholderClassDef = new SerdeClassDefinition([], []);
+                $placeholderClassDef = new SerdeClassDefinition(null, [], []);
                 $serdeType = new SerdeTypeClass($fqsen, $placeholderClassDef);
                 $this->partialSerdeTypeLookup->addSerdeType($fqsen, $serdeType);
 
@@ -172,10 +177,42 @@ class SerdeTypeParser
         $contextFactory = new ContextFactory();
         $context = $contextFactory->createFromReflector($refClass);
 
+        $classDiscriminationInfo = $this->getClassDiscriminationInfo($refClass, $context);
         $allProperties = $this->getProperties($refClass, $context);
         $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $allProperties, $context);
 
-        return new SerdeClassDefinition($mandatoryConstructorParams, $allProperties);
+        return new SerdeClassDefinition($classDiscriminationInfo, $mandatoryConstructorParams, $allProperties);
+    }
+
+    /**
+     * @throws SerializationException
+     * @throws ReflectionException
+     */
+    private function getClassDiscriminationInfo(ReflectionClass $refClass, Context $context): ?SerdeClassDiscriminationInfo
+    {
+        if ($refClass->getDocComment() === false) {
+            return null;
+        }
+
+        $docBlock = $this->docBlockFactory->create($refClass, $context);
+
+        /** @var SerdeDiscriminateTypeTag|null $serdeNameTag */
+        $serdeNameTag = $this->getSingleClassTagIfPresent($docBlock, 'serde-discriminate-type', $refClass->getShortName());
+
+        if ($serdeNameTag === null) {
+            return null;
+        }
+
+        /** @var SerdePossibleSubtypeTag $subtypeTags */
+        $subtypeTags = $docBlock->getTagsByName('serde-possible-subtype');
+        foreach ($subtypeTags as $subtypeTag) {
+            // Resolve the subtype, just to make sure it's in the lookup
+            $this->resolveTypeToSerdeType($subtypeTag->getType());
+        }
+
+        return new SerdeClassDiscriminationInfo(
+            $refClass->getName() . '::' . $serdeNameTag->getDiscriminatorFactory()
+        );
     }
 
     /**
@@ -216,13 +253,13 @@ class SerdeTypeParser
             $propType = $this->resolveTypeToSerdeType($varTag->getType());
 
             /** @var SerdeNameTag|null $serdeNameTag */
-            $serdeNameTag = $this->getSingleTagIfPresent($docBlock, 'serde-name', $propName);
+            $serdeNameTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-name', $propName);
 
             /** @var SerdeNamedByTag|null $serdeNamedByTag */
-            $serdeNamedByTag = $this->getSingleTagIfPresent($docBlock, 'serde-named-by', $propName);
+            $serdeNamedByTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-named-by', $propName);
 
             /** @var SerdePossibleNamesTag|null $serdePossibleNamesTag */
-            $serdePossibleNamesTag = $this->getSingleTagIfPresent($docBlock, 'serde-possible-names', $propName);
+            $serdePossibleNamesTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-possible-names', $propName);
 
             $namingStrategy = null;
             if ($serdeNameTag && $serdeNamedByTag) {
@@ -241,11 +278,11 @@ class SerdeTypeParser
             }
 
             /** @var SerdeUnwrappedTag|null $serdeUnwrappedTag */
-            $serdeUnwrappedTag = $this->getSingleTagIfPresent($docBlock, 'serde-unwrapped', $propName);
+            $serdeUnwrappedTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-unwrapped', $propName);
             $unwrapped = !!$serdeUnwrappedTag;
 
             /** @var SerdeCatchAllTag|null $serdeCatchAllTag */
-            $serdeCatchAllTag = $this->getSingleTagIfPresent($docBlock, 'serde-catch-all', $propName);
+            $serdeCatchAllTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-catch-all', $propName);
             $catchAll = !!$serdeCatchAllTag;
 
             if ($unwrapped && $catchAll) {
@@ -264,11 +301,27 @@ class SerdeTypeParser
     /**
      * @throws SerializationException
      */
-    private function getSingleTagIfPresent(DocBlock $docBlock, string $tagName, string $propName)
+    private function getSingleClassTagIfPresent(DocBlock $docBlock, string $tagName, string $className): ?DocBlock\Tag
+    {
+        return $this->getSingleTagIfPresent($docBlock, $tagName, "class $className");
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    private function getSinglePropTagIfPresent(DocBlock $docBlock, string $tagName, string $propName): ?DocBlock\Tag
+    {
+        return $this->getSingleTagIfPresent($docBlock, $tagName, "property $propName");
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    private function getSingleTagIfPresent(DocBlock $docBlock, string $tagName, string $entity): ?DocBlock\Tag
     {
         $tags = $docBlock->getTagsByName($tagName);
         if (count($tags) > 1) {
-            throw new SerializationException("Expected 0 or 1 @$tagName tag on property $propName but "
+            throw new SerializationException("Expected 0 or 1 @$tagName tag on $entity but "
                 . ' found ' . count($tags));
         }
         if (count($tags) === 1) {

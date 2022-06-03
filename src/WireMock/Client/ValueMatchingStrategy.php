@@ -3,10 +3,19 @@
 namespace WireMock\Client;
 
 use WireMock\Serde\ClassDiscriminator;
-use WireMock\Serde\MappingProvider;
 use WireMock\Serde\SerializationException;
 
-class ValueMatchingStrategy implements MappingProvider
+/**
+ * @serde-discriminate-type getDiscriminatorMapping
+ * @serde-possible-subtype DateTimeMatchingStrategy
+ * @serde-possible-subtype EqualToMatchingStrategy
+ * @serde-possible-subtype XPathValueMatchingStrategy
+ * @serde-possible-subtype EqualToXmlMatchingStrategy
+ * @serde-possible-subtype JsonPathValueMatchingStrategy
+ * @serde-possible-subtype JsonValueMatchingStrategy
+ * @serde-possible-subtype LogicalOperatorMatchingStrategy
+ */
+class ValueMatchingStrategy
 {
     private static $subclassByMatchingType = [
         'absent' => ValueMatchingStrategy::class,
@@ -76,7 +85,8 @@ class ValueMatchingStrategy implements MappingProvider
         return LogicalOperatorMatchingStrategy::orAll($this, $other);
     }
 
-    static function getDiscriminatorMapping(): ClassDiscriminator
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private static function getDiscriminatorMapping(): ClassDiscriminator
     {
         return new class(self::$subclassByMatchingType) implements ClassDiscriminator {
             private $subclassByMatchingType;

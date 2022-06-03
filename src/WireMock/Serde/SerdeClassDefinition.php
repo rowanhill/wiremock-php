@@ -2,19 +2,25 @@
 
 namespace WireMock\Serde;
 
+use ReflectionException;
+
 class SerdeClassDefinition
 {
+    /** @var ?SerdeClassDiscriminationInfo */
+    private $classDiscriminationInfo;
     /** @var SerdeProp[] */
     private $constructorArgProps;
     /** @var SerdeProp[] */
     private $properties;
 
     /**
+     * @param SerdeClassDiscriminationInfo|null $classDiscriminationInfo
      * @param SerdeProp[] $constructorArgProps
      * @param SerdeProp[] $properties
      */
-    public function __construct(array $constructorArgProps, array $properties)
+    public function __construct(?SerdeClassDiscriminationInfo $classDiscriminationInfo, array $constructorArgProps, array $properties)
     {
+        $this->classDiscriminationInfo = $classDiscriminationInfo;
         $this->constructorArgProps = $constructorArgProps;
         $this->properties = $properties;
     }
@@ -27,6 +33,9 @@ class SerdeClassDefinition
         return $this->constructorArgProps;
     }
 
+    /**
+     * @throws SerializationException
+     */
     public function getPropertyByPhpName(string $name): ?SerdeProp
     {
         $matchingProps = array_filter($this->properties, function($prop) use ($name) {
@@ -84,5 +93,16 @@ class SerdeClassDefinition
     public function isPhpName(string $name): bool
     {
         return $this->getPropertyByPhpName($name) !== null;
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function getDiscriminator(): ?ClassDiscriminator
+    {
+        if ($this->classDiscriminationInfo === null) {
+            return null;
+        }
+        return $this->classDiscriminationInfo->getDiscriminator();
     }
 }

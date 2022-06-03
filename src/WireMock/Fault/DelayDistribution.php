@@ -4,9 +4,14 @@ namespace WireMock\Fault;
 
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\ClassDiscriminatorMapping;
-use WireMock\Serde\MappingProvider;
 
-abstract class DelayDistribution implements MappingProvider
+/**
+ * @serde-discriminate-type getDiscriminatorMapping
+ * @serde-possible-subtype LogNormal
+ * @serde-possible-subtype UniformDistribution
+ * @serde-possible-subtype FixedDelay
+ */
+abstract class DelayDistribution
 {
     /** @var string */
     private $type;
@@ -27,7 +32,8 @@ abstract class DelayDistribution implements MappingProvider
         return $this->type;
     }
 
-    public static function getDiscriminatorMapping(): ClassDiscriminator
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private static function getDiscriminatorMapping(): ClassDiscriminator
     {
         return new ClassDiscriminatorMapping('type', [
             'lognormal' => LogNormal::class,

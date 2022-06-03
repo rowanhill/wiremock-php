@@ -51,10 +51,10 @@ class WireMockSerdeGen
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public static function generateAndSaveWireMockSerdeLookup()
+    public static function generateSerializedWiremockSerdeLookup(): string
     {
         $lookup = SerdeTypeLookupFactory::createLookup(
-            // Entry point classes (i.e. explicitly passed to deserialize())
+        // Entry point classes (i.e. explicitly passed to deserialize())
             GetServeEventsResult::class,
             UnmatchedRequests::class,
             FindNearMissesResult::class,
@@ -100,7 +100,16 @@ class WireMockSerdeGen
         );
 
         // Use native PHP serialization to create a string of binary data
-        $lookupSerialized = serialize($lookup);
+        return serialize($lookup);
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws SerializationException
+     */
+    public static function generateAndSaveWireMockSerdeLookup()
+    {
+        $lookupSerialized = self::generateSerializedWiremockSerdeLookup();
 
         file_put_contents(
             __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Serde' . DIRECTORY_SEPARATOR . 'lookup',
