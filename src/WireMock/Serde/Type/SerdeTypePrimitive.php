@@ -37,7 +37,8 @@ class SerdeTypePrimitive extends SerdeTypeSingle
         if (!$this->canDenormalize($data)) {
             $dataType = gettype($data);
             $targetType = $this->displayName();
-            throw new SerializationException("Cannot deserialize data of type $dataType to $targetType");
+            $joinedPath = join('.', $path);
+            throw new SerializationException("Cannot deserialize data of type $dataType to $targetType ($joinedPath)");
         }
         return $data;
     }
