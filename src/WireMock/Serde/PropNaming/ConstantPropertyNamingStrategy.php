@@ -16,4 +16,12 @@ class ConstantPropertyNamingStrategy implements PropertyNamingStrategy
     {
         return $this->name;
     }
+
+    /**
+     * @return string[]
+     */
+    function getPossibleSerializedNames(): array
+    {
+        return [$this->name];
+    }
 }

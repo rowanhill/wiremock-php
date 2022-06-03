@@ -27,20 +27,6 @@ class PropertyMap
         return $this->constructorArgProps;
     }
 
-    public function getPropertyBySerializedName(string $name, array $data): ?SerdeProp
-    {
-        $matchingProps = array_filter($this->properties, function($prop) use ($name, $data) {
-            return $prop->getSerializedName($data) === $name;
-        });
-        if (count($matchingProps) === 0) {
-            return null;
-        } elseif (count($matchingProps) === 1) {
-            return current($matchingProps);
-        } else {
-            throw new SerializationException("Expected 0 or 1 prop to match serialized name $name but found multiple");
-        }
-    }
-
     public function getPropertyByPhpName(string $name): ?SerdeProp
     {
         $matchingProps = array_filter($this->properties, function($prop) use ($name) {
@@ -61,5 +47,17 @@ class PropertyMap
     public function getAllPropertiesAndArgs(): array
     {
         return $this->properties;
+    }
+
+    public function isPossibleSerializedName(string $name): bool
+    {
+        foreach ($this->properties as $prop) {
+            foreach ($prop->getPossibleSerializedNames() as $possibleName) {
+                if ($name === $possibleName) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

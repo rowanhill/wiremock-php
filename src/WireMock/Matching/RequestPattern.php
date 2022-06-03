@@ -11,7 +11,7 @@ class RequestPattern
     /** @var string */
     private $method;
     /**
-     * @var UrlMatchingStrategy
+     * @var UrlMatchingStrategy|null
      * @serde-unwrapped
      */
     private $urlMatchingStrategy;

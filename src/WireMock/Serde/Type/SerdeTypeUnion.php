@@ -66,4 +66,28 @@ class SerdeTypeUnion extends SerdeType
         $targetType = $this->displayName();
         throw new SerializationException("Cannot denormalize data of type $dataType to $targetType");
     }
+
+    /**
+     * @return bool Whether the union represents either a class type or a nullable class type (and nothing more)
+     */
+    function isPotentiallyNullableClassOnly(): bool
+    {
+        return $this->classOrArraySerdeType instanceof SerdeTypeClass &&
+            (
+                count($this->primitiveSerdeTypes) === 0 || (
+                    count($this->primitiveSerdeTypes) === 1 && $this->primitiveSerdeTypes[0] instanceof SerdeTypeNull
+                )
+            );
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    function getClassTypeOrThrow(): SerdeTypeClass
+    {
+        if (!($this->classOrArraySerdeType instanceof SerdeTypeClass)) {
+            throw new SerializationException('Expected a SerdeTypeClass but was ' . get_class($this->classOrArraySerdeType));
+        }
+        return $this->classOrArraySerdeType;
+    }
 }

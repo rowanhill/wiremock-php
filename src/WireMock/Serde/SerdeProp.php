@@ -6,6 +6,8 @@ use ReflectionException;
 use ReflectionProperty;
 use WireMock\Serde\PropNaming\PropertyNamingStrategy;
 use WireMock\Serde\Type\SerdeType;
+use WireMock\Serde\Type\SerdeTypeClass;
+use WireMock\Serde\Type\SerdeTypeUnion;
 
 class SerdeProp
 {
@@ -51,14 +53,10 @@ class SerdeProp
     public function instantiateAndConsumeData(array &$data, Serializer $serializer, array $path)
     {
         $path[] = $this->name;
-        if (!$this->unwrapped) {
-            $name = $this->name;
-            $propData = array_key_exists($name, $data) ? $data[$name] : null;
-            unset($data[$name]);
-            return $this->serdeType->denormalize($propData, $serializer, $path);
-        } else {
-            return $this->serdeType->denormalize($data, $serializer, $path);
-        }
+        $name = $this->name;
+        $propData = array_key_exists($name, $data) ? $data[$name] : null;
+        unset($data[$name]);
+        return $this->serdeType->denormalize($propData, $serializer, $path);
     }
 
     /**
@@ -77,5 +75,29 @@ class SerdeProp
             return $this->name;
         }
         return $this->propertyNamingStrategy->getSerializedName($data);
+    }
+
+    public function getPossibleSerializedNames(): array
+    {
+        if ($this->propertyNamingStrategy !== null) {
+            return $this->propertyNamingStrategy->getPossibleSerializedNames();
+        } else {
+            return [$this->name];
+        }
+    }
+
+    /**
+     * @return SerdeTypeClass
+     * @throws SerializationException
+     */
+    public function getPotentiallyNullableSerdeTypeClassOrThrow(): SerdeTypeClass {
+        if ($this->serdeType instanceof SerdeTypeClass) {
+            return $this->serdeType;
+        } elseif ($this->serdeType instanceof SerdeTypeUnion) {
+            if ($this->serdeType->isPotentiallyNullableClassOnly()) {
+                return $this->serdeType->getClassTypeOrThrow();
+            }
+        }
+        throw new SerializationException("Cannot get SerdeTypeClass for prop $this->name because it is of type " . $this->serdeType->displayName());
     }
 }

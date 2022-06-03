@@ -235,7 +235,8 @@ class SerdeTypeParser
                 }
                 $namingPropName = $serdeNamedByTag->getNamingPropertyName();
                 $possibleNamesGenerator = $serdePossibleNamesTag->getPossibleNamesGenerator();
-                $namingStrategy = new ReferencingPropertyNamingStrategy($namingPropName, $possibleNamesGenerator);
+                $fqMethodName = $refProp->class.'::'.$possibleNamesGenerator;
+                $namingStrategy = new ReferencingPropertyNamingStrategy($namingPropName, $fqMethodName);
             }
 
             /** @var SerdeUnwrappedTag|null $serdeUnwrappedTag */

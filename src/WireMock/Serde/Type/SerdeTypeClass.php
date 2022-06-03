@@ -4,7 +4,6 @@ namespace WireMock\Serde\Type;
 
 use ReflectionClass;
 use ReflectionException;
-use ReflectionMethod;
 use WireMock\Serde\ClassDiscriminator;
 use WireMock\Serde\MappingProvider;
 use WireMock\Serde\ObjectToPopulateFactoryInterface;
@@ -129,6 +128,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     {
         $this->reverseNamedByProps($data);
         $this->reverseNamedProps($data);
+        $this->reverseUnwrappedProps($data);
         $object = $this->constructObject($data, $serializer, $path);
         if ($object !== null) {
             $this->populateObject($data, $object, $serializer, $path);
@@ -157,7 +157,6 @@ class SerdeTypeClass extends SerdeTypeSingle
 
     /**
      * @throws ReflectionException
-     * @throws SerializationException
      */
     private function reverseNamedByProps(array &$data)
     {
@@ -166,18 +165,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             if (!($namingStrategy instanceof ReferencingPropertyNamingStrategy)) {
                 continue;
             }
-            $possibleNamesMethodName = $namingStrategy->possibleNamesGenerator;
-            $refMethod = new ReflectionMethod($this->typeString, $possibleNamesMethodName);
-            if (!$refMethod->isStatic()) {
-                throw new SerializationException("Methods used with @serde-possible-names must be static, but $possibleNamesMethodName is not");
-            }
-            $numRequiredParams = $refMethod->getNumberOfRequiredParameters();
-            if ($numRequiredParams > 0) {
-                throw new SerializationException("Methods used with @serde-possible-names must take no required args, but $possibleNamesMethodName requires $numRequiredParams");
-            }
-            $refMethod->setAccessible(true);
-            /** @var string[] $possibleNames */
-            $possibleNames = $refMethod->invoke(null);
+            $possibleNames = $namingStrategy->getPossibleSerializedNames();
 
             foreach ($possibleNames as $possibleName) {
                 if (array_key_exists($possibleName, $data)) {
@@ -203,6 +191,38 @@ class SerdeTypeClass extends SerdeTypeSingle
                 $value = $data[$serializedName];
                 unset($data[$serializedName]);
                 $data[$prop->name] = $value;
+            }
+        }
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    private function reverseUnwrappedProps(array &$data)
+    {
+        foreach ($this->propertyMap->getAllPropertiesAndArgs() as $prop) {
+            if (!$prop->unwrapped) {
+                continue;
+            }
+
+            // Find the SerdeClassType we want to "rewrap" to (including the case where it's nullable)
+            $nestedClassType = $prop->getPotentiallyNullableSerdeTypeClassOrThrow();
+
+            // Pull out all entries in $data that matches a prop on the @serde-unwrapped prop class
+            $propMap = $nestedClassType->propertyMap;
+            $nestedData = [];
+            foreach ($data as $key => $value) {
+                if (!$propMap->isPossibleSerializedName($key)) {
+                    continue;
+                }
+                $nestedData[$key] = $value;
+                unset($data[$key]);
+            }
+
+            // If we found anything, add all those matched props under the @serde-unwrapped prop's name. If we didn't
+            // find anything, leave the key missing in $data - this allows for the @serde-unwrapped prop to be null
+            if (count($nestedData) > 0) {
+                $data[$prop->name] = $nestedData;
             }
         }
     }
