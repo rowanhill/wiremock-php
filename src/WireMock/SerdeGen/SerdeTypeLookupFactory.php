@@ -16,8 +16,9 @@ class SerdeTypeLookupFactory
     {
         $partialLookup = new PartialSerdeTypeLookup();
         $canonicalTypes = array_map(function($fqn) {
-            return CanonicalNameUtils::prependBackslashIfNeeded($fqn);
+            return CanonicalNameUtils::stripLeadingBackslashIfNeeded($fqn);
         }, $types);
+        $partialLookup->addRootTypes(...$canonicalTypes);
         $serdeTypeParser = new SerdeTypeParser($partialLookup);
         foreach ($canonicalTypes as $type) {
             // This creates the SerdeType and adds it to the lookup as a side-effect

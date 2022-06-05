@@ -27,7 +27,7 @@ class SerdeTypeLookup
      */
     public function getSerdeType(string $type): SerdeType
     {
-        $key = CanonicalNameUtils::prependBackslashIfNeeded($type);
+        $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
         if (!array_key_exists($key, $this->lookup)) {
             throw new SerializationException("Type $key does not exist in the serde type cache");
         }
@@ -36,7 +36,7 @@ class SerdeTypeLookup
 
     public function isRootType(string $type): bool
     {
-        $key = CanonicalNameUtils::prependBackslashIfNeeded($type);
+        $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
         return array_key_exists($key, $this->rootTypes);
     }
 }

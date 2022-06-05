@@ -77,7 +77,7 @@ class SerdeTypeParser
         $typeResolver = new TypeResolver();
         $resolvedType = $typeResolver->resolve($type, $context);
 
-        return $this->resolveTypeToSerdeType($resolvedType);
+        return $this->resolveTypeToSerdeType($resolvedType, true);
     }
 
     /**
@@ -85,32 +85,53 @@ class SerdeTypeParser
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function resolveTypeToSerdeType(Type $type): SerdeType
+    private function resolveTypeToSerdeType(Type $type, bool $forceRootType = false): SerdeType
     {
+        $isRootType = $forceRootType || $this->partialSerdeTypeLookup->isRootType($type->__toString());
         if ($type instanceof Array_) {
             $typeString = $type->__toString();
             if ($typeString === 'array') {
-                return new SerdeTypeUntypedArray();
+                return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                    'array',
+                    new SerdeTypeUntypedArray(),
+                    $isRootType
+                );
             }
-            $valueSerdeType = $this->resolveTypeToSerdeType($type->getValueType());
+            // TODO: Handle circular references involving arrays
+            // When array of a type is a root type, the type of the array's elements is still considered a root type
+            $valueSerdeType = $this->resolveTypeToSerdeType($type->getValueType(), $isRootType);
             if (substr($typeString, -2) === '[]') {
-                return new SerdeTypeTypedArray($valueSerdeType);
+                return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                    $typeString,
+                    new SerdeTypeTypedArray($valueSerdeType),
+                    $isRootType
+                );
             }
-            $keySerdeType = $this->resolveTypeToSerdeType($type->getKeyType());
+            $keySerdeType = $this->resolveTypeToSerdeType($type->getKeyType(), $isRootType);
             if (!($keySerdeType instanceof SerdeTypePrimitive)) {
                 throw new SerializationException(
                     'Expected associative array to have primitive key type, but found' .
                         $keySerdeType->displayName()
                 );
             }
-            return new SerdeTypeAssocArray($keySerdeType, $valueSerdeType);
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                $typeString,
+                new SerdeTypeAssocArray($keySerdeType, $valueSerdeType),
+                $isRootType
+            );
         } elseif ($type instanceof Boolean) {
-            return new SerdeTypePrimitive('bool');
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                'bool',
+                new SerdeTypePrimitive('bool'),
+                $isRootType
+            );
         } elseif ($type instanceof Compound) {
+            // TODO: Handle circular references involving unions
             $primitives = [];
             $nonPrimitive = null;
             foreach ($type->getIterator() as $subtype) {
-                $serdeSubtype = $this->resolveTypeToSerdeType($subtype);
+                // Subtypes in a union are considered root types if the union is a root type
+                $serdeSubtype = $this->resolveTypeToSerdeType($subtype, $isRootType);
                 if ($serdeSubtype instanceof SerdeTypePrimitive) {
                     $primitives[] = $serdeSubtype;
                 } elseif (($serdeSubtype instanceof SerdeTypeClass) || ($serdeSubtype instanceof SerdeTypeArray)) {
@@ -123,22 +144,45 @@ class SerdeTypeParser
                     throw new SerializationException("Serde of union types only supported for primitives, classes, and arrays: $type");
                 }
             }
-            return new SerdeTypeUnion($primitives, $nonPrimitive);
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                $type->__toString(),
+                new SerdeTypeUnion($primitives, $nonPrimitive),
+                $isRootType
+            );
         } elseif ($type instanceof Float_) {
-            return new SerdeTypePrimitive('float');
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                'float',
+                new SerdeTypePrimitive('float'),
+                $isRootType
+            );
         } elseif ($type instanceof Integer) {
-            return new SerdeTypePrimitive('int');
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                'int',
+                new SerdeTypePrimitive('int'),
+                $isRootType
+            );
         } elseif ($type instanceof Null_) {
-            return new SerdeTypeNull();
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                'null',
+                new SerdeTypeNull(),
+                $isRootType
+            );
         } elseif ($type instanceof Nullable) {
-            $innerType = $this->resolveTypeToSerdeType($type->getActualType());
+            // TODO: Handle circular references involving nullables
+            // The inner type of nullable types are root types if the nullable type is a root type
+            $innerType = $this->resolveTypeToSerdeType($type->getActualType(), $isRootType);
             if ($innerType instanceof SerdeTypePrimitive) {
-                return new SerdeTypeUnion([$innerType, new SerdeTypeNull()], null);
+                $unionType = new SerdeTypeUnion([$innerType, new SerdeTypeNull()], null);
             } elseif ($innerType instanceof SerdeTypeClass || $innerType instanceof SerdeTypeArray) {
-                return new SerdeTypeUnion([new SerdeTypeNull()], $innerType);
+                $unionType = new SerdeTypeUnion([new SerdeTypeNull()], $innerType);
             } else {
                 throw new SerializationException('Unexpected nullable type: ' . $innerType->displayName());
             }
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                $type->__toString(),
+                $unionType,
+                $isRootType
+            );
         } elseif ($type instanceof Object_) {
             $fqsen = $type->getFqsen();
             if ($fqsen === null) {
@@ -149,10 +193,10 @@ class SerdeTypeParser
                 // Add a SerdeTypeClass with a placeholder class definition, to break cycles
                 $placeholderClassDef = new SerdeClassDefinition(null, [], []);
                 $serdeType = new SerdeTypeClass($fqsen, $placeholderClassDef);
-                $this->partialSerdeTypeLookup->addSerdeType($fqsen, $serdeType);
+                $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded($fqsen, $serdeType, $isRootType);
 
                 // Create the actual class definition
-                $classDefinition = $this->createClassDefinition($fqsen);
+                $classDefinition = $this->createClassDefinition($fqsen, $isRootType);
 
                 // Overwrite the placeholder class definition on the existing SerdeTypeClass reference
                 // Because this property is private, we do so via reflection
@@ -162,7 +206,11 @@ class SerdeTypeParser
             }
             return $this->partialSerdeTypeLookup->getSerdeType($fqsen);
         } elseif ($type instanceof String_) {
-            return new SerdeTypePrimitive('string');
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                'string',
+                new SerdeTypePrimitive('string'),
+                $isRootType
+            );
         } else {
             throw new SerializationException('Unexpected type ' . get_class($type) . ": $type");
         }
@@ -171,13 +219,13 @@ class SerdeTypeParser
     /**
      * @throws SerializationException|ReflectionException
      */
-    private function createClassDefinition(string $classType): SerdeClassDefinition
+    private function createClassDefinition(string $classType, bool $isRootType): SerdeClassDefinition
     {
         $refClass = new ReflectionClass($classType);
         $contextFactory = new ContextFactory();
         $context = $contextFactory->createFromReflector($refClass);
 
-        $classDiscriminationInfo = $this->getClassDiscriminationInfo($refClass, $context);
+        $classDiscriminationInfo = $this->getClassDiscriminationInfo($refClass, $context, $isRootType);
         $allProperties = $this->getProperties($refClass, $context);
         $mandatoryConstructorParams = $this->getMandatoryConstructorParams($refClass, $allProperties, $context);
 
@@ -188,7 +236,7 @@ class SerdeTypeParser
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function getClassDiscriminationInfo(ReflectionClass $refClass, Context $context): ?SerdeClassDiscriminationInfo
+    private function getClassDiscriminationInfo(ReflectionClass $refClass, Context $context, bool $isRootType): ?SerdeClassDiscriminationInfo
     {
         if ($refClass->getDocComment() === false) {
             return null;
@@ -207,7 +255,8 @@ class SerdeTypeParser
         $subtypeTags = $docBlock->getTagsByName('serde-possible-subtype');
         foreach ($subtypeTags as $subtypeTag) {
             // Resolve the subtype, just to make sure it's in the lookup
-            $this->resolveTypeToSerdeType($subtypeTag->getType());
+            // Possible subtypes of a root type are considered root types as well
+            $this->resolveTypeToSerdeType($subtypeTag->getType(), $isRootType);
         }
 
         return new SerdeClassDiscriminationInfo(

@@ -3,6 +3,8 @@
 namespace WireMock\SerdeGen;
 
 
+use WireMock\Serde\CanonicalNameUtils;
+use WireMock\Serde\SerializationException;
 use WireMock\Serde\Type\SerdeType;
 use WireMock\Serde\Type\SerdeTypeLookup;
 
@@ -13,14 +15,37 @@ class PartialSerdeTypeLookup extends SerdeTypeLookup
         parent::__construct([], []);
     }
 
-    public function addSerdeType(string $type, SerdeType $serdeType)
+    public function addRootTypes(...$types)
     {
-        $this->lookup[$type] = $serdeType;
-        $this->rootTypes[$type] = true;
+        foreach ($types as $type) {
+            $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
+            $this->rootTypes[$key] = true;
+        }
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    public function addSerdeTypeIfNeeded(string $type, SerdeType $serdeType, bool $isRootType): SerdeType
+    {
+        if ($isRootType) {
+            $this->addRootTypes($type);
+        }
+        if (!$this->contains($type)) {
+            $this->addSerdeType($type, $serdeType);
+        }
+        return $this->getSerdeType($type);
+    }
+
+    private function addSerdeType(string $type, SerdeType $serdeType)
+    {
+        $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
+        $this->lookup[$key] = $serdeType;
     }
 
     public function contains(string $type): bool
     {
-        return isset($this->lookup[$type]);
+        $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
+        return isset($this->lookup[$key]);
     }
 }
