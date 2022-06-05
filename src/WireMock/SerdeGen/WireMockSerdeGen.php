@@ -9,7 +9,10 @@ use WireMock\Client\FindRequestsResult;
 use WireMock\Client\GetScenariosResult;
 use WireMock\Client\GetServeEventsResult;
 use WireMock\Client\ListStubMappingsResult;
+use WireMock\Client\LoggedRequest;
 use WireMock\Client\UnmatchedRequests;
+use WireMock\Client\ValueMatchingStrategy;
+use WireMock\Matching\RequestPattern;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpec;
 use WireMock\Recording\SnapshotRecordResult;
@@ -38,7 +41,20 @@ class WireMockSerdeGen
             FindRequestsResult::class,
             SnapshotRecordResult::class,
             RecordSpec::class,
-            StubImport::class
+            StubImport::class,
+
+            // findStubsByMetadata
+            // removeEventsByStubMetadata
+            ValueMatchingStrategy::class,
+
+            // findNearMissesFor
+            LoggedRequest::class,
+
+            // verify
+            // findNearMissesFor
+            // findAll
+            // removeServeEvents
+            RequestPattern::class
         );
 
         // Use native PHP serialization to create a string of binary data
