@@ -119,12 +119,6 @@ class SerdeTypeParser
                 new SerdeTypeAssocArray($keySerdeType, $valueSerdeType),
                 $isRootType
             );
-        } elseif ($type instanceof Boolean) {
-            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
-                'bool',
-                new SerdeTypePrimitive('bool'),
-                $isRootType
-            );
         } elseif ($type instanceof Compound) {
             // TODO: Handle circular references involving unions
             $primitives = [];
@@ -147,24 +141,6 @@ class SerdeTypeParser
             return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
                 $type->__toString(),
                 new SerdeTypeUnion($primitives, $nonPrimitive),
-                $isRootType
-            );
-        } elseif ($type instanceof Float_) {
-            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
-                'float',
-                new SerdeTypePrimitive('float'),
-                $isRootType
-            );
-        } elseif ($type instanceof Integer) {
-            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
-                'int',
-                new SerdeTypePrimitive('int'),
-                $isRootType
-            );
-        } elseif ($type instanceof Null_) {
-            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
-                'null',
-                new SerdeTypeNull(),
                 $isRootType
             );
         } elseif ($type instanceof Nullable) {
@@ -205,14 +181,30 @@ class SerdeTypeParser
                 $refProp->setValue($serdeType, $classDefinition);
             }
             return $this->partialSerdeTypeLookup->getSerdeType($fqsen);
-        } elseif ($type instanceof String_) {
+        } elseif ($type instanceof Null_) {
             return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
-                'string',
-                new SerdeTypePrimitive('string'),
+                'null',
+                new SerdeTypeNull(),
                 $isRootType
             );
         } else {
-            throw new SerializationException('Unexpected type ' . get_class($type) . ": $type");
+            // $type is a primitive, or unsupported
+            if ($type instanceof Boolean) {
+                $primitiveType = 'bool';
+            } elseif ($type instanceof Float_) {
+                $primitiveType = 'float';
+            } elseif ($type instanceof Integer) {
+                $primitiveType = 'int';
+            } elseif ($type instanceof String_) {
+                $primitiveType = 'string';
+            } else {
+                throw new SerializationException('Unexpected type ' . get_class($type) . ": $type");
+            }
+            return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
+                $primitiveType,
+                new SerdeTypePrimitive($primitiveType),
+                $isRootType
+            );
         }
     }
 
