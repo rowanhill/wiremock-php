@@ -82,7 +82,6 @@ class Serializer
         $serdeType = $this->getSerdeType($type);
         if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
             fwrite(STDERR, "Warning: deserializing to $type, but this is not a root type\n");
-            throw new \Exception();
         }
         return $serdeType->denormalize($data, $this, []);
     }
