@@ -181,7 +181,7 @@ class WireMock
     }
 
     /**
-     * @param LoggedRequest|RequestPattern $loggedRequestOrPattern
+     * @param LoggedRequest|RequestPatternBuilder $loggedRequestOrPattern
      * @return FindNearMissesResult
      * @throws \Exception
      */
