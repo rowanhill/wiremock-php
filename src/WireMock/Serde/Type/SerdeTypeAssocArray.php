@@ -22,6 +22,15 @@ class SerdeTypeAssocArray extends SerdeTypeArray
         $this->valueType = $valueType;
     }
 
+    static function setKeyValueTypes(
+        SerdeTypeAssocArray $arrayType,
+        SerdeTypePrimitive $keySerdeType,
+        SerdeType $valueSerdeType
+    ) {
+        $arrayType->keyType = $keySerdeType;
+        $arrayType->valueType = $valueSerdeType;
+    }
+
     function displayName(): string
     {
         $key = $this->keyType->displayName();

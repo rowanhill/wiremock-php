@@ -18,6 +18,11 @@ class SerdeTypeTypedArray extends SerdeTypeArray
         $this->type = $type;
     }
 
+    static function setInnerType(SerdeTypeTypedArray $serdeType, SerdeType $type)
+    {
+        $serdeType->type = $type;
+    }
+
     public function displayName(): string
     {
         return $this->type->displayName() . '[]';

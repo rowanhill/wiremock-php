@@ -15,6 +15,11 @@ class SerdeTypeClass extends SerdeTypeSingle
     /** @var SerdeClassDefinition */
     private $classDefinition;
 
+    static function setClassDefinition(SerdeTypeClass $serdeType, SerdeClassDefinition $classDefinition)
+    {
+        $serdeType->classDefinition = $classDefinition;
+    }
+
     public function __construct(string $typeString, SerdeClassDefinition $classDefinition)
     {
         parent::__construct($typeString);
