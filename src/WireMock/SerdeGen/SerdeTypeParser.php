@@ -7,7 +7,6 @@ use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Compound;
-use phpDocumentor\Reflection\Types\Context;
 use phpDocumentor\Reflection\Types\Float_;
 use phpDocumentor\Reflection\Types\Integer;
 use phpDocumentor\Reflection\Types\Null_;
@@ -41,13 +40,12 @@ class SerdeTypeParser
     }
 
     /**
-     * @param $context Context|null
      * @throws SerializationException|ReflectionException
      */
-    public function parseTypeString(string $type, Context $context = null): SerdeType
+    public function parseTypeString(string $type): SerdeType
     {
         $typeResolver = new TypeResolver();
-        $resolvedType = $typeResolver->resolve($type, $context);
+        $resolvedType = $typeResolver->resolve($type);
 
         return $this->resolveTypeToSerdeType($resolvedType, true);
     }
