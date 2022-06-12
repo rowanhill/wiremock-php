@@ -1,9 +1,13 @@
 <?php
 require_once('../vendor/autoload.php');
-require_once './WireMock/HamcrestTestCase.php';
-require_once './WireMock/Integration/WireMockIntegrationTest.php';
-require_once './WireMock/Integration/MappingsAssertionFunctions.php';
-require_once './WireMock/Integration/TestClient.php';
+
+require_once 'WireMock/Integration/MappingsAssertionFunctions.php';
+
+// Enable Composer autoloading of test classes
+$classLoader = new \Composer\Autoload\ClassLoader();
+$classLoader->add("WireMock\\", __DIR__, true);
+$classLoader->register();
+
 \Hamcrest\Util::registerGlobalFunctions();
 \Phake::setClient(Phake::CLIENT_PHPUNIT8);
 
