@@ -200,6 +200,18 @@ class SerdeTypeParserTest extends HamcrestTestCase
         $this->parser->parseTypeString('array|int[]');
     }
 
+    public function testParsingQuestionMarkNullableUnionIsNotSupported()
+    {
+        $this->expectErrorMessage('Nullable unions (using ?) are currently unsupported');
+        $this->parser->parseTypeString('?(int|string)');
+    }
+
+    public function testParsingQuestionMarkNullableNullIsNotSupported()
+    {
+        $this->expectErrorMessage('Unexpected nullable type');
+        $this->parser->parseTypeString('?null');
+    }
+
     public function testParsingArrayOfUnion()
     {
         $serdeType = $this->parser->parseTypeString('(int|string)[]');

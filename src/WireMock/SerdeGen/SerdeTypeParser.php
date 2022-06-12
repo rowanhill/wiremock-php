@@ -7,6 +7,7 @@ use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Compound;
+use phpDocumentor\Reflection\Types\Expression;
 use phpDocumentor\Reflection\Types\False_;
 use phpDocumentor\Reflection\Types\Float_;
 use phpDocumentor\Reflection\Types\Integer;
@@ -83,6 +84,9 @@ class SerdeTypeParser
                 new SerdeTypeNull(),
                 $isRootType
             );
+        } elseif ($type instanceof Expression) {
+            // Expression types are wrapped in (brackets) - we simply unwrap them and continue
+            return $this->resolveTypeToSerdeType($type->getValueType(), $isRootType);
         } else {
             // $type is a primitive, or unsupported
             if ($type instanceof Boolean) {
@@ -213,12 +217,14 @@ class SerdeTypeParser
 
             // The inner type of nullable types are root types if the nullable type is a root type
             $innerType = $this->resolveTypeToSerdeType($type->getActualType(), $isRootType);
-            if ($innerType instanceof SerdeTypePrimitive) {
+            if ($innerType instanceof SerdeTypePrimitive && !($innerType instanceof SerdeTypeNull)) {
                 $primitives = [$innerType, new SerdeTypeNull()];
                 $classOrArray = null;
             } elseif ($innerType instanceof SerdeTypeClass || $innerType instanceof SerdeTypeArray) {
                 $primitives = [new SerdeTypeNull()];
                 $classOrArray = $innerType;
+            } elseif ($innerType instanceof SerdeTypeUnion) {
+                throw new SerializationException('Nullable unions (using ?) are currently unsupported. Use |null instead.');
             } else {
                 throw new SerializationException('Unexpected nullable type: ' . $innerType->displayName());
             }
