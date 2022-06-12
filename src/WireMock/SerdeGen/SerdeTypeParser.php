@@ -7,12 +7,14 @@ use phpDocumentor\Reflection\TypeResolver;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Compound;
+use phpDocumentor\Reflection\Types\False_;
 use phpDocumentor\Reflection\Types\Float_;
 use phpDocumentor\Reflection\Types\Integer;
 use phpDocumentor\Reflection\Types\Null_;
 use phpDocumentor\Reflection\Types\Nullable;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
+use phpDocumentor\Reflection\Types\True_;
 use ReflectionException;
 use WireMock\Serde\SerdeClassDefinition;
 use WireMock\Serde\SerializationException;
@@ -84,6 +86,10 @@ class SerdeTypeParser
         } else {
             // $type is a primitive, or unsupported
             if ($type instanceof Boolean) {
+                // Only booleans are currently supported, not explicit false and true
+                if ($type instanceof False_ || $type instanceof True_) {
+                    throw new SerializationException('Unsupported type ' . get_class($type) . ": $type");
+                }
                 $primitiveType = 'bool';
             } elseif ($type instanceof Float_) {
                 $primitiveType = 'float';
@@ -92,7 +98,7 @@ class SerdeTypeParser
             } elseif ($type instanceof String_) {
                 $primitiveType = 'string';
             } else {
-                throw new SerializationException('Unexpected type ' . get_class($type) . ": $type");
+                throw new SerializationException('Unsupported type ' . get_class($type) . ": $type");
             }
             return $this->partialSerdeTypeLookup->addSerdeTypeIfNeeded(
                 $primitiveType,
@@ -230,7 +236,7 @@ class SerdeTypeParser
     {
         $fqsen = $type->getFqsen();
         if ($fqsen === null) {
-            throw new SerializationException('Unsupported use of type "object"');
+            throw new SerializationException('Unsupported type "object"');
         }
 
         if (!$this->partialSerdeTypeLookup->contains($fqsen)) {

@@ -77,6 +77,13 @@ class SerdeTypeParserTest extends HamcrestTestCase
         );
     }
 
+    /** @dataProvider providerUnsupportedTypes */
+    public function testParsingUnsupportedTypes($type)
+    {
+        $this->expectExceptionMessage('Unsupported type');
+        $this->parser->parseTypeString($type);
+    }
+
     public function testParsingUntypedArray()
     {
         $serdeType = $this->parser->parseTypeString('array');
@@ -399,6 +406,26 @@ class SerdeTypeParserTest extends HamcrestTestCase
             'float' => ['float', 'float'],
             'double' => ['double', 'float'],
         ];
+    }
+
+    public function providerUnsupportedTypes(): array
+    {
+        $types = [
+            'object',
+            'mixed',
+            'resource',
+            'void',
+            'callable',
+            'false',
+            'true',
+            'self',
+            'scalar',
+        ];
+        $result = [];
+        foreach ($types as $type) {
+            $result[$type] = [$type];
+        }
+        return $result;
     }
 
     public function providerPrimitiveAssocArrayTypes(): array
