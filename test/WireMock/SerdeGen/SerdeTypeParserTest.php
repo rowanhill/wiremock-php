@@ -117,10 +117,17 @@ class SerdeTypeParserTest extends HamcrestTestCase
     }
 
     /** @dataProvider providerOtherPrimitiveTypes */
-    public function testParsingAssocArrayWithBadPrimitiveKeyType($keyInputType)
+    public function testParsingAssocArrayWithBadPrimitiveKeyTypeIsNotSupported($keyInputType)
     {
         $this->expectErrorMessage('An array can have only integers or strings as keys');
         $this->parser->parseTypeString("array<$keyInputType, int>");
+    }
+
+    /** @dataProvider providerArrayKeyTypes */
+    public function testParsingAssocArrayWithNonPrimitiveKeyTypeIsNotSupported($keyInputType)
+    {
+        $this->expectErrorMessage('An array can have only integers or strings as keys');
+        $this->parser->parseTypeString("array<${keyInputType}[], int>");
     }
 
     public function testParsingUnionOfPrimitivesAndNull()
