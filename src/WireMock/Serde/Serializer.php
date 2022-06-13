@@ -48,8 +48,8 @@ class Serializer
             }
             $result = $serdeType->normalize($object, $this);
         } elseif (is_array($object)) {
-            $result = ArrayMapUtils::array_map_assoc(
-                function($key, $value) { return [$key, $this->normalize($value)]; },
+            $result = array_map(
+                function($value) { return $this->normalize($value); },
                 $object
             );
         } else {
