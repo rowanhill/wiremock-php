@@ -7,6 +7,7 @@ use WireMock\Serde\SerializationException;
 
 /**
  * @serde-discriminate-type getDiscriminatorMapping
+ * @serde-possible-subtype ValueMatchingStrategy
  * @serde-possible-subtype DateTimeMatchingStrategy
  * @serde-possible-subtype EqualToMatchingStrategy
  * @serde-possible-subtype XPathValueMatchingStrategy

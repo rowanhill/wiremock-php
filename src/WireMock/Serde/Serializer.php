@@ -42,7 +42,7 @@ class Serializer
         if (is_object($object)) {
             $type = get_class($object);
             /** @var SerdeTypeClass $serdeType */
-            $serdeType = $this->getSerdeType($type);
+            $serdeType = $this->serdeTypeLookup->getSerdeType($type);
             if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
                 fwrite(STDERR, "Warning: serializing from $type, but this is not a root type\n");
             }
@@ -79,18 +79,10 @@ class Serializer
      */
     public function denormalize(&$data, string $type, bool $isRoot = false)
     {
-        $serdeType = $this->getSerdeType($type);
+        $serdeType = $this->serdeTypeLookup->getSerdeType($type);
         if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
             fwrite(STDERR, "Warning: deserializing to $type, but this is not a root type\n");
         }
         return $serdeType->denormalize($data, $this, []);
-    }
-
-    /**
-     * @throws SerializationException
-     */
-    public function getSerdeType(string $type): SerdeType
-    {
-        return $this->serdeTypeLookup->getSerdeType($type);
     }
 }

@@ -10,6 +10,7 @@ use phpDocumentor\Reflection\Types\Context;
 use phpDocumentor\Reflection\Types\ContextFactory;
 use ReflectionClass;
 use ReflectionException;
+use WireMock\Serde\CanonicalNameUtils;
 use WireMock\Serde\PropNaming\ConstantPropertyNamingStrategy;
 use WireMock\Serde\PropNaming\ReferencingPropertyNamingStrategy;
 use WireMock\Serde\SerdeClassDefinition;
@@ -81,16 +82,18 @@ class SerdeClassDefinitionFactory
             return null;
         }
 
-        /** @var SerdePossibleSubtypeTag $subtypeTags */
+        /** @var SerdePossibleSubtypeTag[] $subtypeTags */
         $subtypeTags = $docBlock->getTagsByName('serde-possible-subtype');
+        $possibleTypes = [];
         foreach ($subtypeTags as $subtypeTag) {
-            // Resolve the subtype, just to make sure it's in the lookup
             // Possible subtypes of a root type are considered root types as well
-            $this->serdeTypeParser->resolveTypeToSerdeType($subtypeTag->getType(), $isRootType);
+            $subtypeName = CanonicalNameUtils::stripLeadingBackslashIfNeeded($subtypeTag->getType()->__toString());
+            $possibleTypes[$subtypeName] = $this->serdeTypeParser->resolveTypeToSerdeType($subtypeTag->getType(), $isRootType);
         }
 
         return new SerdeClassDiscriminationInfo(
-            $refClass->getName() . '::' . $serdeNameTag->getDiscriminatorFactory()
+            $refClass->getName() . '::' . $serdeNameTag->getDiscriminatorFactory(),
+            $possibleTypes
         );
     }
 

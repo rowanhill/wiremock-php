@@ -3,6 +3,7 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
+use WireMock\Serde\Type\SerdeTypeClass;
 
 class SerdeClassDefinition
 {
@@ -104,5 +105,13 @@ class SerdeClassDefinition
             return null;
         }
         return $this->classDiscriminationInfo->getDiscriminator();
+    }
+
+    /**
+     * @throws SerializationException
+     */
+    public function getDiscriminatedType(string $fqn): SerdeTypeClass
+    {
+        return $this->classDiscriminationInfo->getTypeByFullyQualifiedClassName($fqn);
     }
 }

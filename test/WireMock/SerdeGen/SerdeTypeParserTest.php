@@ -248,75 +248,86 @@ class SerdeTypeParserTest extends HamcrestTestCase
         $bool = new SerdeTypePrimitive('bool');
         $argAndFieldProp = new SerdeProp('reqArg', KitchenSink::class, $int);
         $oneSimpleFieldType = $this->getOneSimpleFieldType();
+        $kitchenSinkProperties = [
+            // Simple field prop
+            new SerdeProp(
+                'fieldOnly',
+                KitchenSink::class,
+                $string
+            ),
+
+            // Prop appears as both field and required constructor arg
+            $argAndFieldProp,
+
+            // Prop is renamed
+            new SerdeProp(
+                'originalName',
+                KitchenSink::class,
+                $bool,
+                new ConstantPropertyNamingStrategy('renamed')
+            ),
+
+            // One field named by another
+            new SerdeProp(
+                'namedByName',
+                KitchenSink::class,
+                $string
+            ),
+            new SerdeProp(
+                'namedByValue',
+                KitchenSink::class,
+                $int,
+                new ReferencingPropertyNamingStrategy(
+                    'namedByName',
+                    KitchenSink::class . '::possibleNames'
+                )
+            ),
+
+            // Field with a class type
+            new SerdeProp(
+                'object',
+                KitchenSink::class,
+                $oneSimpleFieldType
+            ),
+
+            // Unwrapped
+            new SerdeProp(
+                'inlined',
+                KitchenSink::class,
+                $oneSimpleFieldType,
+                null,
+                true
+            ),
+
+            // Catch-all
+            new SerdeProp(
+                'catchall',
+                KitchenSink::class,
+                new SerdeTypeUntypedArray(),
+                null,
+                false,
+                true
+            )
+        ];
         self::assertEquals(
             new SerdeTypeClass(
                 '\\'.KitchenSink::class,
                 new SerdeClassDefinition(
-                    new SerdeClassDiscriminationInfo(KitchenSink::class.'::discriminate'),
-                    [
-                        $argAndFieldProp,
-                    ],
-                    [
-                        // Simple field prop
-                        new SerdeProp(
-                            'fieldOnly',
-                            KitchenSink::class,
-                            $string
-                        ),
-
-                        // Prop appears as both field and required constructor arg
-                        $argAndFieldProp,
-
-                        // Prop is renamed
-                        new SerdeProp(
-                            'originalName',
-                            KitchenSink::class,
-                            $bool,
-                            new ConstantPropertyNamingStrategy('renamed')
-                        ),
-
-                        // One field named by another
-                        new SerdeProp(
-                            'namedByName',
-                            KitchenSink::class,
-                            $string
-                        ),
-                        new SerdeProp(
-                            'namedByValue',
-                            KitchenSink::class,
-                            $int,
-                            new ReferencingPropertyNamingStrategy(
-                                'namedByName',
-                                KitchenSink::class.'::possibleNames'
+                    new SerdeClassDiscriminationInfo(
+                        KitchenSink::class.'::discriminate',
+                        [
+                            KitchenSinkSubA::class => new SerdeTypeClass(
+                                '\\'.KitchenSinkSubA::class,
+                                new SerdeClassDefinition(null, [$argAndFieldProp], $kitchenSinkProperties)
+                            ),
+                            KitchenSinkSubB::class => new SerdeTypeClass(
+                                '\\'.KitchenSinkSubB::class,
+                                new SerdeClassDefinition(null, [$argAndFieldProp], $kitchenSinkProperties)
                             )
-                        ),
-
-                        // Field with a class type
-                        new SerdeProp(
-                            'object',
-                            KitchenSink::class,
-                            $oneSimpleFieldType
-                        ),
-
-                        // Unwrapped
-                        new SerdeProp(
-                            'inlined',
-                            KitchenSink::class,
-                            $oneSimpleFieldType,
-                            null,
-                            true
-                        ),
-
-                        // Catch-all
-                        new SerdeProp(
-                            'catchall',
-                            KitchenSink::class,
-                            new SerdeTypeUntypedArray(),
-                            null,
-                            false,
-                            true
-                        )
-                    ]
+                        ]
+                    ),
+                    [$argAndFieldProp],
+                    $kitchenSinkProperties
                 )
             ),
             $serdeType
