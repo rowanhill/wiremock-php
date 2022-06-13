@@ -2,8 +2,6 @@
 
 namespace WireMock\Serde\Type;
 
-use WireMock\Serde\Serializer;
-
 class SerdeTypeUntypedArray extends SerdeTypeArray
 {
     function displayName(): string
@@ -11,7 +9,7 @@ class SerdeTypeUntypedArray extends SerdeTypeArray
         return 'array';
     }
 
-    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
+    function denormalizeFromArray(array &$data, array $path): array
     {
         return $data;
     }

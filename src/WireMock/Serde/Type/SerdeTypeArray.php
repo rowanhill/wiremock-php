@@ -3,14 +3,13 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 abstract class SerdeTypeArray extends SerdeType
 {
     /**
      * @throws SerializationException
      */
-    abstract function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array;
+    abstract function denormalizeFromArray(array &$data, array $path): array;
 
     public function canDenormalize($data): bool
     {
@@ -20,12 +19,12 @@ abstract class SerdeTypeArray extends SerdeType
     /**
      * @throws SerializationException
      */
-    function denormalize(&$data, Serializer $serializer, array $path): array
+    function denormalize(&$data, array $path): array
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
                 ' from data of type ' . gettype($data));
         }
-        return $this->denormalizeFromArray($data, $serializer, $path);
+        return $this->denormalizeFromArray($data, $path);
     }
 }

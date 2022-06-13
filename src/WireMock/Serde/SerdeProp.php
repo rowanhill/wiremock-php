@@ -55,13 +55,13 @@ class SerdeProp
     /**
      * @throws SerializationException
      */
-    public function instantiateAndConsumeData(array &$data, Serializer $serializer, array $path)
+    public function instantiateAndConsumeData(array &$data, array $path)
     {
         $path[] = $this->name;
         $name = $this->name;
         $propData = array_key_exists($name, $data) ? $data[$name] : null;
         unset($data[$name]);
-        return $this->serdeType->denormalize($propData, $serializer, $path);
+        return $this->serdeType->denormalize($propData, $path);
     }
 
     /**

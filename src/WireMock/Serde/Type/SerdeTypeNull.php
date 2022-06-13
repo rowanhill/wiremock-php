@@ -3,7 +3,6 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 class SerdeTypeNull extends SerdeTypePrimitive
 {
@@ -17,7 +16,7 @@ class SerdeTypeNull extends SerdeTypePrimitive
         return $data === null;
     }
 
-    function denormalize(&$data, Serializer $serializer, array $path)
+    function denormalize(&$data, array $path)
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot deserialize non-null data to null');

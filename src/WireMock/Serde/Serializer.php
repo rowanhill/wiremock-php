@@ -3,7 +3,6 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
-use WireMock\Serde\Type\SerdeType;
 use WireMock\Serde\Type\SerdeTypeClass;
 use WireMock\Serde\Type\SerdeTypeLookup;
 
@@ -83,6 +82,6 @@ class Serializer
         if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
             fwrite(STDERR, "Warning: deserializing to $type, but this is not a root type\n");
         }
-        return $serdeType->denormalize($data, $this, []);
+        return $serdeType->denormalize($data, []);
     }
 }

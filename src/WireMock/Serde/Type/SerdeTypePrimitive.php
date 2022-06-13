@@ -3,7 +3,6 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 class SerdeTypePrimitive extends SerdeTypeSingle
 {
@@ -32,7 +31,7 @@ class SerdeTypePrimitive extends SerdeTypeSingle
         }
     }
 
-    function denormalize(&$data, Serializer $serializer, array $path)
+    function denormalize(&$data, array $path)
     {
         if (!$this->canDenormalize($data)) {
             $dataType = gettype($data);

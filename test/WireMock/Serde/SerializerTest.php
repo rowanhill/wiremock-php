@@ -46,7 +46,7 @@ class SerializerTest extends HamcrestTestCase
         $mockSerdeType = Phake::mock(SerdeTypeClass::class);
         $serializer = new Serializer(new SerdeTypeLookup([self::class => $mockSerdeType], []));
         $data = ['dummy'];
-        Phake::when($mockSerdeType)->denormalize($data, $serializer, [])->thenReturn($this);
+        Phake::when($mockSerdeType)->denormalize($data, [])->thenReturn($this);
 
         $denormalized = $serializer->denormalize($data, self::class);
 

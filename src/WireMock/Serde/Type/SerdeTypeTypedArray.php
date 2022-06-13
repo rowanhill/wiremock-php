@@ -3,7 +3,6 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 class SerdeTypeTypedArray extends SerdeTypeArray
 {
@@ -31,13 +30,13 @@ class SerdeTypeTypedArray extends SerdeTypeArray
     /**
      * @throws SerializationException
      */
-    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
+    function denormalizeFromArray(array &$data, array $path): array
     {
         $result = [];
         foreach ($data as $index => $element) {
             $newPath = $path;
             $newPath[] = "[$index]";
-            $result[$index] = $this->type->denormalize($element, $serializer, $newPath);
+            $result[$index] = $this->type->denormalize($element, $newPath);
         }
         return $result;
     }

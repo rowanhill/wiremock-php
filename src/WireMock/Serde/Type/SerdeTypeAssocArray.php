@@ -3,7 +3,6 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\ArrayMapUtils;
-use WireMock\Serde\Serializer;
 
 class SerdeTypeAssocArray extends SerdeTypeArray
 {
@@ -38,17 +37,17 @@ class SerdeTypeAssocArray extends SerdeTypeArray
         return "array<$key, $value>";
     }
 
-    function denormalizeFromArray(array &$data, Serializer $serializer, array $path): array
+    function denormalizeFromArray(array &$data, array $path): array
     {
         return ArrayMapUtils::array_map_assoc(
-            function($key, $value) use ($serializer, $path) {
+            function($key, $value) use ($path) {
                 $newKeyPath = $path;
                 $newKeyPath[] = "key<$key>";
-                $newKey = $this->keyType->denormalize($key, $serializer, $newKeyPath);
+                $newKey = $this->keyType->denormalize($key, $newKeyPath);
 
                 $newValuePath = $path;
                 $newValuePath[] = "[$key]";
-                $newValue = $this->valueType->denormalize($value, $serializer, $newValuePath);
+                $newValue = $this->valueType->denormalize($value, $newValuePath);
 
                 return [$newKey, $newValue];
             },

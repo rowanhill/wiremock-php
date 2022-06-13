@@ -3,7 +3,6 @@
 namespace WireMock\Serde\Type;
 
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 abstract class SerdeType
 {
@@ -14,5 +13,5 @@ abstract class SerdeType
     /**
      * @throws SerializationException
      */
-    abstract function denormalize(&$data, Serializer $serializer, array $path);
+    abstract function denormalize(&$data, array $path);
 }

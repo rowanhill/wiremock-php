@@ -4,7 +4,6 @@ namespace WireMock\Serde\Type;
 
 use ReflectionException;
 use WireMock\Serde\SerializationException;
-use WireMock\Serde\Serializer;
 
 class SerdeTypeUnion extends SerdeType
 {
@@ -56,15 +55,15 @@ class SerdeTypeUnion extends SerdeType
      * @throws ReflectionException
      * @throws SerializationException
      */
-    function denormalize(&$data, Serializer $serializer, array $path)
+    function denormalize(&$data, array $path)
     {
         if ($this->classOrArraySerdeType !== null && $this->classOrArraySerdeType->canDenormalize($data)) {
-            return $this->classOrArraySerdeType->denormalize($data, $serializer, $path);
+            return $this->classOrArraySerdeType->denormalize($data, $path);
         }
 
         foreach ($this->primitiveSerdeTypes as $serdeType) {
             if ($serdeType->canDenormalize($data)) {
-                return $serdeType->denormalize($data, $serializer, $path);
+                return $serdeType->denormalize($data, $path);
             }
         }
 
