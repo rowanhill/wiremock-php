@@ -53,7 +53,7 @@ class SerdeTypeClass extends SerdeTypeSingle
         // These props don't care about the data passed in to getSerializedName, which is why we do them first
         foreach ($simpleNamedProps as $prop) {
             $value = $prop->getData($object);
-            $normalizedValue = $serializer->normalize($value);
+            $normalizedValue = $serializer->normalize($value, false, $prop->serdeType);
             if (($prop->unwrapped || $prop->catchAll) && is_array($normalizedValue)) {
                 $result = array_merge($result, $normalizedValue);
             } else {
@@ -63,7 +63,7 @@ class SerdeTypeClass extends SerdeTypeSingle
         // These props rely on the values of other props to name themselves
         foreach ($referenceNamedProps as $prop) {
             $value = $prop->getData($object);
-            $normalizedValue = $serializer->normalize($value);
+            $normalizedValue = $serializer->normalize($value, false, $prop->serdeType);
             if ($prop->unwrapped || $prop->catchAll) {
                 throw new SerializationException("Did not expect $prop->name to be both @serde-unwrapped/@serde-catch-all and @serde-named-by");
             }
@@ -74,7 +74,7 @@ class SerdeTypeClass extends SerdeTypeSingle
             unset($result[$namingPropName]);
         }
         foreach ($result as $key => $item) {
-            if ((is_array($item) && empty($item)) || is_null($item)) {
+            if (is_null($item)) {
                 unset($result[$key]);
             }
         }

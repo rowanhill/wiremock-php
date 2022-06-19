@@ -14,7 +14,7 @@ class WebhookDefinition
     /** @var string|null */
     private $url;
     /** @var string[]|null */
-    private $headers = null;
+    private $headers;
     /** @var string|null */
     private $body;
     /** @var string|null */
@@ -25,7 +25,7 @@ class WebhookDefinition
      * @var array|null
      * @serde-catch-all
      */
-    private $extraParameters = null; // TODO: Check this is accepted by WireMock
+    private $extraParameters;
 
     public function withMethod(string $method): self
     {
@@ -41,9 +41,6 @@ class WebhookDefinition
 
     public function withHeader(string $header, string $value): self
     {
-        if (!isset($this->headers)) {
-            $this->headers = array();
-        }
         $this->headers[$header] = $value;
         return $this;
     }
@@ -85,9 +82,6 @@ class WebhookDefinition
 
     public function withExtraParameter(string $name, $value): self
     {
-        if (!isset($this->extraParameters)) {
-            $this->extraParameters = array();
-        }
         $this->extraParameters[$name] = $value;
         return $this;
     }

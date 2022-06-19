@@ -10,16 +10,16 @@ class RequestPatternBuilder
 {
     private $method;
     private $urlMatchingStrategy;
-    /** @var array<string, ValueMatchingStrategy> */
-    private $headers = array();
-    /** @var array<string, ValueMatchingStrategy> */
-    private $cookies = array();
-    /** @var array<string, ValueMatchingStrategy> */
-    private $queryParameters = array();
-    /** @var ValueMatchingStrategy[] */
-    private $bodyPatterns = array();
-    /** @var MultipartValuePattern[] */
-    private $multipartPatterns = array();
+    /** @var array<string, ValueMatchingStrategy>|null */
+    private $headers;
+    /** @var array<string, ValueMatchingStrategy>|null */
+    private $cookies;
+    /** @var array<string, ValueMatchingStrategy>|null */
+    private $queryParameters;
+    /** @var ValueMatchingStrategy[]|null */
+    private $bodyPatterns;
+    /** @var MultipartValuePattern[]|null */
+    private $multipartPatterns;
     /** @var BasicCredentials */
     private $basicCredentials;
     /** @var CustomMatcherDefinition */
@@ -70,7 +70,7 @@ class RequestPatternBuilder
      */
     public function withoutHeader($headerName)
     {
-        $this->headers[$headerName] = new ValueMatchingStrategy('absent', true);
+        $this->withHeader($headerName, new ValueMatchingStrategy('absent', true));
         return $this;
     }
 

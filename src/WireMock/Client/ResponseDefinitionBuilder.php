@@ -15,7 +15,7 @@ class ResponseDefinitionBuilder
     protected $body;
     protected $bodyFile;
     protected $bodyData;
-    protected $headers = array();
+    protected $headers;
     protected $proxyBaseUrl;
     protected $fixedDelayMillis;
     /** @var DelayDistribution */
@@ -23,12 +23,12 @@ class ResponseDefinitionBuilder
     /** @var ChunkedDribbleDelay */
     protected $chunkedDribbleDelay;
     protected $fault;
-    /** @var string[] */
-    private $transformers = array();
-    /** @var array */
-    private $transformerParameters = array();
+    /** @var string[]|null */
+    private $transformers;
+    /** @var array|null */
+    private $transformerParameters;
 
-    protected $additionalRequestHeaders = array();
+    protected $additionalRequestHeaders;
     /** @var string */
     protected $proxyUrlPrefixToRemove;
 

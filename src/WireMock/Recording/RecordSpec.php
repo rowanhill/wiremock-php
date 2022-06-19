@@ -11,19 +11,19 @@ class RecordSpec
     private $targetBaseUrl;
     /** @var ProxiedServeEventFilters|null */
     private $filters;
-    /** @var array */
+    /** @var array|null */
     private $captureHeaders;
-    /** @var array */
+    /** @var array|null */
     private $extractBodyCriteria;
     /** @var boolean */
     private $persist;
     /** @var boolean */
     private $repeatsAsScenarios;
-    /** @var string[] */
+    /** @var string[]|null */
     private $transformers;
-    /** @var array */
-    private $transformerParameters = array();
-    /** @var array */
+    /** @var array|null */
+    private $transformerParameters;
+    /** @var array|null */
     private $requestBodyPattern;
     /** @var string */
     private $outputFormat;
@@ -31,7 +31,7 @@ class RecordSpec
     /**
      * @param string $targetBaseUrl
      * @param ProxiedServeEventFilters $filters
-     * @param array $captureHeaders
+     * @param array|null $captureHeaders
      * @param array $extractBodyCriteria
      * @param boolean $persist
      * @param boolean $repeatsAsScenarios
@@ -81,7 +81,7 @@ class RecordSpec
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getCaptureHeaders(): ?array
     {
@@ -89,7 +89,7 @@ class RecordSpec
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getExtractBodyCriteria(): ?array
     {
@@ -113,7 +113,7 @@ class RecordSpec
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
     public function getTransformers(): ?array
     {
@@ -121,7 +121,7 @@ class RecordSpec
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getTransformerParameters(): ?array
     {

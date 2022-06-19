@@ -8,7 +8,7 @@ use WireMock\Fault\DelayDistribution;
 class ResponseDefinition
 {
     /** @var int */
-    private $status = 200;
+    private $status;
     /** @var string */
     private $statusMessage;
     /** @var string */
@@ -17,11 +17,11 @@ class ResponseDefinition
     private $bodyFileName;
     /** @var string */
     private $base64Body;
-    /** @var array */
+    /** @var array|null */
     private $headers;
     /** @var string */
     private $proxyBaseUrl;
-    /** @var array */
+    /** @var array|null */
     private $additionalProxyRequestHeaders;
     /**
      * @var int
@@ -29,18 +29,18 @@ class ResponseDefinition
      */
     private $fixedDelayMillis;
     /**
-     * @var DelayDistribution
+     * @var ?DelayDistribution
      * @serde-name delayDistribution
      */
     protected $randomDelayDistribution;
-    /** @var ChunkedDribbleDelay */
+    /** @var ?ChunkedDribbleDelay */
     protected $chunkedDribbleDelay;
     /** @var string */
     private $fault;
-    /** @var string[] */
-    private $transformers = array();
-    /** @var array */
-    private $transformerParameters = array();
+    /** @var string[]|null */
+    private $transformers;
+    /** @var array|null */
+    private $transformerParameters;
     /** @var string */
     private $proxyUrlPrefixToRemove;
 
@@ -51,15 +51,15 @@ class ResponseDefinition
      * @param string $body
      * @param string $bodyFile
      * @param string $base64Body
-     * @param array $headers
+     * @param array|null $headers
      * @param string $proxyBaseUrl
      * @param array $additionalProxyRequestHeaders
      * @param int $fixedDelayMillis
      * @param DelayDistribution $randomDelayDistribution
      * @param ChunkedDribbleDelay $chunkedDribbleDelay
      * @param string $fault
-     * @param string[] $transformers
-     * @param array $transformerParameters
+     * @param string[]|null $transformers
+     * @param array|null $transformerParameters
      */
     public function __construct(
         $status,

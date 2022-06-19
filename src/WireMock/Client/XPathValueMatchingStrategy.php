@@ -10,8 +10,8 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
      * @serde-possible-names matchingValueNames
      */
     protected $matchingValue;
-    /** @var array */
-    private $xPathNamespaces = array();
+    /** @var array|null */
+    private $xPathNamespaces;
 
     /**
      * @param string|AdvancedPathPattern $matchingValue
@@ -33,9 +33,9 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getXPathNamespaces(): array
+    public function getXPathNamespaces(): ?array
     {
         return $this->xPathNamespaces;
     }

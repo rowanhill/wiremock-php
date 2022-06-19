@@ -23,7 +23,7 @@ abstract class SerdeTypeArray extends SerdeType
     {
         if (!$this->canDenormalize($data)) {
             throw new SerializationException('Cannot denormalize to ' . $this->displayName() .
-                ' from data of type ' . gettype($data));
+                ' from data of type ' . gettype($data) . ' at path ' . join('.', $path));
         }
         return $this->denormalizeFromArray($data, $path);
     }

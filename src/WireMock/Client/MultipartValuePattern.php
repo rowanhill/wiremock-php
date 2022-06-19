@@ -7,9 +7,9 @@ class MultipartValuePattern
     const ALL = 'ALL';
     const ANY = 'ANY';
 
-    /** @var ValueMatchingStrategy[] */
+    /** @var ValueMatchingStrategy[]|null */
     private $bodyPatterns;
-    /** @var array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy>|null */
     private $headers;
     /** @var string */
     private $name;
@@ -17,12 +17,12 @@ class MultipartValuePattern
     private $matchingType;
 
     /**
-     * @param ValueMatchingStrategy[] $bodyPatterns
-     * @param array<string, ValueMatchingStrategy> $headers
+     * @param ValueMatchingStrategy[]|null $bodyPatterns
+     * @param array<string, ValueMatchingStrategy>|null $headers
      * @param string $name
      * @param string $matchingType
      */
-    public function __construct($bodyPatterns = [], $headers = [], $name = null, $matchingType = null)
+    public function __construct($bodyPatterns = null, $headers = null, $name = null, $matchingType = null)
     {
         $this->bodyPatterns = $bodyPatterns;
         $this->headers = $headers;

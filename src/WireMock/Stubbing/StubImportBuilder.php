@@ -6,8 +6,8 @@ use WireMock\Client\MappingBuilder;
 
 class StubImportBuilder
 {
-    /** @var StubMapping[] */
-    private $mappings = array();
+    /** @var StubMapping[]|null */
+    private $mappings;
     /** @var string */
     private $duplicatePolicy = StubImportOptions::OVERWRITE;
     /** @var boolean */

@@ -12,9 +12,9 @@ class LoggedRequest
     private $method;
     /** @var string */
     private $clientIp;
-    /** @var array */
+    /** @var array<string, string> */
     private $headers;
-    /** @var array */
+    /** @var array<string, string> */
     private $cookies;
     /** @var string */
     private $body;

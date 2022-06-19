@@ -4,10 +4,10 @@ namespace WireMock\Client;
 
 class MultipartValuePatternBuilder
 {
-    /** @var ValueMatchingStrategy[] */
-    private $bodyPatterns = array();
-    /** @var array<string, ValueMatchingStrategy> */
-    private $headers = array();
+    /** @var ValueMatchingStrategy[]|null */
+    private $bodyPatterns;
+    /** @var array<string, ValueMatchingStrategy>|null */
+    private $headers;
     /** @var string */
     private $name;
     /** @var string */

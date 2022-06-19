@@ -15,31 +15,31 @@ class RequestPattern
      * @serde-unwrapped
      */
     private $urlMatchingStrategy;
-    /** @var array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy>|null */
     private $headers;
-    /** @var array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy>|null */
     private $cookies;
-    /** @var array<string, ValueMatchingStrategy> */
+    /** @var array<string, ValueMatchingStrategy>|null */
     private $queryParameters;
-    /** @var ValueMatchingStrategy[] */
+    /** @var ValueMatchingStrategy[]|null */
     private $bodyPatterns;
     /** @var MultipartValuePattern[]|null */
     private $multipartPatterns;
-    /** @var BasicCredentials */
+    /** @var ?BasicCredentials */
     private $basicAuthCredentials;
-    /** @var CustomMatcherDefinition */
+    /** @var ?CustomMatcherDefinition */
     private $customMatcher;
-    /** @var ValueMatchingStrategy */
+    /** @var ?ValueMatchingStrategy */
     private $host;
 
     /**
      * @param string $method
      * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @param array<string, ValueMatchingStrategy> $headers
-     * @param array<string, ValueMatchingStrategy> $cookies
-     * @param ValueMatchingStrategy[] $bodyPatterns
+     * @param array<string, ValueMatchingStrategy>|null $headers
+     * @param array<string, ValueMatchingStrategy>|null $cookies
+     * @param ValueMatchingStrategy[]|null $bodyPatterns
      * @param ValueMatchingStrategy[] $multipartPatterns
-     * @param array<string, ValueMatchingStrategy> $queryParameters
+     * @param array<string, ValueMatchingStrategy>|null $queryParameters
      * @param BasicCredentials $basicCredentials
      * @param CustomMatcherDefinition $customMatcherDefinition
      * @param ValueMatchingStrategy $hostPattern

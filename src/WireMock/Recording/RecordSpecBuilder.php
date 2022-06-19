@@ -12,21 +12,21 @@ class RecordSpecBuilder
     private $requestPatternBuilder;
     /** @var string[] */
     private $requestIds;
-    /** @var array */
-    private $captureHeaders = array();
-    /** @var array */
-    private $extractBodyCriteria = array();
+    /** @var array|null */
+    private $captureHeaders;
+    /** @var array|null */
+    private $extractBodyCriteria;
     /** @var bool */
     private $persist = true;
     /** @var bool */
     private $repeatsAsScenarios = true;
-    /** @var string[] */
-    private $transformers = array();
-    /** @var array */
-    private $transformerParameters = array();
-    /** @var array */
-    private $requestBodyPattern = null;
-    /** @var string */
+    /** @var string[]|null */
+    private $transformers;
+    /** @var array|null */
+    private $transformerParameters;
+    /** @var array|null */
+    private $requestBodyPattern;
+    /** @var string|null */
     private $format = null;
     /** @var boolean */
     private $allowNonProxied = null;

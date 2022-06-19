@@ -3,6 +3,9 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
+use stdClass;
+use WireMock\Serde\Type\SerdeType;
+use WireMock\Serde\Type\SerdeTypeAssocArray;
 use WireMock\Serde\Type\SerdeTypeClass;
 use WireMock\Serde\Type\SerdeTypeLookup;
 
@@ -32,11 +35,12 @@ class Serializer
     /**
      * @param mixed $object object to normalize
      * @param bool $isRoot whether this is the root object being normalized
+     * @param ?SerdeType $serdeType the SerdeType of the class property being normalized (if applicable)
      * @return mixed An associative array or a primitive type
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public function normalize($object, bool $isRoot = false)
+    public function normalize($object, bool $isRoot = false, $serdeType = null)
     {
         if (is_object($object)) {
             $type = get_class($object);
@@ -51,6 +55,12 @@ class Serializer
                 function($value) { return $this->normalize($value); },
                 $object
             );
+
+            if ($serdeType instanceof SerdeTypeAssocArray && empty($object)) {
+                // We want empty associative arrays to be serialize as "{}" rather than "[]", so we use an empty stdClass
+                // object rather than an empty PHP array as the normalized value
+                $result = new stdClass();
+            }
         } else {
             $result = $object;
         }

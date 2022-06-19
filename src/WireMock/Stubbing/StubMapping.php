@@ -18,7 +18,7 @@ class StubMapping
     private $response;
     /** @var int */
     private $priority;
-    /** @var array */
+    /** @var ?array */
     private $metadata;
     /** @var boolean */
     private $persistent;
