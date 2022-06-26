@@ -15,6 +15,7 @@ use WireMock\Serde\Type\SerdeTypePrimitive;
 use WireMock\Serde\Type\SerdeTypeTypedArray;
 use WireMock\Serde\Type\SerdeTypeUnion;
 use WireMock\Serde\Type\SerdeTypeUntypedArray;
+use WireMock\SerdeGen\TestClasses\CatchAllPrimitiveProperty;
 use WireMock\SerdeGen\TestClasses\KitchenSink;
 use WireMock\SerdeGen\TestClasses\KitchenSinkSubA;
 use WireMock\SerdeGen\TestClasses\KitchenSinkSubB;
@@ -412,6 +413,12 @@ class SerdeTypeParserTest extends HamcrestTestCase
         $this->parser->parseTypeString(OneSimpleField::class.'|null|int');
         self::assertTrue($this->lookup->contains(OneSimpleField::class));
         self::assertTrue($this->lookup->isRootType(OneSimpleField::class));
+    }
+
+    public function testParsingClassWithPrimitiveTypeCatchAllThrowsException()
+    {
+        $this->expectExceptionMessage('must be some kind of array');
+        $this->parser->parseTypeString(CatchAllPrimitiveProperty::class);
     }
 
     public function providerPrimitiveTypes(): array
