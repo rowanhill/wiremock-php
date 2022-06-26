@@ -79,7 +79,7 @@ class RecordSpecBuildTest extends HamcrestTestCase
         $spec = WireMock::recordSpec()->captureHeader('Accept')->build();
 
         // when
-        $json = $this->_serializer->serialize($spec, 'json');
+        $json = $this->_serializer->serialize($spec);
 
         // then
         assertThat($json, equalTo('{"captureHeaders":{"Accept":[]},"persist":true,"repeatsAsScenarios":true}'));
