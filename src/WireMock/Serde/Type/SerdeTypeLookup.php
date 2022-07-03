@@ -34,6 +34,14 @@ class SerdeTypeLookup
         return $this->lookup[$key];
     }
 
+    public function getSerdeTypeIfExits(string $type): ?SerdeType
+    {
+        $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
+        return array_key_exists($key, $this->lookup) ?
+            $this->lookup[$key] :
+            null;
+    }
+
     public function isRootType(string $type): bool
     {
         $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);

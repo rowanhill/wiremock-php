@@ -44,12 +44,19 @@ class Serializer
     {
         if (is_object($object)) {
             $type = get_class($object);
-            /** @var SerdeTypeClass $serdeType */
-            $serdeType = $this->serdeTypeLookup->getSerdeType($type);
             if ($isRoot === true && $this->serdeTypeLookup->isRootType($type) === false) {
                 fwrite(STDERR, "Warning: serializing from $type, but this is not a root type\n");
             }
-            $result = $serdeType->normalize($object, $this);
+            /** @var ?SerdeTypeClass $serdeType */
+            $serdeType = $this->serdeTypeLookup->getSerdeTypeIfExits($type);
+            if ($serdeType) {
+                $result = $serdeType->normalize($object, $this);
+            } else {
+                // There's no SerdeType for this class, so we just return it as is, and let json_decode deal with it
+                // This allows users to supply objects of unregistered types, perhaps as values within an untyped array,
+                // and have them serialized (in a way they can control with JsonSerializable)
+                return $object;
+            }
         } elseif (is_array($object)) {
             $result = array_map(
                 function($value) { return $this->normalize($value); },

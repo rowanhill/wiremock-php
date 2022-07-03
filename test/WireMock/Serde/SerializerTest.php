@@ -2,6 +2,7 @@
 
 namespace WireMock\Serde;
 
+use JsonSerializable;
 use Phake;
 use WireMock\HamcrestTestCase;
 use WireMock\Serde\Type\SerdeTypeClass;
@@ -19,7 +20,7 @@ class SerializerTest extends HamcrestTestCase
         assertThat($normalized, is($primitiveValue));
     }
 
-    public function testNormalizingObjectDelegatesToSerdeTypeClass()
+    public function testNormalizingObjectRegisteredInLookupDelegatesToSerdeTypeClass()
     {
         $mockSerdeType = Phake::mock(SerdeTypeClass::class);
         $serializer = new Serializer(new SerdeTypeLookup([self::class => $mockSerdeType], []));
@@ -28,6 +29,23 @@ class SerializerTest extends HamcrestTestCase
         $normalized = $serializer->normalize($this);
 
         assertThat($normalized, is(['dummy']));
+    }
+
+    public function testSerializingObjectNotInLookupObservesJsonSerializableInterface()
+    {
+        $object = new class implements JsonSerializable {
+            public function jsonSerialize(): array
+            {
+                return ['foo' => 'bar'];
+            }
+        };
+        $mockSerdeType = Phake::mock(SerdeTypeClass::class);
+        $serializer = new Serializer(new SerdeTypeLookup([self::class => $mockSerdeType], [self::class => true]));
+        Phake::when($mockSerdeType)->normalize($this, $serializer)->thenReturn(['unregistered' => [$object]]);
+
+        $json = $serializer->serialize($this);
+
+        self::assertEquals('{"unregistered":[{"foo":"bar"}]}', $json);
     }
 
     public function testNormalizingArrayRecursivelyDenormalizesKeepingKeys()

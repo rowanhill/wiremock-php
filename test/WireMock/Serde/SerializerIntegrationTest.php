@@ -35,11 +35,11 @@ class SerializerIntegrationTest extends HamcrestTestCase
         $serializer = $this->serializerFor($typeName);
 
         $normalized = $serializer->normalize($value);
-        self::assertEquals($expectedNormalized, $normalized);
+        self::assertEquals($expectedNormalized, $normalized, 'Normalized forms are not equal');
 
         $json = $explicitJson ?? $serializer->serialize($value);
         $deserialized = $serializer->deserialize($json, $typeName);
-        self::assertEquals($value, $deserialized);
+        self::assertEquals($value, $deserialized, 'Deserialized form does not equal original');
     }
 
     public function providerSerializableValues(): array
@@ -169,6 +169,26 @@ class SerializerIntegrationTest extends HamcrestTestCase
             'self type of discriminated type' => [
                 new DiscriminatedTypeParent('parent'),
                 ['type' => 'parent'],
+            ],
+        ];
+    }
+
+    /** @dataProvider providerSerializableOnlyValues */
+    public function testNormalizationOnly($value, $expectedNormalized)
+    {
+        $typeName = $explicitType ?? (is_object($value) ? get_class($value) : gettype($value));
+        $serializer = $this->serializerFor($typeName);
+
+        $normalized = $serializer->normalize($value);
+        self::assertEquals($expectedNormalized, $normalized, 'Normalized forms are not equal');
+    }
+
+    public function providerSerializableOnlyValues(): array
+    {
+        return [
+            'unmapped class in untyped array' => [
+                new PrimitiveArrayFields([new NamedProperty()], [], []),
+                ['untypedArray' => [new NamedProperty()], 'intArray' => [], 'intByString' => new stdClass()]
             ],
         ];
     }
