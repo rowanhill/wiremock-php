@@ -22,6 +22,7 @@ class ValueMatchingStrategy
         'absent' => ValueMatchingStrategy::class,
         'binaryEqualTo' => ValueMatchingStrategy::class,
         'contains' => ValueMatchingStrategy::class,
+        'doesNotContain' => ValueMatchingStrategy::class,
         'matches' => ValueMatchingStrategy::class,
         'doesNotMatch' => ValueMatchingStrategy::class,
 

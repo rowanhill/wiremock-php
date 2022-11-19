@@ -739,6 +739,15 @@ class WireMock
 
     /**
      * @param string $value
+     * @return ValueMatchingStrategy
+     */
+    public static function notContaining($value)
+    {
+        return new ValueMatchingStrategy('doesNotContain', $value);
+    }
+
+    /**
+     * @param string $value
      * @param boolean $ignoreArrayOrder
      * @param boolean $ignoreExtraElements
      * @return ValueMatchingStrategy
