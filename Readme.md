@@ -65,7 +65,7 @@ these values are consts on `DateTimeMatchingStrategy`. Similarly, truncation typ
 The `stubImport` method is static on `StubBuilder` in Java. In WireMock, to keep all the public static methods in one
 predictable place, this method is available as `WireMock::stubImport`.
 
-The request method constants are available on `WireMock\Http\RequestMethod`;
+The request method constants are available on `WireMock\Http\RequestMethod`.
 
 In addition, wiremock-php adds the instance method `isAlive`. This polls the standalone WireMock instance until an OK
 response is received or a timeout is reached, allowing your PHP code to wait until WireMock is ready.
