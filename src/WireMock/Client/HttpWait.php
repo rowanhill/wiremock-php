@@ -26,7 +26,7 @@ class HttpWait
                 } else if (!isset($headers[0])) {
                     $debugTrace[] = "$url not yet up. \$headers[0] not set";
                 } else {
-                    $debugTrace[] = "$url not yet up. \$headers[0] was ${headers[0]}";
+                    $debugTrace[] = "$url not yet up. \$headers[0] was {$headers[0]}";
                 }
             }
             usleep(100000);
