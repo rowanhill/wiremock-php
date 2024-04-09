@@ -24,6 +24,8 @@ class WireMock
     private $hostname;
     /** @var int */
     private $port;
+    /** @var string */
+    private $scheme;
     /** @var HttpWait */
     private $httpWait;
     /** @var Curl  */
@@ -45,13 +47,15 @@ class WireMock
         Curl $curl,
         Serializer $serializer,
         $hostname = 'localhost',
-        $port = 8080
+        $port = 8080,
+        $scheme = 'http'
     ) {
-        $this->hostname = $hostname;
-        $this->port = $port;
         $this->httpWait = $httpWait;
         $this->curl = $curl;
         $this->serializer = $serializer;
+        $this->hostname = $hostname;
+        $this->port = $port;
+        $this->scheme = $scheme;
     }
 
     public function isAlive($timeoutSecs = 10, $debug = true)
@@ -506,9 +510,9 @@ class WireMock
         }
     }
 
-    private function _makeUrl($path)
+    private function _makeUrl($path): string
     {
-        return "http://$this->hostname:$this->port/$path";
+        return sprintf('%s://%s:%d/%s', $this->scheme, $this->hostname, $this->port, $path);
     }
 
     /**

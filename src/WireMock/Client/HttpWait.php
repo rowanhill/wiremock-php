@@ -4,6 +4,16 @@ namespace WireMock\Client;
 
 class HttpWait
 {
+    /**
+     * @var Curl
+     */
+    private $curl;
+
+    public function __construct(Curl $curl = null)
+    {
+        $this->curl = $curl ?? new Curl();
+    }
+
     public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = true)
     {
         $debugTrace = array();
@@ -11,26 +21,18 @@ class HttpWait
         $serverStarted = false;
         while (microtime(true) - $startTime < $timeoutSecs) {
             try {
-                $headers = @get_headers($url, 1);
-            } catch (\Exception $e) {
-                $debugTrace[] = "$url not yet up. Error getting headers: " . $e->getMessage();
-                continue;
-            }
-
-            if (isset($headers) && isset($headers[0]) && strpos($headers[0], '200 OK') !== false) {
+                $this->curl->get($url);
                 $serverStarted = true;
                 break;
-            } else {
-                if (!isset($headers)) {
-                    $debugTrace[] = "$url not yet up. \$headers not set";
-                } else if (!isset($headers[0])) {
-                    $debugTrace[] = "$url not yet up. \$headers[0] not set";
-                } else {
-                    $debugTrace[] = "$url not yet up. \$headers[0] was {$headers[0]}";
-                }
+            } catch (\Exception $e) {
+                $debugTrace[] = "$url not yet up. " . $e->getMessage();
+
+                usleep(100000);
+
+                continue;
             }
-            usleep(100000);
         }
+
         if (!$serverStarted) {
             $time = microtime(true) - $startTime;
             if ($debug) {
