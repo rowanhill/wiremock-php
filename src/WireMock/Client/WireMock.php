@@ -102,11 +102,11 @@ class WireMock
 
     /**
      * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
-     * @param RequestPatternBuilder|null $requestPatternBuilder
+     * @param ?RequestPatternBuilder $requestPatternBuilder
      * @throws ClientException
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
+    public function verify($requestPatternBuilderOrCount, ?RequestPatternBuilder $requestPatternBuilder = null)
     {
         if ($requestPatternBuilderOrCount instanceof CountMatchingStrategy) {
             $patternBuilder = $requestPatternBuilder;

@@ -9,7 +9,7 @@ class HttpWait
      */
     private $curl;
 
-    public function __construct(Curl $curl = null)
+    public function __construct(?Curl $curl = null)
     {
         $this->curl = $curl ?? new Curl();
     }

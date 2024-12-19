@@ -12,7 +12,7 @@ class Curl
      */
     private $authenticator;
 
-    public function __construct(Authenticator $authenticator = null)
+    public function __construct(?Authenticator $authenticator = null)
     {
         $this->authenticator = $authenticator ?? new NullAuthenticator();
     }

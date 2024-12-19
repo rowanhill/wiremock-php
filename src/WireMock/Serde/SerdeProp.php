@@ -38,7 +38,7 @@ class SerdeProp
         string $name,
         string $owningClassName,
         SerdeType $serdeType,
-        PropertyNamingStrategy $propertyNamingStrategy = null,
+        ?PropertyNamingStrategy $propertyNamingStrategy = null,
         bool $unwrapped = false,
         bool $catchAll = false
     )
