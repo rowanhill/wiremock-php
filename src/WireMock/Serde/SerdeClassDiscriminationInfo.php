@@ -36,7 +36,7 @@ class SerdeClassDiscriminationInfo
      */
     public function getDiscriminator(): ?ClassDiscriminator
     {
-        $refMethod = new ReflectionMethod($this->discriminatorFactoryName);
+        $refMethod = ReflectionUtils::reflectMethod($this->discriminatorFactoryName);
         $refMethod->setAccessible(true);
         return $refMethod->invoke(null);
     }

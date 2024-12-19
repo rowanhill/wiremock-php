@@ -12,7 +12,7 @@ class StaticFactoryMethodValidator
      * @throws SerializationException
      */
     public static function validate($fqMethodName) {
-        $refMethod = new ReflectionMethod($fqMethodName);
+        $refMethod = ReflectionUtils::reflectMethod($fqMethodName);
         if (!$refMethod->isStatic()) {
             throw new SerializationException("$fqMethodName must be a static method but is not");
         }
