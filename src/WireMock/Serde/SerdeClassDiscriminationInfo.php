@@ -5,6 +5,7 @@ namespace WireMock\Serde;
 use ReflectionException;
 use ReflectionMethod;
 use WireMock\Serde\Type\SerdeTypeClass;
+use const PHP_VERSION_ID;
 
 class SerdeClassDiscriminationInfo
 {
@@ -36,7 +37,11 @@ class SerdeClassDiscriminationInfo
      */
     public function getDiscriminator(): ?ClassDiscriminator
     {
-        $refMethod = new ReflectionMethod($this->discriminatorFactoryName);
+        if (PHP_VERSION_ID >= 80300) {
+            $refMethod = ReflectionMethod::createFromMethodName($this->discriminatorFactoryName);
+        } else {
+            $refMethod = new ReflectionMethod($this->discriminatorFactoryName);;
+        }
         $refMethod->setAccessible(true);
         return $refMethod->invoke(null);
     }

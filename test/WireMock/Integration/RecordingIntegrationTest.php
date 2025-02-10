@@ -41,7 +41,7 @@ class RecordingIntegrationTest extends WireMockIntegrationTest
         parent::tearDown();
         $this->clearMappings();
     }
-    
+
     public function testRecordingStatusDefaultsToNeverStarted()
     {
         // when

@@ -6,6 +6,7 @@ use ReflectionException;
 use ReflectionMethod;
 use WireMock\Serde\SerializationException;
 use WireMock\Serde\StaticFactoryMethodValidator;
+use const PHP_VERSION_ID;
 
 class ReferencingPropertyNamingStrategy implements PropertyNamingStrategy
 {
@@ -47,7 +48,11 @@ class ReferencingPropertyNamingStrategy implements PropertyNamingStrategy
      */
     function getPossibleSerializedNames(): array
     {
-        $refMethod = new ReflectionMethod($this->possibleNamesGenerator);
+        if (PHP_VERSION_ID >= 80300) {
+            $refMethod = ReflectionMethod::createFromMethodName($this->possibleNamesGenerator);
+        } else {
+            $refMethod = new ReflectionMethod($this->possibleNamesGenerator);;
+        }
         $refMethod->setAccessible(true);
         return $refMethod->invoke(null);
     }
