@@ -48,11 +48,7 @@ class ReferencingPropertyNamingStrategy implements PropertyNamingStrategy
      */
     function getPossibleSerializedNames(): array
     {
-        if (PHP_VERSION_ID >= 80300) {
-            $refMethod = ReflectionMethod::createFromMethodName($this->possibleNamesGenerator);
-        } else {
-            $refMethod = new ReflectionMethod($this->possibleNamesGenerator);;
-        }
+        $refMethod = StaticFactoryMethodValidator::createMethod($this->possibleNamesGenerator);
         $refMethod->setAccessible(true);
         return $refMethod->invoke(null);
     }
