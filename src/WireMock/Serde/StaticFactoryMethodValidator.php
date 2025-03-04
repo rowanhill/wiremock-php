@@ -3,7 +3,6 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
-use ReflectionMethod;
 
 class StaticFactoryMethodValidator
 {
@@ -12,7 +11,7 @@ class StaticFactoryMethodValidator
      * @throws SerializationException
      */
     public static function validate($fqMethodName) {
-        $refMethod = new ReflectionMethod($fqMethodName);
+        $refMethod = MethodFactory::createMethod($fqMethodName);
         if (!$refMethod->isStatic()) {
             throw new SerializationException("$fqMethodName must be a static method but is not");
         }

@@ -3,7 +3,6 @@
 namespace WireMock\Serde;
 
 use ReflectionException;
-use ReflectionMethod;
 use WireMock\Serde\Type\SerdeTypeClass;
 
 class SerdeClassDiscriminationInfo
@@ -36,7 +35,7 @@ class SerdeClassDiscriminationInfo
      */
     public function getDiscriminator(): ?ClassDiscriminator
     {
-        $refMethod = new ReflectionMethod($this->discriminatorFactoryName);
+        $refMethod = MethodFactory::createMethod($this->discriminatorFactoryName);
         $refMethod->setAccessible(true);
         return $refMethod->invoke(null);
     }

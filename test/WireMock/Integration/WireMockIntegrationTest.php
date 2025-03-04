@@ -43,7 +43,7 @@ abstract class WireMockIntegrationTest extends HamcrestTestCase
         $this->_testClient = new TestClient();
         self::$_wireMock->reset();
     }
-    
+
     public function clearMappings()
     {
         exec('rm -f ../wiremock/1/mappings/*');
