@@ -10,7 +10,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
 {
     private $_verificationCount = 0;
 
-    private function verify($requestPatternBuilderOrCount, RequestPatternBuilder $requestPatternBuilder = null)
+    private function verify($requestPatternBuilderOrCount, ?RequestPatternBuilder $requestPatternBuilder = null)
     {
         self::$_wireMock->verify($requestPatternBuilderOrCount, $requestPatternBuilder);
         $this->_verificationCount++;
@@ -26,7 +26,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
             $this->addToAssertionCount($this->_verificationCount);
         }
     }
-    
+
     public function testCanVerifySimpleGetToUrl()
     {
         // given
@@ -175,7 +175,7 @@ class VerificationIntegrationTest extends WireMockIntegrationTest
     {
         // then
         $this->expectException(VerificationException::class);
-        
+
         // given
         $this->_testClient->get('/some/url');
         $this->_testClient->get('/some/url');
