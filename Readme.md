@@ -1,4 +1,4 @@
-wiremock-php [![Build Status](https://travis-ci.org/rowanhill/wiremock-php.png?branch=master)](https://travis-ci.org/rowanhill/wiremock-php)
+wiremock-php [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rowanhill/wiremock-php/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/rowanhill/wiremock-php/tree/master)
 ============
 **Stub and mock web services with the power of [WireMock](https://github.com/tomakehurst/wiremock) from PHP.**
 
@@ -22,7 +22,7 @@ Installation
 It's easiest to install wiremock-php via Composer:
 
 ```bash
-php composer.phar require --dev wiremock-php/wiremock-php:2.35.0
+php composer.phar require --dev wiremock-php/wiremock-php:2.35.3
 ```
 
 Usage
