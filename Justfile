@@ -19,13 +19,17 @@ watch-phpstan *args='':
     find src/ test/ -name '*.php' | entr j phpstan analyse "${@}"
 
 phpunit *args='':
-    {{ php }} vendor/bin/phpunit "${@}"
+    cd test && {{ php }} ../vendor/bin/phpunit "${@}"
 
 composer *args='':
     {{ composer }} "${@}"
 
+units:
+    j phpunit --exclude-group=integration
+
 prep:
     j phpstan
+    j phpunit
     j phpunit
 
 

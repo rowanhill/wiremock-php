@@ -5,6 +5,9 @@ namespace WireMock\Integration;
 use WireMock\Client\WireMock;
 use WireMock\Stubbing\Scenario;
 
+/**
+ * @group integration
+ */
 class ScenarioIntegrationTest extends WireMockIntegrationTest
 {
     public function testScenarioNameOfStubCanBeSet()

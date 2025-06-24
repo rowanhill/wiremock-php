@@ -2,6 +2,9 @@
 
 namespace WireMock\Integration;
 
+/**
+ * @group integration
+ */
 class ShutdownIntegrationTest extends WireMockIntegrationTest
 {
     public function testShutdownTerminatesStandaloneServer()

@@ -11,6 +11,9 @@ use WireMock\Client\WireMock;
 use WireMock\Client\XmlUnitComparisonType;
 use WireMock\Stubbing\StubMapping;
 
+/**
+ * @group integration
+ */
 class StubbingIntegrationTest extends WireMockIntegrationTest
 {
     public function setUp(): void

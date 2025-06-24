@@ -8,6 +8,9 @@ use WireMock\Fault\LogNormal;
 use WireMock\Fault\UniformDistribution;
 use WireMock\Stubbing\Fault;
 
+/**
+ * @group integration
+ */
 class FaultsAndDelaysIntegrationTest extends WireMockIntegrationTest
 {
     protected function tearDown(): void

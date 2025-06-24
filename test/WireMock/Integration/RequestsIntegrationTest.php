@@ -9,6 +9,9 @@ use WireMock\Client\LoggedRequest;
 use WireMock\Client\ServeEventQuery;
 use WireMock\Client\WireMock;
 
+/**
+ * @group integration
+ */
 class RequestsIntegrationTest extends WireMockIntegrationTest
 {
     public function testGettingAllServeEventsReturnsAllRequestDetails()
