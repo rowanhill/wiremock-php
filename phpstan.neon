@@ -1,8 +1,15 @@
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+
 parameters:
-    level: max
+    level: 8
     paths:
         - src
         - test
+
+    excludePaths:
+        analyse:
+            - test/
 
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%&project=wiremock-php'
 

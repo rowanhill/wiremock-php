@@ -37,7 +37,8 @@
         "hamcrest/hamcrest-php": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpdocumentor/type-resolver": "^1.6",
-        "phpstan/phpstan": "^2.0.0"
+        "phpstan/phpstan": "^2.0.0",
+        "phpstan/phpstan-phpunit": "^2.0"
     },
 
     "suggest": {

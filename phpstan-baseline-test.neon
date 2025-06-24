@@ -1,0 +1,3655 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:build\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:withHeader\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:withQueryParam\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:withRequestBody\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Cannot call method thenReturn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\MappingBuilderTest\:\:testBuiltStubMappingHasRequestPatternAndResponseDefinition\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\MappingBuilderTest\:\:testMatchedRequestHeadersAreSetOnRequestPattern\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\MappingBuilderTest\:\:testMatchedRequestQueryParamsAreSetOnRequestPattern\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\MappingBuilderTest\:\:testRequestBodyMatcherIsSetOnRequestPattern\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Parameter \#1 \$mock of static method Phake\:\:verify\(\) expects Phake\\IMock, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Parameter \#1 \$requestPatternBuilder of class WireMock\\Client\\MappingBuilder constructor expects WireMock\\Client\\RequestPatternBuilder, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Parameter \#1 \$responseDefinitionBuilder of method WireMock\\Client\\MappingBuilder\:\:willReturn\(\) expects WireMock\\Client\\ResponseDefinitionBuilder, mixed given\.$#'
+			identifier: argument.type
+			count: 4
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Property WireMock\\Client\\MappingBuilderTest\:\:\$_mockRequestPatternBuilder has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Property WireMock\\Client\\MappingBuilderTest\:\:\$_mockResponseDefinitionBuilder has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Client/MappingBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testBasicAuthIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testBuilderCanBeCreatedWithCustomMatcherNameAndParams\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testCookieWithValueMatchingStrategyIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testCustomMatcherDefinitionIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testHeaderAbsenceIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testHeaderWithValueMatchingStrategyIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testMethodAndUrlMatchingStrategyAreInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\RequestPatternBuilderTest\:\:testRequestBodyPatternsAreInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/RequestPatternBuilderTest.php
+
+		-
+			message: '#^Cannot call method getAdditionalProxyRequestHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getBase64Body\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getBody\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getBodyFileName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getFixedDelayMillis\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getProxyBaseUrl\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getStatus\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Cannot call method getStatusMessage\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testBase64BodyIsAvailableInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testBodyFileIsAvailableInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testBodyFileIsNotAvailableInArrayIfNotSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testBodyIsAvailableInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testBodyIsNotAvailableInArrayIfNotSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testDefault200StatusIsAvailableInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testFixedDelayMillisecondsIsInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testHeaderIsAvailableInArrayAsArrayIfSetMultipleTimes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testHeaderIsAvailableInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testHeaderIsNotAvailableInArrayIfNotSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testProxiedBuilderRetainsMatchersAddedSoFar\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testProxyAdditionalHeadersIsInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testProxyAdditionalHeadersIsNotInArrayIfEmpty\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testProxyBaseUrlIsAvailableIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testSpecifiedStatusIsAvailableInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testStatusMessageIsAvailableInArrayIfSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ResponseDefinitionBuilderTest\:\:testStatusMessageIsNotAvailableInArrayIfNotSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ResponseDefinitionBuilderTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\ValueMatchingStrategyTest\:\:testMatchingStrategyAndMatchedValueAreInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/ValueMatchingStrategyTest.php
+
+		-
+			message: '#^Access to an undefined property Phake\\Proxies\\StubberProxy\:\:\$deserialize\.$#'
+			identifier: property.notFound
+			count: 2
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Access to an undefined property Phake\\Proxies\\StubberProxy\:\:\$serialize\.$#'
+			identifier: property.notFound
+			count: 4
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:build\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:deserialize\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:getId\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:post\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:waitForServerToGive200\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:post\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:put\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\VerifierProxy\:\:setId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method build\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getBody\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 8
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getStatus\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 20
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getUrlMatchingStrategy\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method thenReturn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 20
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method willReturn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:_testConvenienceMethodBuildsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:_testConvenienceMethodBuildsUrlEqualTo\(\) has parameter \$method with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:_testConvenienceMethodBuildsUrlEqualTo\(\) has parameter \$url with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testAnyWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testApiIsAliveIfServerReturns200\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testApiIsNotAliveIfServerDoesNotReturn200\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testBadRequestEntityIsConvenienceForResponseWith422Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testBadRequestIsConvenienceForResponseWith400Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testCreatedIsConvenienceForResponseWith201Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testDeleteWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testEditingStubWithoutAnIdThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testEditingStubsPutsJsonSerialisedObjectAtUrlWithIdToWireMock\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testForbiddenIsConvenienceForResponseWith403Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testGetWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testHeadWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testJsonResponseIsConvenienceForResponseWithStatusBodyAndJsonContentType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testNoContentIsConvenienceForResponseWith204Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testNotFoundIsConvenienceForResponseWith404Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkForContentTypeIsConvenienceForResponseWith200StatusWithContentType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkIsConvenienceForResponseWith200Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkJsonIsConvenienceForResponseWith200StatusWithJsonContentType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkTextXmlIsConvenienceForResponseWith200StatusWithTextXmlContentType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkWithBodyIsConvenienceForResponseWith200StatusWithBody\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOkXmlIsConvenienceForResponseWith200StatusWithAppXmlContentType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testOptionsWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testPatchWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testPermanentRedirectIsConvenienceForResponseWith301StatusAndLocationHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testPostWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testProxyToAllIsConvenienceMethodForProxyingAnyToUrl\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testSeeOtherIsConvenienceForResponseWith303StatusAndLocationHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testServerErrorIsConvenienceForResponseWith500Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testServiceUnavailableIsConvenienceForResponseWith503Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testStatusIsConvenienceForResponseWithSpecifiedStatus\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testStubbingAddsReturnedIdToStubMappingObject\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testStubbingPostsJsonSerialisedObjectToWireMock\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testTemporaryRedirectIsConvenienceForResponseWith302StatusAndLocationHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testTraceWithUrlTreatedAsUrlEqualTo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testUnauthorizedIsConvenienceForResponseWith401Status\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Method WireMock\\Client\\WireMockTest\:\:testVerifyingPostsJsonSerialisedObjectToWireMock\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#1 \$mock of static method Phake\:\:verify\(\) expects Phake\\IMock, WireMock\\Client\\Curl given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#1 \$mock of static method Phake\:\:when\(\) expects Phake\\IMock, WireMock\\Client\\Curl given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#1 \$mock of static method Phake\:\:when\(\) expects Phake\\IMock, WireMock\\Client\\HttpWait given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#1 \$mock of static method Phake\:\:when\(\) expects Phake\\IMock, WireMock\\Serde\\Serializer given\.$#'
+			identifier: argument.type
+			count: 7
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Parameter \#2 \$matchingValue of class WireMock\\Matching\\UrlMatchingStrategy constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Client/WireMockTest.php
+
+		-
+			message: '#^Cannot call method getChunkedDribbleDelay\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getFault\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getFixedDelayMillis\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getRandomDelayDistribution\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getResponse\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:_testFaultCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:_testFaultCanBeStubbed\(\) has parameter \$fault with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testChunkedDribbleDelayOnStubbedResponseCanBeSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testConnectionResetByPeerThenCloseFaultCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testEmptyResponseFaultCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testFixedDelayOnStubbedResponseCanBeSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testGlobalFixedDelayOnStubbedResponsesCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testGlobalRandomDelayOnStubbedResponsesCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testLogNormalDelayOnStubbedResponseCanBeSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testMalformedResponseChunkFaultCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testRandomDataThenCloseFaultCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testRandomDelayOnStubbedResponseCanBeSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\FaultsAndDelaysIntegrationTest\:\:testUniformDelayOnStubbedResponseCanBeSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 6
+			path: test/WireMock/Integration/FaultsAndDelaysIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: test/WireMock/Integration/MappingsAssertionFunctions.php
+
+		-
+			message: '#^Function assertThatTheOnlyMappingPresentIs\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsAssertionFunctions.php
+
+		-
+			message: '#^Function assertThatThereAreNoMappings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsAssertionFunctions.php
+
+		-
+			message: '#^Function getMappings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsAssertionFunctions.php
+
+		-
+			message: '#^Parameter \#1 \$json of method WireMock\\Serde\\Serializer\:\:deserialize\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/MappingsAssertionFunctions.php
+
+		-
+			message: '#^Cannot call method getId\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testGettingSingleMappingRetrievesStubById\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testMappingListCanBeLimitedToMostRecent\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testMappingListCanBeOffsetToRetrieveOlderStubs\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testMappingListContainsStubsPreviouslyCreated\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testMappingsListIsEmptyIfNoStubsHaveBeenMade\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testStubsCanBeFoundByMetadata\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testStubsCanBeRemovedByMetadata\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testStubsNotMatchingMetadataAreNotFound\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MappingsIntegrationTest\:\:testStubsNotMatchingMetadataAreNotRemoved\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method WireMock\\Client\\WireMock\:\:getSingleStubMapping\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/MappingsIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset ''Content\-Disposition'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset ''X\-Header'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 7
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset 1 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getBodyPatterns\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getMatchingType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getMultipartPatterns\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MultipartIntegrationTest\:\:testMultipartMatchingTypeCanBetSetToAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MultipartIntegrationTest\:\:testMultipartMatchingTypeDefaultsToAny\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MultipartIntegrationTest\:\:testMultipartWithHeaderCanBeRegistered\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MultipartIntegrationTest\:\:testMultipartWithNameCanBeRegistered\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\MultipartIntegrationTest\:\:testSimpleMultipartStubCanBeRegistered\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 5
+			path: test/WireMock/Integration/MultipartIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\NearMissesIntegrationTest\:\:testFindNearMissesForAllUnmatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/NearMissesIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\NearMissesIntegrationTest\:\:testFindNearMissesForLoggedRequest\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/NearMissesIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\NearMissesIntegrationTest\:\:testFindNearMissesForRequestPattern\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/NearMissesIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getAdditionalProxyRequestHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getProxyBaseUrl\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getProxyUrlPrefixToRemove\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getResponse\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ProxyingIntegrationTest\:\:testAdditionProxiedRequestHeadersCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ProxyingIntegrationTest\:\:testProxyBaseUrlOfStubCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ProxyingIntegrationTest\:\:testProxyUrlPrefixToRemoveCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Integration/ProxyingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method isAlive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testPreviouslyIssuedRequestsCanBeSnapshotted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testPreviouslyIssuedRequestsMatchingRecordingSpecCanBeSnapshotted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordedMappingsCanBeExcludedById\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordedMappingsCanBeRequestedById\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordedRequestsAreReturnedWhenStopping\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordedRequestsMatchingRecordingSpecAreReturnedWhenStopping\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordingCanBeStarted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordingCanBeStopped\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testRecordingStatusDefaultsToNeverStarted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testSnapshotRecordingWithIdsOutputFormat\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testStartAndStopRecordingWithIdsOutputFormat\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testStartingRecordCanRecordNonProxiedRequestsIfAllowed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testStartingRecordDoesNotRecordNonProxiedRequestsByDefault\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RecordingIntegrationTest\:\:testStoppingRecordingBeforeStartingThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Static property WireMock\\Integration\\RecordingIntegrationTest\:\:\$_wireMock2 \(WireMock\\Client\\WireMock\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Static property WireMock\\Integration\\WireMockIntegrationTest\:\:\$_wireMock \(WireMock\\Client\\WireMock\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Integration/RecordingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getId\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testFindingAllRequestsReturnsMatchingRequestDetails\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingAllServeEventsCanBeLimited\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingAllServeEventsCanBePaginatedWithServeEventQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingAllServeEventsReturnsAllRequestDetails\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingAllServeEventsSinceATime\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingServeEventsForStub\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingUnmatchedRequests\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testGettingUnmatchedServeEvents\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testRemoveEventsByStubMetadataRemovesMatchingRequestsFromTheJournal\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testRemovingServeEventRemovesRequestByIdFromTheJournal\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testRemovingServeEventsRemovesRequestsByMatcherFromTheJournal\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\RequestsIntegrationTest\:\:testResettingAllRequestsRemovesPreviousRequestsFromTheJournal\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$stubId of static method WireMock\\Client\\ServeEventQuery\:\:forStubMapping\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/RequestsIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getNewScenarioState\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getRequiredScenarioState\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getScenarioName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testGettingScenarios\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testNewScenarioStateOfStubCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testRequiredScenarioStateOfStubCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testScenarioNameOfStubCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testScenarioStateCanBeSetDirectly\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testScenariosCanBeReset\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ScenarioIntegrationTest\:\:testSingleScenarioCanBeReset\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Integration/ScenarioIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\ShutdownIntegrationTest\:\:testShutdownTerminatesStandaloneServer\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/ShutdownIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset ''X\-Munged\-Date'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot access offset 0 on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getBodyPatterns\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getCustomMatcher\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getHeaders\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 7
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getId\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getMatchingType\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getMatchingValue\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 5
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getMetadata\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getName\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getParameters\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getRequest\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 20
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getResponse\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 6
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getTransformerParameters\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getTransformers\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method getUrlMatchingStrategy\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 7
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method reset\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method resetToDefault\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Cannot call method stubFor\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testAbsentCookiesCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testAbsentHeadersCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testAbsentQueryParamsCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testCookiesCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testHeadersCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testHeadersCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testMappingsCanBeReset\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testMappingsCanBeResetToDefault\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testMultivalueHeadersCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testQueryParamsCanBeMatched\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestCanBeMatchedByUrlPathEquality\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestUrlAndBodyFileCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestUrlCanBeMatchedByRegex\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestUrlCanByMatchedAsAnyUrl\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestUrlPathCanBeMatchedByRegex\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestWithBinaryBodyCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testRequestWithUrlAndStringBodyCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBasicAuthMatching\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBodyContaining\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBodyEqualingJson\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBodyJsonPath\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBodyMatching\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByBodyNotContaining\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByDateTimeMatcherWithActualFormat\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByDateTimeMatcherWithTruncatedActual\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByDateTimeMatcherWithTruncatedExpected\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByLogicalAndOfChainedMatchers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByLogicalAndOfMatchersFromStaticMethod\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByLogicalOrOfChainedMatchers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseCanBeStubbedByLogicalOrOfMatchersFromStaticMethod\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseTransformerAndParameterCanBeSetOnStubInOneGo\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseTransformerParametersCanBeSetOnStub\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponseTransformersCanBeSetOnStub\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByAfterLiteralMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByAfterNowMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBeforeLiteralMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBeforeNowMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXPath\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXPathWithACombinedMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXPathWithNamespace\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXml\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXmlExemptingSpecificComparisonTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXmlWithPlaceholders\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByBodyXmlWithPlaceholdersAndCustomDelimiters\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByDateTimeMatcherWithOffset\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByDateTimeMatcherWithOffsetInStringSpec\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByEqualToDateTimeLiteralMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByHostMatching\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testResponsesCanBeStubbedByIsNowMatcher\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStatusCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStatusMessageCanBeStubbed\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubAttributesCanBeMatchedByBase64BinaryEquality\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubAttributesCanBeMatchedByCaseInsensitiveEquality\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubIdCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubIdIsReturnedInResponseHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubImportCanBeSetToIgnoreDuplicates\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubImportCanBeSetToReplaceAnyExistingStubs\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubImportLeavesExistingStubsInPlaceByDefault\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubImportOverwritesStubsByDefault\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubImportWithMalformedIdThrowsExceptionFromWiremock\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubNameCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubNameIsReturnedInResponseHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubPriorityCanBeSet\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeCreatedWithCustomMatchers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeCreatedWithMetadataAttached\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeCreatedWithStandardMatchersCombinedWithCustomMatchers\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeEdited\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeImmediatelyPersisted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeImported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeIndividuallyDeleted\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\StubbingIntegrationTest\:\:testStubsCanBeSaved\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$id of method WireMock\\Client\\WireMock\:\:removeStub\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 61
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrValue of method ReflectionProperty\:\:setValue\(\) expects object\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 7
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$array of function array_map expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 3
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$valueMatchingStrategy of method WireMock\\Client\\MappingBuilder\:\:withHeader\(\) expects WireMock\\Client\\ValueMatchingStrategy, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$valueMatchingStrategy of method WireMock\\Client\\MappingBuilder\:\:withQueryParam\(\) expects WireMock\\Client\\ValueMatchingStrategy, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/StubbingIntegrationTest.php
+
+		-
+			message: '#^Binary operation "\." between ''/'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:__construct\(\) has parameter \$_hostname with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:__construct\(\) has parameter \$_port with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:_makeTimedRequest\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:_makeTimedRequest\(\) has parameter \$ch with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:_makeUrl\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:_makeUrl\(\) has parameter \$path with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:get\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:get\(\) has parameter \$headers with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:get\(\) has parameter \$includeResponseHeaders with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:get\(\) has parameter \$path with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:getLastRequestTimeMillis\(\) should return float\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:post\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:post\(\) has parameter \$body with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Method WireMock\\Integration\\TestClient\:\:post\(\) has parameter \$path with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Parameter \#1 \$ch of function curl_exec expects resource, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function strpos expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Parameter \#1 \$url of function curl_init expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Parameter \#3 \$value of function curl_setopt expects array\<int, string\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Parameter \#3 \$value of function curl_setopt expects array\|string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Part \$path \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Part \$this\-\>_hostname \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Part \$this\-\>_port \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Property WireMock\\Integration\\TestClient\:\:\$_hostname has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Property WireMock\\Integration\\TestClient\:\:\$_lastRequestTimeMillis has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Property WireMock\\Integration\\TestClient\:\:\$_port has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Integration/TestClient.php
+
+		-
+			message: '#^Cannot use \+\+ on mixed\.$#'
+			identifier: postInc.type
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyASpecificNumberOfRequestsOccurred\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyAsComparisonOperator\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyRequestDoesNotHaveHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyRequestHasBody\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyRequestHasHeader\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifyRequestWithQuery\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testCanVerifySimpleGetToUrl\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingAbsenceOfPresentHeaderThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingRequestWithMissingHeaderThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingRequestWithMissingQueryThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingUnrequestedUrlThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingWiremockUrlEqualThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingWrongNumberOfRequestsThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:testVerifyingZeroRequestsWhenSomeRequestsWereMadeThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:verify\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\VerificationIntegrationTest\:\:verify\(\) has parameter \$requestPatternBuilderOrCount with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$count of method PHPUnit\\Framework\\TestCase\:\:addToAssertionCount\(\) expects int, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 7
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$requestPatternBuilderOrCount of method WireMock\\Client\\WireMock\:\:verify\(\) expects int\|WireMock\\Client\\RequestPatternBuilder\|WireMock\\Verification\\CountMatchingStrategy, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Property WireMock\\Integration\\VerificationIntegrationTest\:\:\$_verificationCount has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Integration/VerificationIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WebhookIntegrationTest\:\:testWebhookCallbackCanBeRegistered\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WebhookIntegrationTest\:\:testWebhookCallbackWithBase64Body\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WebhookIntegrationTest\:\:testWebhookCallbackWithFixedDelay\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WebhookIntegrationTest\:\:testWebhookCallbackWithTemplatingBasedOnExtraParameter\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WebhookIntegrationTest\:\:testWebhookCallbackWithUniformRandomDelay\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$localStubMapping of function assertThatTheOnlyMappingPresentIs expects WireMock\\Stubbing\\StubMapping, mixed given\.$#'
+			identifier: argument.type
+			count: 5
+			path: test/WireMock/Integration/WebhookIntegrationTest.php
+
+		-
+			message: '#^Cannot call method isAlive\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WireMockIntegrationTest\:\:clearMappings\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WireMockIntegrationTest\:\:runCmd\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Integration\\WireMockIntegrationTest\:\:runCmd\(\) has parameter \$cmd with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Part \$cmd \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Static property WireMock\\Integration\\WireMockIntegrationTest\:\:\$_wireMock \(WireMock\\Client\\WireMock\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Integration/WireMockIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\RequestPatternTest\:\:testMethodAndMatchingStategyAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/RequestPatternTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\RequestPatternTest\:\:testQueryParamMatchersAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/RequestPatternTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\RequestPatternTest\:\:testRequestBodyMatchersAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/RequestPatternTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\RequestPatternTest\:\:testRequestCookieMatchersAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/RequestPatternTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\RequestPatternTest\:\:testRequestHeaderMatchersAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/RequestPatternTest.php
+
+		-
+			message: '#^Method WireMock\\Matching\\UrlMatchingStrategyTest\:\:testMatchingTypeAndMatchingValueAreAvailable\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Matching/UrlMatchingStrategyTest.php
+
+		-
+			message: '#^Cannot call method normalize\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Cannot call method serialize\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testAutoRequestBodyPatternIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testBinaryBodySizeExtractThresholdIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testCaptureHeadersAreIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testCaptureHeadersWithoutCaseInsensitiveAreSerializedToEmptyObject\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testEqualToJsonRequestBodyPatternIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testEqualToRequestBodyPatternIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testEqualToXmlRequestBodyPatternIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testIgnoringRepeatsIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testPersistenceIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testRequestIdsAreIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testRequestPatternIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testTargetIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testTextBodySizeExtractThresholdIsIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testTransformerParemetersAreIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:testTransformersAreIncludedInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:toArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Recording\\RecordSpecBuildTest\:\:toArray\(\) has parameter \$obj with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Property WireMock\\Recording\\RecordSpecBuildTest\:\:\$_serializer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Recording/RecordSpecBuildTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:providerBadDeserializeValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:providerBadSerializeValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:providerSerializableOnlyValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:providerSerializableValues\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationAndDenormalization\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationAndDenormalization\(\) has parameter \$expectedNormalized with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationAndDenormalization\(\) has parameter \$explicitJson with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationAndDenormalization\(\) has parameter \$explicitType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationAndDenormalization\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationOnly\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationOnly\(\) has parameter \$expectedNormalized with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testNormalizationOnly\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenDeserializing\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenDeserializing\(\) has parameter \$expectedNormalized with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenDeserializing\(\) has parameter \$explicitJson with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenDeserializing\(\) has parameter \$explicitType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenDeserializing\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenNormalizing\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerIntegrationTest\:\:testThrowsWhenNormalizing\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$className of method WireMock\\Serde\\SerializerIntegrationTest\:\:serializerFor\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$json of method WireMock\\Serde\\Serializer\:\:deserialize\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$original of class WireMock\\Serde\\TestClasses\\UnwrappedAndNamedProperty constructor expects WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#1 \$primitiveTypes of class WireMock\\Serde\\TestClasses\\ClassTypeFields constructor expects WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$type of method WireMock\\Serde\\Serializer\:\:deserialize\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Parameter \#2 \$unwrappedClass of class WireMock\\Serde\\TestClasses\\UnwrappedClassProperty constructor expects WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Variable \$explicitType on left side of \?\? is never defined\.$#'
+			identifier: nullCoalesce.variable
+			count: 2
+			path: test/WireMock/Serde/SerializerIntegrationTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:denormalize\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Call to an undefined method Phake\\Proxies\\StubberProxy\:\:normalize\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Cannot call method thenReturn\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 4
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method JsonSerializable@anonymous/WireMock/Serde/SerializerTest\.php\:36\:\:jsonSerialize\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:providerPrimitives\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testDenormalizingDelegatesToSerdeType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testNormalizingArrayRecursivelyDenormalizesKeepingKeys\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testNormalizingObjectRegisteredInLookupDelegatesToSerdeTypeClass\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testNormalizingPrimitivesIsANoOp\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testNormalizingPrimitivesIsANoOp\(\) has parameter \$primitiveValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\SerializerTest\:\:testSerializingObjectNotInLookupObservesJsonSerializableInterface\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/SerializerTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\CatchAllAndNamedByProperty\:\:possibleNames\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAndNamedByProperty\:\:\$namer is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAndNamedByProperty\:\:\$prop is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedByProperty.php
+
+		-
+			message: '#^Static method WireMock\\Serde\\TestClasses\\CatchAllAndNamedByProperty\:\:possibleNames\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedByProperty.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\CatchAllAndNamedProperty\:\:__construct\(\) has parameter \$original with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAndNamedProperty\:\:\$original \(array\<string, string\>\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAndNamedProperty\:\:\$original is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAndNamedProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAssocArrayProperty\:\:\$catchAll is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAssocArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllAssocArrayProperty\:\:\$topLevel is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllAssocArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllTypedArrayProperty\:\:\$catchAll is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllTypedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllTypedArrayProperty\:\:\$topLevel is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllTypedArrayProperty.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\CatchAllUntypedArrayProperty\:\:__construct\(\) has parameter \$catchAll with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllUntypedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllUntypedArrayProperty\:\:\$catchAll is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllUntypedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllUntypedArrayProperty\:\:\$catchAll type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllUntypedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\CatchAllUntypedArrayProperty\:\:\$topLevel is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/CatchAllUntypedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\ClassTypeFields\:\:\$primitiveTypes is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/ClassTypeFields.php
+
+		-
+			message: '#^Constructor of class WireMock\\Serde\\TestClasses\\ConstructorParams has an unused parameter \$ignoredParam\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: test/WireMock/Serde/TestClasses/ConstructorParams.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\ConstructorParams\:\:\$fieldWithConstructorParam is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/ConstructorParams.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\ConstructorParams\:\:\$fieldWithOptionalConstructorParam is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/ConstructorParams.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\DefaultedField\:\:\$defaulted is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DefaultedField.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\DiscriminatedTypeParent\:\:getDiscriminatorMapping\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeParent.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\DiscriminatedTypeParent\:\:\$type is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeParent.php
+
+		-
+			message: '#^Static method WireMock\\Serde\\TestClasses\\DiscriminatedTypeParent\:\:getDiscriminatorMapping\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeParent.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\DiscriminatedTypeSubclassA\:\:\$subclassAProp is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeSubclassA.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\DiscriminatedTypeSubclassB\:\:__construct\(\) has parameter \$subclassBProp with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeSubclassB.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\DiscriminatedTypeSubclassB\:\:\$subclassBProp is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeSubclassB.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\DiscriminatedTypeSubclassB\:\:\$subclassBProp type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/DiscriminatedTypeSubclassB.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives\:\:create\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/TestClasses/FieldOnlyPrimitives.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives\:\:\$bool is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/FieldOnlyPrimitives.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives\:\:\$float is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/FieldOnlyPrimitives.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives\:\:\$int is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/FieldOnlyPrimitives.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\FieldOnlyPrimitives\:\:\$string is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/FieldOnlyPrimitives.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\NamedByProperty\:\:names\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/NamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\NamedByProperty\:\:\$value is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/NamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\NamedByProperty\:\:\$valueName is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/NamedByProperty.php
+
+		-
+			message: '#^Static method WireMock\\Serde\\TestClasses\\NamedByProperty\:\:names\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/NamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\NamedProperty\:\:\$originalName is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/NamedProperty.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:__construct\(\) has parameter \$intArray with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:__construct\(\) has parameter \$intByString with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:__construct\(\) has parameter \$untypedArray with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$intArray \(array\<int\>\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$intArray is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$intByString \(array\<string, int\>\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$intByString is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$untypedArray is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\PrimitiveArrayFields\:\:\$untypedArray type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/PrimitiveArrayFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnionTypeFields\:\:\$arrayOfUnion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnionTypeFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnionTypeFields\:\:\$arrayUnion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnionTypeFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnionTypeFields\:\:\$classUnion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnionTypeFields.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnionTypeFields\:\:\$primitivesUnion is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnionTypeFields.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\UnwrappedAndNamedByProperty\:\:possibleNames\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedAndNamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedAndNamedByProperty\:\:\$namer is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedAndNamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedAndNamedByProperty\:\:\$prop is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedAndNamedByProperty.php
+
+		-
+			message: '#^Static method WireMock\\Serde\\TestClasses\\UnwrappedAndNamedByProperty\:\:possibleNames\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedAndNamedByProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedAndNamedProperty\:\:\$original is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedAndNamedProperty.php
+
+		-
+			message: '#^Method WireMock\\Serde\\TestClasses\\UnwrappedArrayProperty\:\:__construct\(\) has parameter \$unwrappedArray with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedArrayProperty\:\:\$unwrappedArray \(array\<string\>\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedArrayProperty\:\:\$unwrappedArray is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedArrayProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedClassProperty\:\:\$topLevel is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedClassProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedClassProperty\:\:\$unwrappedClass is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedClassProperty.php
+
+		-
+			message: '#^Property WireMock\\Serde\\TestClasses\\UnwrappedPrimitiveProperty\:\:\$unwrappedPrimitive is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Serde/TestClasses/UnwrappedPrimitiveProperty.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArray@anonymous/WireMock/Serde/Type/SerdeTypeArrayTest\.php\:14\:\:denormalizeFromArray\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArray@anonymous/WireMock/Serde/Type/SerdeTypeArrayTest\.php\:14\:\:denormalizeFromArray\(\) has parameter \$path with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArray@anonymous/WireMock/Serde/Type/SerdeTypeArrayTest\.php\:14\:\:denormalizeFromArray\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArrayTest\:\:providerNonArrayData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArrayTest\:\:testDenormalizingNonArrayThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeArrayTest\:\:testDenormalizingNonArrayThrows\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeArrayTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeNullTest\:\:providerNonNullData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeNullTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeNullTest\:\:testDenormalizesNullToNull\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeNullTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeNullTest\:\:testDenormalizingNonNullThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeNullTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypeNullTest\:\:testDenormalizingNonNullThrows\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypeNullTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:providerMatchedTypeAndData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:providerMismatchedTypeAndData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingArrayDataThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingCorrectTypeDataIsANoOp\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingCorrectTypeDataIsANoOp\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingMismatchedTypeDataThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingMismatchedTypeDataThrows\(\) has parameter \$data with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingNullDataThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Method WireMock\\Serde\\Type\\SerdeTypePrimitiveTest\:\:testDenormalizingObjectDataThrows\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Serde/Type/SerdeTypePrimitiveTest.php
+
+		-
+			message: '#^Binary operation "\." between ''\?'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Binary operation "\." between ''null\|'' and mixed results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\[\]'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Binary operation "\." between mixed and ''\|null'' results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:providerArrayKeyTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:providerOtherPrimitiveTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:providerPrimitiveAssocArrayTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:providerPrimitiveTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:providerUnsupportedTypes\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfClass\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfClassAddsClassToLookupAsRootType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfPrimitives\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfPrimitives\(\) has parameter \$inputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfPrimitives\(\) has parameter \$outputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingArrayOfUnion\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayOfPrimitives\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayOfPrimitives\(\) has parameter \$keyInputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayOfPrimitives\(\) has parameter \$keyOutputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayOfPrimitives\(\) has parameter \$valueInputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayOfPrimitives\(\) has parameter \$valueOutputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithBadPrimitiveKeyTypeIsNotSupported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithBadPrimitiveKeyTypeIsNotSupported\(\) has parameter \$keyInputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithClassValues\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithClassValuesAddsClassToLookupAsRootType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithNonPrimitiveKeyTypeIsNotSupported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithNonPrimitiveKeyTypeIsNotSupported\(\) has parameter \$keyInputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingAssocArrayWithUnionValues\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingClassAddsClassTypesOfPropertiesToLookupAsNonRootType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingClassAddsTypeToLookupAsRootType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingClassWithPrimitiveTypeCatchAllThrowsException\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingDiscriminatedTypeAddsPossibleSubclassesToLookupAsRootTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingKitchenSinkClass\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingNull\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingPrimitive\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingPrimitive\(\) has parameter \$inputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingPrimitive\(\) has parameter \$outputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullableClass\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullableNullIsNotSupported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullablePrimitive\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullablePrimitive\(\) has parameter \$inputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullablePrimitive\(\) has parameter \$outputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullableUnionIsNotSupported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingQuestionMarkNullableUntypedArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionIncludingClass\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionIncludingClassAddsClassToLookupAsRootType\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableAfterPrimitive\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableAfterPrimitive\(\) has parameter \$inputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableAfterPrimitive\(\) has parameter \$outputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableBeforePrimitive\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableBeforePrimitive\(\) has parameter \$inputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionNullableBeforePrimitive\(\) has parameter \$outputType with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionOfPrimitivesAndNull\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionWithAssocArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionWithDuplicatedTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionWithMultipleArrayTypesIsNotSupported\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionWithTypedArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnionWithUntypedArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnsupportedTypes\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUnsupportedTypes\(\) has parameter \$type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\SerdeTypeParserTest\:\:testParsingUntypedArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Parameter \#1 \$type of method WireMock\\SerdeGen\\SerdeTypeParser\:\:parseTypeString\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Parameter \#1 \$typeString of class WireMock\\Serde\\Type\\SerdeTypePrimitive constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 7
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Part \$keyIn \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Part \$keyInputType \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 3
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Part \$valIn \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Part \$valueInputType \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: test/WireMock/SerdeGen/SerdeTypeParserTest.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\CatchAllPrimitiveProperty\:\:\$catchAllPrimitive is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/CatchAllPrimitiveProperty.php
+
+		-
+			message: '#^Constructor of class WireMock\\SerdeGen\\TestClasses\\KitchenSink has an unused parameter \$ignoredParam\.$#'
+			identifier: constructor.unusedParameter
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:__construct\(\) has parameter \$ignoredParam with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:discriminate\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:possibleNames\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$catchall is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$catchall type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$fieldOnly is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$inlined is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$namedByName is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$namedByValue is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$object is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$originalName is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:\$reqArg is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Static method WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:discriminate\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Static method WireMock\\SerdeGen\\TestClasses\\KitchenSink\:\:possibleNames\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/KitchenSink.php
+
+		-
+			message: '#^Property WireMock\\SerdeGen\\TestClasses\\OneSimpleField\:\:\$field is unused\.$#'
+			identifier: property.unused
+			count: 1
+			path: test/WireMock/SerdeGen/TestClasses/OneSimpleField.php
+
+		-
+			message: '#^Method WireMock\\SerdeGen\\WireMockSerdeGenTest\:\:testGeneratingLookup\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/SerdeGen/WireMockSerdeGenTest.php
+
+		-
+			message: '#^Cannot call method normalize\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:testIdIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:testNameIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:testPriorityIsInArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:testRequestPatternAndResponseDefinitionAreAvailableInArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:testScenarioArrayIsMergedIntoArrayIfSpecified\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:toArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Method WireMock\\Stubbing\\StubMappingTest\:\:toArray\(\) has parameter \$obj with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Property WireMock\\Stubbing\\StubMappingTest\:\:\$_mockRequestPattern is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Property WireMock\\Stubbing\\StubMappingTest\:\:\$_mockResponseDefinition is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
+
+		-
+			message: '#^Property WireMock\\Stubbing\\StubMappingTest\:\:\$_serializer has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: test/WireMock/Stubbing/StubMappingTest.php
