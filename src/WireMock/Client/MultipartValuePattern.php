@@ -11,16 +11,16 @@ class MultipartValuePattern
     private $bodyPatterns;
     /** @var array<string, ValueMatchingStrategy>|null */
     private $headers;
-    /** @var string */
+    /** @var string|null */
     private $name;
-    /** @var string */
+    /** @var string|null */
     private $matchingType;
 
     /**
      * @param ValueMatchingStrategy[]|null $bodyPatterns
      * @param array<string, ValueMatchingStrategy>|null $headers
-     * @param string $name
-     * @param string $matchingType
+     * @param string|null $name
+     * @param string|null $matchingType
      */
     public function __construct($bodyPatterns = null, $headers = null, $name = null, $matchingType = null)
     {
@@ -31,7 +31,7 @@ class MultipartValuePattern
     }
 
     /**
-     * @return array
+     * @return ValueMatchingStrategy[]|null
      */
     public function getBodyPatterns()
     {
@@ -39,7 +39,7 @@ class MultipartValuePattern
     }
 
     /**
-     * @return array
+     * @return array<string, ValueMatchingStrategy>|null
      */
     public function getHeaders()
     {
@@ -47,7 +47,7 @@ class MultipartValuePattern
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -55,7 +55,7 @@ class MultipartValuePattern
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMatchingType()
     {

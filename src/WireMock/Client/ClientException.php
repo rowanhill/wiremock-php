@@ -4,8 +4,8 @@ namespace WireMock\Client;
 
 class ClientException extends \Exception
 {
-    private $_responseCode;
-    private $_response;
+    private int $_responseCode;
+    private string $_response;
 
     public function __construct(int $responseCode, string $response)
     {

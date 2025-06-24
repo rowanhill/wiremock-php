@@ -3,6 +3,8 @@
 namespace WireMock\Client;
 
 use DateTime;
+use http\Client\Request;
+use http\Url;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\GlobalDelaySettings;
 use WireMock\Matching\UrlMatchingStrategy;
@@ -23,14 +25,15 @@ class WireMock
     private $hostname;
     /** @var int */
     private $port;
-    /** @var HttpWait */
-    private $httpWait;
-    /** @var Curl  */
-    private $curl;
-    /** @var Serializer */
-    private $serializer;
+    private HttpWait $httpWait;
+    private Curl $curl;
+    private Serializer $serializer;
 
-    public static function create($hostname = 'localhost', $port = 8080)
+    /**
+     * @param string $hostname
+     * @param int $port
+     */
+    public static function create($hostname = 'localhost', $port = 8080): self
     {
         $httpWait = new HttpWait();
         $curl = new Curl();
@@ -39,6 +42,10 @@ class WireMock
         return new self($httpWait, $curl, $serializer, $hostname, $port);
     }
 
+    /**
+     * @param string $hostname
+     * @param int $port
+     */
     public function __construct(
         HttpWait $httpWait,
         Curl $curl,
@@ -53,19 +60,23 @@ class WireMock
         $this->serializer = $serializer;
     }
 
-    public function isAlive($timeoutSecs = 10, $debug = true)
+    /**
+     * @param boolean $debug
+     * @param int $timeoutSecs
+     */
+    public function isAlive($timeoutSecs = 10, $debug = true): bool
     {
         $url = $this->_makeUrl('__admin/');
         return $this->httpWait->waitForServerToGive200($url, $timeoutSecs, $debug);
     }
 
-    public function isShutDown()
+    public function isShutDown(): bool
     {
         $url = $this->_makeUrl('__admin/');
         return $this->httpWait->waitForServerToFailToRespond($url);
     }
 
-    public function stubFor(MappingBuilder $mappingBuilder)
+    public function stubFor(MappingBuilder $mappingBuilder): StubMapping
     {
         $stubMapping = $mappingBuilder->build();
         /** @var StubMapping $responseMapping */
@@ -74,7 +85,7 @@ class WireMock
         return $stubMapping;
     }
 
-    public function editStub(MappingBuilder $mappingBuilder)
+    public function editStub(MappingBuilder $mappingBuilder): StubMapping
     {
         $stubMapping = $mappingBuilder->build();
         if (!$stubMapping->getId()) {
@@ -87,7 +98,7 @@ class WireMock
     /**
      * @param StubImport|StubImportBuilder $stubImportsOrBuilder
      */
-    public function importStubs($stubImportsOrBuilder)
+    public function importStubs($stubImportsOrBuilder): void
     {
         $stubImports = ($stubImportsOrBuilder instanceof StubImport) ?
             $stubImportsOrBuilder :
@@ -96,12 +107,12 @@ class WireMock
     }
 
     /**
-     * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
+     * @param RequestPatternBuilder|CountMatchingStrategy|int $requestPatternBuilderOrCount
      * @param RequestPatternBuilder|null $requestPatternBuilder
      * @throws ClientException
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrCount, ?RequestPatternBuilder $requestPatternBuilder = null)
+    public function verify($requestPatternBuilderOrCount, ?RequestPatternBuilder $requestPatternBuilder = null): void
     {
         if ($requestPatternBuilderOrCount instanceof CountMatchingStrategy) {
             $patternBuilder = $requestPatternBuilder;
@@ -114,7 +125,7 @@ class WireMock
             $numberOfRequestsMatcher = null;
         }
 
-        $requestPattern = $patternBuilder->build();
+        $requestPattern = $patternBuilder->build(); // @phpstan-ignore method.nonObject (@TODO this looks like an actual bug to me?)
         $response = $this->doPost('__admin/requests/count', $requestPattern, CountMatchingRequestsResult::class);
         $count = $response->getCount();
 
@@ -188,15 +199,14 @@ class WireMock
     {
         if ($loggedRequestOrPattern instanceof LoggedRequest) {
             $path = '__admin/near-misses/request';
-        } else if ($loggedRequestOrPattern instanceof RequestPatternBuilder) {
+        } elseif ($loggedRequestOrPattern instanceof RequestPatternBuilder) {
             $loggedRequestOrPattern = $loggedRequestOrPattern->build();
             $path = '__admin/near-misses/request-pattern';
         } else {
             throw new \Exception('Unexpected near miss specifier: ' . print_r($loggedRequestOrPattern, true));
         }
-        /** @var FindNearMissesResult $result */
-        $result = $this->doPost($path, $loggedRequestOrPattern, FindNearMissesResult::class);
-        return $result;
+
+        return $this->doPost($path, $loggedRequestOrPattern, FindNearMissesResult::class);
     }
 
     /**
@@ -210,7 +220,7 @@ class WireMock
     /**
      * Deletes all serve events from the WireMock server's request journal
      */
-    public function resetAllRequests()
+    public function resetAllRequests(): void
     {
         $this->doDelete('__admin/requests');
     }
@@ -219,7 +229,7 @@ class WireMock
      * Removes specified serve event from the WireMock server's request journal
      * @param string $id
      */
-    public function removeServeEvent($id)
+    public function removeServeEvent($id): void
     {
         $this->doDelete("__admin/requests/$id");
     }
@@ -227,7 +237,7 @@ class WireMock
     /**
      * @param RequestPatternBuilder $requestPatternBuilder
      */
-    public function removeServeEvents($requestPatternBuilder)
+    public function removeServeEvents($requestPatternBuilder): void
     {
         $this->doPost('__admin/requests/remove', $requestPatternBuilder->build());
     }
@@ -235,7 +245,7 @@ class WireMock
     /**
      * @param ValueMatchingStrategy $valueMatchingStrategy
      */
-    public function removeEventsByStubMetadata($valueMatchingStrategy)
+    public function removeEventsByStubMetadata($valueMatchingStrategy): void
     {
         $this->doPost('__admin/requests/remove-by-metadata', $valueMatchingStrategy);
     }
@@ -245,7 +255,7 @@ class WireMock
      *
      * @param int $delayMillis
      */
-    public function setGlobalFixedDelay($delayMillis)
+    public function setGlobalFixedDelay($delayMillis): void
     {
         $this->doPost('__admin/settings', GlobalDelaySettings::fixed($delayMillis));
     }
@@ -253,7 +263,7 @@ class WireMock
     /**
      * @param DelayDistribution $delayDistribution
      */
-    public function setGlobalRandomDelay($delayDistribution)
+    public function setGlobalRandomDelay($delayDistribution): void
     {
         $this->doPost('__admin/settings', GlobalDelaySettings::random($delayDistribution));
     }
@@ -261,12 +271,12 @@ class WireMock
     /**
      * Note: this function isn't part of the Java API
      */
-    public function resetGlobalDelays()
+    public function resetGlobalDelays(): void
     {
         $this->doPost('__admin/settings', GlobalDelaySettings::none());
     }
 
-    public function saveAllMappings()
+    public function saveAllMappings(): void
     {
         $this->doPost('__admin/mappings/save');
     }
@@ -276,7 +286,7 @@ class WireMock
      *
      * @param string $id A string representation of a GUID
      */
-    public function removeStub($id)
+    public function removeStub($id): void
     {
         $this->doDelete('__admin/mappings/' . urlencode($id));
     }
@@ -284,7 +294,7 @@ class WireMock
     /**
      * Reset all stubbings and the request journal
      */
-    public function reset()
+    public function reset(): void
     {
         $this->doPost('__admin/reset');
     }
@@ -292,7 +302,7 @@ class WireMock
     /**
      * Reset all stubbings, reload those from the mappings directory, and reset the request journal
      */
-    public function resetToDefault()
+    public function resetToDefault(): void
     {
         $this->doPost('__admin/mappings/reset');
     }
@@ -308,7 +318,7 @@ class WireMock
     /**
      * Reset all scenarios to the Scenario.STARTED state
      */
-    public function resetAllScenarios()
+    public function resetAllScenarios(): void
     {
         $this->doPost('__admin/scenarios/reset');
     }
@@ -317,7 +327,7 @@ class WireMock
      * Reset a single scenario to the Scenario.STARTED state
      * @param string $scenarioName
      */
-    public function resetScenario($scenarioName)
+    public function resetScenario($scenarioName): void
     {
         $this->doPut('__admin/scenarios/' . urlencode($scenarioName) . '/state');
     }
@@ -326,7 +336,7 @@ class WireMock
      * @param string $scenarioName
      * @param string $stateName
      */
-    public function setScenarioState($scenarioName, $stateName)
+    public function setScenarioState($scenarioName, $stateName): void
     {
         $this->doPut(
             '__admin/scenarios/' . urlencode($scenarioName) . '/state',
@@ -334,29 +344,29 @@ class WireMock
         );
     }
 
-    public function shutdownServer()
+    public function shutdownServer(): void
     {
         $this->doPost('__admin/shutdown');
     }
 
     /**
-     * @param int $limit
-     * @param int $offset
+     * @param ?int $limit
+     * @param ?int $offset
      * @return ListStubMappingsResult
      */
-    public function listAllStubMappings($limit = null, $offset = null)
+    public function listAllStubMappings(?int $limit = null, ?int $offset = null)
     {
         $pathAndParams = '__admin/mappings';
-        if ($limit || $offset) {
+        if ($limit !== null || $offset !== null) {
             $pathAndParams .= '?';
-            if ($limit) {
-                $pathAndParams .= 'limit=' . urlencode($limit);
+            if ($limit !== null) {
+                $pathAndParams .= 'limit=' . $limit;
             }
-            if ($limit && $offset) {
+            if ($limit !== null && $offset !== null) {
                 $pathAndParams .= '&';
             }
-            if ($offset) {
-                $pathAndParams .= 'offset=' . urlencode($offset);
+            if ($offset !== null) {
+                $pathAndParams .= 'offset=' . $offset;
             }
         }
         return $this->doGet($pathAndParams, ListStubMappingsResult::class);
@@ -384,7 +394,7 @@ class WireMock
     /**
      * @param ValueMatchingStrategy $valueMatchingStrategy
      */
-    public function removeStubsByMetadata($valueMatchingStrategy)
+    public function removeStubsByMetadata($valueMatchingStrategy): void
     {
         $this->doPost('__admin/mappings/remove-by-metadata', $valueMatchingStrategy);
     }
@@ -392,7 +402,7 @@ class WireMock
     /**
      * @param RecordSpecBuilder|string $recordingSpecOrUrl
      */
-    public function startRecording($recordingSpecOrUrl)
+    public function startRecording($recordingSpecOrUrl): void
     {
         if (is_string($recordingSpecOrUrl)) {
             $spec = self::recordSpec()->forTarget($recordingSpecOrUrl)->build();
@@ -430,9 +440,15 @@ class WireMock
     }
 
     /**
+     * @template T of object
      * @param string $path
-     * @param string|null $resultType
+     * @param string|null|class-string<T> $resultType
      * @return mixed
+     * @phpstan-return (
+     *      $resultType is class-string<T>
+     *          ? T
+     *          : ($resultType is class-string ? object : mixed)
+     *  )
      */
     private function doGet(string $path, ?string $resultType = null)
     {
@@ -446,10 +462,16 @@ class WireMock
     }
 
     /**
+     * @template T of object
      * @param string $path
      * @param mixed $body
-     * @param string|null $resultType
+     * @param string|null|class-string<T> $resultType
      * @return mixed
+     * @phpstan-return (
+     *       $resultType is class-string<T>
+     *           ? T
+     *           : ($resultType is class-string ? object : mixed)
+     *   )
      */
     private function doPost(string $path, $body = null, ?string $resultType = null)
     {
@@ -468,10 +490,16 @@ class WireMock
     }
 
     /**
+     * @template T of object
      * @param string $path
      * @param mixed $body
-     * @param string|null $resultType
+     * @param string|null|class-string<T> $resultType
      * @return mixed
+     * @phpstan-return (
+     *        $resultType is class-string<T>
+     *            ? T
+     *            : ($resultType is class-string ? object : mixed)
+     *    )
      */
     private function doPut(string $path, $body = null, ?string $resultType = null)
     {
@@ -490,9 +518,15 @@ class WireMock
     }
 
     /**
+     * @template T of object
      * @param string $path
-     * @param string|null $resultType
+     * @param string|null|class-string<T> $resultType
      * @return mixed
+     * @phpstan-return (
+     *        $resultType is class-string<T>
+     *            ? T
+     *            : ($resultType is class-string ? object : mixed)
+     *    )
      */
     private function doDelete(string $path, ?string $resultType = null)
     {
@@ -505,7 +539,7 @@ class WireMock
         }
     }
 
-    private function _makeUrl($path)
+    private function _makeUrl(string $path): string
     {
         return "http://$this->hostname:$this->port/$path";
     }
@@ -514,7 +548,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function get($urlMatchingStrategy)
+    public static function get($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -527,7 +561,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function post($urlMatchingStrategy)
+    public static function post($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -540,7 +574,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function put($urlMatchingStrategy)
+    public static function put($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -553,7 +587,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function delete($urlMatchingStrategy)
+    public static function delete($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -566,7 +600,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function patch($urlMatchingStrategy)
+    public static function patch($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -579,7 +613,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function head($urlMatchingStrategy)
+    public static function head($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -592,7 +626,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function options($urlMatchingStrategy)
+    public static function options($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -605,7 +639,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function trace($urlMatchingStrategy)
+    public static function trace($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -618,7 +652,7 @@ class WireMock
      * @param UrlMatchingStrategy|string $urlMatchingStrategy
      * @return MappingBuilder
      */
-    public static function any($urlMatchingStrategy)
+    public static function any($urlMatchingStrategy): MappingBuilder
     {
         if (is_string($urlMatchingStrategy)) {
             $urlMatchingStrategy = self::urlEqualTo($urlMatchingStrategy);
@@ -629,10 +663,10 @@ class WireMock
 
     /**
      * @param string $matcherName
-     * @param array $params
+     * @param array<int|string, mixed> $params
      * @return MappingBuilder
      */
-    public static function requestMatching($matcherName, $params = array())
+    public static function requestMatching($matcherName, $params = array()): MappingBuilder
     {
         $requestPattern = new RequestPatternBuilder($matcherName, $params);
         return new MappingBuilder($requestPattern);
@@ -642,7 +676,7 @@ class WireMock
      * @param string $url
      * @return UrlMatchingStrategy
      */
-    public static function urlEqualTo($url)
+    public static function urlEqualTo($url): UrlMatchingStrategy
     {
         return new UrlMatchingStrategy('url', $url);
     }
@@ -651,7 +685,7 @@ class WireMock
      * @param string $urlRegex
      * @return UrlMatchingStrategy
      */
-    public static function urlMatching($urlRegex)
+    public static function urlMatching($urlRegex): UrlMatchingStrategy
     {
         return new UrlMatchingStrategy('urlPattern', $urlRegex);
     }
@@ -660,7 +694,7 @@ class WireMock
      * @param string $urlPath
      * @return UrlMatchingStrategy
      */
-    public static function urlPathEqualTo($urlPath)
+    public static function urlPathEqualTo($urlPath): UrlMatchingStrategy
     {
         return new UrlMatchingStrategy('urlPath', $urlPath);
     }
@@ -669,7 +703,7 @@ class WireMock
      * @param string $urlPathRegex
      * @return UrlMatchingStrategy
      */
-    public static function urlPathMatching($urlPathRegex)
+    public static function urlPathMatching($urlPathRegex): UrlMatchingStrategy
     {
         return new UrlMatchingStrategy('urlPathPattern', $urlPathRegex);
     }
@@ -677,7 +711,7 @@ class WireMock
     /**
      * @return UrlMatchingStrategy
      */
-    public static function anyUrl()
+    public static function anyUrl(): UrlMatchingStrategy
     {
         return new UrlMatchingStrategy('urlPattern', '.*');
     }
@@ -686,7 +720,7 @@ class WireMock
      * @param string $value
      * @return EqualToMatchingStrategy
      */
-    public static function equalTo($value)
+    public static function equalTo($value): EqualToMatchingStrategy
     {
         return new EqualToMatchingStrategy($value);
     }
@@ -695,7 +729,7 @@ class WireMock
      * @param string $value
      * @return EqualToMatchingStrategy
      */
-    public static function equalToIgnoreCase($value)
+    public static function equalToIgnoreCase($value): EqualToMatchingStrategy
     {
         return new EqualToMatchingStrategy($value, true);
     }
@@ -704,7 +738,7 @@ class WireMock
      * @param string $base64String
      * @return ValueMatchingStrategy
      */
-    public static function binaryEqualTo($base64String)
+    public static function binaryEqualTo($base64String): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('binaryEqualTo', $base64String);
     }
@@ -713,7 +747,7 @@ class WireMock
      * @param string $value
      * @return ValueMatchingStrategy
      */
-    public static function matching($value)
+    public static function matching($value): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('matches', $value);
     }
@@ -722,7 +756,7 @@ class WireMock
      * @param string $value
      * @return ValueMatchingStrategy
      */
-    public static function notMatching($value)
+    public static function notMatching($value): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('doesNotMatch', $value);
     }
@@ -731,7 +765,7 @@ class WireMock
      * @param string $value
      * @return ValueMatchingStrategy
      */
-    public static function containing($value)
+    public static function containing($value): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('contains', $value);
     }
@@ -740,18 +774,17 @@ class WireMock
      * @param string $value
      * @return ValueMatchingStrategy
      */
-    public static function notContaining($value)
+    public static function notContaining($value): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('doesNotContain', $value);
     }
 
     /**
      * @param string $value
-     * @param boolean $ignoreArrayOrder
-     * @param boolean $ignoreExtraElements
-     * @return ValueMatchingStrategy
+     * @param boolean|null $ignoreArrayOrder
+     * @param boolean|null $ignoreExtraElements
      */
-    public static function equalToJson($value, $ignoreArrayOrder = null, $ignoreExtraElements = null)
+    public static function equalToJson($value, $ignoreArrayOrder = null, $ignoreExtraElements = null): JsonValueMatchingStrategy
     {
         return new JsonValueMatchingStrategy($value, $ignoreArrayOrder, $ignoreExtraElements);
     }
@@ -761,7 +794,7 @@ class WireMock
      * @param ValueMatchingStrategy $valueMatchingStrategy
      * @return JsonPathValueMatchingStrategy
      */
-    public static function matchingJsonPath($jsonPath, $valueMatchingStrategy = null)
+    public static function matchingJsonPath($jsonPath, $valueMatchingStrategy = null): JsonPathValueMatchingStrategy
     {
         return new JsonPathValueMatchingStrategy(
             $valueMatchingStrategy === null ?
@@ -780,7 +813,7 @@ class WireMock
         $enablePlaceholders = false,
         $placeholderOpeningDelimiterRegex = null,
         $placeholderClosingDelimiterRegex = null
-    ) {
+    ): EqualToXmlMatchingStrategy {
         return new EqualToXmlMatchingStrategy(
             $xml,
             $enablePlaceholders,
@@ -794,15 +827,15 @@ class WireMock
      * @param ValueMatchingStrategy $valueMatchingStrategy
      * @return XPathValueMatchingStrategy
      */
-    public static function matchingXPath($xPath, $valueMatchingStrategy = null)
+    public static function matchingXPath($xPath, $valueMatchingStrategy = null): XPathValueMatchingStrategy
     {
-        return new XPathValueMatchingStrategy($xPath, $valueMatchingStrategy);
+        return new XPathValueMatchingStrategy($xPath);
     }
 
     /**
      * @return MultipartValuePatternBuilder
      */
-    public static function aMultipart()
+    public static function aMultipart(): MultipartValuePatternBuilder
     {
         return new MultipartValuePatternBuilder();
     }
@@ -810,7 +843,7 @@ class WireMock
     /**
      * @return ValueMatchingStrategy
      */
-    public static function absent()
+    public static function absent(): ValueMatchingStrategy
     {
         return new ValueMatchingStrategy('absent', true);
     }
@@ -819,7 +852,7 @@ class WireMock
      * @param int $count
      * @return CountMatchingStrategy
      */
-    public static function lessThan($count)
+    public static function lessThan($count): CountMatchingStrategy
     {
         return CountMatchingStrategy::lessThan($count);
     }
@@ -828,7 +861,7 @@ class WireMock
      * @param int $count
      * @return CountMatchingStrategy
      */
-    public static function lessThanOrExactly($count)
+    public static function lessThanOrExactly($count): CountMatchingStrategy
     {
         return CountMatchingStrategy::lessThanOrExactly($count);
     }
@@ -837,7 +870,7 @@ class WireMock
      * @param int $count
      * @return CountMatchingStrategy
      */
-    public static function exactly($count)
+    public static function exactly($count): CountMatchingStrategy
     {
         return CountMatchingStrategy::exactly($count);
     }
@@ -846,7 +879,7 @@ class WireMock
      * @param int $count
      * @return CountMatchingStrategy
      */
-    public static function moreThanOrExactly($count)
+    public static function moreThanOrExactly($count): CountMatchingStrategy
     {
         return CountMatchingStrategy::moreThanOrExactly($count);
     }
@@ -855,7 +888,7 @@ class WireMock
      * @param int $count
      * @return CountMatchingStrategy
      */
-    public static function moreThan($count)
+    public static function moreThan($count): CountMatchingStrategy
     {
         return CountMatchingStrategy::moreThan($count);
     }
@@ -864,7 +897,7 @@ class WireMock
      * @param string $dateTimeSpec
      * @return DateTimeMatchingStrategy
      */
-    public static function before($dateTimeSpec)
+    public static function before($dateTimeSpec): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::before($dateTimeSpec);
     }
@@ -872,7 +905,7 @@ class WireMock
     /**
      * @return DateTimeMatchingStrategy
      */
-    public static function beforeNow()
+    public static function beforeNow(): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::before("now");
     }
@@ -881,7 +914,7 @@ class WireMock
      * @param string $dateTimeSpec
      * @return DateTimeMatchingStrategy
      */
-    public static function equalToDateTime($dateTimeSpec)
+    public static function equalToDateTime($dateTimeSpec): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::equalToDateTime($dateTimeSpec);
     }
@@ -889,7 +922,7 @@ class WireMock
     /**
      * @return DateTimeMatchingStrategy
      */
-    public static function isNow()
+    public static function isNow(): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::equalToDateTime("now");
     }
@@ -898,7 +931,7 @@ class WireMock
      * @param string $dateTimeSpec
      * @return DateTimeMatchingStrategy
      */
-    public static function after($dateTimeSpec)
+    public static function after($dateTimeSpec): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::after($dateTimeSpec);
     }
@@ -906,7 +939,7 @@ class WireMock
     /**
      * @return DateTimeMatchingStrategy
      */
-    public static function afterNow()
+    public static function afterNow(): DateTimeMatchingStrategy
     {
         return DateTimeMatchingStrategy::after("now");
     }
@@ -915,7 +948,7 @@ class WireMock
      * @param ValueMatchingStrategy ...$matchers
      * @return LogicalOperatorMatchingStrategy
      */
-    public static function and(...$matchers)
+    public static function and(...$matchers): LogicalOperatorMatchingStrategy
     {
         return LogicalOperatorMatchingStrategy::andAll(...$matchers);
     }
@@ -924,95 +957,57 @@ class WireMock
      * @param ValueMatchingStrategy ...$matchers
      * @return LogicalOperatorMatchingStrategy
      */
-    public static function or(...$matchers)
+    public static function or(...$matchers): LogicalOperatorMatchingStrategy
     {
         return LogicalOperatorMatchingStrategy::orAll(...$matchers);
     }
 
-    /**
-     * @return RecordSpecBuilder
-     */
-    public static function recordSpec()
+    public static function recordSpec(): RecordSpecBuilder
     {
         return new RecordSpecBuilder();
     }
 
-    /**
-     * @return ResponseDefinitionBuilder
-     */
-    public static function aResponse()
+    public static function aResponse(): ResponseDefinitionBuilder
     {
         return new ResponseDefinitionBuilder();
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function getRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function getRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('GET', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function postRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function postRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('POST', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function putRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function putRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('PUT', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function deleteRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function deleteRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('DELETE', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function optionsRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function optionsRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('OPTIONS', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function patchRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function patchRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('PATCH', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function headRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function headRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('HEAD', $urlMatchingStrategy);
     }
 
-    /**
-     * @param UrlMatchingStrategy $urlMatchingStrategy
-     * @return RequestPatternBuilder
-     */
-    public static function traceRequestedFor(UrlMatchingStrategy $urlMatchingStrategy)
+    public static function traceRequestedFor(UrlMatchingStrategy $urlMatchingStrategy): RequestPatternBuilder
     {
         return new RequestPatternBuilder('TRACE', $urlMatchingStrategy);
     }
@@ -1075,7 +1070,8 @@ class WireMock
      * @param integer $status
      * @return ResponseDefinitionBuilder
      */
-    public static function jsonResponse($body, $status) {
+    public static function jsonResponse($body, $status)
+    {
         return self::aResponse()
             ->withStatus($status)
             ->withHeader('Content-Type', "application/json")
@@ -1198,10 +1194,7 @@ class WireMock
         return self::aResponse()->withStatus($status);
     }
 
-    /**
-     * @return StubImportBuilder
-     */
-    public static function stubImport()
+    public static function stubImport(): StubImportBuilder
     {
         return new StubImportBuilder();
     }

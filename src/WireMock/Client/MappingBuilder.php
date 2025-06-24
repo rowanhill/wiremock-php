@@ -20,7 +20,7 @@ class MappingBuilder
     private $priority;
     /** @var ScenarioMappingBuilder */
     private $scenarioBuilder;
-    /** @var array */
+    /** @var array<int|string, mixed> */
     private $metadata;
     /** @var boolean */
     private $isPersistent;
@@ -178,7 +178,7 @@ class MappingBuilder
     }
 
     /**
-     * @param array $metadata
+     * @param array<int|string, mixed> $metadata
      * @return MappingBuilder
      */
     public function withMetadata(array $metadata)
@@ -189,7 +189,7 @@ class MappingBuilder
 
     /**
      * @param string $matcherName
-     * @param array $params
+     * @param array<int|string, mixed> $params
      * @return MappingBuilder
      */
     public function andMatching($matcherName, $params = array())
@@ -222,10 +222,9 @@ class MappingBuilder
     }
 
     /**
-     * @return StubMapping
      * @throws \Exception
      */
-    public function build()
+    public function build(): StubMapping
     {
         $responseDefinition = $this->responseDefinitionBuilder->build();
         return new StubMapping(

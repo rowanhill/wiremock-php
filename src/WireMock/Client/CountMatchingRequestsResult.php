@@ -8,7 +8,7 @@ class CountMatchingRequestsResult
     private $count;
 
     /**
-     * @param $count
+     * @param int $count
      */
     public function __construct($count)
     {

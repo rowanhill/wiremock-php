@@ -7,9 +7,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Formatter;
 
 class SerdeCatchAllTag implements Tag
 {
-    public static function create(string $body)
+    public static function create(string $body): self
     {
-        return new static();
+        return new self();
     }
 
     public function getName(): string

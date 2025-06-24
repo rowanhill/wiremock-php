@@ -25,7 +25,7 @@ class SerdePossibleSubtypeTag extends TagWithType
         $type = $typeResolver->resolve($typeName, $context);
         $description = new Description($body);
 
-        return new static($type, $description);
+        return new self($type, $description);
     }
 
     public function __toString(): string

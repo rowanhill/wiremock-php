@@ -3,7 +3,7 @@ namespace WireMock\Client;
 
 class EqualToXmlMatchingStrategy extends ValueMatchingStrategy
 {
-    /** @var bool */
+    /** @var boolean */
     private $enablePlaceholders;
     /** @var string|null */
     private $placeholderOpeningDelimiterRegex;

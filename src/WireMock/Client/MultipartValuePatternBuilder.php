@@ -55,7 +55,7 @@ class MultipartValuePatternBuilder
         return $this;
     }
 
-    public function build()
+    public function build(): MultipartValuePattern
     {
         return new MultipartValuePattern(
             $this->bodyPatterns,

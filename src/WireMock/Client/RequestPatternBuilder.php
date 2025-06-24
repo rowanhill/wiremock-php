@@ -8,7 +8,9 @@ use WireMock\Matching\UrlMatchingStrategy;
 
 class RequestPatternBuilder
 {
+    /** @var string|null */
     private $method;
+    /** @var UrlMatchingStrategy|null */
     private $urlMatchingStrategy;
     /** @var array<string, ValueMatchingStrategy>|null */
     private $headers;
@@ -24,12 +26,12 @@ class RequestPatternBuilder
     private $basicCredentials;
     /** @var CustomMatcherDefinition */
     private $customMatcherDefinition;
-    /** @var ValueMatchingStrategy[] */
+    /** @var ValueMatchingStrategy|null */
     private $hostPattern;
 
     /**
      * @param string $methodOrCustomMatcherName
-     * @param UrlMatchingStrategy|array $urlMatchingStrategyOrCustomParams
+     * @param UrlMatchingStrategy|array<int|string, mixed> $urlMatchingStrategyOrCustomParams
      */
     public function __construct($methodOrCustomMatcherName, $urlMatchingStrategyOrCustomParams)
     {
@@ -118,7 +120,7 @@ class RequestPatternBuilder
 
     /**
      * @param string $customMatcherName
-     * @param array $customParams
+     * @param array<int|string, mixed> $customParams
      * @return RequestPatternBuilder
      */
     public function withCustomMatcher($customMatcherName, $customParams)

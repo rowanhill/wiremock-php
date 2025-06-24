@@ -1,5 +1,6 @@
 includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- phpstan-baseline.neon
 
 parameters:
     level: 8
@@ -7,11 +8,9 @@ parameters:
         - src
         - test
 
-    excludePaths:
-        analyse:
-            - test/
-
     editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%&project=wiremock-php'
+
+    reportUnmatchedIgnoredErrors: false
 
     stubFiles:
         - config/phpstan/Hamcrest/Description.stub

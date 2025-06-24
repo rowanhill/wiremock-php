@@ -10,24 +10,34 @@ use WireMock\Http\ResponseDefinition;
 
 class ResponseDefinitionBuilder
 {
+    /** @var int */
     protected $status = 200;
+    /** @var string|null */
     protected $statusMessage;
+    /** @var string|null */
     protected $body;
+    /** @var string|null */
     protected $bodyFile;
+    /** @var string|null */
     protected $bodyData;
+    /** @var array<string, mixed>|null */
     protected $headers;
+    /** @var string|null */
     protected $proxyBaseUrl;
+    /** @var int|null */
     protected $fixedDelayMillis;
     /** @var DelayDistribution */
     protected $randomDelayDistribution;
     /** @var ChunkedDribbleDelay */
     protected $chunkedDribbleDelay;
+    /** @var string|null */
     protected $fault;
     /** @var string[]|null */
     private $transformers;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $transformerParameters;
 
+    /** @var array<string, mixed>|null */
     protected $additionalRequestHeaders;
     /** @var string */
     protected $proxyUrlPrefixToRemove;
@@ -84,8 +94,8 @@ class ResponseDefinitionBuilder
     }
 
     /**
-     * @param $headerName
-     * @param $headerValue
+     * @param string $headerName
+     * @param string $headerValue
      * @return ResponseDefinitionBuilder
      */
     public function withHeader($headerName, $headerValue)
@@ -145,7 +155,7 @@ class ResponseDefinitionBuilder
 
     /**
      * @param int $lower
-     * @param int upper
+     * @param int $upper
      * @return ResponseDefinitionBuilder
      */
     public function withUniformRandomDelay($lower, $upper)
@@ -166,7 +176,7 @@ class ResponseDefinitionBuilder
     }
 
     /**
-     * @param $fault
+     * @param string $fault
      * @return ResponseDefinitionBuilder
      */
     public function withFault($fault)
@@ -208,7 +218,7 @@ class ResponseDefinitionBuilder
         return $this;
     }
 
-    public function build()
+    public function build(): ResponseDefinition
     {
         return new ResponseDefinition(
             $this->status,

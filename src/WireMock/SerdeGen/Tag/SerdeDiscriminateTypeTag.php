@@ -18,9 +18,9 @@ class SerdeDiscriminateTypeTag implements Tag
         $this->discriminatorFactory = $discriminatorFactory;
     }
 
-    public static function create(string $body)
+    public static function create(string $body): self
     {
-        return new static(trim($body));
+        return new self(trim($body));
     }
 
     public function getName(): string

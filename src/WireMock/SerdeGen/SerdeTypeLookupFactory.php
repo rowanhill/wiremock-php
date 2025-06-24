@@ -12,10 +12,10 @@ class SerdeTypeLookupFactory
     /**
      * @throws ReflectionException|SerializationException
      */
-    public static function createLookup(...$types): SerdeTypeLookup
+    public static function createLookup(string ...$types): SerdeTypeLookup
     {
         $partialLookup = new PartialSerdeTypeLookup();
-        $canonicalTypes = array_map(function($fqn) {
+        $canonicalTypes = array_map(function(string $fqn) {
             return CanonicalNameUtils::stripLeadingBackslashIfNeeded($fqn);
         }, $types);
         $partialLookup->addRootTypes(...$canonicalTypes);

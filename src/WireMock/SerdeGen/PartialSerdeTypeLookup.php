@@ -15,7 +15,10 @@ class PartialSerdeTypeLookup extends SerdeTypeLookup
         parent::__construct([], []);
     }
 
-    public function addRootTypes(...$types)
+    /**
+     * @param string ...$types
+     */
+    public function addRootTypes(...$types): void
     {
         foreach ($types as $type) {
             $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
@@ -37,7 +40,7 @@ class PartialSerdeTypeLookup extends SerdeTypeLookup
         return $this->getSerdeType($type);
     }
 
-    private function addSerdeType(string $type, SerdeType $serdeType)
+    private function addSerdeType(string $type, SerdeType $serdeType): void
     {
         $key = CanonicalNameUtils::stripLeadingBackslashIfNeeded($type);
         $this->lookup[$key] = $serdeType;

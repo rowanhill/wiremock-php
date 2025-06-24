@@ -19,11 +19,11 @@ class SerdeProp
     public $serdeType;
     /** @var PropertyNamingStrategy|null */
     public $propertyNamingStrategy;
-    /** @var bool */
+    /** @var boolean */
     public $unwrapped;
-    /** @var bool */
+    /** @var boolean */
     public $catchAll;
-    /** @var bool */
+    /** @var boolean */
     public $includeInNormalizedForm;
 
     /**

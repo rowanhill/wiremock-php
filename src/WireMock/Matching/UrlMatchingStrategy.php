@@ -13,8 +13,11 @@ class UrlMatchingStrategy
      */
     private $matchingValue;
 
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function matchingValueNames(): array
+    /**
+     * @noinspection PhpUnusedPrivateMethodInspection
+     * @return list<string>
+     */
+    private static function matchingValueNames(): array // @phpstan-ignore method.unused
     {
         return ['url', 'urlPattern', 'urlPath', 'urlPathPattern'];
     }

@@ -2,6 +2,8 @@
 
 namespace WireMock\Client;
 
+use http\Exception\RuntimeException;
+
 class Curl
 {
     /**
@@ -27,7 +29,7 @@ class Curl
 
     /**
      * @param string $url
-     * @param array|string|null $body The request body
+     * @param string|null $body The request body
      * @return string The response body
      * @throws ClientException
      */
@@ -47,6 +49,9 @@ class Curl
     }
 
     /**
+     * @param non-empty-string $method
+     * @param string $url
+     * @return string
      * @throws ClientException
      */
     private function makeCurlRequest(string $method, string $url, ?string $json = null)
@@ -66,6 +71,11 @@ class Curl
         ));
 
         $result = curl_exec($ch);
+        assert($result !== true, 'if CURLOPT_RETURNTRANSFER is set, this is never true');
+
+        if ($result === false) {
+            throw new RuntimeException('curl_exec failed (returned FALSE)');
+        }
 
         $responseCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         if ($responseCode < 200 || $responseCode >= 300) {

@@ -2,6 +2,7 @@
 
 namespace WireMock\SerdeGen;
 
+use http\Exception\RuntimeException;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
@@ -125,7 +126,11 @@ class SerdeClassDefinitionFactory
                 continue;
             }
             $propName = $refProp->getName();
-            $docBlock = $this->docBlockFactory->create($refProp, $context);
+            try {
+                $docBlock = $this->docBlockFactory->create($refProp, $context);
+            } catch (\Webmozart\Assert\InvalidArgumentException $e) {
+                throw new SerializationException('Missing docblock in '.$parentClass.'::$'.$refProp->getName(), 0, $e);
+            }
 
             $varTags = $docBlock->getTagsByName('var');
             if (count($varTags) !== 1) {

@@ -9,22 +9,22 @@ class ResponseDefinition
 {
     /** @var int */
     private $status;
-    /** @var string */
+    /** @var string|null */
     private $statusMessage;
-    /** @var string */
+    /** @var string|null */
     private $body;
-    /** @var string */
+    /** @var string|null */
     private $bodyFileName;
-    /** @var string */
+    /** @var string|null */
     private $base64Body;
-    /** @var array|null */
+    /** @var array<string, string|int>|null */
     private $headers;
-    /** @var string */
+    /** @var string|null */
     private $proxyBaseUrl;
-    /** @var array|null */
+    /** @var array<string, string|int>|null */
     private $additionalProxyRequestHeaders;
     /**
-     * @var int
+     * @var int|null
      * @serde-name fixedDelayMilliseconds
      */
     private $fixedDelayMillis;
@@ -35,31 +35,32 @@ class ResponseDefinition
     protected $randomDelayDistribution;
     /** @var ?ChunkedDribbleDelay */
     protected $chunkedDribbleDelay;
-    /** @var string */
+    /** @var string|null */
     private $fault;
     /** @var string[]|null */
     private $transformers;
-    /** @var array|null */
+    /** @var array<string, string|int>|null */
     private $transformerParameters;
-    /** @var string */
+    /** @var string|null */
     private $proxyUrlPrefixToRemove;
 
     /**
      * ResponseDefinition constructor.
      * @param int $status
-     * @param string $statusMessage
-     * @param string $body
-     * @param string $bodyFile
-     * @param string $base64Body
-     * @param array|null $headers
-     * @param string $proxyBaseUrl
-     * @param array $additionalProxyRequestHeaders
-     * @param int $fixedDelayMillis
-     * @param DelayDistribution $randomDelayDistribution
-     * @param ChunkedDribbleDelay $chunkedDribbleDelay
-     * @param string $fault
+     * @param string|null $statusMessage
+     * @param string|null $body
+     * @param string|null $bodyFile
+     * @param string|null $base64Body
+     * @param array<int|string, mixed>|null $headers
+     * @param string|null $proxyBaseUrl
+     * @param array<int|string, mixed>|null $additionalProxyRequestHeaders
+     * @param int|null $fixedDelayMillis
+     * @param DelayDistribution|null $randomDelayDistribution
+     * @param ChunkedDribbleDelay|null $chunkedDribbleDelay
+     * @param string|null $fault
      * @param string[]|null $transformers
-     * @param array|null $transformerParameters
+     * @param array<int|string, mixed>|null $transformerParameters
+     * @param string|null $proxyUrlPrefixToRemove
      */
     public function __construct(
         $status,
@@ -104,7 +105,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStatusMessage()
     {
@@ -112,7 +113,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBody()
     {
@@ -120,7 +121,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBodyFileName()
     {
@@ -128,7 +129,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBase64Body()
     {
@@ -136,7 +137,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>|null
      */
     public function getHeaders()
     {
@@ -144,7 +145,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getProxyBaseUrl()
     {
@@ -152,7 +153,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>|null
      */
     public function getAdditionalProxyRequestHeaders()
     {
@@ -160,7 +161,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getFixedDelayMillis()
     {
@@ -168,7 +169,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return DelayDistribution
+     * @return DelayDistribution|null
      */
     public function getRandomDelayDistribution()
     {
@@ -176,7 +177,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return ChunkedDribbleDelay
+     * @return ChunkedDribbleDelay|null
      */
     public function getChunkedDribbleDelay()
     {
@@ -184,7 +185,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFault()
     {
@@ -192,7 +193,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string[]
+     * @return string[]|null
      */
     public function getTransformers()
     {
@@ -200,7 +201,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>|null
      */
     public function getTransformerParameters()
     {
@@ -208,7 +209,7 @@ class ResponseDefinition
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getProxyUrlPrefixToRemove()
     {

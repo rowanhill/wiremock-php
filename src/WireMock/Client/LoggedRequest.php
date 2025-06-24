@@ -5,27 +5,27 @@ namespace WireMock\Client;
 class LoggedRequest
 {
     /** @var string */
-    private $url;
+    private $url; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $absoluteUrl;
+    private $absoluteUrl; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $method;
+    private $method; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $clientIp;
+    private $clientIp; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var array<string, string> */
-    private $headers;
+    private $headers; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var array<string, string> */
-    private $cookies;
+    private $cookies; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $body;
+    private $body; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $bodyAsBase64;
-    /** @var bool */
-    private $browserProxyRequest;
+    private $bodyAsBase64; // @phpstan-ignore property.onlyRead (serde can write this)
+    /** @var boolean */
+    private $browserProxyRequest; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var int */
-    private $loggedDate;
+    private $loggedDate; // @phpstan-ignore property.onlyRead (serde can write this)
     /** @var string */
-    private $loggedDateString;
+    private $loggedDateString; // @phpstan-ignore property.onlyRead (serde can write this)
 
     /**
      * @return string
@@ -60,7 +60,7 @@ class LoggedRequest
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getHeaders()
     {
@@ -68,7 +68,7 @@ class LoggedRequest
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getCookies()
     {
@@ -92,7 +92,7 @@ class LoggedRequest
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBrowserProxyRequest()
     {

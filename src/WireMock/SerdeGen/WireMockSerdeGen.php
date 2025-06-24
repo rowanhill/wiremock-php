@@ -65,7 +65,7 @@ class WireMockSerdeGen
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public static function generateAndSaveWireMockSerdeLookup()
+    public static function generateAndSaveWireMockSerdeLookup(): void
     {
         $lookupSerialized = self::generateSerializedWiremockSerdeLookup();
 

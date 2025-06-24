@@ -22,7 +22,7 @@ class WebhookDefinition
     /** @var DelayDistribution|null */
     private $delay;
     /**
-     * @var array|null
+     * @var array<string, string|int>|null
      * @serde-catch-all
      */
     private $extraParameters;
@@ -80,6 +80,9 @@ class WebhookDefinition
         return $this->withRandomDelay(new UniformDistribution($lower, $upper));
     }
 
+    /**
+     * @param mixed $value
+     */
     public function withExtraParameter(string $name, $value): self
     {
         $this->extraParameters[$name] = $value;
@@ -137,7 +140,7 @@ class WebhookDefinition
     }
 
     /**
-     * @return array|null
+     * @return array<int|string, mixed>|null
      */
     public function getExtraParameters(): ?array
     {

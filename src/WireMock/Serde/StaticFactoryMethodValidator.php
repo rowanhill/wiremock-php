@@ -7,10 +7,11 @@ use ReflectionException;
 class StaticFactoryMethodValidator
 {
     /**
+     * @param string $fqMethodName
      * @throws ReflectionException
      * @throws SerializationException
      */
-    public static function validate($fqMethodName) {
+    public static function validate($fqMethodName): void {
         $refMethod = MethodFactory::createMethod($fqMethodName);
         if (!$refMethod->isStatic()) {
             throw new SerializationException("$fqMethodName must be a static method but is not");

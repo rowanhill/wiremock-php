@@ -5,10 +5,15 @@ namespace WireMock\Client;
 class JsonValueMatchingStrategy extends ValueMatchingStrategy
 {
     /** @var boolean|null */
-    private $ignoreArrayOrder = null;
+    private $ignoreArrayOrder;
     /** @var boolean|null  */
-    private $ignoreExtraElements = null;
+    private $ignoreExtraElements;
 
+    /**
+     * @param mixed $matchingValue
+     * @param bool|null $ignoreArrayOrder
+     * @param bool|null $ignoreExtraElements  
+     */
     public function __construct($matchingValue, $ignoreArrayOrder = null, $ignoreExtraElements = null)
     {
         parent::__construct('equalToJson', $matchingValue);
@@ -17,7 +22,7 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy
     }
 
     /**
-     * @return bool|null
+     * @return boolean|null
      */
     public function getIgnoreArrayOrder()
     {
@@ -25,7 +30,7 @@ class JsonValueMatchingStrategy extends ValueMatchingStrategy
     }
 
     /**
-     * @return bool|null
+     * @return boolean|null
      */
     public function getIgnoreExtraElements()
     {

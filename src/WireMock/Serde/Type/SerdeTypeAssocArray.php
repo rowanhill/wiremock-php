@@ -25,7 +25,7 @@ class SerdeTypeAssocArray extends SerdeTypeArray
         SerdeTypeAssocArray $arrayType,
         SerdeTypePrimitive $keySerdeType,
         SerdeType $valueSerdeType
-    ) {
+    ): void {
         $arrayType->keyType = $keySerdeType;
         $arrayType->valueType = $valueSerdeType;
     }

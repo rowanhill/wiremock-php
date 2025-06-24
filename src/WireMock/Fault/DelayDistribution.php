@@ -33,7 +33,7 @@ abstract class DelayDistribution
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function getDiscriminatorMapping(): ClassDiscriminator
+    private static function getDiscriminatorMapping(): ClassDiscriminator // @phpstan-ignore method.unused
     {
         return new ClassDiscriminatorMapping('type', [
             'lognormal' => LogNormal::class,
