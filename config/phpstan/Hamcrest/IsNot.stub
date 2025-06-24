@@ -1,0 +1,8 @@
+<?php
+
+namespace Hamcrest\Core;
+
+use Hamcrest\BaseMatcher;
+
+class IsNot extends BaseMatcher
+{}

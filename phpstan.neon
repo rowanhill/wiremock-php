@@ -1,0 +1,29 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - test
+
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%&project=wiremock-php'
+
+    stubFiles:
+        - config/phpstan/Hamcrest/Description.stub
+        - config/phpstan/Hamcrest/SelfDescribing.stub
+        - config/phpstan/Hamcrest/Matcher.stub
+        - config/phpstan/Hamcrest/BaseMatcher.stub
+        - config/phpstan/Hamcrest/TypeSafeMatcher.stub
+        - config/phpstan/Hamcrest/TypeSafeDiagnosingMatcher.stub
+        - config/phpstan/Hamcrest/FeatureMatcher.stub
+        - config/phpstan/Hamcrest/Text/SubstringMatcher.stub
+        - config/phpstan/Hamcrest/Text/IsEmptyString.stub
+        - config/phpstan/Hamcrest/Matchers.stub
+        - config/phpstan/Hamcrest/IsEqual.stub
+        - config/phpstan/Hamcrest/AnyOf.stub
+        - config/phpstan/Hamcrest/IsTypeOf.stub
+        - config/phpstan/Hamcrest/IsIdentical.stub
+        - config/phpstan/Hamcrest/Arrays/IsArrayContainingKey.stub
+        - config/phpstan/Hamcrest/IsAnything.stub
+        - config/phpstan/Hamcrest/IsNot.stub
+        - config/phpstan/Hamcrest/IsNonEmptyString.stub
+        - config/phpstan/Hamcrest/StringContains.stub
+        - config/phpstan/Hamcrest/IsInstanceOf.stub
