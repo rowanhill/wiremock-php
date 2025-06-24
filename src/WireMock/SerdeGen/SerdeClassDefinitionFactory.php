@@ -49,6 +49,7 @@ class SerdeClassDefinitionFactory
 
     /**
      * @throws SerializationException|ReflectionException
+     * @param string $classType
      */
     public function createClassDefinition(string $classType, bool $isRootType): SerdeClassDefinition
     {
@@ -106,6 +107,7 @@ class SerdeClassDefinitionFactory
      */
     private function getProperties(ReflectionClass $refClass, Context $context): array
     {
+        $parentClass = $refClass->getName();
         $refProps = [];
         do {
             // Merge the props, ignoring antecedent props that have already been defined on descendants
@@ -132,7 +134,11 @@ class SerdeClassDefinitionFactory
             }
             /** @var Var_ $varTag */
             $varTag = $varTags[0];
-            $propType = $this->serdeTypeParser->resolveTypeToSerdeType($varTag->getType());
+            try {
+                $propType = $this->serdeTypeParser->resolveTypeToSerdeType($varTag->getType());
+            } catch (SerializationException $e) {
+                throw new SerializationException('Cannot resolve type from '.$parentClass.'::$'.$refProp->getName().' with @var of '.$varTag->getType(), 0, $e);
+            }
 
             /** @var SerdeNameTag|null $serdeNameTag */
             $serdeNameTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-name', $propName);
