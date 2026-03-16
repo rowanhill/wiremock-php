@@ -5,6 +5,7 @@ namespace WireMock\Client;
 use DateTime;
 use WireMock\Fault\DelayDistribution;
 use WireMock\Fault\GlobalDelaySettings;
+use WireMock\Matching\RequestPattern;
 use WireMock\Matching\UrlMatchingStrategy;
 use WireMock\PostServe\WebhookDefinition;
 use WireMock\Recording\RecordingStatusResult;
@@ -96,12 +97,12 @@ class WireMock
     }
 
     /**
-     * @param RequestPatternBuilder|CountMatchingStrategy|integer $requestPatternBuilderOrCount
-     * @param RequestPatternBuilder|null $requestPatternBuilder
+     * @param RequestPatternBuilder|RequestPattern|CountMatchingStrategy|integer $requestPatternBuilderOrCount
+     * @param RequestPatternBuilder|RequestPattern|null $requestPatternBuilder
      * @throws ClientException
      * @throws VerificationException
      */
-    public function verify($requestPatternBuilderOrCount, ?RequestPatternBuilder $requestPatternBuilder = null)
+    public function verify($requestPatternBuilderOrCount, $requestPatternBuilder = null)
     {
         if ($requestPatternBuilderOrCount instanceof CountMatchingStrategy) {
             $patternBuilder = $requestPatternBuilder;
@@ -114,7 +115,8 @@ class WireMock
             $numberOfRequestsMatcher = null;
         }
 
-        $requestPattern = $patternBuilder->build();
+        $requestPattern = $this->requestPattern($patternBuilder);
+
         $response = $this->doPost('__admin/requests/count', $requestPattern, CountMatchingRequestsResult::class);
         $count = $response->getCount();
 
@@ -161,12 +163,12 @@ class WireMock
     }
 
     /**
-     * @param RequestPatternBuilder $requestPatternBuilder
+     * @param RequestPatternBuilder|RequestPattern $requestPatternBuilder
      * @return LoggedRequest[]
      */
-    public function findAll(RequestPatternBuilder $requestPatternBuilder)
+    public function findAll($requestPatternBuilder)
     {
-        $requestPattern = $requestPatternBuilder->build();
+        $requestPattern = $this->requestPattern($requestPatternBuilder);
         $result = $this->doPost('__admin/requests/find', $requestPattern, FindRequestsResult::class);
         return $result->getRequests();
     }
@@ -180,7 +182,7 @@ class WireMock
     }
 
     /**
-     * @param LoggedRequest|RequestPatternBuilder $loggedRequestOrPattern
+     * @param LoggedRequest|RequestPatternBuilder|RequestPattern $loggedRequestOrPattern
      * @return FindNearMissesResult
      * @throws \Exception
      */
@@ -188,8 +190,8 @@ class WireMock
     {
         if ($loggedRequestOrPattern instanceof LoggedRequest) {
             $path = '__admin/near-misses/request';
-        } else if ($loggedRequestOrPattern instanceof RequestPatternBuilder) {
-            $loggedRequestOrPattern = $loggedRequestOrPattern->build();
+        } else if ($loggedRequestOrPattern instanceof RequestPatternBuilder || $loggedRequestOrPattern instanceof RequestPattern) {
+            $loggedRequestOrPattern = $this->requestPattern($loggedRequestOrPattern);
             $path = '__admin/near-misses/request-pattern';
         } else {
             throw new \Exception('Unexpected near miss specifier: ' . print_r($loggedRequestOrPattern, true));
@@ -225,11 +227,11 @@ class WireMock
     }
 
     /**
-     * @param RequestPatternBuilder $requestPatternBuilder
+     * @param RequestPatternBuilder|RequestPattern $requestPatternBuilder
      */
     public function removeServeEvents($requestPatternBuilder)
     {
-        $this->doPost('__admin/requests/remove', $requestPatternBuilder->build());
+        $this->doPost('__admin/requests/remove', $this->requestPattern($requestPatternBuilder));
     }
 
     /**
@@ -1209,5 +1211,28 @@ class WireMock
     public static function webhook(): WebhookDefinition
     {
         return new WebhookDefinition();
+    }
+
+    /**
+     * @param RequestPatternBuilder|RequestPattern $patternBuilder
+     */
+    private function requestPattern($patternBuilder): RequestPattern
+    {
+        if ($patternBuilder instanceof RequestPatternBuilder) {
+            return $patternBuilder->build();
+        }
+
+        if ($patternBuilder instanceof RequestPattern) {
+            return $patternBuilder;
+        }
+
+        throw new \InvalidArgumentException(
+            sprintf(
+                'Expected %s or %s, got: %s',
+                RequestPatternBuilder::class,
+                RequestPattern::class,
+                is_object($patternBuilder) ? get_class($patternBuilder) : gettype($patternBuilder)
+            )
+        );
     }
 }
