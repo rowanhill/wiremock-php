@@ -8,7 +8,7 @@ use WireMock\Client\ValueMatchingStrategy;
 
 class RequestPattern
 {
-    /** @var string */
+    /** @var string|null */
     private $method;
     /**
      * @var UrlMatchingStrategy|null
@@ -33,12 +33,12 @@ class RequestPattern
     private $host;
 
     /**
-     * @param string $method
-     * @param UrlMatchingStrategy $urlMatchingStrategy
+     * @param string|null $method
+     * @param UrlMatchingStrategy|null $urlMatchingStrategy
      * @param array<string, ValueMatchingStrategy>|null $headers
      * @param array<string, ValueMatchingStrategy>|null $cookies
      * @param ValueMatchingStrategy[]|null $bodyPatterns
-     * @param ValueMatchingStrategy[] $multipartPatterns
+     * @param MultipartValuePattern[]|null $multipartPatterns
      * @param array<string, ValueMatchingStrategy>|null $queryParameters
      * @param BasicCredentials $basicCredentials
      * @param CustomMatcherDefinition $customMatcherDefinition
@@ -69,7 +69,7 @@ class RequestPattern
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMethod()
     {
@@ -77,7 +77,7 @@ class RequestPattern
     }
 
     /**
-     * @return UrlMatchingStrategy
+     * @return UrlMatchingStrategy|null
      */
     public function getUrlMatchingStrategy()
     {
@@ -85,7 +85,7 @@ class RequestPattern
     }
 
     /**
-     * @return array<string, ValueMatchingStrategy>
+     * @return array<string, ValueMatchingStrategy>|null
      */
     public function getHeaders()
     {
@@ -93,7 +93,7 @@ class RequestPattern
     }
 
     /**
-     * @return array<string, ValueMatchingStrategy>
+     * @return array<string, ValueMatchingStrategy>|null
      */
     public function getCookies()
     {
@@ -101,7 +101,7 @@ class RequestPattern
     }
 
     /**
-     * @return array<string, ValueMatchingStrategy>
+     * @return array<string, ValueMatchingStrategy>|null
      */
     public function getQueryParameters()
     {
@@ -109,7 +109,7 @@ class RequestPattern
     }
 
     /**
-     * @return ValueMatchingStrategy[]
+     * @return ValueMatchingStrategy[]|null
      */
     public function getBodyPatterns()
     {
@@ -117,7 +117,7 @@ class RequestPattern
     }
 
     /**
-     * @return ValueMatchingStrategy[]
+     * @return MultipartValuePattern[]|null
      */
     public function getMultipartPatterns()
     {
@@ -125,7 +125,7 @@ class RequestPattern
     }
 
     /**
-     * @return BasicCredentials
+     * @return BasicCredentials|null
      */
     public function getBasicAuthCredentials()
     {
@@ -133,7 +133,7 @@ class RequestPattern
     }
 
     /**
-     * @return CustomMatcherDefinition
+     * @return CustomMatcherDefinition|null
      */
     public function getCustomMatcher()
     {

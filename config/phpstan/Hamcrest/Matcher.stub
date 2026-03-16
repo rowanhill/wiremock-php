@@ -1,0 +1,9 @@
+<?php
+
+namespace Hamcrest;
+
+interface Matcher extends SelfDescribing
+{
+    public function matches(mixed $item): bool;
+    public function describeMismatch(mixed $item, Description $description): void;
+}

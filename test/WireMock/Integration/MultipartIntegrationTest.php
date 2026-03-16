@@ -5,6 +5,9 @@ namespace WireMock\Integration;
 use WireMock\Client\MultipartValuePattern;
 use WireMock\Client\WireMock;
 
+/**
+ * @group integration
+ */
 class MultipartIntegrationTest extends WireMockIntegrationTest
 {
     public function testSimpleMultipartStubCanBeRegistered()

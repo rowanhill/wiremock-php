@@ -15,7 +15,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     /** @var SerdeClassDefinition */
     private $classDefinition;
 
-    static function setClassDefinition(SerdeTypeClass $serdeType, SerdeClassDefinition $classDefinition)
+    static function setClassDefinition(SerdeTypeClass $serdeType, SerdeClassDefinition $classDefinition): void
     {
         $serdeType->classDefinition = $classDefinition;
     }
@@ -103,7 +103,7 @@ class SerdeTypeClass extends SerdeTypeSingle
 
     /**
      * @param $data
-     * @param array $path
+     * @param array<int|string, mixed> $path
      * @return object|null
      * @throws ReflectionException|SerializationException
      */
@@ -136,7 +136,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     /**
      * @throws ReflectionException
      */
-    private function reverseNamedByProps(array &$data)
+    private function reverseNamedByProps(array &$data): void
     {
         foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             $namingStrategy = $prop->propertyNamingStrategy;
@@ -157,7 +157,7 @@ class SerdeTypeClass extends SerdeTypeSingle
         }
     }
 
-    private function reverseNamedProps(array &$data)
+    private function reverseNamedProps(array &$data): void
     {
         foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             $namingStrategy = $prop->propertyNamingStrategy;
@@ -176,7 +176,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     /**
      * @throws SerializationException
      */
-    private function reverseUnwrappedProps(array &$data)
+    private function reverseUnwrappedProps(array &$data): void
     {
         foreach ($this->classDefinition->getAllPropertiesAndArgs() as $prop) {
             if (!$prop->unwrapped) {
@@ -208,7 +208,7 @@ class SerdeTypeClass extends SerdeTypeSingle
     /**
      * @throws SerializationException
      */
-    private function reverseCatchAllProp(array &$data)
+    private function reverseCatchAllProp(array &$data): void
     {
         $prop = $this->classDefinition->getCatchAllProp();
         if ($prop === null) {
@@ -250,7 +250,7 @@ class SerdeTypeClass extends SerdeTypeSingle
      * @throws SerializationException
      * @throws ReflectionException
      */
-    private function populateObject(array &$data, object $object, array $path)
+    private function populateObject(array &$data, object $object, array $path): void
     {
         foreach ($data as $propertyName => $propertyData) {
             $serdeProp = $this->classDefinition->getPropertyByPhpName($propertyName);

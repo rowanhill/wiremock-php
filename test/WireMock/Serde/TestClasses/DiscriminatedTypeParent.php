@@ -20,7 +20,8 @@ class DiscriminatedTypeParent
         $this->type = $type;
     }
 
-    private static function getDiscriminatorMapping()
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    private static function getDiscriminatorMapping() // @phpstan-ignore method.unused
     {
         return new ClassDiscriminatorMapping('type', [
             'parent' => DiscriminatedTypeParent::class,

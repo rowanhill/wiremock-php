@@ -17,7 +17,7 @@ class SerdeTypeTypedArray extends SerdeTypeArray
         $this->type = $type;
     }
 
-    static function setInnerType(SerdeTypeTypedArray $serdeType, SerdeType $type)
+    static function setInnerType(SerdeTypeTypedArray $serdeType, SerdeType $type): void
     {
         $serdeType->type = $type;
     }

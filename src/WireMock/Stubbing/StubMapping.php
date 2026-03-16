@@ -8,26 +8,26 @@ use WireMock\PostServe\PostServeAction;
 
 class StubMapping
 {
-    /** @var string A string representation of a GUID */
+    /** @var ?string A string representation of a GUID */
     private $id;
-    /** @var string */
+    /** @var ?string */
     private $name;
     /** @var RequestPattern */
     private $request;
     /** @var ResponseDefinition */
     private $response;
-    /** @var int */
+    /** @var ?int */
     private $priority;
-    /** @var ?array */
+    /** @var array<string, int|string>|null */
     private $metadata;
-    /** @var boolean */
+    /** @var ?boolean */
     private $persistent;
 
-    /** @var string */
+    /** @var string|null */
     private $scenarioName;
-    /** @var string */
+    /** @var string|null */
     private $requiredScenarioState;
-    /** @var string */
+    /** @var string|null */
     private $newScenarioState;
     /** @var PostServeAction[]|null */
     private $postServeActions;
@@ -35,13 +35,13 @@ class StubMapping
     /**
      * @param RequestPattern $request
      * @param ResponseDefinition $response
-     * @param string $id
-     * @param string $name
-     * @param int $priority
+     * @param ?string $id
+     * @param ?string $name
+     * @param ?int $priority
      * @param ScenarioMapping|null $scenarioMapping
-     * @param array $metadata
-     * @param boolean $persistent
-     * @param array|null $postServeActions
+     * @param array<int|string, mixed>|null $metadata
+     * @param ?boolean $persistent
+     * @param array<int|string, mixed>|null $postServeActions
      */
     public function __construct(
         RequestPattern $request,
@@ -72,7 +72,7 @@ class StubMapping
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getId()
     {
@@ -80,9 +80,9 @@ class StubMapping
     }
 
     /**
-     * @param string $id
+     * @param string|null $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -112,7 +112,7 @@ class StubMapping
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getPriority()
     {
@@ -120,7 +120,7 @@ class StubMapping
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>|null
      */
     public function getMetadata()
     {
@@ -136,7 +136,7 @@ class StubMapping
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getScenarioName()
     {
@@ -144,7 +144,7 @@ class StubMapping
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getRequiredScenarioState()
     {
@@ -152,7 +152,7 @@ class StubMapping
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getNewScenarioState()
     {

@@ -4,6 +4,9 @@ namespace WireMock\Integration;
 
 use WireMock\Client\WireMock;
 
+/**
+ * @group integration
+ */
 class ProxyingIntegrationTest extends WireMockIntegrationTest
 {
     public function testProxyBaseUrlOfStubCanBeSet()

@@ -4,7 +4,12 @@ namespace WireMock\Client;
 
 class HttpWait
 {
-    public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = true)
+    /**
+     * @param string $url
+     * @param int $timeoutSecs
+     * @param bool $debug
+     */
+    public function waitForServerToGive200($url, $timeoutSecs = 10, $debug = true): bool
     {
         $debugTrace = array();
         $startTime = microtime(true);
@@ -17,11 +22,11 @@ class HttpWait
                 continue;
             }
 
-            if (isset($headers) && isset($headers[0]) && strpos($headers[0], '200 OK') !== false) {
+            if ($headers && isset($headers[0]) && strpos($headers[0], '200 OK') !== false) {
                 $serverStarted = true;
                 break;
             } else {
-                if (!isset($headers)) {
+                if (!$headers) {
                     $debugTrace[] = "$url not yet up. \$headers not set";
                 } else if (!isset($headers[0])) {
                     $debugTrace[] = "$url not yet up. \$headers[0] not set";
@@ -42,7 +47,11 @@ class HttpWait
         return $serverStarted;
     }
 
-    public function waitForServerToFailToRespond($url, $timeoutSecs = 5)
+    /**
+     * @param string $url
+     * @param int $timeoutSecs
+     */
+    public function waitForServerToFailToRespond($url, $timeoutSecs = 5): bool
     {
         $startTime = microtime(true);
         $serverFailedToRespond = false;

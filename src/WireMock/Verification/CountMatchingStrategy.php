@@ -4,13 +4,16 @@ namespace WireMock\Verification;
 
 class CountMatchingStrategy
 {
+    /** @var callable(int): bool */
     private $closure;
+    /** @var string */
     private $operator;
+    /** @var int */
     private $operand;
 
     /**
      * CountMatchingStrategy constructor.
-     * @param callable $closure Closure that takes an int and returns a boolean
+     * @param callable(int): bool $closure Closure that takes an int and returns a boolean
      * @param string $operator
      * @param int $operand
      */
@@ -23,7 +26,7 @@ class CountMatchingStrategy
 
     /**
      * @param int $count
-     * @return boolean
+     * @return bool
      */
     public function matches($count)
     {
@@ -31,28 +34,38 @@ class CountMatchingStrategy
         return $closure($count);
     }
 
-    public function describe()
+    public function describe(): string
     {
         return $this->operator . ' ' . $this->operand;
     }
 
-    public static function lessThan($expected) {
+    /** @param int $expected */
+    public static function lessThan($expected): self
+    {
         return new self(function($actual) use ($expected) { return $actual < $expected; }, '<', $expected);
     }
 
-    public static function lessThanOrExactly($expected) {
+    /** @param int $expected */
+    public static function lessThanOrExactly($expected): self
+    {
         return new self(function($actual) use ($expected) { return $actual <= $expected; }, '<=', $expected);
     }
 
-    public static function exactly($expected) {
+    /** @param int $expected */
+    public static function exactly($expected): self
+    {
         return new self(function($actual) use ($expected) { return $actual == $expected; }, '==', $expected);
     }
 
-    public static function moreThanOrExactly($expected) {
+    /** @param int $expected */
+    public static function moreThanOrExactly($expected): self
+    {
         return new self(function($actual) use ($expected) { return $actual >= $expected; }, '>=', $expected);
     }
 
-    public static function moreThan($expected) {
+    /** @param int $expected */
+    public static function moreThan($expected): self
+    {
         return new self(function($actual) use ($expected) { return $actual > $expected; }, '>', $expected);
     }
 }

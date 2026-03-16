@@ -1,0 +1,8 @@
+<?php
+
+namespace Hamcrest\Text;
+
+use Hamcrest\TypeSafeMatcher;
+
+abstract class SubstringMatcher extends TypeSafeMatcher
+{}

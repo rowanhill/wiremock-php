@@ -28,7 +28,7 @@ class UnmatchedRequests
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getRequestJournalDisabled()
     {

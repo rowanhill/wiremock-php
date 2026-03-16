@@ -6,8 +6,8 @@ class ArrayMapUtils
 {
     /**
      * @param callable $f Called with ($key, $value). Should return [newKey, newValue]
-     * @param array $a
-     * @return array
+     * @param array<int|string, mixed> $a
+     * @return array<int|string, mixed>
      */
     public static function array_map_assoc(callable $f, array $a): array
     {

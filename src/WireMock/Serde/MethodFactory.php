@@ -8,9 +8,10 @@ use const PHP_VERSION_ID;
 
 class MethodFactory {
     /**
+     * @param string $fqMethodName
      * @throws ReflectionException
      */
-    public static function createMethod($fqMethodName) {
+    public static function createMethod($fqMethodName): ReflectionMethod {
         return PHP_VERSION_ID >= 80400
             ? ReflectionMethod::createFromMethodName($fqMethodName)
             : new ReflectionMethod($fqMethodName);

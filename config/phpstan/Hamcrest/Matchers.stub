@@ -1,0 +1,77 @@
+<?php
+namespace Hamcrest;
+
+class Matchers
+{
+    /**
+     * @return \Hamcrest\Core\IsEqual
+     */
+    public static function equalTo(mixed $item)
+    {}
+
+    /**
+     * @return \Hamcrest\Core\AnyOf
+     */
+    public static function anyOf(/* args... */)
+    {}
+
+    /**
+     * @return \Hamcrest\Core\IsTypeOf
+     */
+    public static function typeOf(mixed $item)
+    {}
+
+    /**
+     * @return \Hamcrest\Core\IsIdentical
+     */
+    public static function identicalTo(mixed $item)
+    {}
+
+    /**
+     * @return \Hamcrest\Arrays\IsArrayContainingKey
+     */
+    public static function hasKeyInArray(mixed $keyMatcher)
+    {}
+
+    /**
+     * @return \Hamcrest\Core\IsAnything
+     */
+    public static function anObject()
+    {}
+
+    /**
+     * @return \Hamcrest\Core\IsNot
+     */
+    public static function not(mixed $matcher)
+    {}
+
+    /**
+     * @return \Hamcrest\Text\IsEmptyString
+     */
+    public static function nonEmptyString()
+    {}
+
+    /**
+     * @return \Hamcrest\Text\StringContains
+     */
+    public static function containsString(mixed $substring)
+    {}
+
+    /**
+     * @return \Hamcrest\Arrays\IsArrayWithSize
+     */
+    public static function arrayWithSize(mixed $sizeMatcher)
+    {}
+
+    /**
+     * @return \Hamcrest\Text\IsEmptyString
+     */
+    public static function isNonEmptyString()
+    {}
+
+    /**
+     * @return \Hamcrest\Core\IsInstanceOf
+     */
+    public static function anInstanceOf(mixed $className)
+    {}
+}

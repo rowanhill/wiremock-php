@@ -35,6 +35,10 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy
     /** @var string|null */
     private $truncateExpected = null;
 
+    /**
+     * @param string $matchingType
+     * @param mixed $matchingValue
+     */
     public function __construct($matchingType, $matchingValue)
     {
         parent::__construct($matchingType, $matchingValue);
@@ -113,17 +117,26 @@ class DateTimeMatchingStrategy extends ValueMatchingStrategy
         return $this->truncateExpected;
     }
 
-    public static function before($dateTimeSpec)
+    /**
+     * @param mixed $dateTimeSpec
+     */
+    public static function before($dateTimeSpec): self
     {
         return new self("before", $dateTimeSpec);
     }
 
-    public static function equalToDateTime($dateTimeSpec)
+    /**
+     * @param mixed $dateTimeSpec
+     */
+    public static function equalToDateTime($dateTimeSpec): self
     {
         return new self("equalToDateTime", $dateTimeSpec);
     }
 
-    public static function after($dateTimeSpec)
+    /**
+     * @param mixed $dateTimeSpec
+     */
+    public static function after($dateTimeSpec): self
     {
         return new self("after", $dateTimeSpec);
     }

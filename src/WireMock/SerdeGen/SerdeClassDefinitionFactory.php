@@ -2,6 +2,7 @@
 
 namespace WireMock\SerdeGen;
 
+use http\Exception\RuntimeException;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
@@ -49,6 +50,7 @@ class SerdeClassDefinitionFactory
 
     /**
      * @throws SerializationException|ReflectionException
+     * @param string $classType
      */
     public function createClassDefinition(string $classType, bool $isRootType): SerdeClassDefinition
     {
@@ -106,6 +108,7 @@ class SerdeClassDefinitionFactory
      */
     private function getProperties(ReflectionClass $refClass, Context $context): array
     {
+        $parentClass = $refClass->getName();
         $refProps = [];
         do {
             // Merge the props, ignoring antecedent props that have already been defined on descendants
@@ -123,7 +126,11 @@ class SerdeClassDefinitionFactory
                 continue;
             }
             $propName = $refProp->getName();
-            $docBlock = $this->docBlockFactory->create($refProp, $context);
+            try {
+                $docBlock = $this->docBlockFactory->create($refProp, $context);
+            } catch (\Webmozart\Assert\InvalidArgumentException $e) {
+                throw new SerializationException('Missing docblock in '.$parentClass.'::$'.$refProp->getName(), 0, $e);
+            }
 
             $varTags = $docBlock->getTagsByName('var');
             if (count($varTags) !== 1) {
@@ -132,7 +139,11 @@ class SerdeClassDefinitionFactory
             }
             /** @var Var_ $varTag */
             $varTag = $varTags[0];
-            $propType = $this->serdeTypeParser->resolveTypeToSerdeType($varTag->getType());
+            try {
+                $propType = $this->serdeTypeParser->resolveTypeToSerdeType($varTag->getType());
+            } catch (SerializationException $e) {
+                throw new SerializationException('Cannot resolve type from '.$parentClass.'::$'.$refProp->getName().' with @var of '.$varTag->getType(), 0, $e);
+            }
 
             /** @var SerdeNameTag|null $serdeNameTag */
             $serdeNameTag = $this->getSinglePropTagIfPresent($docBlock, 'serde-name', $propName);

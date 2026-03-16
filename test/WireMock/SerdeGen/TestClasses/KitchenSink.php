@@ -18,7 +18,7 @@ class KitchenSink
     private $reqArg;
 
     /**
-     * @var bool
+     * @var boolean
      * @serde-name renamed
      */
     private $originalName;

@@ -12,19 +12,19 @@ class RecordSpecBuilder
     private $requestPatternBuilder;
     /** @var string[] */
     private $requestIds;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $captureHeaders;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $extractBodyCriteria;
-    /** @var bool */
+    /** @var boolean */
     private $persist = true;
-    /** @var bool */
+    /** @var boolean */
     private $repeatsAsScenarios = true;
     /** @var string[]|null */
     private $transformers;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $transformerParameters;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $requestBodyPattern;
     /** @var string|null */
     private $format = null;
@@ -32,7 +32,7 @@ class RecordSpecBuilder
     private $allowNonProxied = null;
 
     /**
-     * @param $targetBaseUrl
+     * @param string $targetBaseUrl
      * @return RecordSpecBuilder
      */
     public function forTarget($targetBaseUrl)
@@ -95,7 +95,7 @@ class RecordSpecBuilder
     }
 
     /**
-     * @param $persist
+     * @param bool $persist
      * @return RecordSpecBuilder
      */
     public function makeStubsPersistent($persist)
@@ -125,7 +125,7 @@ class RecordSpecBuilder
     }
 
     /**
-     * @param $paramsArray
+     * @param array<int|string, mixed> $paramsArray
      * @return RecordSpecBuilder
      */
     public function transformerParameters($paramsArray)

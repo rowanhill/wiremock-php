@@ -1,0 +1,8 @@
+<?php
+
+namespace Hamcrest\Text;
+
+use Hamcrest\TypeSafeMatcher;
+
+class IsNonEmptyString extends TypeSafeMatcher
+{}

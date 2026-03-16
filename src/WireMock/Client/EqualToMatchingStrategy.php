@@ -4,9 +4,13 @@ namespace WireMock\Client;
 
 class EqualToMatchingStrategy extends ValueMatchingStrategy
 {
-    /** @var bool */
+    /** @var boolean */
     private $caseInsensitive = false;
 
+    /**
+     * @param mixed $matchingValue
+     * @param bool $caseInsensitive
+     */
     public function __construct($matchingValue, $caseInsensitive = false)
     {
         parent::__construct('equalTo', $matchingValue);

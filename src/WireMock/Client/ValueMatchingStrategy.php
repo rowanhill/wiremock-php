@@ -18,6 +18,7 @@ use WireMock\Serde\SerializationException;
  */
 class ValueMatchingStrategy
 {
+    /** @var array<string, class-string> */
     private static $subclassByMatchingType = [
         'absent' => ValueMatchingStrategy::class,
         'binaryEqualTo' => ValueMatchingStrategy::class,
@@ -43,8 +44,14 @@ class ValueMatchingStrategy
         'and' => LogicalOperatorMatchingStrategy::class,
         'or' => LogicalOperatorMatchingStrategy::class,
     ];
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function matchingValueNames(): array { return array_keys(self::$subclassByMatchingType); }
+    /**
+     * @return list<int|string>
+     * @noinspection PhpUnusedPrivateMethodInspection
+     */
+    private static function matchingValueNames(): array // @phpstan-ignore method.unused (used by serde)
+    {
+        return array_keys(self::$subclassByMatchingType);
+    }
 
     /** @var string */
     protected $matchingType;
@@ -55,6 +62,10 @@ class ValueMatchingStrategy
      */
     protected $matchingValue;
 
+    /**
+     * @param string $matchingType
+     * @param mixed $matchingValue
+     */
     public function __construct($matchingType, $matchingValue)
     {
         $this->matchingType = $matchingType;
@@ -70,33 +81,40 @@ class ValueMatchingStrategy
     }
 
     /**
-     * @return bool|string|ValueMatchingStrategy[]
+     * @return boolean|string|ValueMatchingStrategy[]
      */
     public function getMatchingValue()
     {
         return $this->matchingValue;
     }
 
-    public function and(ValueMatchingStrategy $other)
+    public function and(ValueMatchingStrategy $other): LogicalOperatorMatchingStrategy
     {
         return LogicalOperatorMatchingStrategy::andAll($this, $other);
     }
 
-    public function or(ValueMatchingStrategy $other)
+    public function or(ValueMatchingStrategy $other): LogicalOperatorMatchingStrategy
     {
         return LogicalOperatorMatchingStrategy::orAll($this, $other);
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function getDiscriminatorMapping(): ClassDiscriminator
+    private static function getDiscriminatorMapping(): ClassDiscriminator // @phpstan-ignore method.unused
     {
         return new class(self::$subclassByMatchingType) implements ClassDiscriminator {
+            /** @var array<string, class-string> */
             private $subclassByMatchingType;
+            /**
+             * @param array<string, class-string> $subclassByMatchingType
+             */
             public function __construct($subclassByMatchingType)
             {
                 $this->subclassByMatchingType = $subclassByMatchingType;
             }
 
+            /**
+             * @param array<string, mixed> $data
+             */
             function getDiscriminatedType($data): string
             {
                 foreach ($data as $key => $value) {

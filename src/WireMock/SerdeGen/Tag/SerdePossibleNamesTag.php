@@ -18,10 +18,10 @@ class SerdePossibleNamesTag implements Tag
         $this->possibleNamesGenerator = $possibleNamesGenerator;
     }
 
-    public static function create(string $body)
+    public static function create(string $body): self
     {
         $propName = trim($body);
-        return new static($propName);
+        return new self($propName);
     }
 
     public function getName(): string

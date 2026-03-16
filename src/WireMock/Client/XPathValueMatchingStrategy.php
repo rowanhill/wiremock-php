@@ -4,13 +4,7 @@ namespace WireMock\Client;
 
 class XPathValueMatchingStrategy extends ValueMatchingStrategy
 {
-    /**
-     * @var string|AdvancedPathPattern
-     * @serde-named-by matchingType
-     * @serde-possible-names matchingValueNames
-     */
-    protected $matchingValue;
-    /** @var array|null */
+    /** @var array<string, string>|null */
     private $xPathNamespaces;
 
     /**
@@ -28,12 +22,16 @@ class XPathValueMatchingStrategy extends ValueMatchingStrategy
      */
     public function withXPathNamespace($name, $namespaceUri)
     {
+        if (!isset($this->xPathNamespaces)) {
+            $this->xPathNamespaces = [];
+        }
+
         $this->xPathNamespaces[$name] = $namespaceUri;
         return $this;
     }
 
     /**
-     * @return array|null
+     * @return array<int|string, mixed>|null
      */
     public function getXPathNamespaces(): ?array
     {

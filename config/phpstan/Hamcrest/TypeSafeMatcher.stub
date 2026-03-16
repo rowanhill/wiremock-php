@@ -1,0 +1,6 @@
+<?php
+
+namespace Hamcrest;
+
+abstract class TypeSafeMatcher extends BaseMatcher
+{}

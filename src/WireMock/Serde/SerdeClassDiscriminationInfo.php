@@ -20,7 +20,7 @@ class SerdeClassDiscriminationInfo
 
     /**
      * @param string $discriminatorFactoryName
-     * @param array $possibleSerdeTypes
+     * @param array<int|string, mixed> $possibleSerdeTypes
      * @throws SerializationException|ReflectionException
      */
     public function __construct(string $discriminatorFactoryName, array $possibleSerdeTypes)

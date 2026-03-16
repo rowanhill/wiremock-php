@@ -21,6 +21,9 @@ class ProxiedServeEventFilters
     /** @var ?boolean */
     private $allowNonProxied;
 
+    /**
+     * @param array<int|string, mixed> $requestIds
+     */
     public function __construct(?RequestPattern $requestPattern, ?array $requestIds, ?bool $allowNonProxied)
     {
         $this->requestPattern = $requestPattern;
@@ -33,6 +36,9 @@ class ProxiedServeEventFilters
         return $this->requestPattern;
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     public function getRequestIds(): ?array
     {
         return $this->requestIds;

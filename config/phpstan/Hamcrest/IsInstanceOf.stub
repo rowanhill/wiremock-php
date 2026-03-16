@@ -1,0 +1,6 @@
+<?php
+
+namespace Hamcrest\Core;
+
+class IsInstanceOf implements \Hamcrest\Matcher
+{}

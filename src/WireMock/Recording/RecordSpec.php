@@ -11,9 +11,9 @@ class RecordSpec
     private $targetBaseUrl;
     /** @var ProxiedServeEventFilters|null */
     private $filters;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $captureHeaders;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $extractBodyCriteria;
     /** @var boolean */
     private $persist;
@@ -21,24 +21,24 @@ class RecordSpec
     private $repeatsAsScenarios;
     /** @var string[]|null */
     private $transformers;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $transformerParameters;
-    /** @var array|null */
+    /** @var array<int|string, mixed>|null */
     private $requestBodyPattern;
-    /** @var string */
+    /** @var string|null */
     private $outputFormat;
 
     /**
      * @param string $targetBaseUrl
-     * @param ProxiedServeEventFilters $filters
-     * @param array|null $captureHeaders
-     * @param array $extractBodyCriteria
+     * @param ProxiedServeEventFilters|null $filters
+     * @param array<int|string, mixed>|null $captureHeaders
+     * @param array<int|string, mixed>|null $extractBodyCriteria
      * @param boolean $persist
      * @param boolean $repeatsAsScenarios
-     * @param string[] $transformers
-     * @param array $transformerParameters
-     * @param array $requestBodyPattern
-     * @param string $outputFormat
+     * @param string[]|null $transformers
+     * @param array<int|string, mixed>|null $transformerParameters
+     * @param array<int|string, mixed>|null $requestBodyPattern
+     * @param string|null $outputFormat
      */
     public function __construct(
         $targetBaseUrl,
@@ -81,7 +81,7 @@ class RecordSpec
     }
 
     /**
-     * @return array|null
+     * @return array<int|string, mixed>|null
      */
     public function getCaptureHeaders(): ?array
     {
@@ -89,7 +89,7 @@ class RecordSpec
     }
 
     /**
-     * @return array|null
+     * @return array<int|string, mixed>|null
      */
     public function getExtractBodyCriteria(): ?array
     {
@@ -121,7 +121,7 @@ class RecordSpec
     }
 
     /**
-     * @return array|null
+     * @return array<int|string, mixed>|null
      */
     public function getTransformerParameters(): ?array
     {
@@ -129,7 +129,7 @@ class RecordSpec
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getRequestBodyPattern(): ?array
     {

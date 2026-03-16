@@ -5,6 +5,9 @@ namespace WireMock\Integration;
 use WireMock\Client\WireMock;
 use WireMock\Http\RequestMethod;
 
+/**
+ * @group integration
+ */
 class WebhookIntegrationTest extends WireMockIntegrationTest
 {
     public function testWebhookCallbackCanBeRegistered()

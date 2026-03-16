@@ -8,6 +8,9 @@ use WireMock\Client\WireMock;
 use WireMock\Recording\RecordingStatusResult;
 use WireMock\Recording\RecordSpec;
 
+/**
+ * @group integration
+ */
 class RecordingIntegrationTest extends WireMockIntegrationTest
 {
     /** @var WireMock */

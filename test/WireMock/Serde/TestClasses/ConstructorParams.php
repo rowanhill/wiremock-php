@@ -6,7 +6,7 @@ class ConstructorParams
 {
     /** @var int */
     private $fieldWithConstructorParam;
-    /** @var bool */
+    /** @var boolean */
     private $fieldWithOptionalConstructorParam;
 
     /**

@@ -6,14 +6,14 @@ class LoggedResponse
 {
     /** @var int */
     private $status;
-    /** @var array */
+    /** @var array<string, int|string> */
     private $headers;
     /** @var string */
     private $body;
 
     /**
      * @param int $status
-     * @param array $headers
+     * @param array<int|string, mixed> $headers
      * @param string $body
      */
     public function __construct($status, $body, $headers = [])
@@ -32,7 +32,7 @@ class LoggedResponse
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getHeaders()
     {

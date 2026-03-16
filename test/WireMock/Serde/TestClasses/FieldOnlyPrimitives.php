@@ -8,7 +8,7 @@ class FieldOnlyPrimitives
     private $int;
     /** @var float */
     private $float;
-    /** @var bool */
+    /** @var boolean */
     private $bool;
     /** @var string */
     private $string;

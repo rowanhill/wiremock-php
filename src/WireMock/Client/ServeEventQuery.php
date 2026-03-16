@@ -54,19 +54,19 @@ class ServeEventQuery
         return $this;
     }
 
-    public function toParamsString()
+    public function toParamsString(): string
     {
         $params = [];
-        if ($this->since) {
+        if (isset($this->since)) {
             $params[] = 'since=' . urlencode($this->since->format(DateTime::ATOM));
         }
-        if ($this->limit) {
-            $params[] = 'limit=' . urlencode($this->limit);
+        if (isset($this->limit)) {
+            $params[] = 'limit=' . urlencode((string) $this->limit);
         }
-        if ($this->unmatched) {
+        if (isset($this->unmatched)) {
             $params[] = 'unmatched=true';
         }
-        if ($this->matchingStubId) {
+        if (isset($this->matchingStubId)) {
             $params[] = 'matchingStub=' . urlencode($this->matchingStubId);
         }
         return join('&', $params);

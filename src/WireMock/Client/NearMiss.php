@@ -16,12 +16,6 @@ class NearMiss
     /** @var MatchResult */
     private $matchResult;
 
-    /**
-     * @param LoggedRequest $request
-     * @param StubMapping|null $stubMapping
-     * @param RequestPattern|null $requestPattern
-     * @param MatchResult $matchResult
-     */
     public function __construct(
         LoggedRequest $request,
         ?StubMapping $stubMapping,
@@ -34,34 +28,22 @@ class NearMiss
         $this->matchResult = $matchResult;
     }
 
-    /**
-     * @return LoggedRequest
-     */
     public function getRequest()
     {
         return $this->request;
     }
 
-    /**
-     * @return StubMapping
-     */
     public function getMapping()
     {
         return $this->stubMapping;
     }
 
-    /**
-     * @return RequestPattern
-     */
-    public function getRequestPattern()
+    public function getRequestPattern(): ?RequestPattern
     {
         return $this->requestPattern;
     }
 
-    /**
-     * @return MatchResult
-     */
-    public function getMatchResult()
+    public function getMatchResult(): MatchResult
     {
         return $this->matchResult;
     }

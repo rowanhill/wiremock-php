@@ -14,7 +14,7 @@ class UnionTypeFields
     private $arrayOfUnion;
 
     /**
-     * @param bool|int|string $primitivesUnion
+     * @param boolean|int|string $primitivesUnion
      * @param int|int[] $arrayUnion
      * @param float|DefaultedField $classUnion
      * @param (string|int)[] $arrayOfUnion

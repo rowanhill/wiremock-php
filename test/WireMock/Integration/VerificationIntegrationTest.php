@@ -6,6 +6,9 @@ use WireMock\Client\RequestPatternBuilder;
 use WireMock\Client\VerificationException;
 use WireMock\Client\WireMock;
 
+/**
+ * @group integration
+ */
 class VerificationIntegrationTest extends WireMockIntegrationTest
 {
     private $_verificationCount = 0;

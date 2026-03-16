@@ -22,7 +22,11 @@ class SerdeTypeUnion extends SerdeType
         $this->classOrArraySerdeType = $classOrArraySerdeType;
     }
 
-    static function setSubtypes(SerdeTypeUnion $serdeType, array $primitiveSerdeTypes, $classOrArraySerdeType)
+    /**
+     * @param SerdeTypePrimitive[] $primitiveSerdeTypes
+     * @param SerdeTypeArray|SerdeTypeClass|null $classOrArraySerdeType
+     */
+    static function setSubtypes(SerdeTypeUnion $serdeType, array $primitiveSerdeTypes, $classOrArraySerdeType): void
     {
         $serdeType->primitiveSerdeTypes = $primitiveSerdeTypes;
         $serdeType->classOrArraySerdeType = $classOrArraySerdeType;
