@@ -2,8 +2,21 @@
 
 namespace WireMock\Client;
 
+use WireMock\Client\Authentication\Authenticator;
+use WireMock\Client\Authentication\NullAuthenticator;
+
 class Curl
 {
+    /**
+     * @var Authenticator
+     */
+    private $authenticator;
+
+    public function __construct(Authenticator $authenticator = null)
+    {
+        $this->authenticator = $authenticator ?? new NullAuthenticator();
+    }
+
     /**
      * @param string $url
      * @return string The response body
@@ -51,7 +64,7 @@ class Curl
      */
     private function makeCurlRequest(string $method, string $url, ?string $json = null)
     {
-        $ch = curl_init($url);
+        $ch = curl_init($this->authenticator->modifyUrl($url));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         if ($json !== null) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
@@ -60,10 +73,12 @@ class Curl
             $contentLength = 0;
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+
+        $defaultHeaders = [
             'Content-Type: application/json',
-            "Content-Length: $contentLength",
-        ));
+            sprintf('Content-Length: %s', $contentLength),
+        ];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->authenticator->modifyHeaders($defaultHeaders));
 
         $result = curl_exec($ch);
 
